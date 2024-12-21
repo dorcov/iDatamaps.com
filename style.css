@@ -49,3 +49,30 @@ html, body {
   border-radius: 4px;
   background: #fff;
 }
+
+/* Data Table */
+.data-table {
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+table th {
+  background-color: #f4f4f4;
+}
+
+table td input {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 0.3rem;
+}
