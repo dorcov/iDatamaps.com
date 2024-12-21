@@ -1,33 +1,67 @@
-<div class="customise-data">
-  <h3>Select Map</h3>
-  <select id="mapSelector">
-    <option value="md.json">Moldova</option>
-    <option value="ro_judete_poligon.json">România</option>
-    <option value="europe.geojson">Europa</option>
-  </select>
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iDatamaps</title>
 
-  <h3>Select Gradient</h3>
-  <select id="gradientSelector">
-    <option value="blue">Blue</option>
-    <option value="green">Green</option>
-    <option value="red">Red</option>
-    <option value="blueDiverging">Blue Diverging</option>
-  </select>
-</div>
+  <!-- Link către fișierul CSS -->
+  <link rel="stylesheet" href="style.css">
 
-<div class="data-table">
-  <h3>Data Table</h3>
-  <div class="table-container">
-    <table id="regionTable">
-      <thead>
-        <tr>
-          <th>Region</th>
-          <th>Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Rândurile vor fi generate din script -->
-      </tbody>
-    </table>
+  <!-- Link către Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+</head>
+<body>
+
+<div class="container">
+  <!-- Secțiunea pentru harta -->
+  <div class="left-panel">
+    <div id="mapid"></div>
+  </div>
+
+  <!-- Secțiunea pentru UI -->
+  <div class="right-panel">
+    <div class="customise-data">
+      <h3>Select Map</h3>
+      <select id="mapSelector">
+        <option value="md.json">Moldova</option>
+        <option value="ro_judete_poligon.json">România</option>
+        <option value="europe.geojson">Europa</option>
+      </select>
+
+      <h3>Select Gradient</h3>
+      <select id="gradientSelector">
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+        <option value="red">Red</option>
+        <option value="blueDiverging">Blue Diverging</option>
+      </select>
+    </div>
+
+    <div class="data-table">
+      <h3>Data Table</h3>
+      <div class="table-container">
+        <table id="regionTable">
+          <thead>
+            <tr>
+              <th>Region</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Rândurile vor fi generate din script.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
+
+<!-- Link către Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- Link către fișierul JavaScript -->
+<script src="script.js" defer></script>
+
+</body>
+</html>
