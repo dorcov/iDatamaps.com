@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Initializează harta
   const map = L.map("mapid", { center: [47, 28], zoom: 7, attributionControl: false });
 
   // Setează stratul de bază transparent pentru a nu fi inclus în export
@@ -128,104 +129,17 @@ document.addEventListener("DOMContentLoaded", () => {
     radius: 5000
   }).addTo(map);
 
-  // Funcția de export
+  // Inițializează Leaflet EasyPrint
+  const printer = L.easyPrint({
+    title: 'Export Map',
+    position: 'topright',
+    exportOnly: true,
+    hideClasses: ['leaflet-control-zoom', 'leaflet-control-layers'] // Ascunde controalele neesențiale în export
+  }).addTo(map);
+
+  // Legare buton personalizat la funcția de export a Leaflet EasyPrint
   document.getElementById("exportMap").addEventListener("click", () => {
     console.log("Export map clicked");
-
-    if (!currentLayer) {
-      console.error("No GeoJSON layer present on the map.");
-      return;
-    }
-
-    // Salvează vizualizarea originală a hărții
-    const originalCenter = map.getCenter();
-    const originalZoom = map.getZoom();
-
-    // Ajustează harta pentru a se potrivi tuturor straturilor GeoJSON
-    map.fitBounds(currentLayer.getBounds(), { maxZoom: zoomSettings["md.json"] || 15 });
-
-    // Ascunde stratul de test pentru a nu fi inclus în export
-    testCircle.setStyle({ fillOpacity: 0, opacity: 0 });
-
-    // Așteaptă până când harta este complet redată
-    map.once('idle', () => {
-      console.log("Map is idle, proceeding with export");
-
-      // Accesează elementul SVG al hărții
-      const svg = document.querySelector("#mapid svg");
-
-      if (!svg) {
-        console.error("No SVG found on the map");
-        // Revino la vizualizarea originală
-        map.setView(originalCenter, originalZoom);
-        // Reafișează stratul de test
-        testCircle.setStyle({ fillOpacity: 0.5, opacity: 1 });
-        return;
-      }
-
-      // Serializează SVG-ul
-      const serializer = new XMLSerializer();
-      let svgString = serializer.serializeToString(svg);
-
-      // Adaugă namespace-uri dacă lipsesc
-      if (!svgString.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
-        svgString = svgString.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
-      }
-      if (!svgString.match(/^<svg[^>]+"http:\/\/www\.w3\.org\/1999\/xlink"/)) {
-        svgString = svgString.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
-      }
-
-      // Manipulează transformările SVG pentru a elimina decalajele
-      const parser = new DOMParser();
-      const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
-      const svgElement = svgDoc.documentElement;
-
-      const transform = svgElement.getAttribute("transform");
-      if (transform) {
-        // Elimină transformările
-        svgElement.removeAttribute("transform");
-      }
-
-      svgString = new XMLSerializer().serializeToString(svgElement);
-
-      // Creează un canvas suplimentar pentru export
-      const exportCanvas = document.createElement("canvas");
-      const scaleFactor = 3; // Factor de scalare pentru rezoluție înaltă
-      exportCanvas.width = map.getSize().x * scaleFactor;
-      exportCanvas.height = map.getSize().y * scaleFactor;
-      const exportContext = exportCanvas.getContext("2d");
-
-      // Creează o imagine din SVG
-      const img = new Image();
-      img.onload = function() {
-        // Desenează imaginea SVG scalată pe canvas
-        exportContext.scale(scaleFactor, scaleFactor);
-        exportContext.drawImage(img, 0, 0);
-
-        // Exportă canvas-ul ca PNG
-        const link = document.createElement("a");
-        link.download = "map.png";
-        link.href = exportCanvas.toDataURL("image/png");
-        link.click();
-
-        // Revino la vizualizarea originală a hărții
-        map.setView(originalCenter, originalZoom);
-
-        // Reafișează stratul de test
-        testCircle.setStyle({ fillOpacity: 0.5, opacity: 1 });
-      };
-
-      // Gestionează erorile la încărcarea imaginii
-      img.onerror = function(e) {
-        console.error("Error loading SVG into image", e);
-        // Revino la vizualizarea originală în caz de eroare
-        map.setView(originalCenter, originalZoom);
-        // Reafișează stratul de test
-        testCircle.setStyle({ fillOpacity: 0.5, opacity: 1 });
-      };
-
-      // Setează sursa imaginii la datele SVG codificate în base64
-      img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
-    });
+    printer.printMap('CurrentView');
   });
 });
