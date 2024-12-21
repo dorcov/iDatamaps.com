@@ -1,62 +1,62 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>iDatamaps</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iDatamaps</title>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 </head>
 <body>
 
 <div class="container">
-  <!-- Harta -->
-  <div class="left-panel">
-    <div id="mapid"></div>
-  </div>
-
-  <!-- Panoul din dreapta -->
-  <div class="right-panel">
-    <div class="customise-data">
-      <h3>Select Map</h3>
-      <select id="mapSelector">
-        <option value="md.json">Moldova</option>
-        <option value="ro_judete_poligon.json">România</option>
-        <option value="europe.geojson">Europa</option>
-      </select>
-
-      <h3>Select Gradient</h3>
-      <select id="gradientSelector">
-        <option value="blue">Blue</option>
-        <option value="green">Green</option>
-        <option value="red">Red</option>
-        <option value="blueDiverging">Blue Diverging</option>
-      </select>
+    <!-- Harta -->
+    <div class="left-panel">
+        <div id="mapid"></div>
     </div>
 
-    <div class="data-table">
-      <h3>Data Table</h3>
-      <div class="table-container">
-        <table id="regionTable">
-          <thead>
-            <tr>
-              <th>Region</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Conținut generat din script -->
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <!-- Panoul din dreapta -->
+    <div class="right-panel">
+        <div class="customise-data">
+            <h3>Select Map</h3>
+            <select id="mapSelector">
+                <option value="md.json">Moldova</option>
+                <option value="ro_judete_poligon.json">România</option>
+                <option value="europe.geojson">Europa</option>
+            </select>
 
-    <div class="export-button">
-      <button id="exportMap">Export Map as PNG</button>
+            <h3>Select Gradient</h3>
+            <select id="gradientSelector">
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+                <option value="red">Red</option>
+                <option value="blueDiverging">Blue Diverging</option>
+            </select>
+        </div>
+
+        <div class="data-table">
+            <h3>Data Table</h3>
+            <div class="table-container">
+                <table id="regionTable">
+                    <thead>
+                        <tr>
+                            <th>Region</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Conținut generat din script -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="export-button">
+            <button id="exportMap">Export Map as PNG</button>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Leaflet și alte scripturi -->
