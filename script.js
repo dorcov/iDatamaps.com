@@ -168,12 +168,25 @@ document.addEventListener("DOMContentLoaded", () => {
       let svgString = serializer.serializeToString(svg);
 
       // Adaugă namespace-uri dacă lipsesc
-      if(!svgString.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
-          svgString = svgString.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+      if (!svgString.match(/^<svg[^>]+xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
+        svgString = svgString.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
       }
-      if(!svgString.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
-          svgString = svgString.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+      if (!svgString.match(/^<svg[^>]+"http:\/\/www\.w3\.org\/1999\/xlink"/)) {
+        svgString = svgString.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
       }
+
+      // Manipulează transformările SVG pentru a elimina decalajele
+      const parser = new DOMParser();
+      const svgDoc = parser.parseFromString(svgString, "image/svg+xml");
+      const svgElement = svgDoc.documentElement;
+
+      const transform = svgElement.getAttribute("transform");
+      if (transform) {
+        // Elimină transformările
+        svgElement.removeAttribute("transform");
+      }
+
+      svgString = new XMLSerializer().serializeToString(svgElement);
 
       // Creează un canvas suplimentar pentru export
       const exportCanvas = document.createElement("canvas");
