@@ -1,31 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Inițializează harta fără niciun strat de fundal
+  // 1. Inițializează harta FĂRĂ strat de fundal (doar fundal gri/culoarea din CSS)
   const map = L.map("mapid", {
-    // Centrăm aproximativ pe Moldova
-    center: [47, 28],
+    center: [47, 28], // Coordonate aproximativ pe centrul Moldovei
     zoom: 7
-    // Nu mai adăugăm niciun tileLayer
+    // Nu adăugăm tileLayer, deci va fi doar un fundal simplu
   });
 
-  // 2. Încarcă fișierul GeoJSON (raioane.json)
+  // 2. Încarcă fișierul GeoJSON (moldova.json)
   fetch("data/moldova.json")
     .then(response => response.json())
     .then(geoData => {
-      // 3. Creează un layer pentru poligoanele raioanelor
-      const raioaneLayer = L.geoJSON(geoData, {
+      // 3. Creează un layer cu poligoanele
+      const moldovaLayer = L.geoJSON(geoData, {
         style: {
-          color: "#333",         // culoarea conturului
-          weight: 2,            // grosimea conturului
-          fillColor: "#00A4FF", // culoarea de umplere a fiecărui raion
+          color: "#333",       // Culoarea conturului
+          weight: 2,          // Grosimea conturului
+          fillColor: "#00A4FF", 
           fillOpacity: 0.3
         },
         onEachFeature: (feature, layer) => {
-          // De exemplu, numele raionului dacă există un câmp `NAME` sau `RAION`
-          const prop = feature.properties;
-          const raionName = prop.NAME || prop.RAION || "Raion necunoscut";
+          // Aici adaptăm câmpurile din `properties` (NAME, RAION, name etc.)
+          const props = feature.properties;
+          const regionName = props.NAME || props.RAION || props.name || "Zonă necunoscută";
 
           // Popup la click
-          layer.bindPopup(raionName);
+          layer.bindPopup(regionName);
 
           // Highlight la mouseover
           layer.on("mouseover", () => {
@@ -34,6 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
               fillOpacity: 0.5
             });
           });
+
+          // Revine la stil inițial la mouseout
           layer.on("mouseout", () => {
             layer.setStyle({
               fillColor: "#00A4FF",
@@ -41,13 +42,10 @@ document.addEventListener("DOMContentLoaded", () => {
             });
           });
         }
-      });
+      }).addTo(map);
 
-      // 4. Adaugă layerul pe hartă
-      raioaneLayer.addTo(map);
-
-      // 5. Centrare automată pe limitele poligoanelor
-      map.fitBounds(raioaneLayer.getBounds());
+      // 4. Centrează automat harta pe limitele poligoanelor
+      map.fitBounds(moldovaLayer.getBounds());
     })
-    .catch(err => console.error("Eroare la încărcarea raioanelor:", err));
+    .catch(err => console.error("Eroare la încărcarea fișierului moldova.json:", err));
 });
