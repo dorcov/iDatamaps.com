@@ -1,0 +1,12 @@
+/* Stil minimal pentru a face harta vizibilă pe ecran */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+  }
+  
+  #mapid {
+    width: 100%;
+    height: 600px; /* Înălțime implicită, modifică după preferințe */
+  }
+  
