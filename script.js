@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const map = L.map("mapid", {
-    center: [47, 28], // Coordonate inițiale, dar acestea vor fi ajustate dinamic
+    center: [47, 28],
     zoom: 7,
     zoomControl: false,
     scrollWheelZoom: false,
@@ -11,55 +11,100 @@ document.addEventListener("DOMContentLoaded", () => {
     keyboard: false
   });
 
-  let currentLayer = null; // Layer curent (pentru a șterge harta anterioară)
+  let currentLayer = null; // Layer curent
+  const regionTable = document.getElementById("regionTable").querySelector("tbody");
+  const gradientSelector = document.getElementById("gradientSelector");
 
-  // Funcție pentru încărcarea unei hărți
+  const zoomSettings = {
+    "md.json": 9,
+    "ro_judete_poligon.json": 7,
+    "europe.geojson": 5
+  };
+
+  // Funcție pentru generarea gradientului
+  const getColor = (value, maxValue, gradient) => {
+    if (value === 0 || isNaN(value)) return "#ccc";
+    const ratio = value / maxValue;
+    switch (gradient) {
+      case "blue":
+        return `rgba(42, 115, 255, ${Math.min(0.3 + ratio * 0.7, 1)})`;
+      case "green":
+        return `rgba(50, 200, 50, ${Math.min(0.3 + ratio * 0.7, 1)})`;
+      case "red":
+        return `rgba(255, 50, 50, ${Math.min(0.3 + ratio * 0.7, 1)})`;
+      case "blueDiverging":
+        return ratio > 0.5
+          ? `rgba(42, 115, 255, ${Math.min(0.3 + (ratio - 0.5) * 1.4, 1)})`
+          : `rgba(255, 50, 50, ${Math.min(0.3 + ratio * 1.4, 1)})`;
+      default:
+        return "#ccc";
+    }
+  };
+
+  // Funcție pentru actualizarea gradientului
+  const updateMapGradient = () => {
+    if (!currentLayer) return;
+
+    const maxValue = Math.max(
+      ...Array.from(regionTable.querySelectorAll("input")).map(input =>
+        parseFloat(input.value) || 0
+      )
+    );
+
+    const gradient = gradientSelector.value;
+
+    currentLayer.eachLayer(layer => {
+      const props = layer.feature.properties;
+      const regionName = props.NAME || props.RAION || props.name;
+      const input = document.querySelector(`[data-region="${regionName}"]`);
+      const value = input ? parseFloat(input.value) || 0 : 0;
+
+      layer.setStyle({
+        fillColor: getColor(value, maxValue, gradient),
+        fillOpacity: 0.8,
+        color: "#fff",
+        weight: 1
+      });
+    });
+  };
+
+  const generateTable = (geoData) => {
+    regionTable.innerHTML = "";
+    geoData.features.forEach(feature => {
+      const props = feature.properties;
+      const regionName = props.NAME || props.RAION || props.name || "Unknown";
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${regionName}</td><td><input type="number" value="0" data-region="${regionName}" /></td>`;
+      regionTable.appendChild(row);
+    });
+
+    regionTable.querySelectorAll("input").forEach(input => {
+      input.addEventListener("input", updateMapGradient);
+    });
+  };
+
   const loadMap = (geojsonFile) => {
     fetch(`data/${geojsonFile}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("HTTP error " + response.status);
-        }
-        return response.json();
-      })
-      .then((geoData) => {
-        if (currentLayer) {
-          map.removeLayer(currentLayer); // Șterge stratul anterior
-        }
-
-        // Creează stratul Leaflet
+      .then(response => response.json())
+      .then(geoData => {
+        if (currentLayer) map.removeLayer(currentLayer);
         currentLayer = L.geoJSON(geoData, {
-          style: {
-            color: "#fff",
-            weight: 1,
-            fillColor: "#ccc", // Culoare implicită gri
-            fillOpacity: 0.8
-          },
+          style: { color: "#fff", weight: 1, fillColor: "#ccc", fillOpacity: 0.8 },
           onEachFeature: (feature, layer) => {
             const props = layer.feature.properties;
-            const regionName = props.NAME || props.RAION || props.name || "Zonă necunoscută";
-
-            // Adaugă popup la click
+            const regionName = props.NAME || props.RAION || props.name || "Unknown";
             layer.bindPopup(regionName);
           }
         }).addTo(map);
-
-        // Ajustează vizibilitatea în funcție de limitele geografice
-        const bounds = currentLayer.getBounds();
-        map.fitBounds(bounds, {
-          padding: [20, 20], // Adaugă puțin spațiu în jurul hărții
-          maxZoom: 10, // Limitează zoom-ul maxim
-          animate: true
-        });
+        map.fitBounds(currentLayer.getBounds(), { maxZoom: zoomSettings[geojsonFile] });
+        generateTable(geoData);
       })
-      .catch((err) => console.error("Eroare la încărcarea fișierului GeoJSON:", err));
+      .catch(err => console.error("Error loading GeoJSON:", err));
   };
 
-  // Inițializează cu harta Moldovei
   loadMap("md.json");
-
-  // Ascultă schimbările din dropdown
   document.getElementById("mapSelector").addEventListener("change", (e) => {
     loadMap(e.target.value);
   });
+  gradientSelector.addEventListener("change", updateMapGradient);
 });

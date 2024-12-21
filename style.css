@@ -27,13 +27,13 @@ html, body {
 #mapid {
   width: 100%;
   height: 100%; /* Harta va ocupa întregul div */
-  min-height: 500px; /* Înălțime minimă pentru ecrane mari */
+  min-height: 600px; /* Înălțime minimă pentru ecrane mari */
   max-height: 800px; /* Înălțime maximă */
 }
 
 @media (min-width: 1024px) {
   #mapid {
-    min-height: 600px;
+    min-height: 700px;
   }
 }
 
