@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const map = L.map("mapid", { center: [47, 28], zoom: 7 });
 
-  // 1. Eliminarea stratului de fundal OpenStreetMap și folosirea unui strat de bază transparent
+  // 1. Crearea unui strat de bază transparent folosind L.GridLayer
   const TransparentLayer = L.GridLayer.extend({
       createTile: function(coords) {
           const tile = document.createElement('div');
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .then(geoData => {
               if (currentLayer) map.removeLayer(currentLayer);
               currentLayer = L.geoJSON(geoData, {
-                  renderer: L.canvas(), // Asigură renderizarea pe canvas
+                  renderer: L.svg(), // Utilizează renderer-ul SVG pentru compatibilitate mai bună cu dom-to-image
                   style: { color: "#fff", weight: 1, fillColor: "#ccc", fillOpacity: 0.8 },
                   onEachFeature: (feature, layer) => {
                       const props = layer.feature.properties;
@@ -127,6 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
       radius: 5000
   }).addTo(map);
 
+  // Funcția de export
   document.getElementById("exportMap").addEventListener("click", () => {
       console.log("Export map clicked");
 
