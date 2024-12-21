@@ -88,3 +88,22 @@ table td input {
   border: 1px solid #ccc;
   padding: 0.3rem;
 }
+
+/* Export Button */
+.export-button {
+  margin-top: 1rem;
+}
+
+#exportMap {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#exportMap:hover {
+  background-color: #0056b3;
+}

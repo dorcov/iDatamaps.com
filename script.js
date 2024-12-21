@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     keyboard: false
   });
 
-  let currentLayer = null; // Layer curent
+  let currentLayer = null;
   const regionTable = document.getElementById("regionTable").querySelector("tbody");
   const gradientSelector = document.getElementById("gradientSelector");
 
@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "europe.geojson": 5
   };
 
-  // Funcție pentru generarea gradientului
   const getColor = (value, maxValue, gradient) => {
     if (value === 0 || isNaN(value)) return "#ccc";
     const ratio = value / maxValue;
@@ -41,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // Funcție pentru actualizarea gradientului
   const updateMapGradient = () => {
     if (!currentLayer) return;
 
@@ -107,4 +105,16 @@ document.addEventListener("DOMContentLoaded", () => {
     loadMap(e.target.value);
   });
   gradientSelector.addEventListener("change", updateMapGradient);
+
+  // Funcția de export al hărții în PNG
+  document.getElementById("exportMap").addEventListener("click", () => {
+    const mapElement = document.getElementById("mapid");
+
+    html2canvas(mapElement).then(canvas => {
+      const link = document.createElement("a");
+      link.download = "map.png";
+      link.href = canvas.toDataURL();
+      link.click();
+    }).catch(err => console.error("Error exporting map:", err));
+  });
 });
