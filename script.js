@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     center: [47, 28], // Coordonate inițiale pentru Moldova
     zoom: 7,
     zoomControl: true,
-    scrollWheelZoom: false,
+    scrollWheelZoom: true,
     doubleClickZoom: false,
     dragging: true,
     touchZoom: false,
