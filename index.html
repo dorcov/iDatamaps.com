@@ -2,22 +2,79 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <title>Harta Moldova</title>
-  
-  <!-- CSS personal -->
+  <title>Infographic App</title>
+
+  <!-- Stil personal -->
   <link rel="stylesheet" href="style.css" />
-  
+
   <!-- Leaflet CSS (CDN) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
-  <!-- Div pentru hartă -->
-  <div id="mapid"></div>
-  
-  <!-- Leaflet JS (CDN) -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  
-  <!-- Script-ul nostru -->
-  <script src="script.js"></script>
+
+<div class="container">
+  <!-- Partea stângă (harta) -->
+  <div class="left-panel">
+    <div id="mapid"></div>
+  </div>
+
+  <!-- Partea dreaptă (UI / butoane / setări) -->
+  <div class="right-panel">
+
+    <!-- Header sau titlu -->
+    <div class="project-header">
+      <h2>Infographic Title</h2>
+      <p>Add description</p>
+      <button class="btn primary">New Project</button>
+      <button class="btn secondary">Save Project</button>
+    </div>
+
+    <!-- Quick Tools -->
+    <div class="quick-tools">
+      <h3>Quick tools</h3>
+      <button class="btn">Add text block</button>
+      <button class="btn">Copy Map Data</button>
+    </div>
+
+    <!-- Enter Data -->
+    <div class="enter-data">
+      <h3>Enter Data</h3>
+      <button class="btn">Paste Values</button>
+      <button class="btn">Connect to Google Sheets</button>
+      <button class="btn">Randomize</button>
+    </div>
+
+    <!-- Customise Data -->
+    <div class="customise-data">
+      <h3>Customise Data</h3>
+      <div class="data-table">
+        <label>Add prefix or suffix</label><br/>
+        <input type="text" placeholder="Prefix" /> 
+        <input type="text" placeholder="Suffix" />
+
+        <br/><br/>
+        <label>Search regions</label><br/>
+        <input type="text" placeholder="Enter region name" />
+      </div>
+    </div>
+
+    <!-- Valoarea totală / figură -->
+    <div class="total-figure">
+      <h2>Total Figure <span>0</span></h2>
+    </div>
+
+    <!-- Footer de credit / semnătură -->
+    <div class="footer-credit">
+      <p>Created by @cvldrn</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- Leaflet JS (CDN) -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- Script-ul nostru -->
+<script src="script.js"></script>
 </body>
 </html>
