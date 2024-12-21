@@ -1,19 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const map = L.map("mapid", {
-    center: [47, 28],
-    zoom: 7,
-    zoomControl: false,
-    scrollWheelZoom: false,
-    doubleClickZoom: false,
-    dragging: false,
-    touchZoom: false,
-    boxZoom: false,
-    keyboard: false
-  });
+  const map = L.map("mapid", { center: [47, 28], zoom: 7 });
 
   let currentLayer = null;
-  const regionTable = document.getElementById("regionTable").querySelector("tbody");
-  const gradientSelector = document.getElementById("gradientSelector");
 
   const zoomSettings = {
     "md.json": 9,
@@ -21,8 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
     "europe.geojson": 5
   };
 
+  const gradientSelector = document.getElementById("gradientSelector");
+  const regionTable = document.getElementById("regionTable").querySelector("tbody");
+
   const getColor = (value, maxValue, gradient) => {
-    if (value === 0 || isNaN(value)) return "#ccc";
+    if (value === 0 || isNaN(value)) return "#ccc"; // Gri pentru valori lipsă
     const ratio = value / maxValue;
     switch (gradient) {
       case "blue":
@@ -101,19 +92,19 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   loadMap("md.json");
+
   document.getElementById("mapSelector").addEventListener("change", (e) => {
     loadMap(e.target.value);
   });
+
   gradientSelector.addEventListener("change", updateMapGradient);
 
-  // Funcția de export al hărții în PNG folosind leaflet-image
   document.getElementById("exportMap").addEventListener("click", () => {
-    leafletImage(map, function (err, canvas) {
+    leafletImage(map, (err, canvas) => {
       if (err) {
         console.error("Eroare la generarea imaginii:", err);
         return;
       }
-
       const link = document.createElement("a");
       link.download = "map.png";
       link.href = canvas.toDataURL();

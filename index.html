@@ -5,18 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>iDatamaps</title>
 
-  <!-- Link către fișierul CSS -->
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- Link către Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 </head>
 <body>
 
 <div class="container">
+  <!-- Harta -->
   <div class="left-panel">
     <div id="mapid"></div>
   </div>
+
+  <!-- Panoul din dreapta -->
   <div class="right-panel">
     <div class="customise-data">
       <h3>Select Map</h3>
@@ -46,6 +47,7 @@
             </tr>
           </thead>
           <tbody>
+            <!-- Conținut generat din script -->
           </tbody>
         </table>
       </div>
@@ -57,13 +59,9 @@
   </div>
 </div>
 
-<!-- Link către Leaflet JS -->
+<!-- Leaflet și alte scripturi -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<!-- Link către leaflet-image -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-image/0.0.4/leaflet-image.min.js"></script>
-
-<!-- Link către script.js -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet-image@0.0.4/leaflet-image.min.js"></script>
 <script src="script.js" defer></script>
 
 </body>

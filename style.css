@@ -10,17 +10,14 @@ html, body {
   font-family: Arial, sans-serif;
 }
 
-/* Container principal */
 .container {
   display: flex;
-  width: 100%;
   height: 100%;
 }
 
-/* Dimensiunea secțiunii pentru hartă */
+/* Harta */
 .left-panel {
   flex: 0 0 70%;
-  position: relative;
   background: #f0f0f0;
 }
 
@@ -31,21 +28,13 @@ html, body {
   max-height: 800px;
 }
 
-@media (min-width: 1024px) {
-  #mapid {
-    min-height: 700px;
-  }
-}
-
-/* Partea dreaptă (UI) */
+/* Panoul din dreapta */
 .right-panel {
   flex: 1;
-  background: #ffffff;
   padding: 1rem;
   overflow-y: auto;
 }
 
-/* Dropdown-uri */
 #mapSelector, #gradientSelector {
   display: block;
   margin: 1rem 0;
@@ -55,11 +44,9 @@ html, body {
   max-width: 300px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background: #fff;
 }
 
-/* Tabel scrollabil */
-.data-table .table-container {
+.table-container {
   max-height: 300px;
   overflow-y: scroll;
   border: 1px solid #ccc;
@@ -71,33 +58,20 @@ table {
   border-collapse: collapse;
 }
 
-table th, table td {
+th, td {
   border: 1px solid #ccc;
-  padding: 0.4rem;
+  padding: 0.5rem;
   text-align: left;
-  font-size: 0.9rem;
 }
 
-table th {
+th {
   background-color: #f4f4f4;
-}
-
-table td input {
-  width: 100%;
-  border: 1px solid #ccc;
-  padding: 0.3rem;
-}
-
-/* Export Button */
-.export-button {
-  margin-top: 1rem;
 }
 
 #exportMap {
   padding: 0.5rem 1rem;
-  font-size: 1rem;
   background-color: #007bff;
-  color: #fff;
+  color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
