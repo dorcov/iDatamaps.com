@@ -2,29 +2,50 @@ document.addEventListener("DOMContentLoaded", () => {
   const map = L.map("mapid", {
     center: [47, 28],
     zoom: 7,
-    zoomControl: true,
-    scrollWheelZoom: true,
+    zoomControl: false,
+    scrollWheelZoom: false,
     doubleClickZoom: false,
-    dragging: true,
+    dragging: false,
     touchZoom: false,
     boxZoom: false,
     keyboard: false
   });
 
-  let currentLayer = null; // Layer curent (pentru a șterge harta anterioară)
+  let currentLayer = null; // Layer curent
   const regionTable = document.getElementById("regionTable").querySelector("tbody");
+  const gradientSelector = document.getElementById("gradientSelector");
 
   // Funcție pentru generarea gradientului
-  const getColor = (value, maxValue) => {
+  const getColor = (value, maxValue, gradient) => {
+    if (value === 0 || isNaN(value)) return "#ccc"; // Gri pentru valori lipsă
     const ratio = value / maxValue;
-    return `rgba(42, 115, 255, ${Math.min(0.3 + ratio * 0.7, 1)})`; // Gradual între transparent și opac
+    switch (gradient) {
+      case "blue":
+        return `rgba(42, 115, 255, ${Math.min(0.3 + ratio * 0.7, 1)})`;
+      case "green":
+        return `rgba(50, 200, 50, ${Math.min(0.3 + ratio * 0.7, 1)})`;
+      case "red":
+        return `rgba(255, 50, 50, ${Math.min(0.3 + ratio * 0.7, 1)})`;
+      case "blueDiverging":
+        return ratio > 0.5
+          ? `rgba(42, 115, 255, ${Math.min(0.3 + (ratio - 0.5) * 1.4, 1)})`
+          : `rgba(255, 50, 50, ${Math.min(0.3 + ratio * 1.4, 1)})`;
+      default:
+        return "#ccc";
+    }
   };
 
-  // Funcție pentru actualizarea gradientului hărții
+  // Funcție pentru actualizarea gradientului
   const updateMapGradient = () => {
     if (!currentLayer) return;
 
-    const maxValue = Math.max(...Array.from(regionTable.querySelectorAll("input")).map(input => parseFloat(input.value) || 0));
+    const maxValue = Math.max(
+      ...Array.from(regionTable.querySelectorAll("input")).map(input =>
+        parseFloat(input.value) || 0
+      )
+    );
+
+    const gradient = gradientSelector.value;
 
     currentLayer.eachLayer(layer => {
       const props = layer.feature.properties;
@@ -34,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Actualizează stilul stratului
       layer.setStyle({
-        fillColor: getColor(value, maxValue),
+        fillColor: getColor(value, maxValue, gradient),
         fillOpacity: 0.8,
         color: "#fff",
         weight: 1
@@ -84,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
           style: {
             color: "#fff",
             weight: 1,
-            fillColor: "#2a73ff",
+            fillColor: "#ccc", // Gri implicit
             fillOpacity: 0.8
           },
           onEachFeature: (feature, layer) => {
@@ -101,6 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Generează tabelul
         generateTable(geoData);
+        updateMapGradient();
       })
       .catch((err) => console.error("Eroare la încărcarea fișierului GeoJSON:", err));
   };
@@ -108,9 +130,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // Inițializează cu harta Moldovei
   loadMap("md.json");
 
-  // Ascultă schimbările din dropdown
-  const mapSelector = document.getElementById("mapSelector");
-  mapSelector.addEventListener("change", (e) => {
+  // Ascultă schimbările din dropdown-uri
+  document.getElementById("mapSelector").addEventListener("change", (e) => {
     loadMap(e.target.value);
   });
+
+  gradientSelector.addEventListener("change", updateMapGradient);
 });
