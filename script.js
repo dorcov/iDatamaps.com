@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const map = L.map("mapid", { center: [47, 28], zoom: 7 });
 
-  // Adăugarea unui strat de bază OpenStreetMap sau alternativ
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  // Stochează stratul de bază într-o variabilă
+  const baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
 
@@ -106,15 +106,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("exportMap").addEventListener("click", () => {
     console.log("Export map clicked");
+
+    // Verifică dacă stratul GeoJSON este prezent
+    if (currentLayer) {
+      console.log("GeoJSON layer is present");
+    } else {
+      console.log("GeoJSON layer is NOT present");
+    }
+
+    // Elimină stratul de bază înainte de export
+    map.removeLayer(baseLayer);
+
+    // Apelează leafletImage pentru a exporta harta
     leafletImage(map, (err, canvas) => {
       if (err) {
         console.error("Eroare la generarea imaginii:", err);
+        // Re-adaugă stratul de bază în caz de eroare
+        baseLayer.addTo(map);
         return;
       }
       const link = document.createElement("a");
       link.download = "map.png";
       link.href = canvas.toDataURL();
       link.click();
+
+      // Re-adaugă stratul de bază după export
+      baseLayer.addTo(map);
     });
   });
 });
