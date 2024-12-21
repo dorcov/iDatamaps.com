@@ -2,9 +2,9 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8" />
-  <title>Infographic App</title>
+  <title>Hărți Moldova, România și Europa</title>
 
-  <!-- Stil personal -->
+  <!-- CSS personal -->
   <link rel="stylesheet" href="style.css" />
 
   <!-- Leaflet CSS (CDN) -->
@@ -18,56 +18,18 @@
     <div id="mapid"></div>
   </div>
 
-  <!-- Partea dreaptă (UI / butoane / setări) -->
+  <!-- Partea dreaptă (UI / setări) -->
   <div class="right-panel">
 
-    <!-- Header sau titlu -->
-    <div class="project-header">
-      <h2>Infographic Title</h2>
-      <p>Add description</p>
-      <button class="btn primary">New Project</button>
-      <button class="btn secondary">Save Project</button>
-    </div>
-
-    <!-- Quick Tools -->
-    <div class="quick-tools">
-      <h3>Quick tools</h3>
-      <button class="btn">Add text block</button>
-      <button class="btn">Copy Map Data</button>
-    </div>
-
-    <!-- Enter Data -->
-    <div class="enter-data">
-      <h3>Enter Data</h3>
-      <button class="btn">Paste Values</button>
-      <button class="btn">Connect to Google Sheets</button>
-      <button class="btn">Randomize</button>
-    </div>
-
-    <!-- Customise Data -->
+    <!-- Select Map -->
     <div class="customise-data">
-      <h3>Customise Data</h3>
-      <div class="data-table">
-        <label>Add prefix or suffix</label><br/>
-        <input type="text" placeholder="Prefix" /> 
-        <input type="text" placeholder="Suffix" />
-
-        <br/><br/>
-        <label>Search regions</label><br/>
-        <input type="text" placeholder="Enter region name" />
-      </div>
+      <h3>Select Map</h3>
+      <select id="mapSelector">
+        <option value="md.json">Moldova</option>
+        <option value="ro_judete_poligon.json">România</option>
+        <option value="europe.geojson">Europa</option>
+      </select>
     </div>
-
-    <!-- Valoarea totală / figură -->
-    <div class="total-figure">
-      <h2>Total Figure <span>0</span></h2>
-    </div>
-
-    <!-- Footer de credit / semnătură -->
-    <div class="footer-credit">
-      <p>Created by @cvldrn</p>
-    </div>
-
   </div>
 </div>
 
