@@ -1,3 +1,15 @@
+/* Reset de bază */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
 /* Container principal */
 .container {
   display: flex;
@@ -5,17 +17,24 @@
   height: 100%;
 }
 
-/* Partea stângă (harta mai mică) */
+/* Dimensiunea secțiunii pentru hartă */
 .left-panel {
-  flex: 0 0 60%; /* Ajustăm dimensiunea părții cu harta */
+  flex: 0 0 70%; /* Ajustăm dimensiunea părții cu harta */
   position: relative;
   background: #f0f0f0;
 }
 
-/* Harta Leaflet */
 #mapid {
   width: 100%;
-  height: 100%;
+  height: 100%; /* Harta va ocupa întregul div */
+  min-height: 500px; /* Înălțime minimă pentru ecrane mari */
+  max-height: 800px; /* Înălțime maximă */
+}
+
+@media (min-width: 1024px) {
+  #mapid {
+    min-height: 600px;
+  }
 }
 
 /* Partea dreaptă (UI) */
