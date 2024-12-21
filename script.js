@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentLayer = null;
 
   const zoomSettings = {
-    "md.json": 9,
+    "md.json": 15,
     "ro_judete_poligon.json": 7,
-    "europe.geojson": 5
+    "europe.geojson": 9
   };
 
   const gradientSelector = document.getElementById("gradientSelector");
