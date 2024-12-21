@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const map = L.map("mapid", {
     center: [47, 28],   // coordonate aproximative pentru Moldova
     zoom: 7,            // nivel inițial de zoom
-    zoomControl: false,
-    scrollWheelZoom: false,
+    zoomControl: true,
+    scrollWheelZoom: true,
     doubleClickZoom: false,
     dragging: false,
     touchZoom: false,
