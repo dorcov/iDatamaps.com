@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 2. Încarcă fișierul GeoJSON (moldovanew.json)
-  fetch("data/moldovanew.json")
+  fetch("data/md.json")
     .then(response => response.json())
     .then(geoData => {
       // 3. Creează un layer Leaflet cu poligoanele
