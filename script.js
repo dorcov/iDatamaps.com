@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const map = L.map("mapid", { center: [47, 28], zoom: 7 });
 
-  // Setează stratul de bază (opțional, poți să-l lași dacă dorești)
+  // Stochează stratul de bază într-o variabilă
   const baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
@@ -107,53 +107,55 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("exportMap").addEventListener("click", () => {
     console.log("Export map clicked");
 
-    // Accesează elementul SVG al hărții
-    const svg = document.querySelector("#mapid svg");
-
-    if (!svg) {
-      console.error("No SVG found on the map");
+    if (!currentLayer) {
+      console.error("No GeoJSON layer present on the map.");
       return;
     }
 
-    // Serializează SVG-ul
-    const serializer = new XMLSerializer();
-    let svgString = serializer.serializeToString(svg);
+    // Salvează vizualizarea curentă a hărții
+    const originalCenter = map.getCenter();
+    const originalZoom = map.getZoom();
 
-    // Adaugă namespace-uri dacă lipsesc
-    if(!svgString.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
-        svgString = svgString.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
-    }
-    if(!svgString.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
-        svgString = svgString.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
-    }
+    // Ajustează harta pentru a se potrivi tuturor straturilor GeoJSON
+    map.fitBounds(currentLayer.getBounds(), { maxZoom: zoomSettings["md.json"] || 15 });
 
-    // Creează un canvas
-    const canvas = document.createElement("canvas");
-    const width = map.getSize().x;
-    const height = map.getSize().y;
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext("2d");
+    // După ce harta a fost ajustată, așteaptă puțin pentru a te asigura că toate straturile sunt încărcate
+    setTimeout(() => {
+      // Setează opacitatea stratului de bază la 0 pentru a nu fi inclus în export
+      baseLayer.setOpacity(0);
 
-    // Creează o imagine
-    const img = new Image();
+      // Generează imaginea folosind leaflet-image
+      leafletImage(map, (err, canvas) => {
+        if (err) {
+          console.error("Eroare la generarea imaginii:", err);
+          // Re-adaugă stratul de bază în caz de eroare
+          baseLayer.setOpacity(1);
+          // Revine la vizualizarea originală
+          map.setView(originalCenter, originalZoom);
+          return;
+        }
 
-    // Setează sursa imaginii la datele SVG codificate în base64
-    img.onload = function() {
-      // Desenează SVG-ul pe canvas
-      context.drawImage(img, 0, 0);
-      // Exportă ca PNG
-      const link = document.createElement("a");
-      link.download = "map.png";
-      link.href = canvas.toDataURL();
-      link.click();
-    };
-    
-    // Gestionează erorile
-    img.onerror = function(e) {
-      console.error("Error loading SVG into image", e);
-    }
+        // Crează un nou canvas cu rezoluție mai mare
+        const scaleFactor = 2; // Schimbă factorul de scalare după necesitate
+        const highResCanvas = document.createElement("canvas");
+        highResCanvas.width = canvas.width * scaleFactor;
+        highResCanvas.height = canvas.height * scaleFactor;
+        const highResContext = highResCanvas.getContext("2d");
 
-    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
+        // Desenează canvas-ul original pe canvas-ul de rezoluție înaltă
+        highResContext.drawImage(canvas, 0, 0, highResCanvas.width, highResCanvas.height);
+
+        // Exportă canvas-ul de rezoluție înaltă ca PNG
+        const link = document.createElement("a");
+        link.download = "map.png";
+        link.href = highResCanvas.toDataURL();
+        link.click();
+
+        // Re-adaugă stratul de bază după export
+        baseLayer.setOpacity(1);
+        // Revine la vizualizarea originală
+        map.setView(originalCenter, originalZoom);
+      });
+    }, 500); // Ajustează timpul de așteptare dacă este necesar
   });
 });
