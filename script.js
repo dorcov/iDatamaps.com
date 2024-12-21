@@ -2,10 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const map = L.map("mapid", {
     center: [47, 28],
     zoom: 7,
-    zoomControl: false,
-    scrollWheelZoom: false,
+    zoomControl: true,
+    scrollWheelZoom: true,
     doubleClickZoom: false,
-    dragging: false,
+    dragging: true,
     touchZoom: false,
     boxZoom: false,
     keyboard: false
