@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   const map = L.map("mapid", { center: [47, 28], zoom: 7 });
 
+  // Adăugarea unui strat de bază OpenStreetMap sau alternativ
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
   let currentLayer = null;
 
   const zoomSettings = {
@@ -45,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     currentLayer.eachLayer(layer => {
       const props = layer.feature.properties;
       const regionName = props.NAME || props.RAION || props.name;
-      const input = document.querySelector(`[data-region="${regionName}"]`);
+      const input = document.querySelector(`[data-region="${encodeURIComponent(regionName)}"]`);
       const value = input ? parseFloat(input.value) || 0 : 0;
 
       layer.setStyle({
@@ -63,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const props = feature.properties;
       const regionName = props.NAME || props.RAION || props.name || "Unknown";
       const row = document.createElement("tr");
-      row.innerHTML = `<td>${regionName}</td><td><input type="number" value="0" data-region="${regionName}" /></td>`;
+      row.innerHTML = `<td>${regionName}</td><td><input type="number" value="0" data-region="${encodeURIComponent(regionName)}" /></td>`;
       regionTable.appendChild(row);
     });
 
@@ -100,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
   gradientSelector.addEventListener("change", updateMapGradient);
 
   document.getElementById("exportMap").addEventListener("click", () => {
+    console.log("Export map clicked");
     leafletImage(map, (err, canvas) => {
       if (err) {
         console.error("Eroare la generarea imaginii:", err);
