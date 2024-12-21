@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     zoomControl: true,
     scrollWheelZoom: true,
     doubleClickZoom: false,
-    dragging: false,
+    dragging: true,
     touchZoom: false,
     boxZoom: false,
     keyboard: false
