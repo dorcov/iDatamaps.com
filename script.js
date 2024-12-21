@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const map = L.map("mapid", { center: [47, 28], zoom: 7 });
 
-  // Stochează stratul de bază într-o variabilă
+  // Setează stratul de bază (opțional, poți să-l lași dacă dorești)
   const baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
   }).addTo(map);
@@ -107,31 +107,53 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("exportMap").addEventListener("click", () => {
     console.log("Export map clicked");
 
-    // Verifică dacă stratul GeoJSON este prezent
-    if (currentLayer) {
-      console.log("GeoJSON layer is present");
-    } else {
-      console.log("GeoJSON layer is NOT present");
+    // Accesează elementul SVG al hărții
+    const svg = document.querySelector("#mapid svg");
+
+    if (!svg) {
+      console.error("No SVG found on the map");
+      return;
     }
 
-    // Elimină stratul de bază înainte de export
-    map.removeLayer(baseLayer);
+    // Serializează SVG-ul
+    const serializer = new XMLSerializer();
+    let svgString = serializer.serializeToString(svg);
 
-    // Apelează leafletImage pentru a exporta harta
-    leafletImage(map, (err, canvas) => {
-      if (err) {
-        console.error("Eroare la generarea imaginii:", err);
-        // Re-adaugă stratul de bază în caz de eroare
-        baseLayer.addTo(map);
-        return;
-      }
+    // Adaugă namespace-uri dacă lipsesc
+    if(!svgString.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+        svgString = svgString.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+    }
+    if(!svgString.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+        svgString = svgString.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+    }
+
+    // Creează un canvas
+    const canvas = document.createElement("canvas");
+    const width = map.getSize().x;
+    const height = map.getSize().y;
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext("2d");
+
+    // Creează o imagine
+    const img = new Image();
+
+    // Setează sursa imaginii la datele SVG codificate în base64
+    img.onload = function() {
+      // Desenează SVG-ul pe canvas
+      context.drawImage(img, 0, 0);
+      // Exportă ca PNG
       const link = document.createElement("a");
       link.download = "map.png";
       link.href = canvas.toDataURL();
       link.click();
+    };
+    
+    // Gestionează erorile
+    img.onerror = function(e) {
+      console.error("Error loading SVG into image", e);
+    }
 
-      // Re-adaugă stratul de bază după export
-      baseLayer.addTo(map);
-    });
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
   });
 });

@@ -26,6 +26,7 @@ html, body {
   height: 100%;
   min-height: 600px;
   max-height: 800px;
+  background-color: white; /* Setează o culoare de fundal */
 }
 
 /* Panoul din dreapta */
