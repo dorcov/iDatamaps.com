@@ -106,15 +106,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   gradientSelector.addEventListener("change", updateMapGradient);
 
-  // Funcția de export al hărții în PNG
+  // Funcția de export al hărții în PNG folosind leaflet-image
   document.getElementById("exportMap").addEventListener("click", () => {
-    const mapElement = document.getElementById("mapid");
+    leafletImage(map, function (err, canvas) {
+      if (err) {
+        console.error("Eroare la generarea imaginii:", err);
+        return;
+      }
 
-    html2canvas(mapElement).then(canvas => {
       const link = document.createElement("a");
       link.download = "map.png";
       link.href = canvas.toDataURL();
       link.click();
-    }).catch(err => console.error("Error exporting map:", err));
+    });
   });
 });

@@ -19,16 +19,16 @@ html, body {
 
 /* Dimensiunea secțiunii pentru hartă */
 .left-panel {
-  flex: 0 0 70%; /* Ajustăm dimensiunea părții cu harta */
+  flex: 0 0 70%;
   position: relative;
   background: #f0f0f0;
 }
 
 #mapid {
   width: 100%;
-  height: 100%; /* Harta va ocupa întregul div */
-  min-height: 600px; /* Înălțime minimă pentru ecrane mari */
-  max-height: 800px; /* Înălțime maximă */
+  height: 100%;
+  min-height: 600px;
+  max-height: 800px;
 }
 
 @media (min-width: 1024px) {
@@ -42,7 +42,7 @@ html, body {
   flex: 1;
   background: #ffffff;
   padding: 1rem;
-  overflow-y: auto; /* Scroll vertical dacă secțiunea devine prea mare */
+  overflow-y: auto;
 }
 
 /* Dropdown-uri */
@@ -60,13 +60,12 @@ html, body {
 
 /* Tabel scrollabil */
 .data-table .table-container {
-  max-height: 300px; /* Limitează înălțimea tabelului */
-  overflow-y: scroll; /* Adaugă scroll vertical */
+  max-height: 300px;
+  overflow-y: scroll;
   border: 1px solid #ccc;
   margin-top: 1rem;
 }
 
-/* Tabel */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -76,7 +75,7 @@ table th, table td {
   border: 1px solid #ccc;
   padding: 0.4rem;
   text-align: left;
-  font-size: 0.9rem; /* Text mai mic */
+  font-size: 0.9rem;
 }
 
 table th {
