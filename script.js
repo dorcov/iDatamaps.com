@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Initialize the map
   const map = L.map("mapid", { center: [47, 28], zoom: 7 });
-  
-  // 1. Crearea unui strat de bază transparent folosind L.GridLayer
+
+  // 1. Eliminarea stratului de fundal OpenStreetMap și folosirea unui strat de bază transparent
   const TransparentLayer = L.GridLayer.extend({
       createTile: function(coords) {
           const tile = document.createElement('div');
@@ -12,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
           return tile;
       }
   });
-  
+
   const transparentTileLayer = new TransparentLayer({
       tileSize: 256,
       noWrap: true,
@@ -20,18 +19,18 @@ document.addEventListener("DOMContentLoaded", () => {
       attribution: '',
       opacity: 0
   }).addTo(map);
-  
+
   let currentLayer = null;
-  
+
   const zoomSettings = {
       "md.json": 15,
       "ro_judete_poligon.json": 7,
       "europe.geojson": 9
   };
-  
+
   const gradientSelector = document.getElementById("gradientSelector");
   const regionTable = document.getElementById("regionTable").querySelector("tbody");
-  
+
   const getColor = (value, maxValue, gradient) => {
       if (value === 0 || isNaN(value)) return "#ccc"; // Gri pentru valori lipsă
       const ratio = value / maxValue;
@@ -50,24 +49,24 @@ document.addEventListener("DOMContentLoaded", () => {
               return "#ccc";
       }
   };
-  
+
   const updateMapGradient = () => {
       if (!currentLayer) return;
-  
+
       const maxValue = Math.max(
           ...Array.from(regionTable.querySelectorAll("input")).map(input =>
               parseFloat(input.value) || 0
           )
       );
-  
+
       const gradient = gradientSelector.value;
-  
+
       currentLayer.eachLayer(layer => {
           const props = layer.feature.properties;
           const regionName = props.NAME || props.RAION || props.name;
           const input = document.querySelector(`[data-region="${encodeURIComponent(regionName)}"]`);
           const value = input ? parseFloat(input.value) || 0 : 0;
-  
+
           layer.setStyle({
               fillColor: getColor(value, maxValue, gradient),
               fillOpacity: 0.8,
@@ -76,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
           });
       });
   };
-  
+
   const generateTable = (geoData) => {
       regionTable.innerHTML = "";
       geoData.features.forEach(feature => {
@@ -86,12 +85,12 @@ document.addEventListener("DOMContentLoaded", () => {
           row.innerHTML = `<td>${regionName}</td><td><input type="number" value="0" data-region="${encodeURIComponent(regionName)}" /></td>`;
           regionTable.appendChild(row);
       });
-  
+
       regionTable.querySelectorAll("input").forEach(input => {
           input.addEventListener("input", updateMapGradient);
       });
   };
-  
+
   const loadMap = (geojsonFile) => {
       fetch(`data/${geojsonFile}`)
           .then(response => response.json())
@@ -111,15 +110,15 @@ document.addEventListener("DOMContentLoaded", () => {
           })
           .catch(err => console.error("Error loading GeoJSON:", err));
   };
-  
+
   loadMap("md.json");
-  
+
   document.getElementById("mapSelector").addEventListener("change", (e) => {
       loadMap(e.target.value);
   });
-  
+
   gradientSelector.addEventListener("change", updateMapGradient);
-  
+
   // Adăugăm un strat de test pentru a verifica dacă exportul funcționează
   const testCircle = L.circle([47, 28], {
       color: 'red',
@@ -127,77 +126,50 @@ document.addEventListener("DOMContentLoaded", () => {
       fillOpacity: 0.5,
       radius: 5000
   }).addTo(map);
-  
-  // Încarcă leaflet-image după ce pagina este încărcată
-  // Asigură-te că folosești cea mai recentă versiune a leaflet-image
-  const leafletImageScript = document.createElement('script');
-  leafletImageScript.src = "https://unpkg.com/leaflet-image/leaflet-image.js";
-  leafletImageScript.onload = () => {
-      console.log("leaflet-image loaded");
-  
-      document.getElementById("exportMap").addEventListener("click", () => {
-          console.log("Export map clicked");
-  
-          if (!currentLayer) {
-              console.error("No GeoJSON layer present on the map.");
-              return;
-          }
-  
-          // Salvează vizualizarea originală a hărții
-          const originalCenter = map.getCenter();
-          const originalZoom = map.getZoom();
-  
-          // Ajustează harta pentru a se potrivi tuturor straturilor GeoJSON
-          map.fitBounds(currentLayer.getBounds(), { maxZoom: zoomSettings["md.json"] || 15 });
-  
-          // Ascunde stratul de bază pentru a nu fi inclus în export
-          transparentTileLayer.setOpacity(0);
-  
-          // Ascunde stratul de test pentru a verifica exportul
-          testCircle.setStyle({ fillOpacity: 0, opacity: 0 });
-  
-          // Ascunde alte elemente non-GeoJSON dacă este necesar
-  
-          // Așteaptă până când harta este complet redată
-          map.once('idle', () => {
-              console.log("Map is idle, proceeding with export");
-  
-              // Utilizează leaflet-image pentru a captura harta
-              leafletImage(map, (err, canvas) => {
-                  if (err) {
-                      console.error("Error generating image:", err);
-                      // Restore the original view
-                      map.setView(originalCenter, originalZoom);
-                      // Reafișează straturile ascunse în caz de eroare
-                      transparentTileLayer.setOpacity(0); // Rămâne transparent
-                      testCircle.setStyle({ fillOpacity: 0.5, opacity: 1 });
-                      return;
-                  }
-  
-                  // Scalează canvas-ul pentru rezoluție mai înaltă
-                  const scaleFactor = 3; // Poți ajusta acest factor pentru o rezoluție mai mare
-                  const highResCanvas = document.createElement("canvas");
-                  highResCanvas.width = canvas.width * scaleFactor;
-                  highResCanvas.height = canvas.height * scaleFactor;
-                  const highResContext = highResCanvas.getContext("2d");
-  
-                  highResContext.drawImage(canvas, 0, 0, highResCanvas.width, highResCanvas.height);
-  
-                  // Creează un link pentru descărcare
-                  const link = document.createElement("a");
-                  link.download = "map.png";
-                  link.href = highResCanvas.toDataURL();
+
+  document.getElementById("exportMap").addEventListener("click", () => {
+      console.log("Export map clicked");
+
+      if (!currentLayer) {
+          console.error("No GeoJSON layer present on the map.");
+          return;
+      }
+
+      // 1. Ajustarea vizualizării hărții pentru a include toate straturile GeoJSON
+      map.fitBounds(currentLayer.getBounds(), { maxZoom: zoomSettings["md.json"] || 15 });
+
+      // 2. Așteaptă până când harta este complet redată
+      map.once('idle', () => {
+          console.log("Map is idle, proceeding with export");
+
+          // 3. Utilizează dom-to-image pentru a captura div-ul hărții
+          const mapElement = document.getElementById('mapid');
+
+          // 4. Configurarea opțiunilor pentru dom-to-image
+          const scaleFactor = 3; // Factor de scalare pentru rezoluție înaltă
+
+          const exportOptions = {
+              width: mapElement.clientWidth * scaleFactor,
+              height: mapElement.clientHeight * scaleFactor,
+              style: {
+                  transform: `scale(${scaleFactor})`,
+                  transformOrigin: 'top left',
+                  width: `${mapElement.clientWidth}px`,
+                  height: `${mapElement.clientHeight}px`
+              },
+              quality: 1
+          };
+
+          domtoimage.toPng(mapElement, exportOptions)
+              .then(function (dataUrl) {
+                  const link = document.createElement('a');
+                  link.download = 'map.png';
+                  link.href = dataUrl;
                   link.click();
-  
-                  // Restore the original view
-                  map.setView(originalCenter, originalZoom);
-  
-                  // Reafișează straturile ascunse
-                  transparentTileLayer.setOpacity(0); // Rămâne transparent
-                  testCircle.setStyle({ fillOpacity: 0.5, opacity: 1 });
+              })
+              .catch(function (error) {
+                  console.error('Error exporting map:', error);
               });
-          });
       });
-  };
-  document.body.appendChild(leafletImageScript);
+  });
 });
