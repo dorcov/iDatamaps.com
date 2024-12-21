@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 2. Încarcă fișierul GeoJSON (raioane.json)
-  fetch("data/raioane.json")
+  fetch("data/moldova.json")
     .then(response => response.json())
     .then(geoData => {
       // 3. Creează un layer pentru poligoanele raioanelor
