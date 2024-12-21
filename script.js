@@ -1,176 +1,77 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const map = L.map("mapid", { center: [47, 28], zoom: 7 });
+// script.js
 
-  // 1. Crearea unui strat de bază transparent folosind L.GridLayer
-  const TransparentLayer = L.GridLayer.extend({
-      createTile: function(coords) {
-          const tile = document.createElement('div');
-          tile.style.width = this.getTileSize().x + 'px';
-          tile.style.height = this.getTileSize().y + 'px';
-          tile.style.background = 'transparent';
-          return tile;
-      }
-  });
+const canvas = document.getElementById('mapCanvas');
+const ctx = canvas.getContext('2d');
 
-  const transparentTileLayer = new TransparentLayer({
-      tileSize: 256,
-      noWrap: true,
-      bounds: [[-90, -180], [90, 180]],
-      attribution: '',
-      opacity: 0
-  }).addTo(map);
+// Încarcă imaginea hărții personalizate
+const mapImage = new Image();
+mapImage.src = 'path/to/your/map-image.png'; // Înlocuiește cu calea către imaginea ta
 
-  let currentLayer = null;
+mapImage.onload = () => {
+    // Desenează harta pe canvas
+    ctx.drawImage(mapImage, 0, 0, canvas.width, canvas.height);
+    // După încărcarea hărții, poți încărca straturile GeoJSON
+    loadGeoJSON();
+};
 
-  const zoomSettings = {
-      "md.json": 15,
-      "ro_judete_poligon.json": 7,
-      "europe.geojson": 9
-  };
+mapImage.onerror = () => {
+    console.error('Eroare la încărcarea imaginii hărții.');
+};
 
-  const gradientSelector = document.getElementById("gradientSelector");
-  const regionTable = document.getElementById("regionTable").querySelector("tbody");
+// Proiecție simplă: equirectangular
+function project(lon, lat) {
+    const x = ((lon + 180) / 360) * canvas.width;
+    const y = ((90 - lat) / 180) * canvas.height;
+    return [x, y];
+}
 
-  const getColor = (value, maxValue, gradient) => {
-      if (value === 0 || isNaN(value)) return "#ccc"; // Gri pentru valori lipsă
-      const ratio = value / maxValue;
-      switch (gradient) {
-          case "blue":
-              return `rgba(42, 115, 255, ${Math.min(0.3 + ratio * 0.7, 1)})`;
-          case "green":
-              return `rgba(50, 200, 50, ${Math.min(0.3 + ratio * 0.7, 1)})`;
-          case "red":
-              return `rgba(255, 50, 50, ${Math.min(0.3 + ratio * 0.7, 1)})`;
-          case "blueDiverging":
-              return ratio > 0.5
-                  ? `rgba(42, 115, 255, ${Math.min(0.3 + (ratio - 0.5) * 1.4, 1)})`
-                  : `rgba(255, 50, 50, ${Math.min(0.3 + ratio * 1.4, 1)})`;
-          default:
-              return "#ccc";
-      }
-  };
+// Funcție pentru a desena un poligon
+function drawPolygon(coordinates, fillColor = 'rgba(0, 255, 0, 0.5)', strokeColor = '#fff') {
+    ctx.beginPath();
+    coordinates.forEach((coord, index) => {
+        const [lon, lat] = coord;
+        const [x, y] = project(lon, lat);
+        if (index === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    });
+    ctx.closePath();
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+    ctx.strokeStyle = strokeColor;
+    ctx.stroke();
+}
 
-  const updateMapGradient = () => {
-      if (!currentLayer) return;
+// Încărcarea fișierului GeoJSON
+function loadGeoJSON() {
+    fetch('path/to/your/data.geojson') // Înlocuiește cu calea către fișierul tău GeoJSON
+        .then(response => response.json())
+        .then(data => {
+            data.features.forEach(feature => {
+                const geometry = feature.geometry;
+                if (geometry.type === 'Polygon') {
+                    geometry.coordinates.forEach(polygon => {
+                        drawPolygon(polygon);
+                    });
+                } else if (geometry.type === 'MultiPolygon') {
+                    geometry.coordinates.forEach(multiPolygon => {
+                        multiPolygon.forEach(polygon => {
+                            drawPolygon(polygon);
+                        });
+                    });
+                }
+            });
+        })
+        .catch(err => console.error('Eroare la încărcarea GeoJSON:', err));
+}
 
-      const maxValue = Math.max(
-          ...Array.from(regionTable.querySelectorAll("input")).map(input =>
-              parseFloat(input.value) || 0
-          )
-      );
-
-      const gradient = gradientSelector.value;
-
-      currentLayer.eachLayer(layer => {
-          const props = layer.feature.properties;
-          const regionName = props.NAME || props.RAION || props.name;
-          const input = document.querySelector(`[data-region="${encodeURIComponent(regionName)}"]`);
-          const value = input ? parseFloat(input.value) || 0 : 0;
-
-          layer.setStyle({
-              fillColor: getColor(value, maxValue, gradient),
-              fillOpacity: 0.8,
-              color: "#fff",
-              weight: 1
-          });
-      });
-  };
-
-  const generateTable = (geoData) => {
-      regionTable.innerHTML = "";
-      geoData.features.forEach(feature => {
-          const props = feature.properties;
-          const regionName = props.NAME || props.RAION || props.name || "Unknown";
-          const row = document.createElement("tr");
-          row.innerHTML = `<td>${regionName}</td><td><input type="number" value="0" data-region="${encodeURIComponent(regionName)}" /></td>`;
-          regionTable.appendChild(row);
-      });
-
-      regionTable.querySelectorAll("input").forEach(input => {
-          input.addEventListener("input", updateMapGradient);
-      });
-  };
-
-  const loadMap = (geojsonFile) => {
-      fetch(`data/${geojsonFile}`)
-          .then(response => response.json())
-          .then(geoData => {
-              if (currentLayer) map.removeLayer(currentLayer);
-              currentLayer = L.geoJSON(geoData, {
-                  renderer: L.svg(), // Utilizează renderer-ul SVG pentru compatibilitate mai bună cu dom-to-image
-                  style: { color: "#fff", weight: 1, fillColor: "#ccc", fillOpacity: 0.8 },
-                  onEachFeature: (feature, layer) => {
-                      const props = layer.feature.properties;
-                      const regionName = props.NAME || props.RAION || props.name || "Unknown";
-                      layer.bindPopup(regionName);
-                  }
-              }).addTo(map);
-              map.fitBounds(currentLayer.getBounds(), { maxZoom: zoomSettings[geojsonFile] || 15 });
-              generateTable(geoData);
-          })
-          .catch(err => console.error("Error loading GeoJSON:", err));
-  };
-
-  loadMap("md.json");
-
-  document.getElementById("mapSelector").addEventListener("change", (e) => {
-      loadMap(e.target.value);
-  });
-
-  gradientSelector.addEventListener("change", updateMapGradient);
-
-  // Adăugăm un strat de test pentru a verifica dacă exportul funcționează
-  const testCircle = L.circle([47, 28], {
-      color: 'red',
-      fillColor: '#f03',
-      fillOpacity: 0.5,
-      radius: 5000
-  }).addTo(map);
-
-  // Funcția de export
-  document.getElementById("exportMap").addEventListener("click", () => {
-      console.log("Export map clicked");
-
-      if (!currentLayer) {
-          console.error("No GeoJSON layer present on the map.");
-          return;
-      }
-
-      // 1. Ajustarea vizualizării hărții pentru a include toate straturile GeoJSON
-      map.fitBounds(currentLayer.getBounds(), { maxZoom: zoomSettings["md.json"] || 15 });
-
-      // 2. Așteaptă până când harta este complet redată
-      map.once('idle', () => {
-          console.log("Map is idle, proceeding with export");
-
-          // 3. Utilizează dom-to-image pentru a captura div-ul hărții
-          const mapElement = document.getElementById('mapid');
-
-          // 4. Configurarea opțiunilor pentru dom-to-image
-          const scaleFactor = 3; // Factor de scalare pentru rezoluție înaltă
-
-          const exportOptions = {
-              width: mapElement.clientWidth * scaleFactor,
-              height: mapElement.clientHeight * scaleFactor,
-              style: {
-                  transform: `scale(${scaleFactor})`,
-                  transformOrigin: 'top left',
-                  width: `${mapElement.clientWidth}px`,
-                  height: `${mapElement.clientHeight}px`
-              },
-              quality: 1
-          };
-
-          domtoimage.toPng(mapElement, exportOptions)
-              .then(function (dataUrl) {
-                  const link = document.createElement('a');
-                  link.download = 'map.png';
-                  link.href = dataUrl;
-                  link.click();
-              })
-              .catch(function (error) {
-                  console.error('Error exporting map:', error);
-              });
-      });
-  });
+// Exportarea hărții ca PNG
+document.getElementById('exportButton').addEventListener('click', () => {
+    const dataURL = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = 'map.png';
+    link.click();
 });
