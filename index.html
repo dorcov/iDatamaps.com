@@ -3,37 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Map Exporter</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        #mapCanvas {
-            border: 1px solid #000;
-            cursor: grab;
-        }
-        #exportButton {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        #exportButton:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>iDatamaps</title>
+
+    <!-- CSS Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Stiluri Personalizate -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <canvas id="mapCanvas" width="800" height="600"></canvas>
-    <button id="exportButton">Export Map as PNG</button>
 
-    <script src="script.js"></script>
+<div class="container">
+    <!-- Harta -->
+    <div class="left-panel">
+        <div id="mapid"></div>
+    </div>
+
+    <!-- Panoul din dreapta -->
+    <div class="right-panel">
+        <div class="customise-data">
+            <h3>Select Map</h3>
+            <select id="mapSelector">
+                <option value="md.json">Moldova</option>
+                <option value="ro_judete_poligon.json">România</option>
+                <option value="europe.geojson">Europa</option>
+            </select>
+
+            <h3>Select Gradient</h3>
+            <select id="gradientSelector">
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+                <option value="red">Red</option>
+                <option value="blueDiverging">Blue Diverging</option>
+            </select>
+        </div>
+
+        <div class="data-table">
+            <h3>Data Table</h3>
+            <div class="table-container">
+                <table id="regionTable">
+                    <thead>
+                        <tr>
+                            <th>Region</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Conținut generat din script -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="export-button">
+            <button id="exportMap">Export Map as PNG</button>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript Leaflet -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!-- Include leaflet-image din CDN -->
+<script src="https://unpkg.com/leaflet-image/leaflet-image.js"></script>
+
+<!-- Scriptul tău JavaScript -->
+<script src="script.js" defer></script>
+
 </body>
 </html>
