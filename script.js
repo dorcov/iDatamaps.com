@@ -1,8 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Initializează harta
-  const map = L.map("mapid", { center: [47, 28], zoom: 7, attributionControl: false });
+  const map = L.map("mapid", {
+    center: [47, 28],
+    zoom: 7,
+    attributionControl: false
+  });
 
-  // Setează stratul de bază transparent pentru a nu fi inclus în export
+  // Stratul de bază transparent (opțional)
   const TransparentLayer = L.GridLayer.extend({
     createTile: function(coords) {
       const tile = document.createElement('div');
@@ -33,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const regionTable = document.getElementById("regionTable").querySelector("tbody");
 
   const getColor = (value, maxValue, gradient) => {
-    if (value === 0 || isNaN(value)) return "#ccc"; // Gri pentru valori lipsă
+    if (value === 0 || isNaN(value)) return "#ccc";
     const ratio = value / maxValue;
     switch (gradient) {
       case "blue":
@@ -97,22 +101,33 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(response => response.json())
       .then(geoData => {
         if (currentLayer) map.removeLayer(currentLayer);
+
         currentLayer = L.geoJSON(geoData, {
-          renderer: L.svg(), // Utilizează renderer-ul SVG
-          style: { color: "#fff", weight: 1, fillColor: "#ccc", fillOpacity: 0.8 },
+          renderer: L.svg(),
+          style: {
+            color: "#fff",
+            weight: 1,
+            fillColor: "#ccc",
+            fillOpacity: 0.8
+          },
           onEachFeature: (feature, layer) => {
             const props = layer.feature.properties;
             const regionName = props.NAME || props.RAION || props.name || "Unknown";
             layer.bindPopup(regionName);
           }
         }).addTo(map);
-        map.fitBounds(currentLayer.getBounds(), { maxZoom: zoomSettings[geojsonFile] || 15 });
+
+        map.fitBounds(currentLayer.getBounds(), {
+          maxZoom: zoomSettings[geojsonFile] || 15
+        });
+
         generateTable(geoData);
-        updateMapGradient(); // Actualizează culorile după încărcarea datelor
+        updateMapGradient();
       })
       .catch(err => console.error("Error loading GeoJSON:", err));
   };
 
+  // Încarcă inițial "md.json"
   loadMap("md.json");
 
   document.getElementById("mapSelector").addEventListener("change", (e) => {
@@ -121,25 +136,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   gradientSelector.addEventListener("change", updateMapGradient);
 
-  // Adăugăm un strat de test pentru a verifica dacă exportul funcționează
-  const testCircle = L.circle([47, 28], {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5,
-    radius: 5000
-  }).addTo(map);
-
-  // Inițializează Leaflet EasyPrint
-  const printer = L.easyPrint({
-    title: 'Export Map',
-    position: 'topright',
-    exportOnly: true,
-    hideClasses: ['leaflet-control-zoom', 'leaflet-control-layers'] // Ascunde controalele neesențiale în export
-  }).addTo(map);
-
-  // Legare buton personalizat la funcția de export a Leaflet EasyPrint
+  // --- Aici vine logica de export cu html2canvas ---
   document.getElementById("exportMap").addEventListener("click", () => {
-    console.log("Export map clicked");
-    printer.printMap('CurrentView');
+    const mapElement = document.getElementById("mapid");
+
+    // Face screenshot la div-ul cu harta
+    html2canvas(mapElement, { useCORS: true })
+      .then((canvas) => {
+        const dataUrl = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "map_snapshot.png";
+        link.click();
+      })
+      .catch((err) => {
+        console.error("Eroare la generarea screenshot-ului:", err);
+      });
   });
 });
