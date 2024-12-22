@@ -6,34 +6,43 @@
   <title>Harta Interactivă</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div id="container">
-    <div id="map">
+  <div class="container">
+    <div class="map-column">
       <svg id="mapSVG">
-        <g id="mapGroup"></g>
+        <g class="map-group"></g>
       </svg>
     </div>
-    <div id="controls">
+    <div class="right-panel">
       <h3>Select Map</h3>
       <select id="mapSelector">
         <option value="md.json">Moldova</option>
         <option value="europe.geojson">Europa</option>
       </select>
+      <h3>Select Gradient</h3>
+      <select id="gradientSelector">
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+        <option value="red">Red</option>
+        <option value="blueDiverging">Blue Diverging</option>
+      </select>
       <h3>Data Table</h3>
-      <div id="tableContainer">
-        <table>
+      <div class="table-container">
+        <table id="regionTable">
           <thead>
             <tr>
               <th>Region</th>
               <th>Value</th>
             </tr>
           </thead>
-          <tbody id="tableBody">
-            <!-- Generat din JavaScript -->
+          <tbody>
+            <!-- Populat din JavaScript -->
           </tbody>
         </table>
       </div>
+      <button id="exportMap">Export as PNG</button>
     </div>
   </div>
   <script src="script.js"></script>
