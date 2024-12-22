@@ -3,24 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>iDatamaps - Exemplu Complet</title>
-
-  <!-- CSS Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
-  <!-- Fișierul nostru CSS -->
+  <title>Harta D3 - Fundal Curat</title>
+  <!-- CSS propriu -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- D3.js pentru randarea hărții (versiunea 7) -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <!-- html2canvas pentru export -->
+  <script 
+    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+    crossorigin="anonymous">
+  </script>
 </head>
 <body>
   <div class="container">
-    <!-- Coloana stânga: harta fixă -->
+    <!-- Coloana stânga: container pentru harta SVG -->
     <div class="left-panel">
-      <div id="mapid"></div>
-      <!-- Dacă dorești un overlay peste hartă, 
-           poți adăuga un <div> absolut aici (ex: titlu, legendă). -->
+      <!-- Aici vom crea un <svg> prin script.js; poate fi și <div id="mapContainer"> -->
+      <svg id="mapSVG"></svg>
     </div>
 
-    <!-- Coloana dreapta: panou cu setări / tabel / export -->
+    <!-- Coloana dreaptă: setări, tabel, export -->
     <div class="right-panel">
       <div class="customise-data">
         <h3>Select Map</h3>
@@ -62,16 +66,7 @@
     </div>
   </div>
 
-  <!-- JavaScript Leaflet -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-  <!-- Pentru export cu html2canvas (fără integritate SRI ca să evităm erori) -->
-  <script 
-    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" 
-    crossorigin="anonymous">
-  </script>
-
-  <!-- Scriptul nostru JavaScript -->
-  <script src="script.js" defer></script>
+  <!-- Scriptul principal -->
+  <script src="script.js"></script>
 </body>
 </html>
