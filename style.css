@@ -95,15 +95,3 @@ th, td {
   align-items: center;
   margin: 10px 0;
 }
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  margin-right: 10px;
-}
-
-.legend-item div {
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
-}

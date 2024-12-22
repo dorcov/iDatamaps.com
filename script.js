@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .querySelector("tbody");
   const exportButton = document.getElementById("exportMap");
   const mapTitleInput = document.getElementById("mapTitle");
-  const legend = document.getElementById("legend");
   const tooltip = document.getElementById("tooltip");
   const svg = d3.select("#mapSVG");
   const gMap = svg.select(".map-group");
@@ -16,12 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   svg.attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
     .attr("preserveAspectRatio", "xMidYMid meet");
-
-  const title = svg.append("text")
-    .attr("id", "mapTitleDisplay")
-    .attr("x", svgWidth / 2)
-    .attr("y", 30)
-    .text("");
 
   let geoDataFeatures = [];
 
@@ -44,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("fill", "#ccc")
         .attr("stroke", "#fff")
         .on("mouseover", function (event, d) {
-          const regionName = d.properties.NAME || d.properties.name || "Unknown";
+          const regionName = d.properties.NAME || "Unknown";
           const value = getRegionValue(regionName);
           tooltip.textContent = `${regionName}: ${value}`;
           tooltip.style.display = "block";
@@ -56,15 +49,14 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
       generateTable(data.features);
-      updateMapColors(); // Colorează harta la încărcare
-      updateLegend();
+      updateMapColors();
     });
   }
 
   function generateTable(features) {
     regionTableBody.innerHTML = "";
     features.forEach((feature) => {
-      const regionName = feature.properties.NAME || feature.properties.name || "Unknown";
+      const regionName = feature.properties.NAME || "Unknown";
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${regionName}</td>
@@ -77,44 +69,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     regionTableBody.querySelectorAll("input").forEach((input) => {
       input.addEventListener("input", () => {
-        updateMapColors(); // Actualizează culorile
-        updateLegend(); // Actualizează legenda
+        updateMapColors();
       });
     });
   }
 
   function updateMapColors() {
-    const inputs = Array.from(
-      regionTableBody.querySelectorAll("input")
-    ).map((input) => parseFloat(input.value) || 0);
-
-    const maxValue = Math.max(...inputs, 1);
+    const maxValue = Math.max(
+      ...Array.from(regionTableBody.querySelectorAll("input")).map(
+        (input) => parseFloat(input.value) || 0
+      )
+    );
 
     gMap.selectAll("path").each(function (d) {
-      const regionName = d.properties.NAME || d.properties.name || "Unknown";
+      const regionName = d.properties.NAME || "Unknown";
       const input = document.querySelector(`[data-region="${regionName}"]`);
       const value = input ? parseFloat(input.value) || 0 : 0;
-
-      const fillColor = d3.interpolateBlues(value / maxValue);
-      d3.select(this).attr("fill", fillColor);
+      const color = d3.interpolateBlues(value / maxValue || 0);
+      d3.select(this).attr("fill", color);
     });
   }
 
-  function updateLegend() {
-    const inputs = Array.from(
-      regionTableBody.querySelectorAll("input")
-    ).map((input) => parseFloat(input.value) || 0);
-
-    const max = Math.max(...inputs, 1);
-    legend.innerHTML = `
-      <div>0</div>
-      <div>→</div>
-      <div>${max}</div>
-    `;
-  }
+  mapSelector.addEventListener("change", (e) => {
+    loadMap(e.target.value);
+  });
 
   mapTitleInput.addEventListener("input", () => {
-    title.text(mapTitleInput.value);
+    svg.select("#mapTitleDisplay")
+      .attr("x", svgWidth / 2)
+      .attr("y", 30)
+      .text(mapTitleInput.value);
   });
 
   exportButton.addEventListener("click", () => {
@@ -126,10 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
         link.click();
       }
     );
-  });
-
-  mapSelector.addEventListener("change", (e) => {
-    loadMap(e.target.value);
   });
 
   loadMap("md.json");
