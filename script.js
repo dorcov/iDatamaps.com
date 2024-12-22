@@ -1,126 +1,136 @@
-// script.js
-
 document.addEventListener("DOMContentLoaded", () => {
-  // Referințe la elemente din HTML
   const mapSelector = document.getElementById("mapSelector");
   const gradientSelector = document.getElementById("gradientSelector");
-  const regionTable = document.getElementById("regionTable").querySelector("tbody");
+  const regionTableBody = document
+    .getElementById("regionTable")
+    .querySelector("tbody");
   const exportBtn = document.getElementById("exportMap");
 
-  // SVG-ul care va conține harta
+  // Selectăm SVG și <g>
   const svg = d3.select("#mapSVG");
-  // Grup (g) în care desenăm harta
-  const gMap = svg.append("g").attr("class", "map-group");
+  const gMap = svg.select(".map-group");
 
   // Variabile globale
-  let geoDataFeatures = []; // stocăm features pentru a le putea re-colora
-  let projection, path;     // setăm la încărcarea hărții
+  let geoDataFeatures = [];
+  let projection, path;
 
-  // Zoom recomandat / scale aproximativ pentru fiecare fișier (dacă vrei)
-  // Vom folosi totuși boundingBox auto, dar îl putem ajusta
-  const customScale = {
-    "md.json": 1,
-    "ro_judete_poligon.json": 1,
-    "europe.geojson": 1
-  };
-
-  // === 1. Funcție încărcare GeoJSON și randare cu D3 ===
+  // === Funcție: Încarcă fișier GeoJSON și randează-l ===
   function loadMap(geojsonFile) {
-    d3.json(`data/${geojsonFile}`).then((data) => {
-      // Salvează features pentru referințe ulterioare
-      geoDataFeatures = data.features;
+    d3.json(`data/${geojsonFile}`)
+      .then((data) => {
+        console.log("Loaded data for", geojsonFile, data);
 
-      // Ștergem orice path existent (dacă schimbăm harta)
-      gMap.selectAll("path").remove();
+        // Stocăm features
+        geoDataFeatures = data.features;
 
-      // Creăm un projection general (Mercator, de ex.)
-      projection = d3.geoMercator();
-      path = d3.geoPath().projection(projection);
+        // Curățăm <path> existente (dacă schimbăm harta)
+        gMap.selectAll("path").remove();
 
-      // Calculăm bounding box al GeoJSON-ului
-      // d3.geoPath().bounds(data) returnează [[x0, y0], [x1, y1]]
-      const bounds = path.bounds(data);
+        // Creăm proiecție mercator și path
+        projection = d3.geoMercator();
+        path = d3.geoPath().projection(projection);
 
-      // Dimensiunile containerului SVG
-      const svgWidth = +svg.style("width").replace("px","");
-      const svgHeight = +svg.style("height").replace("px","");
+        // Dimensiuni SVG efective
+        const svgWidth = +svg.style("width").replace("px", "");
+        const svgHeight = +svg.style("height").replace("px", "");
+        console.log("SVG Size:", svgWidth, svgHeight);
 
-      // Lățimea / înălțimea shape-ului
-      const widthGeo = bounds[1][0] - bounds[0][0];
-      const heightGeo = bounds[1][1] - bounds[0][1];
+        // Calcul bounding box
+        const bounds = path.bounds(data);
+        const x0 = bounds[0][0],
+              y0 = bounds[0][1],
+              x1 = bounds[1][0],
+              y1 = bounds[1][1];
+        const widthGeo = x1 - x0;
+        const heightGeo = y1 - y0;
+        console.log("Bounds:", bounds, "widthGeo:", widthGeo, "heightGeo:", heightGeo);
 
-      // Stabilim un scale astfel încât harta să încapă în SVG
-      // un mic padding de 20 pixeli
-      const scale = 0.95 / Math.max(widthGeo / svgWidth, heightGeo / svgHeight);
+        // Evităm scale Infinity dacă datele sunt corupte
+        // Fallback la un scale fix, ex. 1000
+        let scaleFallback = 1000;
 
-      // Centrul bounding box-ului
-      const midX = (bounds[0][0] + bounds[1][0]) / 2;
-      const midY = (bounds[0][1] + bounds[1][1]) / 2;
+        let scale = scaleFallback; // implicit
+        let translateX = svgWidth / 2;
+        let translateY = svgHeight / 2;
 
-      // Setăm proiecția cu scale + translate
-      projection
-        .scale(scale * customScale[geojsonFile]) // eventual personalizăm
-        .translate([
-          svgWidth / 2 - scale * midX,
-          svgHeight / 2 - scale * midY
-        ]);
+        // Verificăm daca bounding box e valid (fără Infinity / NaN)
+        if (
+          isFinite(widthGeo) &&
+          isFinite(heightGeo) &&
+          widthGeo > 0 &&
+          heightGeo > 0
+        ) {
+          // Calcul scale auto
+          scale =
+            0.95 /
+            Math.max(widthGeo / svgWidth, heightGeo / svgHeight);
 
-      // Acum desenăm shape-urile
-      gMap
-        .selectAll("path")
-        .data(geoDataFeatures)
-        .enter()
-        .append("path")
-        .attr("d", path)
-        .attr("fill", "#ccc")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 1)
-        .on("mouseover", function() {
-          d3.select(this).attr("stroke", "#000");
-        })
-        .on("mouseout", function() {
-          d3.select(this).attr("stroke", "#fff");
-        });
+          // Centrul bounding box
+          const midX = (x0 + x1) / 2;
+          const midY = (y0 + y1) / 2;
 
-      // Generăm tabelul cu regiuni
-      generateTable(geoDataFeatures);
-      // Apoi colorăm harta inițial
-      updateMapColors();
-    })
-    .catch((err) => {
-      console.error("Eroare la încărcarea fișierului:", err);
-    });
+          translateX = svgWidth / 2 - scale * midX;
+          translateY = svgHeight / 2 - scale * midY;
+        } else {
+          console.warn("Bounds invalid, use fallback scale:", scaleFallback);
+        }
+
+        // Aplicăm proiecția
+        projection
+          .scale(scale)
+          .translate([translateX, translateY]);
+
+        // Creăm path-urile
+        gMap
+          .selectAll("path")
+          .data(geoDataFeatures)
+          .enter()
+          .append("path")
+          .attr("d", path)
+          .attr("fill", "#ccc")   // (se va actualiza la updateMapColors)
+          .attr("stroke", "#fff")
+          .attr("stroke-width", 1);
+
+        // Generăm Tabel
+        generateTable(geoDataFeatures);
+        // Colorăm inițial
+        updateMapColors();
+      })
+      .catch((err) => {
+        console.error("Eroare la încărcarea fișierului:", err);
+      });
   }
 
-  // === 2. Generăm tabelul cu regiuni, fiecare având un input numeric ===
+  // === Tabel cu regiuni + input numeric ===
   function generateTable(features) {
-    regionTable.innerHTML = "";
+    regionTableBody.innerHTML = "";
 
     features.forEach((f) => {
       const props = f.properties;
-      // Unele fișiere pot avea "NAME", "RAION", "name" etc.
       const regionName = props.NAME || props.RAION || props.name || "Unknown";
 
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${regionName}</td>
         <td>
-          <input type="number" value="0" data-region="${encodeURIComponent(regionName)}" />
+          <input type="number" value="0" data-region="${encodeURIComponent(
+            regionName
+          )}" />
         </td>
       `;
-      regionTable.appendChild(row);
+      regionTableBody.appendChild(row);
     });
 
-    // Când se modifică un input => recalculăm culorile
-    regionTable.querySelectorAll("input").forEach((inp) => {
+    // Ascultăm modificări la input
+    regionTableBody.querySelectorAll("input").forEach((inp) => {
       inp.addEventListener("input", updateMapColors);
     });
   }
 
-  // === 3. Funcție pentru returnarea unei culori în funcție de "value" & gradient ===
+  // === Funcție de colorare în funcție de gradient + value vs maxValue ===
   function getColor(value, maxValue, gradient) {
     if (!value || isNaN(value) || value <= 0) {
-      return "#ccc"; // gri pt lipsă / zero
+      return "#ccc"; // gri
     }
     const ratio = value / maxValue;
 
@@ -142,42 +152,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // === 4. Actualizăm culorile hărții pe baza valorilor din tabel ===
+  // === Actualizăm culorile poligoanelor pe baza inputurilor ===
   function updateMapColors() {
-    // Obținem toate valorile
-    const inputs = regionTable.querySelectorAll("input[type='number']");
-    const values = Array.from(inputs).map(inp => parseFloat(inp.value) || 0);
-    const maxValue = Math.max(...values, 0);  // max de evitat -Infinity
+    if (!geoDataFeatures.length) return;
+
+    // Aflăm valoarea max din tabel
+    const inputs = regionTableBody.querySelectorAll("input[type='number']");
+    const values = Array.from(inputs).map((i) => parseFloat(i.value) || 0);
+    const maxValue = Math.max(...values, 1); // să nu fie 0
 
     const gradient = gradientSelector.value;
 
-    // Pentru fiecare path din gMap, determinăm regionName => input => fill
-    gMap.selectAll("path").each(function(d) {
+    // Parcurgem <path>-urile
+    gMap.selectAll("path").each(function (d) {
       const props = d.properties;
       const regionName = encodeURIComponent(
         props.NAME || props.RAION || props.name || "Unknown"
       );
-
-      // Căutăm input-ul
       const inp = document.querySelector(`[data-region="${regionName}"]`);
       const val = inp ? parseFloat(inp.value) || 0 : 0;
 
-      // Setăm fill color
-      d3.select(this).attr("fill", getColor(val, maxValue, gradient));
+      const fillColor = getColor(val, maxValue, gradient);
+      d3.select(this).attr("fill", fillColor);
     });
   }
 
-  // === 5. Când se schimbă harta din <select>, încărcăm fișierul ===
-  mapSelector.addEventListener("change", (e) => {
-    loadMap(e.target.value);
-  });
-
-  // === 6. Când se schimbă gradientul, recolorăm harta ===
-  gradientSelector.addEventListener("change", updateMapColors);
-
-  // === 7. Buton de export (folosind html2canvas) ===
+  // === Buton de export (html2canvas pe .left-panel) ===
   exportBtn.addEventListener("click", () => {
-    // Vizăm containerul stânga, care conține SVG-ul
     const mapElement = document.querySelector(".left-panel");
 
     html2canvas(mapElement, { useCORS: true })
@@ -193,6 +194,14 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 
-  // === 8. Încărcare implicită la pornire (de ex. Moldova) ===
+  // === Când se schimbă harta din <select> ===
+  mapSelector.addEventListener("change", (e) => {
+    loadMap(e.target.value);
+  });
+
+  // === Când se schimbă gradientul, recolorăm poligoanele ===
+  gradientSelector.addEventListener("change", updateMapColors);
+
+  // === Încărcare inițială cu "md.json" (Moldova) ===
   loadMap("md.json");
 });

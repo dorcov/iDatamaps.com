@@ -15,35 +15,42 @@ html, body {
 .container {
   display: flex;
   width: 100%;
-  height: 100vh;
-  overflow: hidden; /* nu vrem scroll la container */
+  height: 100vh;   /* umple tot ecranul */
+  overflow: hidden;
 }
 
 /* Coloana stânga (harta) */
 .left-panel {
-  flex: 0 0 60%;  /* 60% lățime, restul e panoul din dreapta */
+  flex: 0 0 60%;   /* 60% lățime, restul e panoul */
   height: 100%;
   position: relative;
-  background: #eee; /* doar un fundal neutru */
-  overflow: hidden; /* să nu apară scroll */
+  background: #eee; 
+  overflow: hidden;
 }
 
-/* SVG-ul hărții: îl forțăm să ocupe tot spațiul coloanei stânga */
+/* SVG-ul hărții: setăm 100% să umple coloana stânga */
 #mapSVG {
   width: 100%;
   height: 100%;
   display: block;
-  /* Poți adăuga un shadow:
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
 
-/* Coloana dreapta (panou setări/tabel) */
+/* Grupul map-group unde se vor crea <path> poligoane */
+.map-group path {
+  /* Culori default, ajustabile din script. 
+     Pun un stroke roșu subțire pentru debugging */
+  fill: #ccc;
+  stroke: red; 
+  stroke-width: 0.5px;
+}
+
+/* Coloana dreaptă (panou) */
 .right-panel {
-  flex: 1;             /* restul spațiului */
+  flex: 1;
   height: 100%;
   padding: 2rem;
   background-color: #fff;
-  overflow-y: auto;    /* scroll doar aici */
+  overflow-y: auto;
   border-left: 1px solid #e0e0e0;
 }
 
@@ -52,9 +59,11 @@ html, body {
   color: #333;
 }
 
-#mapSelector, #gradientSelector {
+/* Selectoare */
+#mapSelector,
+#gradientSelector {
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   padding: 0.5rem 1rem;
   font-size: 1rem;
   width: 100%;
@@ -64,6 +73,7 @@ html, body {
   outline: none;
 }
 
+/* Tabel */
 .data-table {
   margin-top: 1rem;
 }
@@ -96,6 +106,7 @@ tr:hover {
   background-color: #f1f1f1;
 }
 
+/* Input numeric */
 input[type="number"] {
   width: 100%;
   padding: 0.3rem;
@@ -104,7 +115,7 @@ input[type="number"] {
   outline: none;
 }
 
-/* Buton export */
+/* Buton Export */
 .export-button {
   text-align: center;
   margin-top: 1.5rem;

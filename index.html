@@ -4,44 +4,45 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Harta D3 - Fundal Curat</title>
+
   <!-- CSS propriu -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- D3.js pentru randarea hărții (versiunea 7) -->
+  <!-- D3.js pentru randare (versiunea 7) -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
-  <!-- html2canvas pentru export -->
+  <!-- html2canvas pentru export PNG -->
   <script 
     src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
     crossorigin="anonymous">
   </script>
 </head>
 <body>
+
   <div class="container">
     <!-- Coloana stânga: container pentru harta SVG -->
     <div class="left-panel">
-      <!-- Aici vom crea un <svg> prin script.js; poate fi și <div id="mapContainer"> -->
-      <svg id="mapSVG"></svg>
+      <svg id="mapSVG">
+        <g class="map-group"></g>
+      </svg>
     </div>
 
-    <!-- Coloana dreaptă: setări, tabel, export -->
+    <!-- Coloana dreaptă: setări, date, export -->
     <div class="right-panel">
-      <div class="customise-data">
-        <h3>Select Map</h3>
-        <select id="mapSelector">
-          <option value="md.json">Moldova</option>
-          <option value="ro_judete_poligon.json">România</option>
-          <option value="europe.geojson">Europa</option>
-        </select>
+      <h3>Select Map</h3>
+      <select id="mapSelector">
+        <option value="md.json">Moldova</option>
+        <option value="ro_judete_poligon.json">România</option>
+        <option value="europe.geojson">Europa</option>
+      </select>
 
-        <h3>Select Gradient</h3>
-        <select id="gradientSelector">
-          <option value="blue">Blue</option>
-          <option value="green">Green</option>
-          <option value="red">Red</option>
-          <option value="blueDiverging">Blue Diverging</option>
-        </select>
-      </div>
+      <h3>Select Gradient</h3>
+      <select id="gradientSelector">
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+        <option value="red">Red</option>
+        <option value="blueDiverging">Blue Diverging</option>
+      </select>
 
       <div class="data-table">
         <h3>Data Table</h3>
@@ -54,7 +55,7 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Generat din script.js -->
+              <!-- Generat din script -->
             </tbody>
           </table>
         </div>
