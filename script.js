@@ -1,25 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // === Inițializare hartă ===
+  // === 1. Inițializare hartă în div-ul #mapid ===
   const map = L.map("mapid", {
-    center: [47, 28],
+    center: [47, 28], // punct central (de exemplu, coordonatele Moldovei)
     zoom: 7,
     attributionControl: false
-    // dacă vrei tileLayer, adaugă-l aici
-    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //   crossOrigin: true
-    // }).addTo(map);
   });
 
+  // (Opțional) - Poți adăuga un tileLayer de fundal
+  // Atenție la CORS dacă vrei să exporți imaginea cu html2canvas
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    crossOrigin: true
+  }).addTo(map);
+
   let currentLayer = null; // stratul curent (geoJSON)
-  
-  // Setări de zoom diferite pentru hărți
+
+  // Zoom recomandat pentru fiecare fișier
   const zoomSettings = {
     "md.json": 15,
     "ro_judete_poligon.json": 7,
     "europe.geojson": 4
   };
-  
-  // Referințe la elemente din HTML
+
+  // Referințe la elemente DOM
   const mapSelector = document.getElementById("mapSelector");
   const gradientSelector = document.getElementById("gradientSelector");
   const regionTableBody = document
@@ -27,9 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
     .querySelector("tbody");
   const exportButton = document.getElementById("exportMap");
 
-  // === Funcție de calculare a culorii pe baza valorilor și a gradientului selectat ===
+  // === 2. Funcție de calculare a culorii (în funcție de gradient) ===
   const getColor = (value, maxValue, gradient) => {
-    if (value === 0 || isNaN(value)) return "#ccc"; // Gri pentru valori lipsă
+    if (value === 0 || isNaN(value)) return "#ccc"; // Gri pt valori lipsă
     const ratio = value / maxValue;
 
     switch (gradient) {
@@ -40,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
       case "red":
         return `rgba(255, 50, 50, ${Math.min(0.3 + ratio * 0.7, 1)})`;
       case "blueDiverging":
-        // dacă ratio > 0.5, colorează albastru, altfel roșu
+        // dacă ratio > 0.5, albastru, altfel roșu
         return ratio > 0.5
           ? `rgba(42, 115, 255, ${Math.min(0.3 + (ratio - 0.5) * 1.4, 1)})`
           : `rgba(255, 50, 50, ${Math.min(0.3 + ratio * 1.4, 1)})`;
@@ -49,11 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // === Actualizează culorile de pe hartă pe baza valorilor din tabel ===
+  // === 3. Actualizează culorile hărții pe baza valorilor din tabel ===
   const updateMapGradient = () => {
     if (!currentLayer) return;
 
-    // Aflăm valoarea maxima din input-urile tabelului
+    // Aflăm valoarea maximă din input-urile tabelului
     const allInputs = regionTableBody.querySelectorAll("input[type='number']");
     const maxValue = Math.max(
       ...Array.from(allInputs).map((input) => parseFloat(input.value) || 0)
@@ -64,10 +66,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Iterăm fiecare regiune (layer) și actualizăm fillColor
     currentLayer.eachLayer((layer) => {
       const props = layer.feature.properties;
-      // unele fișiere pot avea .NAME, .RAION, .name etc.
+      // unele fișiere au .NAME, altele .RAION, .name, etc.
       const regionName = props.NAME || props.RAION || props.name || "Unknown";
 
-      // Căutăm input-ul corespondent acestui regionName
+      // Căutăm input-ul corespondent
       const input = document.querySelector(
         `[data-region="${encodeURIComponent(regionName)}"]`
       );
@@ -82,16 +84,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  // === Generăm Tabel (când încărcăm un nou GeoJSON) ===
+  // === 4. Construim Tabel (când încărcăm un nou GeoJSON) ===
   const generateTable = (geoData) => {
-    // curățăm conținutul vechi
+    // Curățăm conținutul vechi
     regionTableBody.innerHTML = "";
 
     geoData.features.forEach((feature) => {
       const props = feature.properties;
       const regionName = props.NAME || props.RAION || props.name || "Unknown";
 
-      // Creăm un rând <tr> cu 2 coloane: regionName, input numeric
+      // Adăugăm un rând <tr> cu 2 coloane: regionName, input numeric
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${regionName}</td>
@@ -112,17 +114,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  // === Încărcăm un fișier GeoJSON și îl afișăm pe hartă ===
+  // === 5. Încărcăm un fișier GeoJSON și îl afișăm pe hartă ===
   const loadMap = (geojsonFile) => {
     fetch(`data/${geojsonFile}`)
       .then((response) => response.json())
       .then((geoData) => {
-        // scoatem stratul vechi, dacă există
+        // Scoatem stratul vechi, dacă există
         if (currentLayer) {
           map.removeLayer(currentLayer);
         }
 
-        // creăm un nou strat geoJSON
+        // Creăm un nou strat geoJSON
         currentLayer = L.geoJSON(geoData, {
           style: {
             color: "#fff",
@@ -138,43 +140,38 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }).addTo(map);
 
-        // Ajustăm harta să încapă în bounding box-ul stratului nou încărcat
+        // Ajustăm harta să încapă în bounding box-ul stratului încărcat
         map.fitBounds(currentLayer.getBounds(), {
           maxZoom: zoomSettings[geojsonFile] || 6
         });
 
-        // Construim/Refacem tabelul
+        // Construim / reîncărcăm tabelul
         generateTable(geoData);
-        // După ce există date în tabel, actualizăm culorile inițiale
+        // După ce există date în tabel, colorăm inițial harta
         updateMapGradient();
       })
       .catch((err) => console.error("Eroare la încărcarea GeoJSON:", err));
   };
 
-  // === Apelăm loadMap inițial (Moldova) ===
+  // === 6. Încarcă inițial "md.json" (Moldova) ===
   loadMap("md.json");
 
-  // === Când se schimbă harta din select ===
+  // === 7. Când se schimbă harta din <select>, încărcăm fișierul corespunzător ===
   mapSelector.addEventListener("change", (e) => {
     loadMap(e.target.value);
   });
 
-  // === Când se schimbă gradientul din select ===
+  // === 8. Când se schimbă gradientul, actualizăm culorile hărții ===
   gradientSelector.addEventListener("change", updateMapGradient);
 
-  // === Buton de export (exemplu cu html2canvas) ===
-  // Dacă preferi "leaflet-image", vezi codul anterior
+  // === 9. Buton de export - exemplu cu html2canvas ===
   exportButton.addEventListener("click", () => {
-    // Exemplu: HTML2Canvas
-    // Asigură-te că ai inclus scriptul html2canvas în index.html
-    // <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    // 
-    // Apoi:
+    // Asigură-te că ai inclus scriptul html2canvas în index.html (vezi mai sus)
     if (typeof html2canvas === "undefined") {
-      alert("html2canvas nu este încărcat, te rugăm să adaugi scriptul!");
+      alert("html2canvas nu este încărcat. Asigură-te că ai inclus scriptul CDN!");
       return;
     }
-    
+
     const mapElement = document.getElementById("mapid");
     html2canvas(mapElement, { useCORS: true })
       .then((canvas) => {

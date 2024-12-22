@@ -1,4 +1,4 @@
-/* Importă fonturi moderne de la Google Fonts */
+/* Importă fonturi de la Google Fonts (opțional) */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 /* Reset de bază */
@@ -14,40 +14,37 @@ html, body {
   background-color: #f9f9f9;
 }
 
-/* Container general: 2 coloane - stânga harta, dreapta setări */
+/* Container principal: 2 coloane (harta stânga, panou dreapta) */
 .container {
   display: flex;
   width: 100%;
-  height: 100vh; /* full height */
-  overflow: hidden; /* nu vrem scroll la container principal */
+  height: 100vh; /* harta & panoul ocupă toată înălțimea ecranului */
+  overflow: hidden; /* fără scroll global, doar panoul din dreapta */
 }
 
 /* Coloana stânga (harta) */
 .left-panel {
-  flex: 0 0 60%; /* 60% lățime sau cât vrei, ex 70% */
+  flex: 0 0 60%; /* 60% lățime pentru hartă, poți ajusta */
   height: 100%;
   position: relative;
-  background: #ccc; /* fallback, va fi acoperit de harta */
-  overflow: hidden; /* evităm scroll */
+  background: #ccc; 
+  overflow: hidden; /* evităm apariția de scroll în stânga */
 }
 
-/* Harta ocupă toată coloana stânga */
+/* Harta umple toată coloana stângă */
 #mapid {
   width: 100%;
   height: 100%;
-  /* Scoatem min-height/max-height ca să se adapteze complet */
-  /* min-height: 600px; */
-  /* max-height: 800px; */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Coloana dreaptă (panou cu setări) */
 .right-panel {
-  flex: 1;               /* restul spațiului */
+  flex: 1; /* restul spațiului */
   height: 100%;
   padding: 2rem;
   background-color: #fff;
-  overflow-y: auto;      /* scroll doar pe verticală pentru setări */
+  overflow-y: auto; /* scroll doar pe verticală când conținutul e mare */
   border-left: 1px solid #e0e0e0;
 }
 
@@ -95,8 +92,7 @@ table {
   border-collapse: collapse;
 }
 
-th,
-td {
+th, td {
   border-bottom: 1px solid #e0e0e0;
   padding: 0.75rem 1rem;
   text-align: left;
@@ -113,7 +109,7 @@ tr:hover {
 }
 
 /* Input numeric */
-input[type='number'] {
+input[type="number"] {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #ccc;
@@ -121,7 +117,7 @@ input[type='number'] {
   transition: border-color 0.3s ease;
 }
 
-input[type='number']:focus {
+input[type="number"]:focus {
   border-color: #007bff;
   outline: none;
 }
@@ -165,7 +161,7 @@ input[type='number']:focus {
   .right-panel {
     flex: none;
     width: 100%;
-    height: 50vh; /* Harta și panoul se împart vertical */
+    height: 50vh; /* Harta și panoul împart vertical ecranul */
   }
 
   .right-panel {

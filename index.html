@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>iDatamaps</title>
+  <title>iDatamaps - Exemplu Complet</title>
 
   <!-- CSS Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
-  <!-- Stiluri Personalizate -->
+  <!-- Fișierul nostru CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -16,15 +16,11 @@
     <!-- Coloana stânga: harta fixă -->
     <div class="left-panel">
       <div id="mapid"></div>
-      <!-- Dacă vrei text / logo / legendă peste hartă, 
-           poți adăuga un div absolut aici -->
-      <!-- <div class="map-overlays">
-           <h1>Infographic Title</h1>
-           <span class="big-figure">0</span>
-         </div> -->
+      <!-- Dacă dorești un overlay peste hartă, 
+           poți adăuga un <div> absolut aici (ex: titlu, legendă). -->
     </div>
 
-    <!-- Coloana dreapta: panou cu setări -->
+    <!-- Coloana dreapta: panou cu setări / tabel / export -->
     <div class="right-panel">
       <div class="customise-data">
         <h3>Select Map</h3>
@@ -54,7 +50,7 @@
               </tr>
             </thead>
             <tbody>
-              <!-- Generat din script -->
+              <!-- Generat din script.js -->
             </tbody>
           </table>
         </div>
@@ -69,10 +65,13 @@
   <!-- JavaScript Leaflet -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-  <!-- (Optional) html2canvas sau leaflet-image, vezi discuțiile anterioare -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script> -->
+  <!-- Pentru export cu html2canvas (fără integritate SRI ca să evităm erori) -->
+  <script 
+    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" 
+    crossorigin="anonymous">
+  </script>
 
-  <!-- Scriptul tău JavaScript -->
+  <!-- Scriptul nostru JavaScript -->
   <script src="script.js" defer></script>
 </body>
 </html>
