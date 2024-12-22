@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("regionTable")
     .querySelector("tbody");
   const exportButton = document.getElementById("exportMap");
+  const saveDataButton = document.getElementById("saveData");
+  const loadDataInput = document.getElementById("loadData");
+  const mapTitleInput = document.getElementById("mapTitle");
+  const legend = document.getElementById("legend");
+  const tooltip = document.getElementById("tooltip");
   const svg = d3.select("#mapSVG");
   const gMap = svg.select(".map-group");
 
@@ -16,21 +21,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let geoDataFeatures = [];
 
-  // Încărcăm harta selectată
   function loadMap(geojsonFile) {
     d3.json(`data/${geojsonFile}`).then((data) => {
-      console.log(`Loaded GeoJSON (${geojsonFile}):`, data);
-
-      if (!data || !data.features) {
-        console.error("GeoJSON invalid sau lipsă features.");
-        return;
-      }
+      if (!data || !data.features) return;
 
       geoDataFeatures = data.features;
 
-      const projection = d3.geoMercator()
-        .fitSize([svgWidth, svgHeight], data);
-
+      const projection = d3.geoMercator().fitSize([svgWidth, svgHeight], data);
       const path = d3.geoPath().projection(projection);
 
       gMap.selectAll("path").remove();
@@ -42,95 +39,71 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("d", path)
         .attr("fill", "#ccc")
         .attr("stroke", "#fff")
-        .attr("stroke-width", 0.5)
         .on("mouseover", function (event, d) {
-          d3.select(this).attr("fill", "orange");
+          const regionName = d.properties.NAME || "Unknown";
+          const value = getRegionValue(regionName);
+          tooltip.textContent = `${regionName}: ${value}`;
+          tooltip.style.display = "block";
+          tooltip.style.left = `${event.pageX + 10}px`;
+          tooltip.style.top = `${event.pageY + 10}px`;
         })
-        .on("mouseout", function (event, d) {
-          d3.select(this).attr("fill", "#ccc");
-          updateMapColors();
+        .on("mouseout", () => {
+          tooltip.style.display = "none";
         });
 
       generateTable(data.features);
-      updateMapColors();
-    }).catch((err) => {
-      console.error("Eroare la încărcarea GeoJSON:", err);
+      updateLegend();
     });
   }
 
-  // Generăm tabelul cu regiuni
   function generateTable(features) {
     regionTableBody.innerHTML = "";
     features.forEach((feature) => {
-      const regionName = feature.properties.NAME || feature.properties.name || "Unknown";
+      const regionName = feature.properties.NAME || "Unknown";
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${regionName}</td>
         <td>
-          <input type="number" value="0" data-region="${encodeURIComponent(regionName)}" />
+          <input type="number" value="0" data-region="${regionName}" />
         </td>
       `;
       regionTableBody.appendChild(row);
     });
 
-    // Eveniment la modificarea valorilor din tabel
     regionTableBody.querySelectorAll("input").forEach((input) => {
-      input.addEventListener("input", updateMapColors);
+      input.addEventListener("input", updateLegend);
     });
   }
 
-  // Funcție pentru a colora regiunile
-  function updateMapColors() {
-    const inputs = regionTableBody.querySelectorAll("input");
-    const values = Array.from(inputs).map((input) => parseFloat(input.value) || 0);
-    const maxValue = Math.max(...values, 1); // Evităm zero
-
-    const gradient = gradientSelector.value;
-
-    gMap.selectAll("path").each(function (d) {
-      const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || "Unknown");
-      const input = document.querySelector(`[data-region="${regionName}"]`);
-      const value = input ? parseFloat(input.value) || 0 : 0;
-
-      const fillColor = getColor(value, maxValue, gradient);
-      d3.select(this).attr("fill", fillColor);
-    });
+  function getRegionValue(regionName) {
+    const input = document.querySelector(
+      `[data-region="${regionName}"]`
+    );
+    return input ? parseFloat(input.value) || 0 : 0;
   }
 
-  // Calculăm culoarea pe baza gradientului
-  function getColor(value, maxValue, gradient) {
-    const ratio = value / maxValue;
+  function updateLegend() {
+    const inputs = Array.from(
+      regionTableBody.querySelectorAll("input")
+    ).map((input) => parseFloat(input.value) || 0);
 
-    switch (gradient) {
-      case "blue":
-        return `rgba(42, 115, 255, ${Math.min(0.3 + ratio * 0.7, 1)})`;
-      case "green":
-        return `rgba(50, 200, 50, ${Math.min(0.3 + ratio * 0.7, 1)})`;
-      case "red":
-        return `rgba(255, 50, 50, ${Math.min(0.3 + ratio * 0.7, 1)})`;
-      case "blueDiverging":
-        return ratio > 0.5
-          ? `rgba(42, 115, 255, ${Math.min(0.3 + (ratio - 0.5) * 1.4, 1)})`
-          : `rgba(255, 50, 50, ${Math.min(0.3 + ratio * 1.4, 1)})`;
-      default:
-        return "#ccc";
-    }
+    const max = Math.max(...inputs, 1);
+    legend.innerHTML = `
+      <div>0</div>
+      <div>→</div>
+      <div>${max}</div>
+    `;
   }
 
-  // Exportăm harta ca PNG
   exportButton.addEventListener("click", () => {
-    html2canvas(document.querySelector(".map-column"), { useCORS: true })
-      .then((canvas) => {
+    html2canvas(document.querySelector(".map-column"), { useCORS: true }).then(
+      (canvas) => {
         const link = document.createElement("a");
-        link.download = "harta.png";
+        link.download = `${mapTitleInput.value || "map"}.png`;
         link.href = canvas.toDataURL("image/png");
         link.click();
-      })
-      .catch((err) => console.error("Export error:", err));
-  });
-
-  mapSelector.addEventListener("change", (e) => {
-    loadMap(e.target.value);
+      }
+    );
   });
 
   loadMap("md.json");

@@ -11,6 +11,7 @@
 <body>
   <div class="container">
     <div class="map-column">
+      <div class="tooltip" id="tooltip"></div>
       <svg id="mapSVG">
         <g class="map-group"></g>
       </svg>
@@ -28,6 +29,10 @@
         <option value="red">Red</option>
         <option value="blueDiverging">Blue Diverging</option>
       </select>
+      <h3>Set Title</h3>
+      <input type="text" id="mapTitle" placeholder="Enter map title" />
+      <h3>Legend</h3>
+      <div id="legend"></div>
       <h3>Data Table</h3>
       <div class="table-container">
         <table id="regionTable">
@@ -42,7 +47,9 @@
           </tbody>
         </table>
       </div>
-      <button id="exportMap">Export as PNG</button>
+      <button id="exportMap">Export Map as PNG</button>
+      <button id="saveData">Save Data</button>
+      <input type="file" id="loadData" />
     </div>
   </div>
   <script src="script.js"></script>
