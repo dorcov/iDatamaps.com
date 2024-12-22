@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Elementele din HTML
+  // Selectăm elementele HTML
   const mapSelector = document.getElementById("mapSelector");
   const gradientSelector = document.getElementById("gradientSelector");
   const regionTableBody = document
@@ -7,28 +7,28 @@ document.addEventListener("DOMContentLoaded", () => {
     .querySelector("tbody");
   const exportBtn = document.getElementById("exportMap");
 
-  // Overlay
+  // Overlay (pentru tooltips)
   const overlay = document.getElementById("mapOverlay");
   const hoverLabel = document.getElementById("hoverLabel");
 
-  // Selectăm SVG și <g>
+  // Selectăm SVG-ul și grupul pentru harta
   const svg = d3.select("#mapSVG");
   const gMap = svg.select(".map-group");
 
   let geoDataFeatures = [];
   let projection, path;
 
-  // === Load Map (GeoJSON) ===
+  // === Încărcăm fișierul GeoJSON și facem rendering ===
   function loadMap(geojsonFile) {
     d3.json(`data/${geojsonFile}`)
       .then((data) => {
-        // Stocăm features
+        // Stocăm features din GeoJSON
         geoDataFeatures = data.features;
 
-        // Ștergem path-uri anterioare
+        // Curățăm harta anterioară
         gMap.selectAll("path").remove();
 
-        // Proiecție + path
+        // Proiecția și path-ul D3
         projection = d3.geoMercator();
         path = d3.geoPath().projection(projection);
 
@@ -36,15 +36,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const svgWidth = +svg.style("width").replace("px", "");
         const svgHeight = +svg.style("height").replace("px", "");
 
-        // Bounds
+        console.log("SVG Width/Height:", svgWidth, svgHeight);
+
+        // Calculăm bounding box pentru geoData
         const bounds = path.bounds(data);
         const x0 = bounds[0][0],  y0 = bounds[0][1];
         const x1 = bounds[1][0],  y1 = bounds[1][1];
         const widthGeo = x1 - x0;
         const heightGeo = y1 - y0;
+        
+        console.log("Bounds:", bounds);
 
-        // Fallback scale
-        let scale = 1000;
+        // Fallback pentru scale, dacă bounding box-ul nu este valid
+        let scale = 1000; // fallback fix pentru scaling
         let translateX = svgWidth / 2;
         let translateY = svgHeight / 2;
 
@@ -54,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
           widthGeo > 0 &&
           heightGeo > 0
         ) {
+          // Calculăm scale pe baza dimensiunii hărții
           scale = 0.95 / Math.max(widthGeo / svgWidth, heightGeo / svgHeight);
           const midX = (x0 + x1) / 2;
           const midY = (y0 + y1) / 2;
@@ -61,11 +66,12 @@ document.addEventListener("DOMContentLoaded", () => {
           translateY = svgHeight / 2 - scale * midY;
         }
 
+        // Aplicăm proiecția
         projection
           .scale(scale)
           .translate([translateX, translateY]);
 
-        // Adăugăm poligoanele
+        // Randează path-urile pentru fiecare județ
         gMap
           .selectAll("path")
           .data(geoDataFeatures)
@@ -75,40 +81,35 @@ document.addEventListener("DOMContentLoaded", () => {
           .attr("fill", "#ccc")
           .attr("stroke", "#fff")
           .attr("stroke-width", 1)
-          // Evenimente de hover -> actualizăm overlay
+          // Evenimente pentru hover - tooltip
           .on("mousemove", function (event, d) {
             const props = d.properties;
-            const regionName =
-              props.NAME || props.RAION || props.name || "Unknown";
+            const regionName = props.NAME || props.RAION || props.name || "Unknown";
 
-            // Afișăm label
+            // Afișăm label-ul hover
             hoverLabel.style.display = "block";
             hoverLabel.textContent = regionName;
 
-            // Poziționăm labelul lângă cursor
-            // event.x / event.y în D3v7 e relative la fereastră
-            const mouseX = event.pageX;
-            const mouseY = event.pageY;
-
-            // Păstrăm un offset
-            hoverLabel.style.left = mouseX + 10 + "px";
-            hoverLabel.style.top = mouseY + 10 + "px";
+            // Poziționăm label-ul lângă cursor
+            hoverLabel.style.left = event.pageX + 10 + "px";
+            hoverLabel.style.top = event.pageY + 10 + "px";
           })
           .on("mouseleave", function () {
             hoverLabel.style.display = "none";
           });
 
-        // Construim Tabel
+        // Generăm tabelul cu regiuni
         generateTable(geoDataFeatures);
-        // Colorăm inițial
+
+        // Colorează harta în funcție de valorile din tabel
         updateMapColors();
       })
       .catch((err) => {
-        console.error("Eroare la încărcare:", err);
+        console.error("Eroare la încărcarea fișierului:", err);
       });
   }
 
-  // === Generăm Tabel (cu input numeric pentru fiecare regiune) ===
+  // === Creăm Tabelul cu valori pentru fiecare regiune ===
   function generateTable(features) {
     regionTableBody.innerHTML = "";
 
@@ -120,24 +121,22 @@ document.addEventListener("DOMContentLoaded", () => {
       row.innerHTML = `
         <td>${regionName}</td>
         <td>
-          <input type="number" value="0" data-region="${encodeURIComponent(
-            regionName
-          )}" />
+          <input type="number" value="0" data-region="${encodeURIComponent(regionName)}" />
         </td>
       `;
       regionTableBody.appendChild(row);
     });
 
-    // Când se modifică un input -> recolorăm
+    // Când se modifică input-ul, se recolorează harta
     regionTableBody.querySelectorAll("input").forEach((inp) => {
       inp.addEventListener("input", updateMapColors);
     });
   }
 
-  // === Funcție de colorare (în funcție de gradient + value) ===
+  // === Funcție de colorare a regiunilor în funcție de valori ===
   function getColor(value, maxValue, gradient) {
     if (!value || isNaN(value) || value <= 0) {
-      return "#ccc";
+      return "#ccc"; // gri
     }
     const ratio = value / maxValue;
 
@@ -159,22 +158,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // === Actualizăm culori pe hartă, pe baza valorilor introduse ===
+  // === Actualizăm culorile regiunilor pe hartă ===
   function updateMapColors() {
     if (!geoDataFeatures.length) return;
 
-    // maxValue
     const inputs = regionTableBody.querySelectorAll("input[type='number']");
     const values = Array.from(inputs).map((i) => parseFloat(i.value) || 0);
-    const maxValue = Math.max(...values, 1);
+    const maxValue = Math.max(...values, 1); // evităm zero
 
     const gradient = gradientSelector.value;
 
     gMap.selectAll("path").each(function (d) {
       const props = d.properties;
-      const regionName = encodeURIComponent(
-        props.NAME || props.RAION || props.name || "Unknown"
-      );
+      const regionName = encodeURIComponent(props.NAME || props.RAION || props.name || "Unknown");
       const inp = document.querySelector(`[data-region="${regionName}"]`);
       const val = inp ? parseFloat(inp.value) || 0 : 0;
 
@@ -183,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // === Export PNG (html2canvas pe .map-column) ===
+  // === Funcție de Export la PNG (html2canvas) ===
   exportBtn.addEventListener("click", () => {
     const mapElement = document.querySelector(".map-column");
 
@@ -200,14 +196,14 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 
-  // === Când se schimbă harta (select) ===
+  // === Când se schimbă harta (din select) ===
   mapSelector.addEventListener("change", (e) => {
     loadMap(e.target.value);
   });
 
-  // === Când se schimbă gradientul, recolorăm harta ===
+  // === Când se schimbă gradientul (recolorare harta) ===
   gradientSelector.addEventListener("change", updateMapColors);
 
-  // === Inițial, încărcăm "md.json" (Moldova) ===
+  // === Încărcare implicită cu "md.json" (Moldova) ===
   loadMap("md.json");
 });
