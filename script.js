@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .querySelector("tbody");
   const exportButton = document.getElementById("exportMap");
   const mapTitleInput = document.getElementById("mapTitle");
-  const tooltip = document.getElementById("tooltip");
   const svg = d3.select("#mapSVG");
   const gMap = svg.select(".map-group");
 
@@ -38,8 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("stroke", "#fff")
         .on("mouseover", function (event, d) {
           const regionName = d.properties.NAME || "Unknown";
-          const value = getRegionValue(regionName);
-          tooltip.textContent = `${regionName}: ${value}`;
+          tooltip.textContent = regionName;
           tooltip.style.display = "block";
           tooltip.style.left = `${event.pageX + 10}px`;
           tooltip.style.top = `${event.pageY + 10}px`;
@@ -68,25 +66,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     regionTableBody.querySelectorAll("input").forEach((input) => {
-      input.addEventListener("input", () => {
-        updateMapColors();
-      });
+      input.addEventListener("input", updateMapColors);
     });
   }
 
   function updateMapColors() {
-    const maxValue = Math.max(
-      ...Array.from(regionTableBody.querySelectorAll("input")).map(
-        (input) => parseFloat(input.value) || 0
-      )
-    );
+    const inputs = Array.from(
+      regionTableBody.querySelectorAll("input")
+    ).map((input) => parseFloat(input.value) || 0);
+
+    const maxValue = Math.max(...inputs, 1);
 
     gMap.selectAll("path").each(function (d) {
       const regionName = d.properties.NAME || "Unknown";
       const input = document.querySelector(`[data-region="${regionName}"]`);
       const value = input ? parseFloat(input.value) || 0 : 0;
-      const color = d3.interpolateBlues(value / maxValue || 0);
-      d3.select(this).attr("fill", color);
+
+      const fillColor = d3.interpolateBlues(value / maxValue || 0);
+      d3.select(this).attr("fill", fillColor);
     });
   }
 
