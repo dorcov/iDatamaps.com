@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Harta D3 - Fundal Curat</title>
-
+  <title>Harta cu Overlay - Exemplar</title>
+  
   <!-- CSS propriu -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- D3.js pentru randare (versiunea 7) -->
+  <!-- D3.js (v7) pentru randarea hărții -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
   <!-- html2canvas pentru export PNG -->
@@ -19,55 +19,62 @@
 </head>
 <body>
 
-  <div class="container">
-    <!-- Coloana stânga: container pentru harta SVG -->
-    <div class="left-panel">
-      <svg id="mapSVG">
-        <g class="map-group"></g>
-      </svg>
-    </div>
+<div class="container">
+  <!-- Coloana stânga: conține harta (SVG) + overlay HTML -->
+  <div class="map-column">
+    <!-- Harta noastră SVG -->
+    <svg id="mapSVG">
+      <g class="map-group"></g>
+    </svg>
 
-    <!-- Coloana dreaptă: setări, date, export -->
-    <div class="right-panel">
-      <h3>Select Map</h3>
-      <select id="mapSelector">
-        <option value="md.json">Moldova</option>
-        <option value="ro_judete_poligon.json">România</option>
-        <option value="europe.geojson">Europa</option>
-      </select>
-
-      <h3>Select Gradient</h3>
-      <select id="gradientSelector">
-        <option value="blue">Blue</option>
-        <option value="green">Green</option>
-        <option value="red">Red</option>
-        <option value="blueDiverging">Blue Diverging</option>
-      </select>
-
-      <div class="data-table">
-        <h3>Data Table</h3>
-        <div class="table-container">
-          <table id="regionTable">
-            <thead>
-              <tr>
-                <th>Region</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Generat din script -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="export-button">
-        <button id="exportMap">Export Map as PNG</button>
-      </div>
+    <!-- Overlay deasupra hărții, pentru tooltips / labeluri / pop-up etc. -->
+    <div class="overlay" id="mapOverlay">
+      <!-- La hover, vom afișa un label aici -->
+      <div class="hover-label" id="hoverLabel" style="display: none;"></div>
     </div>
   </div>
 
-  <!-- Scriptul principal -->
-  <script src="script.js"></script>
+  <!-- Coloana dreaptă: setări, date, butoane, etc. -->
+  <div class="right-panel">
+    <h3>Select Map</h3>
+    <select id="mapSelector">
+      <option value="md.json">Moldova</option>
+      <option value="ro_judete_poligon.json">România</option>
+      <option value="europe.geojson">Europa</option>
+    </select>
+
+    <h3>Select Gradient</h3>
+    <select id="gradientSelector">
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+      <option value="red">Red</option>
+      <option value="blueDiverging">Blue Diverging</option>
+    </select>
+
+    <div class="data-table">
+      <h3>Data Table</h3>
+      <div class="table-container">
+        <table id="regionTable">
+          <thead>
+            <tr>
+              <th>Region</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- generat din script.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="export-button">
+      <button id="exportMap">Export Map as PNG</button>
+    </div>
+  </div>
+</div>
+
+<!-- Scriptul principal -->
+<script src="script.js"></script>
 </body>
 </html>
