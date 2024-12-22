@@ -1,74 +1,75 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>iDatamaps - Export cu html2canvas</title>
 
   <!-- CSS Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
   <!-- Stiluri Personalizate -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-<div class="container">
-  <!-- Harta -->
-  <div class="left-panel">
-    <div id="mapid"></div>
-  </div>
-
-  <!-- Panoul din dreapta -->
-  <div class="right-panel">
-    <div class="customise-data">
-      <h3>Select Map</h3>
-      <select id="mapSelector">
-        <option value="md.json">Moldova</option>
-        <option value="ro_judete_poligon.json">România</option>
-        <option value="europe.geojson">Europa</option>
-      </select>
-
-      <h3>Select Gradient</h3>
-      <select id="gradientSelector">
-        <option value="blue">Blue</option>
-        <option value="green">Green</option>
-        <option value="red">Red</option>
-        <option value="blueDiverging">Blue Diverging</option>
-      </select>
+  <div class="container">
+    <!-- Harta -->
+    <div class="left-panel">
+      <div id="mapid"></div>
     </div>
 
-    <div class="data-table">
-      <h3>Data Table</h3>
-      <div class="table-container">
-        <table id="regionTable">
-          <thead>
-            <tr>
-              <th>Region</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Conținut generat din script -->
-          </tbody>
-        </table>
+    <!-- Panoul din dreapta -->
+    <div class="right-panel">
+      <div class="customise-data">
+        <h3>Select Map</h3>
+        <select id="mapSelector">
+          <option value="md.json">Moldova</option>
+          <option value="ro_judete_poligon.json">România</option>
+          <option value="europe.geojson">Europa</option>
+        </select>
+
+        <h3>Select Gradient</h3>
+        <select id="gradientSelector">
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+          <option value="red">Red</option>
+          <option value="blueDiverging">Blue Diverging</option>
+        </select>
+      </div>
+
+      <div class="data-table">
+        <h3>Data Table</h3>
+        <div class="table-container">
+          <table id="regionTable">
+            <thead>
+              <tr>
+                <th>Region</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Generat din script -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="export-button">
+        <button id="exportMap">Export Map as PNG</button>
       </div>
     </div>
-
-    <div class="export-button">
-      <button id="exportMap">Export Map as PNG</button>
-    </div>
   </div>
-</div>
 
-<!-- JavaScript Leaflet -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- JavaScript Leaflet -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-<!-- Librăria html2canvas (pentru screenshot) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-o2MFbPNTbIsSUlrPzdugO2aTNlbztpk+JXiX/UqO/VglcZgi1zJAVqbRniK30HJgieHuu02mQRTfZbD6icvTig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- Librăria html2canvas (fără integritate) -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+    crossorigin="anonymous"
+  ></script>
 
-<!-- Scriptul nostru JavaScript -->
-<script src="script.js" defer></script>
-
+  <!-- Scriptul nostru JavaScript -->
+  <script src="script.js" defer></script>
 </body>
 </html>
