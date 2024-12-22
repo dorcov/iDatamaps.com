@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
       generateTable(data.features);
+      updateMapColors();
       updateLegend();
     });
   }
@@ -75,15 +76,48 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     regionTableBody.querySelectorAll("input").forEach((input) => {
-      input.addEventListener("input", updateLegend);
+      input.addEventListener("input", () => {
+        updateMapColors();
+        updateLegend();
+      });
     });
   }
 
-  function getRegionValue(regionName) {
-    const input = document.querySelector(
-      `[data-region="${regionName}"]`
-    );
-    return input ? parseFloat(input.value) || 0 : 0;
+  function updateMapColors() {
+    const inputs = Array.from(
+      regionTableBody.querySelectorAll("input")
+    ).map((input) => parseFloat(input.value) || 0);
+
+    const maxValue = Math.max(...inputs, 1);
+    const gradient = gradientSelector.value;
+
+    gMap.selectAll("path").each(function (d) {
+      const regionName = d.properties.NAME || d.properties.name || "Unknown";
+      const input = document.querySelector(`[data-region="${regionName}"]`);
+      const value = input ? parseFloat(input.value) || 0 : 0;
+
+      const fillColor = getColor(value, maxValue, gradient);
+      d3.select(this).attr("fill", fillColor);
+    });
+  }
+
+  function getColor(value, maxValue, gradient) {
+    const ratio = value / maxValue;
+
+    switch (gradient) {
+      case "blue":
+        return `rgba(42, 115, 255, ${Math.min(0.3 + ratio * 0.7, 1)})`;
+      case "green":
+        return `rgba(50, 200, 50, ${Math.min(0.3 + ratio * 0.7, 1)})`;
+      case "red":
+        return `rgba(255, 50, 50, ${Math.min(0.3 + ratio * 0.7, 1)})`;
+      case "blueDiverging":
+        return ratio > 0.5
+          ? `rgba(42, 115, 255, ${Math.min(0.3 + (ratio - 0.5) * 1.4, 1)})`
+          : `rgba(255, 50, 50, ${Math.min(0.3 + ratio * 1.4, 1)})`;
+      default:
+        return "#ccc";
+    }
   }
 
   function updateLegend() {
