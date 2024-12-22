@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const mapSelector = document.getElementById("mapSelector");
+  const exportButton = document.getElementById("exportMap");
   const svg = d3.select("#mapSVG");
   const gMap = svg.select(".map-group");
 
@@ -29,13 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .data(data.features)
         .enter()
         .append("path")
-        .attr("d", (d) => {
-          const p = path(d);
-          if (!p) {
-            console.warn("Feature fără coordonate valide:", d);
-          }
-          return p;
-        })
+        .attr("d", path)
         .attr("fill", "#ccc")
         .attr("stroke", "#fff")
         .attr("stroke-width", 0.5)
@@ -53,9 +48,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function exportMap() {
+    html2canvas(document.querySelector(".map-column"), { useCORS: true })
+      .then((canvas) => {
+        const link = document.createElement("a");
+        link.download = "harta.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      })
+      .catch((err) => console.error("Export error:", err));
+  }
+
   mapSelector.addEventListener("change", (e) => {
     loadMap(e.target.value);
   });
+
+  exportButton.addEventListener("click", exportMap);
 
   loadMap("md.json");
 });

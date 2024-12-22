@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Debug GeoJSON</title>
+  <title>Harta Interactivă</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="container">
@@ -18,9 +19,16 @@
       <h3>Select Map</h3>
       <select id="mapSelector">
         <option value="md.json">Moldova</option>
-        <option value="ro_judete_poligon.json">România</option>
         <option value="europe.geojson">Europa</option>
       </select>
+      <h3>Select Gradient</h3>
+      <select id="gradientSelector">
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+        <option value="red">Red</option>
+        <option value="blueDiverging">Blue Diverging</option>
+      </select>
+      <button id="exportMap">Export as PNG</button>
     </div>
   </div>
   <script src="script.js"></script>
