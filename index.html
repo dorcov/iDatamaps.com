@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>iDatamaps - Export cu html2canvas</title>
+  <title>iDatamaps</title>
 
   <!-- CSS Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -13,12 +13,18 @@
 </head>
 <body>
   <div class="container">
-    <!-- Harta -->
+    <!-- Coloana stânga: harta fixă -->
     <div class="left-panel">
       <div id="mapid"></div>
+      <!-- Dacă vrei text / logo / legendă peste hartă, 
+           poți adăuga un div absolut aici -->
+      <!-- <div class="map-overlays">
+           <h1>Infographic Title</h1>
+           <span class="big-figure">0</span>
+         </div> -->
     </div>
 
-    <!-- Panoul din dreapta -->
+    <!-- Coloana dreapta: panou cu setări -->
     <div class="right-panel">
       <div class="customise-data">
         <h3>Select Map</h3>
@@ -63,13 +69,10 @@
   <!-- JavaScript Leaflet -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-  <!-- Librăria html2canvas (fără integritate) -->
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
-    crossorigin="anonymous"
-  ></script>
+  <!-- (Optional) html2canvas sau leaflet-image, vezi discuțiile anterioare -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script> -->
 
-  <!-- Scriptul nostru JavaScript -->
+  <!-- Scriptul tău JavaScript -->
   <script src="script.js" defer></script>
 </body>
 </html>
