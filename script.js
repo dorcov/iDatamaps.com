@@ -5,8 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("regionTable")
     .querySelector("tbody");
   const exportButton = document.getElementById("exportMap");
-  const saveDataButton = document.getElementById("saveData");
-  const loadDataInput = document.getElementById("loadData");
   const mapTitleInput = document.getElementById("mapTitle");
   const legend = document.getElementById("legend");
   const tooltip = document.getElementById("tooltip");
@@ -18,6 +16,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   svg.attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
     .attr("preserveAspectRatio", "xMidYMid meet");
+
+  const title = svg.append("text")
+    .attr("id", "mapTitleDisplay")
+    .attr("x", svgWidth / 2)
+    .attr("y", 30)
+    .text("");
 
   let geoDataFeatures = [];
 
@@ -40,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("fill", "#ccc")
         .attr("stroke", "#fff")
         .on("mouseover", function (event, d) {
-          const regionName = d.properties.NAME || "Unknown";
+          const regionName = d.properties.NAME || d.properties.name || "Unknown";
           const value = getRegionValue(regionName);
           tooltip.textContent = `${regionName}: ${value}`;
           tooltip.style.display = "block";
@@ -59,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function generateTable(features) {
     regionTableBody.innerHTML = "";
     features.forEach((feature) => {
-      const regionName = feature.properties.NAME || "Unknown";
+      const regionName = feature.properties.NAME || feature.properties.name || "Unknown";
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${regionName}</td>
@@ -95,6 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
   }
 
+  mapTitleInput.addEventListener("input", () => {
+    title.text(mapTitleInput.value);
+  });
+
   exportButton.addEventListener("click", () => {
     html2canvas(document.querySelector(".map-column"), { useCORS: true }).then(
       (canvas) => {
@@ -104,6 +112,10 @@ document.addEventListener("DOMContentLoaded", () => {
         link.click();
       }
     );
+  });
+
+  mapSelector.addEventListener("change", (e) => {
+    loadMap(e.target.value);
   });
 
   loadMap("md.json");
