@@ -1,113 +1,90 @@
 document.addEventListener("DOMContentLoaded", () => {
   const mapSelector = document.getElementById("mapSelector");
-  const gradientSelector = document.getElementById("gradientSelector");
-  const regionTableBody = document
-    .getElementById("regionTable")
-    .querySelector("tbody");
-  const exportButton = document.getElementById("exportMap");
-  const mapTitleInput = document.getElementById("mapTitle");
+  const tableBody = document.getElementById("tableBody");
   const svg = d3.select("#mapSVG");
-  const gMap = svg.select(".map-group");
+  const mapGroup = svg.select("#mapGroup");
 
-  const svgWidth = 800;
-  const svgHeight = 600;
+  const width = 800;
+  const height = 600;
 
-  svg.attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
+  svg.attr("viewBox", `0 0 ${width} ${height}`)
     .attr("preserveAspectRatio", "xMidYMid meet");
 
-  let geoDataFeatures = [];
+  let geoData = [];
 
-  function loadMap(geojsonFile) {
-    d3.json(`data/${geojsonFile}`).then((data) => {
-      if (!data || !data.features) return;
+  // Funcție pentru încărcarea hărții
+  function loadMap(file) {
+    d3.json(`data/${file}`).then((data) => {
+      geoData = data.features;
 
-      geoDataFeatures = data.features;
-
-      const projection = d3.geoMercator().fitSize([svgWidth, svgHeight], data);
+      const projection = d3.geoMercator().fitSize([width, height], data);
       const path = d3.geoPath().projection(projection);
 
-      gMap.selectAll("path").remove();
+      mapGroup.selectAll("path").remove();
 
-      gMap.selectAll("path")
-        .data(geoDataFeatures)
+      mapGroup.selectAll("path")
+        .data(geoData)
         .enter()
         .append("path")
         .attr("d", path)
         .attr("fill", "#ccc")
-        .attr("stroke", "#fff")
+        .attr("stroke", "#333")
         .on("mouseover", function (event, d) {
-          const regionName = d.properties.NAME || "Unknown";
-          tooltip.textContent = regionName;
-          tooltip.style.display = "block";
-          tooltip.style.left = `${event.pageX + 10}px`;
-          tooltip.style.top = `${event.pageY + 10}px`;
+          d3.select(this).attr("fill", "#aaa");
         })
-        .on("mouseout", () => {
-          tooltip.style.display = "none";
+        .on("mouseout", function () {
+          d3.select(this).attr("fill", "#ccc");
         });
 
-      generateTable(data.features);
-      updateMapColors();
+      generateTable(geoData);
     });
   }
 
+  // Funcție pentru generarea tabelului
   function generateTable(features) {
-    regionTableBody.innerHTML = "";
+    tableBody.innerHTML = "";
+
     features.forEach((feature) => {
-      const regionName = feature.properties.NAME || "Unknown";
+      const name = feature.properties.NAME || "Unknown";
       const row = document.createElement("tr");
+
       row.innerHTML = `
-        <td>${regionName}</td>
-        <td>
-          <input type="number" value="0" data-region="${regionName}" />
-        </td>
+        <td>${name}</td>
+        <td><input type="number" value="0" data-region="${name}" /></td>
       `;
-      regionTableBody.appendChild(row);
+
+      tableBody.appendChild(row);
     });
 
-    regionTableBody.querySelectorAll("input").forEach((input) => {
+    // Conectăm input-urile la funcția de colorare
+    tableBody.querySelectorAll("input").forEach((input) => {
       input.addEventListener("input", updateMapColors);
     });
   }
 
+  // Funcție pentru actualizarea culorilor hărții
   function updateMapColors() {
-    const inputs = Array.from(
-      regionTableBody.querySelectorAll("input")
-    ).map((input) => parseFloat(input.value) || 0);
+    const values = Array.from(tableBody.querySelectorAll("input")).map(
+      (input) => parseFloat(input.value) || 0
+    );
 
-    const maxValue = Math.max(...inputs, 1);
+    const maxValue = Math.max(...values);
 
-    gMap.selectAll("path").each(function (d) {
+    mapGroup.selectAll("path").each(function (d) {
       const regionName = d.properties.NAME || "Unknown";
       const input = document.querySelector(`[data-region="${regionName}"]`);
       const value = input ? parseFloat(input.value) || 0 : 0;
 
-      const fillColor = d3.interpolateBlues(value / maxValue || 0);
-      d3.select(this).attr("fill", fillColor);
+      const color = d3.interpolateBlues(value / maxValue || 0);
+      d3.select(this).attr("fill", color);
     });
   }
 
-  mapSelector.addEventListener("change", (e) => {
-    loadMap(e.target.value);
+  // Eveniment pentru schimbarea hărții
+  mapSelector.addEventListener("change", (event) => {
+    loadMap(event.target.value);
   });
 
-  mapTitleInput.addEventListener("input", () => {
-    svg.select("#mapTitleDisplay")
-      .attr("x", svgWidth / 2)
-      .attr("y", 30)
-      .text(mapTitleInput.value);
-  });
-
-  exportButton.addEventListener("click", () => {
-    html2canvas(document.querySelector(".map-column"), { useCORS: true }).then(
-      (canvas) => {
-        const link = document.createElement("a");
-        link.download = `${mapTitleInput.value || "map"}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      }
-    );
-  });
-
+  // Încarcă harta implicită
   loadMap("md.json");
 });
