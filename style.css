@@ -36,9 +36,4 @@ html, body {
   flex: 1;
   padding: 1rem;
   background: #fff;
-  overflow-y: auto;
-}
-
-h3 {
-  margin-bottom: 1rem;
 }
