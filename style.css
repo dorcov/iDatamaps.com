@@ -378,6 +378,30 @@ td.select-category select {
     x: 25px;
     y: 595px;
   }
+
+  /* Responsive Design pentru ecrane mici */
+  .container {
+    flex-direction: column;
+  }
+
+  .map-column, .right-panel {
+    flex: none;
+    width: 100%;
+    height: 50vh; /* Ajustează înălțimea pentru ecrane mici */
+  }
+
+  /* Ajustări pentru titlu pe ecrane mici */
+  #mapTitle {
+    font-size: 20px;
+    top: 10px;
+    left: 10px;
+  }
+
+  /* Ajustări pentru Sursa Datelor pe ecrane mici */
+  .data-source-group {
+    bottom: 10px;
+    left: 10px;
+  }
 }
 
 /* Poziționare și dimensiuni pentru data source */
