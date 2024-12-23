@@ -48,9 +48,26 @@
         <input type="text" id="infographicTitle" class="input-text" placeholder="Introdu Titlul" />
       </div>
       
-      <!-- Secțiunea de Gradient Personalizat -->
+      <!-- Secțiunea de Gradient Personalizat și Presetat (Modificat) -->
       <div class="option-section">
-        <h4>Selectează Gradient Personalizat</h4>
+        <h4>Selectează Gradient</h4>
+        <!-- Dropdown pentru Gradienturi Presetate (Nou) -->
+        <div class="preset-gradient">
+          <label for="presetGradient">Gradient Presetat:</label>
+          <select id="presetGradient" class="custom-select">
+            <option value="">Selectează un Gradient Presetat</option>
+            <option value="blueGreen">Albastru la Verde</option>
+            <option value="redYellow">Roșu la Galben</option>
+            <option value="purplePink">Mov la Roz</option>
+            <option value="orangeBlue">Portocaliu la Albastru</option>
+            <option value="grey">Gri</option>
+          </select>
+        </div>
+        
+        <!-- Divider -->
+        <hr />
+        
+        <!-- Secțiunea de Gradient Personalizat -->
         <div class="custom-gradient">
           <div class="color-picker">
             <label for="gradientStart">Culoare de Start:</label>
@@ -62,7 +79,7 @@
             <input type="color" id="gradientEnd" value="#2A73FF" />
           </div>
           
-          <button id="applyGradient" class="btn btn-primary">Aplică Gradient</button>
+          <button id="applyGradient" class="btn btn-primary">Aplică Gradient Personalizat</button>
         </div>
       </div>
       
