@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMapData = null;
   let initialData = [];
 
+  // Eveniment pentru adăugarea unei noi categorii
   addCategoryBtn.addEventListener('click', () => {
     if (categoryCount >= maxCategories) {
       alert(`Poți adăuga maximum ${maxCategories} categorii.`);
@@ -54,8 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
       updateMapColors();
     });
 
+    // Eveniment pentru modificarea denumirii categoriei
     categoryName.addEventListener('input', () => {
-      const oldName = Object.keys(categories).find(key => key === categoryName.getAttribute('data-old-name'));
+      const oldName = categoryName.getAttribute('data-old-name');
       if (oldName && oldName !== categoryName.value.trim()) {
         delete categories[oldName];
       }
@@ -69,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
       updateMapColors();
     });
 
+    // Eveniment pentru modificarea culorii categoriei
     categoryColor.addEventListener('input', () => {
       const name = categoryName.value.trim();
       if (name) {
@@ -183,8 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
           return categories[regionData.category];
         } else {
           // Culoare implicită pentru valorile numerice
+          const maxVal = d3.max(initialData, d => d.value);
           const colorScale = d3.scaleSequential(d3.interpolateBlues)
-            .domain([0, d3.max(initialData, d => d.value)]);
+            .domain([0, maxVal || 100]); // Asigură un domeniu valid
           return colorScale(regionData.value);
         }
       });
@@ -248,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Event pentru aplicarea gradientului
+  // Eveniment pentru aplicarea gradientului
   applyGradientBtn.addEventListener('click', () => {
     const startColor = gradientStart.value;
     const endColor = gradientEnd.value;
@@ -274,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderMap(geoData);
     }).catch(error => {
       console.error('Eroare la încărcarea fișierului GeoJSON:', error);
+      alert('Nu s-a putut încărca harta selectată. Verifică consola pentru mai multe detalii.');
     });
   }
 
@@ -330,8 +335,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let shiftY = e.clientY - mapTitle.getBoundingClientRect().top;
 
     function moveAt(pageX, pageY) {
-      mapTitle.style.left = pageX - shiftX + 'px';
-      mapTitle.style.top = pageY - shiftY + 'px';
+      mapTitle.style.left = `${pageX - shiftX}px`;
+      mapTitle.style.top = `${pageY - shiftY}px`;
     }
 
     function onMouseMove(event) {
@@ -352,4 +357,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Încarcă harta inițială
   loadMap(mapSelector.value);
+
+  // Eveniment pentru actualizarea titlului hărții
+  infographicTitle.addEventListener('input', () => {
+    mapTitle.textContent = infographicTitle.value || 'Titlu Implicitar';
+  });
 });
