@@ -63,10 +63,14 @@ body {
   right: 20px;
   display: flex;
   align-items: center;
+  justify-content: center; /* Aliniază elementele pe axa principală */
+  gap: 8px; /* Spațiere uniformă între elemente */
   background: rgba(255, 255, 255, 0.8);
   padding: 5px 10px;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  max-width: 200px; /* Asigură suficient spațiu */
+  flex-wrap: wrap; /* Permite rânduri suplimentare pe ecrane mici */
 }
 
 .footer span {
@@ -77,8 +81,9 @@ body {
 
 .footer .logo {
   width: 24px;
-  height: 24px;
+  height: auto; /* Menține proporțiile */
   margin-left: 8px; /* Spațiere între text și logo */
+  object-fit: contain; /* Asigură că imaginea nu se deformează */
 }
 
 /* Panoul drept pentru opțiuni */
@@ -260,10 +265,14 @@ th {
   right: 20px;
   display: flex;
   align-items: center;
+  justify-content: center; /* Aliniază elementele pe axa principală */
+  gap: 8px; /* Spațiere uniformă între elemente */
   background: rgba(255, 255, 255, 0.8);
   padding: 5px 10px;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  max-width: 200px; /* Asigură suficient spațiu */
+  flex-wrap: wrap; /* Permite rânduri suplimentare pe ecrane mici */
 }
 
 .footer span {
@@ -274,8 +283,9 @@ th {
 
 .footer .logo {
   width: 24px;
-  height: 24px;
+  height: auto; /* Menține proporțiile */
   margin-left: 8px; /* Spațiere între text și logo */
+  object-fit: contain; /* Asigură că imaginea nu se deformează */
 }
 
 /* Responsive Design pentru footer */
@@ -284,6 +294,7 @@ th {
     bottom: 10px;
     right: 10px;
     padding: 4px 8px;
+    max-width: 150px; /* Ajustează în funcție de necesități */
   }
 
   .footer span {
@@ -292,7 +303,7 @@ th {
 
   .footer .logo {
     width: 20px;
-    height: 20px;
+    height: auto;
     margin-left: 6px;
   }
 }
