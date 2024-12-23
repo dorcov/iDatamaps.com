@@ -55,6 +55,29 @@ document.addEventListener("DOMContentLoaded", () => {
   // Funcție pentru a actualiza sursa datelor
   function updateDataSource(text) {
     dataSourceTextElement.text(`Sursa datelor: ${text || "N/A"}`);
+    
+    // După actualizarea textului, măsurăm dimensiunea textului
+    setTimeout(() => { // Folosim setTimeout pentru a ne asigura că textul este actualizat în DOM
+      const textElement = document.getElementById("dataSourceText");
+      const bbox = textElement.getBBox();
+      
+      // Setăm lățimea dreptunghiului în funcție de lățimea textului + padding
+      const padding = 20; // Ajustează padding-ul după necesități
+      const newWidth = bbox.width + padding;
+      
+      // Actualizăm atributul width al rect-ului
+      const rect = document.querySelector(".footer.data-source-group rect");
+      rect.setAttribute("width", newWidth);
+      
+      // Poziționăm dreptunghiul astfel încât să înconjoare textul
+      const x = parseFloat(dataSourceTextElement.attr("x")) - 10; // 10px padding stânga
+      const y = parseFloat(dataSourceTextElement.attr("y")) - 14; // Ajustăm pentru vertical
+      rect.setAttribute("x", x);
+      rect.setAttribute("y", y);
+      rect.setAttribute("height", 30); // Asigură o înălțime constantă
+      
+      // Opțional: Poți ajusta y în funcție de necesități
+    }, 0);
   }
 
   // Verificare existență elemente înainte de a adăuga event listeners
@@ -109,6 +132,46 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   } else {
     console.error("Elementul cu ID 'mapTitle' nu a fost găsit.");
+  }
+
+  // Implementare drag-and-drop pentru sursa datelor
+  if (dataSourceTextElement) {
+    let isDraggingDataSource = false;
+    let offsetXDataSource, offsetYDataSource;
+
+    dataSourceTextElement.on("mousedown", function(event) {
+      isDraggingDataSource = true;
+      const bbox = this.getBBox();
+      offsetXDataSource = event.clientX - bbox.x;
+      offsetYDataSource = event.clientY - bbox.y;
+    });
+
+    document.addEventListener("mousemove", function(event) {
+      if (isDraggingDataSource) {
+        const mapColumn = document.querySelector(".map-column");
+        const rect = mapColumn.getBoundingClientRect();
+        let x = event.clientX - rect.left - offsetXDataSource;
+        let y = event.clientY - rect.top - offsetYDataSource;
+
+        // Limitează poziția sursei datelor în interiorul hărții
+        x = Math.max(0, Math.min(x, rect.width - dataSourceTextElement.node().getBBox().width - 10)); // 10 este padding-ul
+        y = Math.max(20, Math.min(y, rect.height - 20)); // Minim y la 20 pentru a nu se suprapune cu marginile
+
+        dataSourceTextElement.attr("x", x + 10); // Adaugă padding-ul stânga
+        dataSourceTextElement.attr("y", y + 14); // Ajustează pentru vertical
+
+        // Ajustăm și rect-ul
+        const rectElement = document.querySelector(".footer.data-source-group rect");
+        rectElement.setAttribute("x", x);
+        rectElement.setAttribute("y", y);
+      }
+    });
+
+    document.addEventListener("mouseup", function() {
+      isDraggingDataSource = false;
+    });
+  } else {
+    console.error("Elementul cu ID 'dataSourceText' nu a fost găsit.");
   }
 
   // Funcție de debouncing pentru îmbunătățirea performanței

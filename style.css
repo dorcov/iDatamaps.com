@@ -38,6 +38,25 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Stiluri pentru containerul cu sursa datelor */
+.footer.data-source-group rect {
+  fill: rgba(255, 255, 255, 0.8);
+  stroke: #ccc;
+  stroke-width: 1;
+  rx: 4;
+  ry: 4;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition: all 0.3s ease;
+}
+
+.footer.data-source-group text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  fill: #333;
+  transition: all 0.3s ease;
+  cursor: move;
+}
+
 /* Elementul de titlu */
 #mapTitle {
   font-family: 'Montserrat', sans-serif;
@@ -54,22 +73,10 @@ body {
   padding: 5px 10px;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
 }
 
-/* Grup pentru Sursa Datelor */
-.data-source-group {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-}
-
-/* Elementul de Sursa Datelor */
-#dataSourceText {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  fill: #333;
-  pointer-events: none;
-}
+/* Grup pentru Sursa Datelor (redundant, deja acoperit de '.footer.data-source-group') */
 
 /* Stil pentru footer */
 .footer {
@@ -84,6 +91,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   max-width: 200px; /* Asigură suficient spațiu */
   flex-wrap: wrap; /* Permite rânduri suplimentare pe ecrane mici */
+  transition: all 0.3s ease;
 }
 
 /* Stil pentru textul din footer */
@@ -364,26 +372,17 @@ td.select-category select {
     max-width: 150px; /* Ajustează în funcție de necesități */
   }
 
-  /* Poziționare și dimensiuni pentru data source */
-  .data-source-group rect {
-    x: 20px;
-    y: 560px; /* Ajustat pentru aliniere corectă cu bottom:10px */
-    width: 200px;
-    height: 30px;
-    rx: 4;
-    ry: 4;
-    fill: rgba(255, 255, 255, 0.8);
-    stroke: #ccc;
-    stroke-width: 1;
+  /* Poziționare și dimensiuni pentru data source pe ecrane mici */
+  .footer.data-source-group rect {
+    x: 10px;
+    y: 560px;
+    /* Lățimea se ajustează automat prin JS */
   }
 
-  #dataSourceText {
-    x: 30px;
-    y: 580px; /* Ajustat pentru a fi centrat în noul dreptunghi */
-    font-family: 'Roboto', sans-serif;
+  .footer.data-source-group text {
+    x: 20px;
+    y: 580px;
     font-size: 14px;
-    fill: #333;
-    pointer-events: none;
   }
 
   /* Responsive Design pentru ecrane mici */
@@ -405,30 +404,8 @@ td.select-category select {
   }
 
   /* Ajustări pentru Sursa Datelor pe ecrane mici */
-  .data-source-group {
+  .footer.data-source-group {
     bottom: 10px;
     left: 10px;
   }
-}
-
-/* Poziționare și dimensiuni pentru data source */
-.data-source-group rect {
-  x: 20px;
-  y: 550px; /* Ajustat pentru aliniere corectă */
-  width: 200px;
-  height: 30px;
-  rx: 4;
-  ry: 4;
-  fill: rgba(255, 255, 255, 0.8);
-  stroke: #ccc;
-  stroke-width: 1;
-}
-
-#dataSourceText {
-  x: 30px;
-  y: 570px; /* Centrat în dreptunghi */
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  fill: #333;
-  pointer-events: none;
 }
