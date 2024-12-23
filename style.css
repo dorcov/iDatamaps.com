@@ -1,3 +1,42 @@
+/* Reset de bază pentru a asigura consistența între browsere */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container principal care va folosi Flexbox pentru layout */
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh; /* Înălțimea completă a viewport-ului */
+}
+
+/* Coloana hărții */
+.map-column {
+  flex: 1; /* Ocupă 50% din lățime */
+  padding: 20px;
+  background-color: #f0f0f0; /* Fundal ușor pentru contrast */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* SVG-ul hărții să ocupe întreg spațiul disponibil */
+.map-column svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Panoul drept pentru opțiuni */
+.right-panel {
+  flex: 1; /* Ocupă 50% din lățime */
+  padding: 20px;
+  background-color: #ffffff; /* Fundal alb pentru opțiuni */
+  overflow-y: auto; /* Adaugă scroll dacă conținutul depășește înălțimea */
+}
+
+/* Stiluri existente pentru tabel */
 .table-container {
   max-height: 400px;
   overflow-y: auto;
@@ -28,4 +67,32 @@ input[type="number"] {
   border: 1px solid #ccc;
   border-radius: 4px;
   outline: none;
+}
+
+/* Stil pentru butonul de export */
+#exportMap {
+  padding: 0.75rem 1.5rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+#exportMap:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Design pentru ecrane mici */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .map-column, .right-panel {
+    flex: none;
+    width: 100%;
+    height: 50vh; /* Ajustează înălțimea pentru ecrane mici */
+  }
 }
