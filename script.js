@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const svgHeight = 600;
 
   svg.attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
-    .attr("preserveAspectRatio", "xMidYMid meet");
+     .attr("preserveAspectRatio", "xMidYMid meet");
 
   let geoDataFeatures = [];
   let currentGradient = {
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a actualiza titlul
   function updateTitle(text) {
-    mapTitle.textContent = text || "Default Title";
+    mapTitle.textContent = text || "Titlu Implicitar";
   }
 
   // Eveniment pentru actualizarea titlului din input
@@ -38,8 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   mapTitle.addEventListener("mousedown", (e) => {
     isDragging = true;
-    offsetX = e.clientX - mapTitle.getBoundingClientRect().left;
-    offsetY = e.clientY - mapTitle.getBoundingClientRect().top;
+    const bbox = mapTitle.getBBox();
+    offsetX = e.clientX - bbox.x;
+    offsetY = e.clientY - bbox.y;
   });
 
   document.addEventListener("mousemove", (e) => {
@@ -51,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Limitează poziția titlului în interiorul hărții
       x = Math.max(0, Math.min(x, rect.width - mapTitle.getBBox().width));
-      y = Math.max(0, Math.min(y, rect.height - mapTitle.getBBox().height));
+      y = Math.max(20, Math.min(y, rect.height - 20)); // Minim y la 20 pentru a nu se suprapune cu marginile
 
       mapTitle.setAttribute("x", x);
       mapTitle.setAttribute("y", y);
@@ -100,10 +101,14 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("stroke-width", 0.5)
         .on("mouseover", function (event, d) {
           d3.select(this).attr("fill", "orange");
+          showTooltip(event, d);
+        })
+        .on("mousemove", function (event) {
+          moveTooltip(event);
         })
         .on("mouseout", function (event, d) {
-          d3.select(this).attr("fill", "#ccc");
-          updateMapColors();
+          d3.select(this).attr("fill", getFillColor(d));
+          hideTooltip();
         });
 
       generateTable(data.features);
@@ -166,6 +171,61 @@ document.addEventListener("DOMContentLoaded", () => {
     return interpolatedColor.toString();
   }
 
+  // Funcționalitate Tooltip
+  const tooltip = d3.select(".tooltip");
+
+  function showTooltip(event, d) {
+    const regionName = d.properties.NAME || d.properties.name || "Unknown";
+    const value = getRegionValue(d);
+    tooltip.style("visibility", "visible")
+           .html(`<strong>${regionName}</strong><br/>Valoare: ${value}`);
+  }
+
+  function moveTooltip(event) {
+    tooltip.style("top", (event.pageY - 10) + "px")
+           .style("left", (event.pageX + 10) + "px");
+  }
+
+  function hideTooltip() {
+    tooltip.style("visibility", "hidden");
+  }
+
+  // Funcție pentru a obține valoarea unei regiuni
+  function getRegionValue(d) {
+    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || "Unknown");
+    const input = document.querySelector(`[data-region="${regionName}"]`);
+    return input ? parseFloat(input.value) || 0 : 0;
+  }
+
+  // Funcție pentru a obține culoarea unei regiuni
+  function getFillColor(d) {
+    const value = getRegionValue(d);
+    const maxValue = Math.max(...Array.from(regionTableBody.querySelectorAll("input")).map(i => parseFloat(i.value) || 0), 1);
+    const gradient = currentGradient;
+    return value > 0 ? getColor(value, maxValue, gradient) : "#ccc";
+  }
+
+  // Funcție pentru debouncing (îmbunătățirea performanței)
+  function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func.apply(this, args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  const debouncedUpdateMapColors = debounce(updateMapColors, 300);
+
+  // Actualizare evenimente pentru input-uri de tabel cu debounce
+  regionTableBody.querySelectorAll("input").forEach((input) => {
+    input.removeEventListener("input", updateMapColors);
+    input.addEventListener("input", debouncedUpdateMapColors);
+  });
+
   // Exportăm harta ca PNG
   exportButton.addEventListener("click", () => {
     html2canvas(document.querySelector(".map-column"), { useCORS: true })
@@ -183,5 +243,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loadMap(e.target.value);
   });
 
+  // Încarcă harta inițială
   loadMap("md.json");
 });

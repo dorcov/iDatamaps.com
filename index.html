@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Harta Interactivă</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- Incluzând D3.js pentru manipularea hărților -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- Incluzând html2canvas pentru exportarea hărții -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -15,36 +17,36 @@
         <g class="map-group"></g>
       </svg>
       <!-- Element pentru Titlu -->
-      <text id="mapTitle" class="draggable" draggable="true">Default Title</text>
+      <text id="mapTitle" class="draggable" draggable="true">Titlu Implicitar</text>
     </div>
     <div class="right-panel">
-      <h3>Select Map</h3>
+      <h3>Selectează Harta</h3>
       <select id="mapSelector">
         <option value="md.json">Moldova</option>
         <option value="europe.geojson">Europa</option>
       </select>
       
-      <h3>Add Title</h3>
-      <input type="text" id="infographicTitle" placeholder="Enter Title" />
+      <h3>Adaugă Titlu</h3>
+      <input type="text" id="infographicTitle" placeholder="Introdu Titlul" />
       
-      <h3>Select Gradient</h3>
+      <h3>Selectează Gradient Personalizat</h3>
       <div class="custom-gradient">
-        <label for="gradientStart">Start Color:</label>
+        <label for="gradientStart">Culoare de Start:</label>
         <input type="color" id="gradientStart" value="#2A73FF" />
         
-        <label for="gradientEnd">End Color:</label>
+        <label for="gradientEnd">Culoare de Sfârșit:</label>
         <input type="color" id="gradientEnd" value="#2A73FF" />
         
-        <button id="applyGradient">Apply Gradient</button>
+        <button id="applyGradient">Aplică Gradient</button>
       </div>
       
-      <h3>Data Table</h3>
+      <h3>Tabel de Date</h3>
       <div class="table-container">
         <table id="regionTable">
           <thead>
             <tr>
-              <th>Region</th>
-              <th>Value</th>
+              <th>Regiune</th>
+              <th>Valoare</th>
             </tr>
           </thead>
           <tbody>
@@ -53,9 +55,13 @@
         </table>
       </div>
       
-      <button id="exportMap">Export as PNG</button>
+      <button id="exportMap">Exportă ca PNG</button>
     </div>
   </div>
+  
+  <!-- Tooltip pentru informații suplimentare -->
+  <div class="tooltip"></div>
+  
   <script src="script.js"></script>
 </body>
 </html>
