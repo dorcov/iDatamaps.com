@@ -22,7 +22,7 @@ body {
 /* Coloana pentru hartă */
 .map-column {
   flex: 1; /* Ocupă 50% din lățime */
-  position: relative; /* Pentru poziționarea absolută a titlului */
+  position: relative; /* Pentru poziționarea absolută a titlului și footer-ului */
   padding: 20px;
   background-color: #f0f0f0; /* Fundal ușor pentru contrast */
   display: flex;
@@ -54,6 +54,31 @@ body {
   padding: 5px 10px;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Stil pentru footer */
+.footer {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.footer .logo {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.footer span {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #333;
 }
 
 /* Panoul drept pentru opțiuni */
@@ -226,6 +251,50 @@ th {
   padding: 10px;
   border: 2px dashed #ced4da;
   color: #6c757d;
+}
+
+/* Stil pentru footer */
+.footer {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.footer .logo {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.footer span {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Responsive Design pentru footer */
+@media (max-width: 768px) {
+  .footer {
+    bottom: 10px;
+    right: 10px;
+    padding: 4px 8px;
+  }
+
+  .footer .logo {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+  }
+
+  .footer span {
+    font-size: 12px;
+  }
 }
 
 /* Responsive Design pentru ecrane mici */
