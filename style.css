@@ -302,6 +302,7 @@ th {
   border-radius: 4px;
   color: #fff;
   z-index: 10;
+  display: none; /* Inițial ascuns */
 }
 
 /* Stil pentru viitoarele funcționalități */
@@ -311,40 +312,6 @@ th {
   padding: 10px;
   border: 2px dashed #ced4da;
   color: #6c757d;
-}
-
-/* Stil pentru legenda */
-.legend {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.legend h4 {
-  margin-bottom: 10px;
-  font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.legend ul {
-  list-style: none;
-}
-
-.legend li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-}
-
-.legend li .color-box {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
 }
 
 /* Responsive Design pentru footer și legenda */
@@ -362,8 +329,8 @@ th {
 
   /* Ajustează legenda pe ecrane mici */
   .legend {
-    top: auto;
     bottom: 20px;
+    top: auto;
     right: 20px;
   }
 
