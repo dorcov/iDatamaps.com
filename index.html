@@ -66,6 +66,23 @@
         </div>
       </div>
       
+      <!-- Secțiunea de Categorii (Nou) -->
+      <div class="option-section">
+        <h4>Gestionare Categorii</h4>
+        <div class="category-manager">
+          <div class="add-category">
+            <input type="text" id="newCategoryName" class="input-text" placeholder="Nume Categorie" />
+            <input type="color" id="newCategoryColor" value="#FF5733" />
+            <button id="addCategory" class="btn btn-primary">Adaugă Categorie</button>
+          </div>
+          <div class="category-list">
+            <ul id="categoryList">
+              <!-- Categorii adăugate din JavaScript -->
+            </ul>
+          </div>
+        </div>
+      </div>
+      
       <!-- Secțiunea de Tabel de Date -->
       <div class="option-section">
         <h4>Tabel de Date</h4>
@@ -75,6 +92,7 @@
               <tr>
                 <th>Regiune</th>
                 <th>Valoare</th>
+                <th>Categorie</th> <!-- Nou -->
               </tr>
             </thead>
             <tbody>
