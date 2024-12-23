@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
       row.innerHTML = `
         <td>${regionName}</td>
         <td>
-          <input type="number" value="0" data-region="${encodeURIComponent(regionName)}" />
+          <input type="number" min="0" step="1" value="0" data-region="${encodeURIComponent(regionName)}" />
         </td>
       `;
       regionTableBody.appendChild(row);
@@ -92,8 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const input = document.querySelector(`[data-region="${regionName}"]`);
       const value = input ? parseFloat(input.value) || 0 : 0;
 
-      const fillColor = getColor(value, maxValue, gradient);
-      d3.select(this).attr("fill", fillColor);
+      if (value > 0) {
+        const fillColor = getColor(value, maxValue, gradient);
+        d3.select(this).attr("fill", fillColor);
+      } else {
+        d3.select(this).attr("fill", "#ccc"); // Gri pentru valoare 0 sau lipsă
+      }
     });
   }
 
@@ -129,8 +133,14 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((err) => console.error("Export error:", err));
   });
 
+  // Eveniment pentru schimbarea hărții
   mapSelector.addEventListener("change", (e) => {
     loadMap(e.target.value);
+  });
+
+  // Eveniment pentru schimbarea gradientului
+  gradientSelector.addEventListener("change", () => {
+    updateMapColors();
   });
 
   loadMap("md.json");
