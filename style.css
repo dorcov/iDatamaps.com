@@ -200,6 +200,21 @@ body {
   transform: translateY(-2px);
 }
 
+.btn-reset {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-reset:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+/* Opțional: Stil pentru secțiunea de resetare */
+.option-section button.btn-reset {
+  width: 100%;
+}
+
 /* Stil pentru tabel */
 .table-container {
   max-height: 300px;
@@ -240,7 +255,7 @@ td.select-category select {
   border: 1px solid #ccc;
 }
 
-/* Stil pentru gestionarea categoriilor (Nou) */
+/* Stil pentru gestionarea categoriilor */
 .category-manager {
   display: flex;
   flex-direction: column;

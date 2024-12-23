@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const applyGradientButton = document.getElementById("applyGradient");
   const regionTableBody = document.getElementById("regionTable").querySelector("tbody");
   const exportButton = document.getElementById("exportMap");
+  const resetButton = document.getElementById("resetAll"); // Nou
   const svg = d3.select("#mapSVG");
   const gMap = svg.select(".map-group");
   const titleInput = document.getElementById("infographicTitle");
@@ -80,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   applyGradientButton.addEventListener("click", applyCustomGradient);
 
-  // Funcții pentru gestionarea categoriilor (Nou)
+  // Funcții pentru gestionarea categoriilor
   function renderCategoryList() {
     categoryList.innerHTML = "";
     categories.forEach((category, index) => {
@@ -99,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const index = e.target.getAttribute("data-index");
         categories.splice(index, 1);
         renderCategoryList();
+        generateTable(geoDataFeatures); // Regenerează tabelul pentru a actualiza opțiunile de categorie
         updateMapColors();
       });
     });
@@ -115,7 +117,47 @@ document.addEventListener("DOMContentLoaded", () => {
     newCategoryName.value = "";
     newCategoryColor.value = "#FF5733"; // Resetare la o culoare default
     renderCategoryList();
+    generateTable(geoDataFeatures); // Regenerează tabelul pentru a actualiza opțiunile de categorie
     updateMapColors();
+  });
+
+  // Funcție pentru resetarea tuturor valorilor și categoriilor
+  function resetAll() {
+    // Resetăm valorile din tabel
+    regionTableBody.querySelectorAll("input").forEach(input => {
+      input.value = 0;
+    });
+
+    // Resetăm selectele de categorii din tabel
+    regionTableBody.querySelectorAll("select").forEach(select => {
+      select.value = "";
+    });
+
+    // Resetăm gradientul la valorile implicite
+    gradientStart.value = "#2A73FF";
+    gradientEnd.value = "#2A73FF";
+    currentGradient = {
+      start: "#2A73FF",
+      end: "#2A73FF"
+    };
+
+    // Ștergem toate categoriile
+    categories = [];
+    renderCategoryList();
+
+    // Actualizăm titlul la valoarea implicită
+    updateTitle("");
+    titleInput.value = "";
+
+    // Recolorăm harta
+    updateMapColors();
+  }
+
+  // Adăugăm evenimentul de click pentru butonul de resetare
+  resetButton.addEventListener("click", () => {
+    if (confirm("Ești sigur că vrei să resetezi toate valorile și categoriile?")) {
+      resetAll();
+    }
   });
 
   // Încărcăm harta selectată
@@ -334,20 +376,43 @@ document.addEventListener("DOMContentLoaded", () => {
   // Încarcă harta inițială
   loadMap("md.json");
 
-  // Monitorizare schimbare a categoriilor pentru a actualiza opțiunile din tabel
-  const observer = new MutationObserver(() => {
-    updateCategoryOptions();
-  });
+  // Funcție pentru resetarea tuturor valorilor și categoriilor
+  function resetAll() {
+    // Resetăm valorile din tabel
+    regionTableBody.querySelectorAll("input").forEach(input => {
+      input.value = 0;
+    });
 
-  observer.observe(categoryList, { childList: true, subtree: true });
+    // Resetăm selectele de categorii din tabel
+    regionTableBody.querySelectorAll("select").forEach(select => {
+      select.value = "";
+    });
 
-  // Actualizează opțiunile de categorie atunci când lista de categorii se schimbă
-  function handleCategoryChange() {
-    updateCategoryOptions();
+    // Resetăm gradientul la valorile implicite
+    gradientStart.value = "#2A73FF";
+    gradientEnd.value = "#2A73FF";
+    currentGradient = {
+      start: "#2A73FF",
+      end: "#2A73FF"
+    };
+
+    // Ștergem toate categoriile
+    categories = [];
+    renderCategoryList();
+
+    // Actualizăm titlul la valoarea implicită
+    updateTitle("");
+    titleInput.value = "";
+
+    // Recolorăm harta
     updateMapColors();
   }
 
-  // Observăm adăugarea și ștergerea categoriilor
-  addCategoryButton.addEventListener("click", handleCategoryChange);
-  categoryList.addEventListener("click", handleCategoryChange);
+  // Adăugăm evenimentul de click pentru butonul de resetare
+  resetButton.addEventListener("click", () => {
+    if (confirm("Ești sigur că vrei să resetezi toate valorile și categoriile?")) {
+      resetAll();
+    }
+  });
+
 });
