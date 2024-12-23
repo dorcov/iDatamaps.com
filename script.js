@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const svg = d3.select("#mapSVG");
   const gMap = svg.select(".map-group");
   const titleInput = document.getElementById("infographicTitle");
+  const dataSourceInput = document.getElementById("dataSource"); // Nou
   const mapTitle = document.getElementById("mapTitle");
 
   const svgWidth = 800;
@@ -49,9 +50,22 @@ document.addEventListener("DOMContentLoaded", () => {
     mapTitle.textContent = text || "Titlu Implicitar";
   }
 
+  // Funcție pentru a actualiza sursa datelor
+  function updateDataSource(text) {
+    // Poți decide cum să folosești această valoare
+    // De exemplu, afișează într-un alt element sau salvează în altă parte
+    console.log("Sursa datelor:", text);
+    // Exemplu: Poți adăuga un atribut în SVG sau altă logică
+  }
+
   // Eveniment pentru actualizarea titlului din input
   titleInput.addEventListener("input", () => {
     updateTitle(titleInput.value);
+  });
+
+  // Eveniment pentru actualizarea sursei datelor din input
+  dataSourceInput.addEventListener("input", () => {
+    updateDataSource(dataSourceInput.value);
   });
 
   // Implementare drag-and-drop pentru titlu
@@ -84,6 +98,22 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("mouseup", () => {
     isDragging = false;
   });
+
+  // Funcție de debouncing pentru îmbunătățirea performanței
+  function debounce(func, wait) {
+    let timeout;
+    return function(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func.apply(this, args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  // Debounced update to improve performance
+  const debouncedUpdateMapColors = debounce(updateMapColors, 300);
 
   // Funcție pentru a aplica gradientul personalizat
   function applyCustomGradient() {
@@ -197,6 +227,10 @@ document.addEventListener("DOMContentLoaded", () => {
     updateTitle("");
     titleInput.value = "";
 
+    // Resetăm sursa datelor
+    updateDataSource("");
+    dataSourceInput.value = "";
+
     // Recolorăm harta
     updateMapColors();
   }
@@ -282,42 +316,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     return "";
   }
-
-  // Funcție de debouncing pentru îmbunătățirea performanței
-  function debounce(func, wait) {
-    let timeout;
-    return function(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func.apply(this, args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
-
-  // Debounced update to improve performance
-  const debouncedUpdateMapColors = debounce(updateMapColors, 300);
-
-  // Exportăm harta ca PNG
-  exportButton.addEventListener("click", () => {
-    html2canvas(document.querySelector(".map-column"), { useCORS: true })
-      .then((canvas) => {
-        const link = document.createElement("a");
-        link.download = "harta.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      })
-      .catch((err) => console.error("Export error:", err));
-  });
-
-  // Eveniment pentru schimbarea hărții
-  mapSelector.addEventListener("change", (e) => {
-    loadMap(e.target.value);
-  });
-
-  // Încărcăm harta selectată
-  loadMap("md.json");
 
   // Funcție pentru a încărca harta
   function loadMap(geojsonFile) {
@@ -421,4 +419,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     return value > 0 ? getColor(value, maxValue, gradient) : "#ccc";
   }
+
+  // Exportăm harta ca PNG
+  exportButton.addEventListener("click", () => {
+    html2canvas(document.querySelector(".map-column"), { useCORS: true })
+      .then((canvas) => {
+        const link = document.createElement("a");
+        link.download = "harta.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      })
+      .catch((err) => console.error("Export error:", err));
+  });
+
+  // Eveniment pentru schimbarea hărții
+  mapSelector.addEventListener("change", (e) => {
+    loadMap(e.target.value);
+  });
+
+  // Încarcă harta selectată
+  loadMap("md.json");
 });
