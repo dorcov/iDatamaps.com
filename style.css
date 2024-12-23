@@ -56,6 +56,14 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Elementul de Sursa Datelor */
+#dataSourceText {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  fill: #333;
+  pointer-events: none;
+}
+
 /* Stil pentru footer */
 .footer {
   position: absolute;
@@ -370,6 +378,13 @@ td.select-category select {
   #mapTitle {
     font-size: 20px;
     top: 10px;
+    left: 10px;
+  }
+
+  /* Ajustări pentru Sursa Datelor pe ecrane mici */
+  #dataSourceText {
+    font-size: 10px;
+    bottom: 10px;
     left: 10px;
   }
 }
