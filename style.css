@@ -63,8 +63,6 @@ body {
   right: 20px;
   display: flex;
   align-items: center;
-  justify-content: center; /* Aliniază elementele pe axa principală */
-  gap: 8px; /* Spațiere uniformă între elemente */
   background: rgba(255, 255, 255, 0.8);
   padding: 5px 10px;
   border-radius: 4px;
@@ -73,17 +71,59 @@ body {
   flex-wrap: wrap; /* Permite rânduri suplimentare pe ecrane mici */
 }
 
+/* Stil pentru textul din footer */
 .footer span {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   color: #333;
 }
 
-.footer .logo {
-  width: 24px;
-  height: auto; /* Menține proporțiile */
-  margin-left: 8px; /* Spațiere între text și logo */
-  object-fit: contain; /* Asigură că imaginea nu se deformează */
+/* Stil pentru containerul logo-ului */
+.logo-container {
+  position: absolute;
+  bottom: 20px;
+  right: 240px; /* Poziționează logo-ul lângă footer */
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Stil pentru logo */
+.logo-container .logo {
+  width: 24px; /* Setează doar lățimea */
+  height: auto; /* Înălțimea se ajustează automat */
+}
+
+/* Responsivitate pentru footer și logo */
+@media (max-width: 768px) {
+  .footer {
+    bottom: 10px;
+    right: 10px;
+    padding: 4px 8px;
+    max-width: 150px; /* Ajustează în funcție de necesități */
+  }
+
+  .footer span {
+    font-size: 12px;
+  }
+
+  .footer .logo {
+    /* Acum nu mai este nevoie, deoarece logo-ul este separat */
+  }
+
+  /* Ajustează poziția logo-ului pe ecrane mici */
+  .logo-container {
+    bottom: 10px;
+    right: 160px; /* Ajustează în funcție de noua poziție a footer-ului */
+    padding: 4px;
+  }
+
+  .logo-container .logo {
+    width: 20px;
+  }
 }
 
 /* Panoul drept pentru opțiuni */
@@ -258,37 +298,14 @@ th {
   color: #6c757d;
 }
 
-/* Stil pentru footer */
-.footer {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Aliniază elementele pe axa principală */
-  gap: 8px; /* Spațiere uniformă între elemente */
-  background: rgba(255, 255, 255, 0.8);
-  padding: 5px 10px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  max-width: 200px; /* Asigură suficient spațiu */
-  flex-wrap: wrap; /* Permite rânduri suplimentare pe ecrane mici */
-}
-
-.footer span {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #333;
-}
-
-.footer .logo {
-  width: 24px;
-  height: auto; /* Menține proporțiile */
-  margin-left: 8px; /* Spațiere între text și logo */
+/* Stil pentru logo-ul independent */
+.logo-container .logo {
+  width: 24px; /* Setează doar lățimea */
+  height: auto; /* Înălțimea se ajustează automat */
   object-fit: contain; /* Asigură că imaginea nu se deformează */
 }
 
-/* Responsive Design pentru footer */
+/* Responsive Design pentru footer și logo */
 @media (max-width: 768px) {
   .footer {
     bottom: 10px;
@@ -301,10 +318,15 @@ th {
     font-size: 12px;
   }
 
-  .footer .logo {
+  /* Ajustează poziția logo-ului pe ecrane mici */
+  .logo-container {
+    bottom: 10px;
+    right: 160px; /* Ajustează în funcție de noua poziție a footer-ului */
+    padding: 4px;
+  }
+
+  .logo-container .logo {
     width: 20px;
-    height: auto;
-    margin-left: 6px;
   }
 }
 
