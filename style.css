@@ -78,40 +78,6 @@ body {
   color: #333;
 }
 
-/* Stil pentru legenda */
-.legend {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.legend h4 {
-  margin-bottom: 10px;
-  font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.legend ul {
-  list-style: none;
-}
-
-.legend li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-}
-
-.legend li .color-box {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-}
-
 /* Panoul drept pentru opțiuni */
 .right-panel {
   flex: 1; /* Ocupă 50% din lățime */
@@ -261,35 +227,6 @@ th {
   color: #333;
 }
 
-/* Stil pentru panoul de categorii */
-#categoriesContainer {
-  display: flex;
-  flex-direction: column;
-}
-
-.category-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.category-item input[type="text"] {
-  flex: 1;
-  padding: 8px 12px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.category-item input[type="color"] {
-  width: 40px;
-  height: 40px;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
 /* Stil pentru tooltip */
 .tooltip {
   pointer-events: none;
@@ -302,7 +239,6 @@ th {
   border-radius: 4px;
   color: #fff;
   z-index: 10;
-  display: none; /* Inițial ascuns */
 }
 
 /* Stil pentru viitoarele funcționalități */
@@ -314,7 +250,7 @@ th {
   color: #6c757d;
 }
 
-/* Responsive Design pentru footer și legenda */
+/* Responsive Design pentru footer */
 @media (max-width: 768px) {
   .footer {
     bottom: 10px;
@@ -324,31 +260,6 @@ th {
   }
 
   .footer span {
-    font-size: 12px;
-  }
-
-  /* Ajustează legenda pe ecrane mici */
-  .legend {
-    bottom: 20px;
-    top: auto;
-    right: 20px;
-  }
-
-  .legend h4 {
-    font-size: 14px;
-  }
-
-  .legend li .color-box {
-    width: 16px;
-    height: 16px;
-  }
-
-  /* Ajustează secțiunile din panoul drept */
-  .option-section h4 {
-    font-size: 16px;
-  }
-
-  .input-text, .custom-select, .btn {
     font-size: 12px;
   }
 }
@@ -370,11 +281,5 @@ th {
     font-size: 20px;
     top: 10px;
     left: 10px;
-  }
-
-  /* Ajustări pentru legenda pe ecrane mici */
-  .legend {
-    bottom: 20px;
-    top: auto;
   }
 }

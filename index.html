@@ -31,23 +31,14 @@
       <div class="footer">
         <span>Creat cu iDataMaps</span>
       </div>
-      
-      <!-- Legendă pentru Categorii -->
-      <div class="legend">
-        <h4>Legendă Categorii</h4>
-        <ul id="legendList">
-          <!-- Elemente vor fi adăugate din JavaScript -->
-        </ul>
-      </div>
     </div>
     <div class="right-panel">
       <!-- Secțiunea de Selectare a Hărții -->
       <div class="option-section">
         <h4>Selectează Harta</h4>
         <select id="mapSelector" class="custom-select">
-          <option value="modovanew.geojson">Moldova</option>
+          <option value="md.json">Moldova</option>
           <option value="europe.geojson">Europa</option>
-          <!-- Poți adăuga mai multe opțiuni de hărți aici -->
         </select>
       </div>
       
@@ -75,15 +66,6 @@
         </div>
       </div>
       
-      <!-- Secțiunea de Categorii -->
-      <div class="option-section">
-        <h4>Definire Categorii</h4>
-        <div id="categoriesContainer">
-          <!-- Categorii vor fi adăugate din JavaScript -->
-        </div>
-        <button id="addCategory" class="btn btn-primary">Adaugă Categorie</button>
-      </div>
-      
       <!-- Secțiunea de Tabel de Date -->
       <div class="option-section">
         <h4>Tabel de Date</h4>
@@ -92,8 +74,7 @@
             <thead>
               <tr>
                 <th>Regiune</th>
-                <th>Valoare Numerică</th>
-                <th>Categorie</th>
+                <th>Valoare</th>
               </tr>
             </thead>
             <tbody>
