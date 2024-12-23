@@ -1,243 +1,301 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const mapSelector = document.getElementById("mapSelector");
-  const gradientStart = document.getElementById("gradientStart");
-  const gradientEnd = document.getElementById("gradientEnd");
-  const applyGradientButton = document.getElementById("applyGradient");
-  const regionTableBody = document.getElementById("regionTable").querySelector("tbody");
-  const exportButton = document.getElementById("exportMap");
-  const svg = d3.select("#mapSVG");
-  const gMap = svg.select(".map-group");
-  const titleInput = document.getElementById("infographicTitle");
-  const mapTitle = document.getElementById("mapTitle");
+// script.js
 
-  const svgWidth = 800;
-  const svgHeight = 600;
+document.addEventListener('DOMContentLoaded', () => {
+  const addCategoryBtn = document.getElementById('addCategory');
+  const categoriesContainer = document.getElementById('categoriesContainer');
+  const maxCategories = 10;
+  let categoryCount = 0;
+  const categories = {}; // Obiect pentru a stoca categorii și culorile lor
 
-  svg.attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
-     .attr("preserveAspectRatio", "xMidYMid meet");
+  const legendList = document.getElementById('legendList');
 
-  let geoDataFeatures = [];
-  let currentGradient = {
-    start: "#2A73FF",
-    end: "#2A73FF"
-  };
-
-  // Funcție pentru a actualiza titlul
-  function updateTitle(text) {
-    mapTitle.textContent = text || "Titlu Implicitar";
-  }
-
-  // Eveniment pentru actualizarea titlului din input
-  titleInput.addEventListener("input", () => {
-    updateTitle(titleInput.value);
-  });
-
-  // Implementare drag-and-drop pentru titlu
-  let isDragging = false;
-  let offsetX, offsetY;
-
-  mapTitle.addEventListener("mousedown", (e) => {
-    isDragging = true;
-    const bbox = mapTitle.getBBox();
-    offsetX = e.clientX - bbox.x;
-    offsetY = e.clientY - bbox.y;
-  });
-
-  document.addEventListener("mousemove", (e) => {
-    if (isDragging) {
-      const mapColumn = document.querySelector(".map-column");
-      const rect = mapColumn.getBoundingClientRect();
-      let x = e.clientX - rect.left - offsetX;
-      let y = e.clientY - rect.top - offsetY;
-
-      // Limitează poziția titlului în interiorul hărții
-      x = Math.max(0, Math.min(x, rect.width - mapTitle.getBBox().width));
-      y = Math.max(20, Math.min(y, rect.height - 20)); // Minim y la 20 pentru a nu se suprapune cu marginile
-
-      mapTitle.setAttribute("x", x);
-      mapTitle.setAttribute("y", y);
+  addCategoryBtn.addEventListener('click', () => {
+    if (categoryCount >= maxCategories) {
+      alert(`Poți adăuga maximum ${maxCategories} categorii.`);
+      return;
     }
-  });
 
-  document.addEventListener("mouseup", () => {
-    isDragging = false;
-  });
+    categoryCount++;
+    const categoryItem = document.createElement('div');
+    categoryItem.classList.add('category-item');
 
-  // Funcție pentru a aplica gradientul personalizat
-  function applyCustomGradient() {
-    currentGradient.start = gradientStart.value;
-    currentGradient.end = gradientEnd.value;
-    updateMapColors();
-  }
+    const categoryName = document.createElement('input');
+    categoryName.type = 'text';
+    categoryName.placeholder = `Categorie ${categoryCount}`;
+    categoryName.required = true;
 
-  applyGradientButton.addEventListener("click", applyCustomGradient);
+    const categoryColor = document.createElement('input');
+    categoryColor.type = 'color';
+    categoryColor.value = getRandomColor();
 
-  // Încărcăm harta selectată
-  function loadMap(geojsonFile) {
-    d3.json(`data/${geojsonFile}`).then((data) => {
-      console.log(`Loaded GeoJSON (${geojsonFile}):`, data);
-
-      if (!data || !data.features) {
-        console.error("GeoJSON invalid sau lipsă features.");
-        return;
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = 'Șterge';
+    removeBtn.classList.add('btn', 'btn-export');
+    removeBtn.style.flex = '0 0 auto';
+    removeBtn.addEventListener('click', () => {
+      categoriesContainer.removeChild(categoryItem);
+      if (categoryName.value.trim() !== '') {
+        delete categories[categoryName.value.trim()];
       }
-
-      geoDataFeatures = data.features;
-
-      const projection = d3.geoMercator()
-        .fitSize([svgWidth, svgHeight], data);
-
-      const path = d3.geoPath().projection(projection);
-
-      gMap.selectAll("path").remove();
-
-      gMap.selectAll("path")
-        .data(geoDataFeatures)
-        .enter()
-        .append("path")
-        .attr("d", path)
-        .attr("fill", "#ccc")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 0.5)
-        .on("mouseover", function (event, d) {
-          d3.select(this).attr("fill", "orange");
-          showTooltip(event, d);
-        })
-        .on("mousemove", function (event) {
-          moveTooltip(event);
-        })
-        .on("mouseout", function (event, d) {
-          d3.select(this).attr("fill", getFillColor(d));
-          hideTooltip();
-        });
-
-      generateTable(data.features);
+      categoryCount--;
+      updateLegend();
+      updateTableOptions();
       updateMapColors();
-    }).catch((err) => {
-      console.error("Eroare la încărcarea GeoJSON:", err);
-    });
-  }
-
-  // Generăm tabelul cu regiuni
-  function generateTable(features) {
-    regionTableBody.innerHTML = "";
-    features.forEach((feature) => {
-      const regionName = feature.properties.NAME || feature.properties.name || "Unknown";
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${regionName}</td>
-        <td>
-          <input type="number" min="0" step="1" value="0" data-region="${encodeURIComponent(regionName)}" />
-        </td>
-      `;
-      regionTableBody.appendChild(row);
     });
 
-    // Eveniment la modificarea valorilor din tabel
-    regionTableBody.querySelectorAll("input").forEach((input) => {
-      input.addEventListener("input", debouncedUpdateMapColors);
+    categoryName.addEventListener('input', () => {
+      const oldName = Object.keys(categories).find(key => categories[key] === categoryColor.value && key !== categoryName.value.trim());
+      if (oldName && oldName !== categoryName.value.trim()) {
+        delete categories[oldName];
+      }
+      const name = categoryName.value.trim();
+      if (name) {
+        categories[name] = categoryColor.value;
+      }
+      updateLegend();
+      updateTableOptions();
+      updateMapColors();
     });
-  }
 
-  // Debounced update to improve performance
-  const debouncedUpdateMapColors = debounce(updateMapColors, 300);
-
-  // Funcție pentru a colora regiunile
-  function updateMapColors() {
-    const inputs = regionTableBody.querySelectorAll("input");
-    const values = Array.from(inputs).map((input) => parseFloat(input.value) || 0);
-    const maxValue = Math.max(...values, 1); // Evităm zero
-
-    gMap.selectAll("path").each(function (d) {
-      const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || "Unknown");
-      const input = document.querySelector(`[data-region="${regionName}"]`);
-      const value = input ? parseFloat(input.value) || 0 : 0;
-
-      if (value > 0) {
-        const fillColor = getColor(value, maxValue, currentGradient);
-        d3.select(this).attr("fill", fillColor);
-      } else {
-        d3.select(this).attr("fill", "#ccc"); // Gri pentru valoare 0 sau lipsă
+    categoryColor.addEventListener('input', () => {
+      const name = categoryName.value.trim();
+      if (name) {
+        categories[name] = categoryColor.value;
+        updateLegend();
+        updateMapColors();
       }
     });
+
+    categoryItem.appendChild(categoryName);
+    categoryItem.appendChild(categoryColor);
+    categoryItem.appendChild(removeBtn);
+    categoriesContainer.appendChild(categoryItem);
+  });
+
+  // Funcție pentru a genera culori aleatorii
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 
-  // Calculăm culoarea pe baza gradientului personalizat
-  function getColor(value, maxValue, gradient) {
-    const ratio = value / maxValue;
+  // Funcție pentru a popula tabelul cu date
+  function populateTable(data) {
+    const tbody = document.querySelector('#regionTable tbody');
+    tbody.innerHTML = ''; // Curățăm tabelul
 
-    // Interpolare între culorile start și end
-    const startColor = d3.color(gradient.start);
-    const endColor = d3.color(gradient.end);
-    const interpolatedColor = d3.interpolateRgb(startColor, endColor)(ratio);
+    data.forEach(region => {
+      const tr = document.createElement('tr');
 
-    return interpolatedColor.toString();
+      const tdName = document.createElement('td');
+      tdName.textContent = region.name;
+      tr.appendChild(tdName);
+
+      const tdValue = document.createElement('td');
+      const inputValue = document.createElement('input');
+      inputValue.type = 'number';
+      inputValue.value = region.value;
+      inputValue.classList.add('input-text');
+      inputValue.addEventListener('input', () => {
+        region.value = parseFloat(inputValue.value) || 0;
+        updateMapColors();
+      });
+      tdValue.appendChild(inputValue);
+      tr.appendChild(tdValue);
+
+      const tdCategory = document.createElement('td');
+      const selectCategory = document.createElement('select');
+      selectCategory.classList.add('custom-select');
+
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = '-- Selectează --';
+      selectCategory.appendChild(defaultOption);
+
+      Object.keys(categories).forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        selectCategory.appendChild(option);
+      });
+
+      selectCategory.value = region.category || '';
+      selectCategory.addEventListener('change', () => {
+        region.category = selectCategory.value;
+        updateMapColors();
+      });
+
+      tdCategory.appendChild(selectCategory);
+      tr.appendChild(tdCategory);
+
+      tbody.appendChild(tr);
+    });
   }
 
-  // Funcționalitate Tooltip
-  const tooltip = d3.select(".tooltip");
+  // Funcție pentru actualizarea opțiunilor din tabel în funcție de categoriile definite
+  function updateTableOptions() {
+    const tbody = document.querySelector('#regionTable tbody');
+    tbody.querySelectorAll('select').forEach(select => {
+      // Păstrăm valoarea selectată
+      const currentValue = select.value;
+      // Curățăm opțiunile
+      select.innerHTML = '';
+      
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = '-- Selectează --';
+      select.appendChild(defaultOption);
 
-  function showTooltip(event, d) {
-    const regionName = d.properties.NAME || d.properties.name || "Unknown";
-    const value = getRegionValue(d);
-    tooltip.style("visibility", "visible")
-           .html(`<strong>${regionName}</strong><br/>Valoare: ${value}`);
+      Object.keys(categories).forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        select.appendChild(option);
+      });
+
+      select.value = currentValue;
+    });
   }
 
-  function moveTooltip(event) {
-    tooltip.style("top", (event.pageY - 10) + "px")
-           .style("left", (event.pageX + 10) + "px");
+  // Exemplu de date inițiale
+  const initialData = [
+    { name: 'Regiune 1', value: 10, category: '' },
+    { name: 'Regiune 2', value: 20, category: '' },
+    { name: 'Regiune 3', value: 30, category: '' },
+    // Adaugă mai multe regiuni după necesități
+  ];
+
+  populateTable(initialData);
+
+  // Funcție pentru actualizarea culorilor pe hartă
+  function updateMapColors() {
+    d3.selectAll('.region')
+      .attr('fill', function(d) {
+        const regionData = initialData.find(r => r.name === d.properties.name);
+        if (regionData.category && categories[regionData.category]) {
+          return categories[regionData.category];
+        } else {
+          // Culoare implicită pentru valorile numerice
+          const colorScale = d3.scaleSequential(d3.interpolateBlues)
+            .domain([0, d3.max(initialData, d => d.value)]);
+          return colorScale(regionData.value);
+        }
+      });
   }
 
-  function hideTooltip() {
-    tooltip.style("visibility", "hidden");
+  // Funcție pentru actualizarea legendei
+  function updateLegend() {
+    legendList.innerHTML = ''; // Curățăm lista
+
+    Object.keys(categories).forEach(cat => {
+      const li = document.createElement('li');
+
+      const colorBox = document.createElement('span');
+      colorBox.classList.add('color-box');
+      colorBox.style.backgroundColor = categories[cat];
+
+      const label = document.createElement('span');
+      label.textContent = cat;
+
+      li.appendChild(colorBox);
+      li.appendChild(label);
+      legendList.appendChild(li);
+    });
   }
 
-  // Funcție pentru a obține valoarea unei regiuni
-  function getRegionValue(d) {
-    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || "Unknown");
-    const input = document.querySelector(`[data-region="${regionName}"]`);
-    return input ? parseFloat(input.value) || 0 : 0;
-  }
+  // Funcție pentru exportarea hărții ca PNG
+  document.getElementById('exportMap').addEventListener('click', () => {
+    html2canvas(document.querySelector('.map-column')).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'harta.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  });
 
-  // Funcție pentru a obține culoarea unei regiuni
-  function getFillColor(d) {
-    const value = getRegionValue(d);
-    const maxValue = Math.max(...Array.from(regionTableBody.querySelectorAll("input")).map(i => parseFloat(i.value) || 0), 1);
-    const gradient = currentGradient;
-    return value > 0 ? getColor(value, maxValue, gradient) : "#ccc";
-  }
+  // Event pentru aplicarea gradientului
+  document.getElementById('applyGradient').addEventListener('click', () => {
+    const startColor = document.getElementById('gradientStart').value;
+    const endColor = document.getElementById('gradientEnd').value;
 
-  // Funcție de debouncing pentru îmbunătățirea performanței
-  function debounce(func, wait) {
-    let timeout;
-    return function(...args) {
-      const later = () => {
-        clearTimeout(timeout);
-        func.apply(this, args);
-      };
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    };
-  }
+    // Eliminăm orice gradient existent
+    d3.select('#gradient').remove();
 
-  // Exportăm harta ca PNG
-  exportButton.addEventListener("click", () => {
-    html2canvas(document.querySelector(".map-column"), { useCORS: true })
-      .then((canvas) => {
-        const link = document.createElement("a");
-        link.download = "harta.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
+    // Aplicăm gradientul pe hartă
+    const svg = d3.select('#mapSVG');
+    const defs = svg.append('defs');
+
+    const linearGradient = defs.append('linearGradient')
+      .attr('id', 'gradient')
+      .attr('x1', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '0%')
+      .attr('y2', '100%');
+
+    linearGradient.append('stop')
+      .attr('offset', '0%')
+      .attr('stop-color', startColor);
+
+    linearGradient.append('stop')
+      .attr('offset', '100%')
+      .attr('stop-color', endColor);
+
+    d3.selectAll('.region')
+      .attr('fill', 'url(#gradient)');
+  });
+
+  // Încărcăm datele GeoJSON și le adăugăm pe hartă
+  d3.json('data/europe.geojson').then(geoData => {
+    const svg = d3.select('#mapSVG');
+    const projection = d3.geoMercator().fitSize([800, 600], geoData);
+    const path = d3.geoPath().projection(projection);
+
+    svg.select('.map-group')
+      .selectAll('path')
+      .data(geoData.features)
+      .enter()
+      .append('path')
+      .attr('d', path)
+      .attr('class', 'region') // Clasă pentru fiecare regiune
+      .attr('fill', '#ccc') // Culoare implicită
+      .attr('stroke', '#333')
+      .on('mouseover', function(event, d) {
+        // Cod pentru tooltip sau interactivitate
+        const regionName = d.properties.name;
+        const regionData = initialData.find(r => r.name === regionName);
+        const tooltip = document.querySelector('.tooltip');
+        tooltip.style.left = (event.pageX + 10) + 'px';
+        tooltip.style.top = (event.pageY + 10) + 'px';
+        tooltip.innerHTML = `<strong>${regionName}</strong><br>Valoare: ${regionData.value}<br>Categorie: ${regionData.category || 'N/A'}`;
+        tooltip.style.display = 'block';
       })
-      .catch((err) => console.error("Export error:", err));
+      .on('mouseout', function() {
+        // Cod pentru tooltip sau interactivitate
+        const tooltip = document.querySelector('.tooltip');
+        tooltip.style.display = 'none';
+      });
+
+    // Actualizăm culorile după ce harta este încărcată
+    updateMapColors();
   });
 
-  // Eveniment pentru schimbarea hărții
-  mapSelector.addEventListener("change", (e) => {
-    loadMap(e.target.value);
+  // Dragging functionality for the title
+  const mapTitle = document.getElementById('mapTitle');
+  mapTitle.addEventListener('dragstart', (e) => {
+    e.dataTransfer.setData('text/plain', '');
+    const rect = mapTitle.getBoundingClientRect();
+    e.dataTransfer.setDragImage(mapTitle, 0, 0);
+    mapTitle.style.position = 'absolute';
   });
 
-  // Încarcă harta inițială
-  loadMap("md.json");
+  document.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    const x = e.clientX;
+    const y = e.clientY;
+    mapTitle.style.left = `${x}px`;
+    mapTitle.style.top = `${y}px`;
+  });
 });
