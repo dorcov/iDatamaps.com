@@ -23,6 +23,17 @@
     <div class="map-column">
       <svg id="mapSVG">
         <g class="map-group"></g>
+        
+        <!-- Grup pentru Legendă -->
+        <g id="legendGroup" class="legend-group">
+          <rect class="legend-background" x="20" y="20" width="200" height="100" rx="4" ry="4"></rect>
+          <text id="legendTitle" x="30" y="40" class="legend-title" draggable="true">Legendă</text>
+          <g id="legendItems" class="legend-items"></g>
+          <!-- Buton de Ștergere Legendă -->
+          <circle class="legend-delete" cx="210" cy="20" r="8" fill="#dc3545" cursor="pointer"></circle>
+          <text class="legend-delete-text" x="208" y="24" font-size="12px" fill="#fff" text-anchor="middle" pointer-events="none">X</text>
+        </g>
+        
         <!-- Grup pentru Sursa datelor -->
         <g id="dataSourceGroup" class="footer data-source-group">
           <rect x="20" y="550" width="200" height="30" rx="4" ry="4"></rect>

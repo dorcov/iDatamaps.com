@@ -22,7 +22,7 @@ body {
 /* Coloana pentru hartă */
 .map-column {
   flex: 1; /* Ocupă 50% din lățime */
-  position: relative; /* Pentru poziționarea absolută a titlului și footer-ului */
+  position: relative; /* Pentru poziționarea absolută a titlului, footer-ului și legendei */
   padding: 20px;
   background-color: #f0f0f0; /* Fundal ușor pentru contrast */
   display: flex;
@@ -57,6 +57,66 @@ body {
   cursor: move;
 }
 
+/* Stiluri pentru Legendă */
+.legend-group {
+  cursor: move;
+}
+
+.legend-background {
+  fill: rgba(255, 255, 255, 0.7); /* Fundal semi-transparent */
+  stroke: #ccc;
+  stroke-width: 1;
+  rx: 4;
+  ry: 4;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition: all 0.3s ease;
+}
+
+.legend-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  fill: #333;
+  cursor: move;
+  user-select: none;
+}
+
+.legend-items {
+  margin-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.legend-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Buton de Ștergere Legendă */
+.legend-delete {
+  fill: #dc3545;
+  cursor: pointer;
+}
+
+.legend-delete-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  fill: #fff;
+  pointer-events: none;
+}
+
 /* Elementul de titlu */
 #mapTitle {
   font-family: 'Montserrat', sans-serif;
@@ -75,8 +135,6 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
 }
-
-/* Grup pentru Sursa Datelor (redundant, deja acoperit de '.footer.data-source-group') */
 
 /* Stil pentru footer */
 .footer {
@@ -407,5 +465,11 @@ td.select-category select {
   .footer.data-source-group {
     bottom: 10px;
     left: 10px;
+  }
+
+  /* Ajustări pentru Legendă pe ecrane mici */
+  .legend-group {
+    x: 10px;
+    y: 10px;
   }
 }
