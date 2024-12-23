@@ -23,13 +23,12 @@
     <div class="map-column">
       <svg id="mapSVG">
         <g class="map-group"></g>
+        <!-- Grup pentru Sursa datelor -->
+        <g id="dataSourceGroup" class="data-source-group">
+          <rect x="20" y="580" width="200" height="30" rx="4" ry="4" fill="rgba(255, 255, 255, 0.8)" stroke="#ccc" stroke-width="1"></rect>
+          <text id="dataSourceText" x="30" y="600" font-family="Roboto, sans-serif" font-size="14px" fill="#333">Sursa datelor: N/A</text>
+        </g>
       </svg>
-      <!-- Element pentru Titlu -->
-      <text id="mapTitle" class="draggable" draggable="true">Titlu Implicitar</text>
-      
-      <!-- Element pentru Sursa datelor -->
-      <text id="dataSourceText" class="data-source-text">Sursa datelor: N/A</text>
-      
       <!-- Footer în dreapta jos -->
       <div class="footer">
         <span>Creat cu iDataMaps</span>
@@ -51,7 +50,7 @@
         <input type="text" id="infographicTitle" class="input-text" placeholder="Introdu Titlul" />
       </div>
       
-      <!-- Secțiunea de Sursa Datelor (Nouă) -->
+      <!-- Secțiunea de Sursa Datelor -->
       <div class="option-section">
         <h4>Adaugă Sursa Datelor</h4>
         <input type="text" id="dataSource" class="input-text" placeholder="Introdu Sursa Datelor" />
