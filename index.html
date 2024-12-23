@@ -20,42 +20,67 @@
       <text id="mapTitle" class="draggable" draggable="true">Titlu Implicitar</text>
     </div>
     <div class="right-panel">
-      <h3>Selectează Harta</h3>
-      <select id="mapSelector">
-        <option value="md.json">Moldova</option>
-        <option value="europe.geojson">Europa</option>
-      </select>
-      
-      <h3>Adaugă Titlu</h3>
-      <input type="text" id="infographicTitle" placeholder="Introdu Titlul" />
-      
-      <h3>Selectează Gradient Personalizat</h3>
-      <div class="custom-gradient">
-        <label for="gradientStart">Culoare de Start:</label>
-        <input type="color" id="gradientStart" value="#2A73FF" />
-        
-        <label for="gradientEnd">Culoare de Sfârșit:</label>
-        <input type="color" id="gradientEnd" value="#2A73FF" />
-        
-        <button id="applyGradient">Aplică Gradient</button>
+      <!-- Secțiunea de Selectare a Hărții -->
+      <div class="option-section">
+        <h4>Selectează Harta</h4>
+        <select id="mapSelector" class="custom-select">
+          <option value="md.json">Moldova</option>
+          <option value="europe.geojson">Europa</option>
+        </select>
       </div>
       
-      <h3>Tabel de Date</h3>
-      <div class="table-container">
-        <table id="regionTable">
-          <thead>
-            <tr>
-              <th>Regiune</th>
-              <th>Valoare</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Populat din JavaScript -->
-          </tbody>
-        </table>
+      <!-- Secțiunea de Titlu -->
+      <div class="option-section">
+        <h4>Adaugă Titlu</h4>
+        <input type="text" id="infographicTitle" class="input-text" placeholder="Introdu Titlul" />
       </div>
       
-      <button id="exportMap">Exportă ca PNG</button>
+      <!-- Secțiunea de Gradient Personalizat -->
+      <div class="option-section">
+        <h4>Selectează Gradient Personalizat</h4>
+        <div class="custom-gradient">
+          <div class="color-picker">
+            <label for="gradientStart">Culoare de Start:</label>
+            <input type="color" id="gradientStart" value="#2A73FF" />
+          </div>
+          
+          <div class="color-picker">
+            <label for="gradientEnd">Culoare de Sfârșit:</label>
+            <input type="color" id="gradientEnd" value="#2A73FF" />
+          </div>
+          
+          <button id="applyGradient" class="btn btn-primary">Aplică Gradient</button>
+        </div>
+      </div>
+      
+      <!-- Secțiunea de Tabel de Date -->
+      <div class="option-section">
+        <h4>Tabel de Date</h4>
+        <div class="table-container">
+          <table id="regionTable">
+            <thead>
+              <tr>
+                <th>Regiune</th>
+                <th>Valoare</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Populat din JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Secțiunea de Export -->
+      <div class="option-section">
+        <button id="exportMap" class="btn btn-export">Exportă ca PNG</button>
+      </div>
+      
+      <!-- Spațiu pentru viitoare funcționalități -->
+      <div class="option-section future-feature">
+        <h4>Viitoare Funcționalități</h4>
+        <p>Aici va fi adăugată funcționalitatea viitoare.</p>
+      </div>
     </div>
   </div>
   

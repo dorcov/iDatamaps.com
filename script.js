@@ -135,9 +135,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Eveniment la modificarea valorilor din tabel
     regionTableBody.querySelectorAll("input").forEach((input) => {
-      input.addEventListener("input", updateMapColors);
+      input.addEventListener("input", debouncedUpdateMapColors);
     });
   }
+
+  // Debounced update to improve performance
+  const debouncedUpdateMapColors = debounce(updateMapColors, 300);
 
   // Funcție pentru a colora regiunile
   function updateMapColors() {
@@ -205,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return value > 0 ? getColor(value, maxValue, gradient) : "#ccc";
   }
 
-  // Funcție pentru debouncing (îmbunătățirea performanței)
+  // Funcție de debouncing pentru îmbunătățirea performanței
   function debounce(func, wait) {
     let timeout;
     return function(...args) {
@@ -217,14 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
       timeout = setTimeout(later, wait);
     };
   }
-
-  const debouncedUpdateMapColors = debounce(updateMapColors, 300);
-
-  // Actualizare evenimente pentru input-uri de tabel cu debounce
-  regionTableBody.querySelectorAll("input").forEach((input) => {
-    input.removeEventListener("input", updateMapColors);
-    input.addEventListener("input", debouncedUpdateMapColors);
-  });
 
   // Exportăm harta ca PNG
   exportButton.addEventListener("click", () => {

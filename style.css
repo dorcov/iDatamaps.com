@@ -27,6 +27,8 @@
 .map-column svg {
   width: 100%;
   height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Elementul de titlu */
@@ -40,6 +42,10 @@
   position: absolute;
   top: 20px;
   left: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Panoul drept pentru opțiuni */
@@ -48,78 +54,124 @@
   padding: 20px;
   background-color: #ffffff; /* Fundal alb pentru opțiuni */
   overflow-y: auto; /* Adaugă scroll dacă conținutul depășește înălțimea */
+  border-left: 1px solid #e0e0e0;
 }
 
-/* Stiluri pentru etichete */
-.right-panel label {
-  display: block;
-  margin-top: 0.5rem;
-  margin-bottom: 0.25rem;
-  font-weight: bold;
+/* Secțiune de opțiuni */
+.option-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Titluri pentru secțiuni */
+.option-section h4 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
 }
 
 /* Stiluri pentru input-uri de text */
-.right-panel input[type="text"] {
+.input-text {
   width: 100%;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
+  padding: 8px 12px;
+  margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s;
 }
 
-/* Stiluri pentru input-uri de tip number */
-.table-container input[type="number"] {
-  width: 100%;
-  padding: 0.3rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.input-text:focus {
+  border-color: #007bff;
   outline: none;
-  -moz-appearance: textfield; /* Firefox */
 }
 
-.table-container input[type="number"]::-webkit-inner-spin-button, 
-.table-container input[type="number"]::-webkit-outer-spin-button { 
-  -webkit-appearance: none;
-  margin: 0;
+/* Stiluri pentru select-uri personalizate */
+.custom-select {
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.custom-select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Stil pentru gradient personalizat */
+.custom-gradient {
+  display: flex;
+  flex-direction: column;
+}
+
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.color-picker label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.custom-gradient input[type="color"] {
+  width: 100%;
+  height: 40px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
 /* Stil pentru butoane */
-.right-panel button {
-  display: block;
-  width: 100%;
-  padding: 0.75rem 1.5rem;
-  margin-bottom: 1rem;
+.btn {
+  padding: 8px 12px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 14px;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
-#exportMap {
+.btn-primary {
   background-color: #007bff;
   color: #fff;
 }
 
-#exportMap:hover {
+.btn-primary:hover {
   background-color: #0056b3;
+  transform: translateY(-2px);
 }
 
-#applyGradient {
+.btn-export {
   background-color: #28a745;
   color: #fff;
 }
 
-#applyGradient:hover {
+.btn-export:hover {
   background-color: #218838;
+  transform: translateY(-2px);
 }
 
-/* Stiluri existente pentru tabel */
+/* Stil pentru tabel */
 .table-container {
-  max-height: 400px;
+  max-height: 300px;
   overflow-y: auto;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  margin-bottom: 1.5rem;
+  background-color: #fff;
 }
 
 table {
@@ -129,8 +181,9 @@ table {
 
 th, td {
   border-bottom: 1px solid #e0e0e0;
-  padding: 0.75rem 1rem;
+  padding: 8px 12px;
   text-align: left;
+  font-size: 14px;
 }
 
 th {
@@ -138,38 +191,27 @@ th {
   color: #333;
 }
 
-/* Stil pentru gradient personalizat */
-.custom-gradient {
-  display: flex;
-  flex-direction: column;
-}
-
-.custom-gradient label {
-  margin-top: 0.5rem;
-  margin-bottom: 0.25rem;
-  font-weight: bold;
-}
-
-.custom-gradient input[type="color"] {
-  width: 100%;
-  height: 40px;
-  border: none;
-  padding: 0;
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
 /* Stil pentru tooltip */
 .tooltip {
   pointer-events: none;
   position: absolute;
   text-align: center;
-  padding: 6px;
+  padding: 6px 10px;
   font: 12px sans-serif;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.7);
   border: 0px;
   border-radius: 4px;
   color: #fff;
+  z-index: 10;
+}
+
+/* Stil pentru viitoarele funcționalități */
+.future-feature {
+  background-color: #e9ecef;
+  text-align: center;
+  padding: 10px;
+  border: 2px dashed #ced4da;
+  color: #6c757d;
 }
 
 /* Responsive Design pentru ecrane mici */
@@ -182,5 +224,12 @@ th {
     flex: none;
     width: 100%;
     height: 50vh; /* Ajustează înălțimea pentru ecrane mici */
+  }
+
+  /* Ajustări pentru titlu pe ecrane mici */
+  #mapTitle {
+    font-size: 20px;
+    top: 10px;
+    left: 10px;
   }
 }
