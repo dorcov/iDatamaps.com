@@ -22,7 +22,7 @@ body {
 /* Coloana pentru hartă */
 .map-column {
   flex: 1; /* Ocupă 50% din lățime */
-  position: relative; /* Pentru poziționarea absolută a titlului, footer-ului și legendei */
+  position: relative; /* Pentru poziționarea absolută a titlului și footer-ului */
   padding: 20px;
   background-color: #f0f0f0; /* Fundal ușor pentru contrast */
   display: flex;
@@ -57,67 +57,7 @@ body {
   cursor: move;
 }
 
-/* Stiluri pentru Legendă */
-.legend-group {
-  cursor: move;
-}
-
-.legend-background {
-  fill: rgba(255, 255, 255, 0.7); /* Fundal semi-transparent */
-  stroke: #ccc;
-  stroke-width: 1;
-  rx: 4;
-  ry: 4;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-  transition: all 0.3s ease;
-}
-
-.legend-title {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  fill: #333;
-  cursor: move;
-  user-select: none;
-}
-
-.legend-items {
-  margin-top: 10px;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-}
-
-.legend-color {
-  width: 16px;
-  height: 16px;
-  border-radius: 4px;
-  margin-right: 8px;
-}
-
-.legend-text {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #333;
-}
-
-/* Buton de Ștergere Legendă */
-.legend-delete {
-  fill: #dc3545;
-  cursor: pointer;
-}
-
-.legend-delete-text {
-  font-family: 'Roboto', sans-serif;
-  font-size: 12px;
-  fill: #fff;
-  pointer-events: none;
-}
-
-/* Elementul de titlu */
+/* Stil pentru titlul hartii */
 #mapTitle {
   font-family: 'Montserrat', sans-serif;
   font-size: 24px;
@@ -421,7 +361,44 @@ td.select-category select {
   color: #6c757d;
 }
 
-/* Responsive Design pentru footer și data source */
+/* Stil pentru legendă */
+.legend-group {
+  cursor: move; /* Indică că elementul poate fi mutat */
+}
+
+.legend-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  fill: #333;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.legend-item rect {
+  width: 20px;
+  height: 20px;
+  rx: 2;
+  ry: 2;
+  margin-right: 10px;
+}
+
+.legend-edit, .legend-delete {
+  font-size: 16px;
+  fill: #333;
+  cursor: pointer;
+  user-select: none;
+}
+
+.legend-edit:hover, .legend-delete:hover {
+  fill: #007bff;
+}
+
+/* Responsive Design pentru footer, data source și legendă */
 @media (max-width: 768px) {
   .footer {
     bottom: 10px;
@@ -441,6 +418,24 @@ td.select-category select {
     x: 20px;
     y: 580px;
     font-size: 14px;
+  }
+
+  /* Poziționare și dimensiuni pentru legendă pe ecrane mici */
+  .legend-group rect {
+    x: 10px;
+    y: 20px;
+    /* Lățimea se ajustează automat prin JS */
+  }
+
+  .legend-group text#legendTitle {
+    x: 20px;
+    y: 40px;
+    font-size: 16px;
+  }
+
+  .legend-edit, .legend-delete {
+    x: 10px;
+    y: 10px;
   }
 
   /* Responsive Design pentru ecrane mici */
@@ -465,11 +460,5 @@ td.select-category select {
   .footer.data-source-group {
     bottom: 10px;
     left: 10px;
-  }
-
-  /* Ajustări pentru Legendă pe ecrane mici */
-  .legend-group {
-    x: 10px;
-    y: 10px;
   }
 }
