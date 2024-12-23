@@ -371,12 +371,13 @@ td.select-category select {
   .data-source-group rect {
     width: 150px;
     height: 25px;
+    y: 480px; /* Ajustat pentru ecrane mai mici */
   }
 
   #dataSourceText {
     font-size: 12px;
     x: 25px;
-    y: 595px;
+    y: 500px; /* Ajustat pentru a fi centrat în noul dreptunghi */
   }
 
   /* Responsive Design pentru ecrane mici */
@@ -407,7 +408,7 @@ td.select-category select {
 /* Poziționare și dimensiuni pentru data source */
 .data-source-group rect {
   x: 20px;
-  y: 580px;
+  y: 550px; /* Adjustat pentru aliniere corectă */
   width: 200px;
   height: 30px;
   rx: 4;
@@ -419,7 +420,7 @@ td.select-category select {
 
 #dataSourceText {
   x: 30px;
-  y: 600px;
+  y: 570px; /* Centrat în dreptunghi */
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   fill: #333;
