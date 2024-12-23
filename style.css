@@ -36,6 +36,96 @@
   overflow-y: auto; /* Adaugă scroll dacă conținutul depășește înălțimea */
 }
 
+/* Stiluri pentru etichete */
+.right-panel label {
+  display: block;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-weight: bold;
+}
+
+/* Stiluri pentru input-uri de text */
+.right-panel input[type="text"] {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Stiluri pentru input-uri de tip number */
+.table-container input[type="number"] {
+  width: 100%;
+  padding: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  -moz-appearance: textfield; /* Firefox */
+}
+
+.table-container input[type="number"]::-webkit-inner-spin-button, 
+.table-container input[type="number"]::-webkit-outer-spin-button { 
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Stil pentru butoane */
+.right-panel button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+#exportMap {
+  background-color: #007bff;
+  color: #fff;
+}
+
+#exportMap:hover {
+  background-color: #0056b3;
+}
+
+#exportPDF {
+  background-color: #6f42c1;
+  color: #fff;
+}
+
+#exportPDF:hover {
+  background-color: #5a32a3;
+}
+
+#applyCustomGradient {
+  background-color: #28a745;
+  color: #fff;
+}
+
+#applyCustomGradient:hover {
+  background-color: #218838;
+}
+
+#saveInfographic {
+  background-color: #17a2b8;
+  color: #fff;
+}
+
+#saveInfographic:hover {
+  background-color: #138496;
+}
+
+#loadInfographic {
+  background-color: #ffc107;
+  color: #fff;
+}
+
+#loadInfographic:hover {
+  background-color: #e0a800;
+}
+
 /* Stiluri existente pentru tabel */
 .table-container {
   max-height: 400px;
@@ -61,34 +151,27 @@ th {
   color: #333;
 }
 
-input[type="number"] {
+/* Stil pentru legendă */
+.legend-container {
+  margin-bottom: 1.5rem;
+}
+
+.legend-container svg {
   width: 100%;
-  padding: 0.3rem;
-  border: 1px solid #ccc;
+  height: auto;
+}
+
+/* Stil pentru tooltip */
+.tooltip {
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+  padding: 6px;
+  font: 12px sans-serif;
+  background: rgba(0, 0, 0, 0.6);
+  border: 0px;
   border-radius: 4px;
-  outline: none;
-  -moz-appearance: textfield; /* Firefox */
-}
-
-input[type="number"]::-webkit-inner-spin-button, 
-input[type="number"]::-webkit-outer-spin-button { 
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Stil pentru butonul de export */
-#exportMap {
-  padding: 0.75rem 1.5rem;
-  background-color: #007bff;
   color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-#exportMap:hover {
-  background-color: #0056b3;
 }
 
 /* Responsive Design pentru ecrane mici */

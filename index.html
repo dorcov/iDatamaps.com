@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -16,11 +17,20 @@
       </svg>
     </div>
     <div class="right-panel">
+      <h3>Add Title</h3>
+      <label for="infographicTitle">Title:</label>
+      <input type="text" id="infographicTitle" placeholder="Enter Title" />
+
+      <h3>Add Subtitle</h3>
+      <label for="infographicSubtitle">Subtitle:</label>
+      <input type="text" id="infographicSubtitle" placeholder="Enter Subtitle" />
+
       <h3>Select Map</h3>
       <select id="mapSelector">
         <option value="md.json">Moldova</option>
         <option value="europe.geojson">Europa</option>
       </select>
+
       <h3>Select Gradient</h3>
       <select id="gradientSelector">
         <option value="blue">Blue</option>
@@ -28,6 +38,21 @@
         <option value="red">Red</option>
         <option value="blueDiverging">Blue Diverging</option>
       </select>
+
+      <h3>Custom Gradient Colors</h3>
+      <label for="customColorStart">Start Color:</label>
+      <input type="color" id="customColorStart" value="#2A73FF" />
+      <label for="customColorEnd">End Color:</label>
+      <input type="color" id="customColorEnd" value="#2A73FF" />
+      <button id="applyCustomGradient">Apply Custom Gradient</button>
+
+      <h3>Filter Data</h3>
+      <select id="dataFilter">
+        <option value="all">All Regions</option>
+        <option value="above50">Value > 50</option>
+        <option value="below50">Value <= 50</option>
+      </select>
+
       <h3>Data Table</h3>
       <div class="table-container">
         <table id="regionTable">
@@ -42,9 +67,21 @@
           </tbody>
         </table>
       </div>
+
+      <h3>Save & Load</h3>
+      <button id="saveInfographic">Save Infographic</button>
+      <input type="file" id="loadInfographic" accept=".json" />
+
       <button id="exportMap">Export as PNG</button>
+      <button id="exportPDF">Export as PDF</button>
+
+      <h3>Legend</h3>
+      <div class="legend-container">
+        <svg id="legendSVG" width="200" height="50"></svg>
+      </div>
     </div>
   </div>
+  <div class="tooltip"></div>
   <script src="script.js"></script>
 </body>
 </html>
