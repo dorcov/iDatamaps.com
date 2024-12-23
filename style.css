@@ -364,20 +364,26 @@ td.select-category select {
     max-width: 150px; /* Ajustează în funcție de necesități */
   }
 
-  .footer span {
-    font-size: 12px;
-  }
-
+  /* Poziționare și dimensiuni pentru data source */
   .data-source-group rect {
-    width: 150px;
-    height: 25px;
-    y: 480px; /* Ajustat pentru ecrane mai mici */
+    x: 20px;
+    y: 560px; /* Ajustat pentru aliniere corectă cu bottom:10px */
+    width: 200px;
+    height: 30px;
+    rx: 4;
+    ry: 4;
+    fill: rgba(255, 255, 255, 0.8);
+    stroke: #ccc;
+    stroke-width: 1;
   }
 
   #dataSourceText {
-    font-size: 12px;
-    x: 25px;
-    y: 500px; /* Ajustat pentru a fi centrat în noul dreptunghi */
+    x: 30px;
+    y: 580px; /* Ajustat pentru a fi centrat în noul dreptunghi */
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    fill: #333;
+    pointer-events: none;
   }
 
   /* Responsive Design pentru ecrane mici */
@@ -408,7 +414,7 @@ td.select-category select {
 /* Poziționare și dimensiuni pentru data source */
 .data-source-group rect {
   x: 20px;
-  y: 550px; /* Adjustat pentru aliniere corectă */
+  y: 550px; /* Ajustat pentru aliniere corectă */
   width: 200px;
   height: 30px;
   rx: 4;
