@@ -69,16 +69,16 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.footer .logo {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
-}
-
 .footer span {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   color: #333;
+}
+
+.footer .logo {
+  width: 24px;
+  height: 24px;
+  margin-left: 8px; /* Spațiere între text și logo */
 }
 
 /* Panoul drept pentru opțiuni */
@@ -266,16 +266,16 @@ th {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.footer .logo {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
-}
-
 .footer span {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   color: #333;
+}
+
+.footer .logo {
+  width: 24px;
+  height: 24px;
+  margin-left: 8px; /* Spațiere între text și logo */
 }
 
 /* Responsive Design pentru footer */
@@ -286,14 +286,14 @@ th {
     padding: 4px 8px;
   }
 
+  .footer span {
+    font-size: 12px;
+  }
+
   .footer .logo {
     width: 20px;
     height: 20px;
-    margin-right: 6px;
-  }
-
-  .footer span {
-    font-size: 12px;
+    margin-left: 6px;
   }
 }
 
