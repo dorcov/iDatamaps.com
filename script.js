@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcționalitate Tooltip
   function showTooltip(event, d) {
-    const regionName = d.properties.NAME || d.properties.name ||d.properties.region_nam || "Unknown";
+    const regionName = d.properties.NAME || d.properties.name || d.properties.region_nam || "Unknown";
     const value = getRegionValue(d);
     const category = getRegionCategory(d);
     tooltip.style("visibility", "visible")
@@ -414,7 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     regionTableBody.innerHTML = "";
     features.forEach((feature) => {
-      const regionName = feature.properties.NAME || feature.properties.name ||d.properties.region_nam || "Unknown";
+      const regionName = feature.properties.NAME || feature.properties.name || feature.properties.region_nam || "Unknown";
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${regionName}</td>
