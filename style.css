@@ -24,7 +24,7 @@ body {
   flex: 1; /* Ocupă 50% din lățime */
   position: relative; /* Pentru poziționarea absolută a titlului și footer-ului */
   padding: 20px;
-  background-color: #f0f0f0; /* Fundal ușor pentru contrast */
+  background-color: #ffffff; /* Fundal ușor pentru contrast */
   display: flex;
   justify-content: center;
   align-items: center;
