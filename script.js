@@ -505,7 +505,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Definirea comportamentului de zoom
     const zoom = d3.zoom()
-      .scaleExtent([1, 8]) // Intervalul de zoom: de la 1 (normal) la 8 (mărire maximă)
+      .scaleExtent([0.5, 8]) // Intervalul de zoom: de la 0.5 (normal) la 8 (mărire maximă)
       .on("zoom", zoomed);
 
     // Aplicarea comportamentului de zoom la SVG
