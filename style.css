@@ -5,6 +5,56 @@
   box-sizing: border-box;
 }
 
+/* Definirea variabilelor CSS pentru gradienturi */
+:root {
+  /* Gradienturi presetate */
+  --blueGreen-start: #2A73FF;
+  --blueGreen-end: #00FF7F;
+  
+  --redYellow-start: #FF0000;
+  --redYellow-end: #FFFF00;
+  
+  --purplePink-start: #800080;
+  --purplePink-end: #FFC0CB;
+  
+  --orangeBlue-start: #FFA500;
+  --orangeBlue-end: #0000FF;
+  
+  --grey-start: #808080;
+  --grey-end: #D3D3D3;
+  
+  /* Gradienturi suplimentare pentru modernizare */
+  --tealIndigo-start: #008080;
+  --tealIndigo-end: #4B0082;
+  
+  --coralMint-start: #FF7F50;
+  --coralMint-end: #98FF98;
+  
+  --sunset-start: #FF4500;
+  --sunset-end: #FFD700;
+  
+  --navyLime-start: #000080;
+  --navyLime-end: #32CD32;
+  
+  --magentaCyan-start: #FF00FF;
+  --magentaCyan-end: #00FFFF;
+  
+  --violetYellow-start: #9400D3;
+  --violetYellow-end: #FFFF00;
+  
+  --pinkOrange-start: #FF69B4;
+  --pinkOrange-end: #FFA07A;
+  
+  --limeBlue-start: #32CD32;
+  --limeBlue-end: #1E90FF;
+  
+  --burgundyGold-start: #800020;
+  --burgundyGold-end: #FFD700;
+  
+  --cyanPurple-start: #00FFFF;
+  --cyanPurple-end: #8A2BE2;
+}
+
 /* Aplicarea fonturilor globale */
 body {
   font-family: 'Roboto', sans-serif;
@@ -493,3 +543,95 @@ td.select-category select {
     y: 10px;
   }
 }
+
+/* Stiluri pentru gradienturi */
+.preset-gradient select, .custom-gradient input[type="color"] {
+  /* Asigură o înălțime consistentă pentru elementele de selecție */
+  height: 40px;
+}
+
+.preset-gradient select {
+  /* Adaugă o tranziție pentru schimbarea culorilor */
+  transition: background-color 0.3s ease;
+}
+
+.custom-gradient button#applyGradient {
+  /* Adaugă un margin-top pentru a separa butonul de color pickers */
+  margin-top: 10px;
+}
+
+/* Stiluri pentru hărți interactive */
+.map-group path {
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+.map-group path:hover {
+  stroke: #000;
+  stroke-width: 1;
+}
+
+/* Stil pentru butonul de toggle legendă */
+#toggleLegend {
+  width: 100%;
+}
+
+/* Stil pentru butoanele de editare și ștergere legendă */
+.legend-edit, .legend-delete {
+  transition: fill 0.3s ease;
+}
+
+/* Stil pentru butoanele din panoul drept */
+.right-panel .btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Stil pentru grupurile draggable */
+.draggable {
+  cursor: move;
+}
+
+/* Stil pentru elementele legendă */
+.legend-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  fill: #333;
+}
+
+/* Stil pentru background-ul titlului */
+.title-group text#mapTitle {
+  /* Aplică un efect de umbră subtil pentru contrast */
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+/* Stiluri pentru exportare */
+.btn-export {
+  width: 100%;
+}
+
+/* Stiluri pentru legendă atunci când este ascunsă */
+.legend-group[visibility="hidden"] {
+  display: none;
+}
+
+/* Stiluri pentru tooltip */
+.tooltip {
+  /* Asigură o tranziție lină la afișare */
+  transition: visibility 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+
+.tooltip.visible {
+  opacity: 1;
+}
+
+/* Stil pentru butonul de resetare */
+.btn-reset {
+  width: 100%;
+}
+
+/* Stil pentru selectele de categorie din tabel */
+td.select-category select {
+  background-color: #fff;
+}
+
