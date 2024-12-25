@@ -503,6 +503,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const dataSourceGroup = d3.select("#dataSourceGroup");
     const titleGroup = d3.select("#titleGroup");
 
+    // Definirea comportamentului de zoom
+    const zoom = d3.zoom()
+      .scaleExtent([1, 8]) // Intervalul de zoom: de la 1 (normal) la 8 (mărire maximă)
+      .on("zoom", zoomed);
+
+    // Aplicarea comportamentului de zoom la SVG
+    svg.call(zoom);
+
+    // Funcția care se execută la zoom/pan
+    function zoomed(event) {
+      gMap.attr("transform", event.transform);
+    }
+
     // Încarcă poziția salvată a legendei
     const savedLegendPosition = JSON.parse(localStorage.getItem("legendPosition"));
     if (savedLegendPosition) {
