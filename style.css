@@ -36,6 +36,7 @@ body {
   height: 100%;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative; /* Pentru a poziționa elementele absolute în interior */
 }
 
 /* Stiluri pentru containerul cu sursa datelor */
@@ -364,6 +365,20 @@ td.select-category select {
 /* Stil pentru legendă */
 .legend-group {
   cursor: move; /* Indică că elementul poate fi mutat */
+  /* Poziționare absolută pentru a putea fi mutată */
+  position: absolute;
+  top: 20px;
+  left: 600px;
+}
+
+#legendBackground {
+  fill: rgba(255, 255, 255, 0.5); /* Fundal semi-transparent */
+  stroke: #ccc;
+  stroke-width: 1;
+  rx: 4;
+  ry: 4;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition: all 0.3s ease;
 }
 
 .legend-title {
@@ -398,16 +413,40 @@ td.select-category select {
   fill: #007bff;
 }
 
-/* Responsive Design pentru footer, data source și legendă */
+/* Responsivitate pentru legendă */
 @media (max-width: 768px) {
-  .footer {
-    bottom: 10px;
-    right: 10px;
-    padding: 4px 8px;
-    max-width: 150px; /* Ajustează în funcție de necesități */
+  #legendBackground {
+    width: 140px;
+    height: 160px;
   }
 
-  /* Poziționare și dimensiuni pentru data source pe ecrane mici */
+  .legend-title {
+    font-size: 14px;
+  }
+
+  .legend-edit, .legend-delete {
+    font-size: 14px;
+  }
+  
+  /* Responsive Design pentru ecrane mici */
+  .container {
+    flex-direction: column;
+  }
+
+  .map-column, .right-panel {
+    flex: none;
+    width: 100%;
+    height: 50vh; /* Ajustează înălțimea pentru ecrane mici */
+  }
+
+  /* Ajustări pentru titlu pe ecrane mici */
+  #mapTitle {
+    font-size: 20px;
+    top: 10px;
+    left: 10px;
+  }
+
+  /* Ajustări pentru Sursa Datelor pe ecrane mici */
   .footer.data-source-group rect {
     x: 10px;
     y: 560px;
@@ -436,29 +475,5 @@ td.select-category select {
   .legend-edit, .legend-delete {
     x: 10px;
     y: 10px;
-  }
-
-  /* Responsive Design pentru ecrane mici */
-  .container {
-    flex-direction: column;
-  }
-
-  .map-column, .right-panel {
-    flex: none;
-    width: 100%;
-    height: 50vh; /* Ajustează înălțimea pentru ecrane mici */
-  }
-
-  /* Ajustări pentru titlu pe ecrane mici */
-  #mapTitle {
-    font-size: 20px;
-    top: 10px;
-    left: 10px;
-  }
-
-  /* Ajustări pentru Sursa Datelor pe ecrane mici */
-  .footer.data-source-group {
-    bottom: 10px;
-    left: 10px;
   }
 }

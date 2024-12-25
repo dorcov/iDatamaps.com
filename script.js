@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
       offsetYDataSource = event.clientY - bbox.y;
     });
 
-    document.addEventListener("mousemove", function(event) {
+    d3.select("body").on("mousemove", function(event) {
       if (isDraggingDataSource) {
         const mapColumn = document.querySelector(".map-column");
         const rect = mapColumn.getBoundingClientRect();
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    document.addEventListener("mouseup", function() {
+    d3.select("body").on("mouseup", function() {
       isDraggingDataSource = false;
     });
   } else {
@@ -262,6 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
         categories.splice(index, 1);
         renderCategoryList();
         generateTable(geoDataFeatures); // Regenerează tabelul pentru a actualiza opțiunile de categorie
+        generateLegend(); // Actualizează legenda
         updateMapColors();
       });
     });
@@ -512,6 +513,8 @@ document.addEventListener("DOMContentLoaded", () => {
     regionTableBody.querySelectorAll("input").forEach((input) => {
       input.addEventListener("input", debouncedUpdateMapColors);
     });
+
+    generateLegend(); // Generează legenda după actualizarea tabelului
   }
 
   // Actualizează opțiunile de categorie în tabel
@@ -604,4 +607,107 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // Funcție pentru a genera elementele legendei
+  function generateLegend() {
+    const legendItemsGroup = d3.select("#legendItems");
+    legendItemsGroup.selectAll("*").remove(); // Curăță legenda existentă
+
+    categories.forEach((category, index) => {
+      const legendItem = legendItemsGroup.append("g")
+        .attr("class", "legend-item")
+        .attr("transform", `translate(10, ${40 + index * 30})`);
+
+      legendItem.append("rect")
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("fill", category.color);
+
+      legendItem.append("text")
+        .attr("x", 30)
+        .attr("y", 15)
+        .attr("class", "legend-text")
+        .text(category.name);
+    });
+  }
+
+  // Funcționalitate Drag-and-Drop pentru Legendă
+  function makeLegendDraggable() {
+    const legendGroup = d3.select("#legendGroup");
+    const legendBackground = d3.select("#legendBackground");
+
+    // Încarcă poziția salvată
+    const savedPosition = JSON.parse(localStorage.getItem("legendPosition"));
+    if (savedPosition) {
+      legendGroup.attr("transform", `translate(${savedPosition.x}, ${savedPosition.y})`);
+    }
+
+    let isDragging = false;
+    let startX, startY;
+    let initialX, initialY;
+
+    legendGroup.on("mousedown", (event) => {
+      isDragging = true;
+      startX = event.clientX;
+      startY = event.clientY;
+      const transform = legendGroup.attr("transform") || "translate(0,0)";
+      const translate = transform.match(/translate\(([^)]+)\)/)[1].split(",").map(Number);
+      initialX = translate[0];
+      initialY = translate[1];
+    });
+
+    d3.select("body").on("mousemove", (event) => {
+      if (isDragging) {
+        const dx = event.clientX - startX;
+        const dy = event.clientY - startY;
+        let newX = initialX + dx;
+        let newY = initialY + dy;
+
+        // Limitări pentru a menține legenda în interiorul SVG-ului
+        const svg = document.getElementById("mapSVG");
+        const svgRect = svg.getBoundingClientRect();
+        const legendRect = legendBackground.node().getBoundingClientRect();
+
+        // Calcularea noii poziții relative în SVG
+        newX = Math.max(0, Math.min(newX, svgRect.width - legendRect.width));
+        newY = Math.max(0, Math.min(newY, svgRect.height - legendRect.height));
+
+        legendGroup.attr("transform", `translate(${newX}, ${newY})`);
+
+        // Salvează poziția în localStorage
+        localStorage.setItem("legendPosition", JSON.stringify({ x: newX, y: newY }));
+      }
+    });
+
+    d3.select("body").on("mouseup", () => {
+      isDragging = false;
+    });
+  }
+
+  // Funcție pentru a genera tabelul cu regiuni
+  // ... funcția generateTable este deja definită mai sus ...
+
+  // Funcție pentru a genera elementele legendei
+  // ... funcția generateLegend este deja definită mai sus ...
+
+  // Funcție pentru a face legenda draggable
+  makeLegendDraggable();
+
+  // Generăm lista de categorii inițială
+  renderCategoryList();
+
+  // Funcție pentru a controla vizibilitatea legendei
+  const toggleLegendButton = d3.select("#toggleLegend");
+  const legendGroupSelection = d3.select("#legendGroup");
+
+  if (toggleLegendButton) {
+    toggleLegendButton.on("click", () => {
+      const isVisible = legendGroupSelection.attr("visibility") !== "hidden";
+      legendGroupSelection.attr("visibility", isVisible ? "hidden" : "visible");
+    });
+  } else {
+    console.error("Elementul cu ID 'toggleLegend' nu a fost găsit.");
+  }
+
+  // Functia de colorare a regiunilor trebuie apelata la generarea tabelului si adaugarea de categorii
 });
