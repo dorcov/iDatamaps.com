@@ -369,7 +369,7 @@ td.select-category select {
 }
 
 #legendBackground {
-  fill: rgba(255, 255, 255, 0.1); /* Fundal semi-transparent */
+  fill: rgba(255, 255, 255, 0.0); /* Fundal semi-transparent */
   stroke: #ccc;
   stroke-width: 0;
   rx: 4;
