@@ -291,7 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const maxValue = Math.max(...values, 1); // Evităm zero
 
     gMap.selectAll("path").each(function (d) {
-      const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || d.properties.region_nam || "Unknown");
+      const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || d.properties.region_nam ||d.properties.nume_regiu || "Unknown");
       const input = document.querySelector(`[data-region="${regionName}"]`);
       const select = document.querySelector(`select[data-region="${regionName}"]`);
       const value = input ? parseFloat(input.value) || 0 : 0;
@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcționalitate Tooltip
   function showTooltip(event, d) {
-    const regionName = d.properties.NAME || d.properties.name || d.properties.region_nam || "Unknown";
+    const regionName = d.properties.NAME || d.properties.name || d.properties.region_nam ||d.properties.nume_regiu || "Unknown";
     const value = getRegionValue(d);
     const category = getRegionCategory(d);
     tooltip.style("visibility", "visible")
@@ -343,14 +343,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a obține valoarea unei regiuni
   function getRegionValue(d) {
-    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name ||d.properties.region_nam || "Unknown");
+    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name ||d.properties.region_nam || d.properties.nume_regiu ||"Unknown");
     const input = document.querySelector(`[data-region="${regionName}"]`);
     return input ? parseFloat(input.value) || 0 : 0;
   }
 
   // Funcție pentru a obține categoria unei regiuni
   function getRegionCategory(d) {
-    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name ||d.properties.region_nam || "Unknown");
+    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name ||d.properties.region_nam ||d.properties.nume_regiu || "Unknown");
     const select = document.querySelector(`select[data-region="${regionName}"]`);
     if (select && select.value !== "" && categories[select.value]) {
       return categories[select.value].name;
@@ -414,7 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     regionTableBody.innerHTML = "";
     features.forEach((feature) => {
-      const regionName = feature.properties.NAME || feature.properties.name || feature.properties.region_nam || "Unknown";
+      const regionName = feature.properties.NAME || feature.properties.name || feature.properties.region_nam ||feature.properties.nume_regiu || "Unknown";
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${regionName}</td>
