@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcționalitate Tooltip
   function showTooltip(event, d) {
-    const regionName = d.properties.NAME || d.properties.name || "Unknown";
+    const regionName = d.properties.NAME || d.properties.name ||d.properties.region_nam || "Unknown";
     const value = getRegionValue(d);
     const category = getRegionCategory(d);
     tooltip.style("visibility", "visible")
@@ -343,14 +343,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a obține valoarea unei regiuni
   function getRegionValue(d) {
-    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || "Unknown");
+    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name ||d.properties.region_nam || "Unknown");
     const input = document.querySelector(`[data-region="${regionName}"]`);
     return input ? parseFloat(input.value) || 0 : 0;
   }
 
   // Funcție pentru a obține categoria unei regiuni
   function getRegionCategory(d) {
-    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || "Unknown");
+    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name ||d.properties.region_nam || "Unknown");
     const select = document.querySelector(`select[data-region="${regionName}"]`);
     if (select && select.value !== "" && categories[select.value]) {
       return categories[select.value].name;
@@ -414,7 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     regionTableBody.innerHTML = "";
     features.forEach((feature) => {
-      const regionName = feature.properties.NAME || feature.properties.name || "Unknown";
+      const regionName = feature.properties.NAME || feature.properties.name ||d.properties.region_nam || "Unknown";
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${regionName}</td>
