@@ -35,7 +35,8 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Eliminare box-shadow */
+  box-shadow: none;
   position: relative; /* Pentru a poziționa elementele absolute în interior */
 }
 
@@ -46,7 +47,8 @@ body {
   stroke-width: 1;
   rx: 4;
   ry: 4;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  /* Eliminare box-shadow */
+  filter: none;
   transition: all 0.3s ease;
 }
 
@@ -59,7 +61,7 @@ body {
 }
 
 /* Stil pentru titlul hartii */
-#mapTitle {
+.title-group text#mapTitle {
   font-family: 'Montserrat', sans-serif;
   font-size: 24px;
   font-weight: 700;
@@ -67,13 +69,11 @@ body {
   cursor: move;
   user-select: none;
   pointer-events: all;
-  position: absolute;
-  top: 20px;
-  left: 20px;
   background: rgba(255, 255, 255, 0.7);
   padding: 5px 10px;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Eliminare box-shadow */
+  filter: none;
   transition: all 0.3s ease;
 }
 
@@ -87,7 +87,8 @@ body {
   background: rgba(255, 255, 255, 0.8);
   padding: 5px 10px;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Eliminare box-shadow */
+  box-shadow: none;
   max-width: 200px; /* Asigură suficient spațiu */
   flex-wrap: wrap; /* Permite rânduri suplimentare pe ecrane mici */
   transition: all 0.3s ease;
@@ -365,7 +366,6 @@ td.select-category select {
 /* Stil pentru legendă */
 .legend-group {
   cursor: move; /* Indică că elementul poate fi mutat */
-  /* Poziționare absolută eliminată pentru a evita conflicte */
 }
 
 #legendBackground {
@@ -374,7 +374,7 @@ td.select-category select {
   stroke-width: 1;
   rx: 4;
   ry: 4;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  filter: none; /* Eliminare umbră */
   transition: all 0.3s ease;
 }
 
@@ -410,6 +410,26 @@ td.select-category select {
   fill: #007bff;
 }
 
+/* Stil pentru grupul titlului */
+.title-group {
+  cursor: move; /* Indică că elementul poate fi mutat */
+}
+
+.title-group text#mapTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  fill: #000;
+  cursor: move;
+  user-select: none;
+  pointer-events: all;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 4px;
+  filter: none; /* Eliminare umbră */
+  transition: all 0.3s ease;
+}
+
 /* Responsivitate pentru legendă */
 @media (max-width: 768px) {
   #legendBackground {
@@ -437,10 +457,9 @@ td.select-category select {
   }
 
   /* Ajustări pentru titlu pe ecrane mici */
-  #mapTitle {
+  .title-group text#mapTitle {
     font-size: 20px;
-    top: 10px;
-    left: 10px;
+    /* Poziția inițială poate fi ajustată din JavaScript */
   }
 
   /* Ajustări pentru Sursa Datelor pe ecrane mici */

@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const gMap = svg.select(".map-group");
   const titleInput = document.getElementById("infographicTitle");
   const dataSourceInput = document.getElementById("dataSource"); // Nou
-  const mapTitle = document.getElementById("mapTitle");
+  const mapTitle = d3.select("#mapTitle");
   const dataSourceTextElement = d3.select("#dataSourceText"); // Nou
 
   const svgWidth = 800;
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a actualiza titlul
   function updateTitle(text) {
-    mapTitle.textContent = text || "Titlu Implicitar";
+    mapTitle.text(text || "Titlu Implicitar");
   }
 
   // Funcție pentru a actualiza sursa datelor
@@ -97,41 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   } else {
     console.error("Elementul cu ID 'dataSource' nu a fost găsit.");
-  }
-
-  if (mapTitle) {
-    // Implementare drag-and-drop pentru titlu
-    let isDragging = false;
-    let offsetX, offsetY;
-
-    mapTitle.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      const bbox = mapTitle.getBBox();
-      offsetX = e.clientX - bbox.x;
-      offsetY = e.clientY - bbox.y;
-    });
-
-    document.addEventListener("mousemove", (e) => {
-      if (isDragging) {
-        const mapColumn = document.querySelector(".map-column");
-        const rect = mapColumn.getBoundingClientRect();
-        let x = e.clientX - rect.left - offsetX;
-        let y = e.clientY - rect.top - offsetY;
-
-        // Limitează poziția titlului în interiorul hărții
-        x = Math.max(0, Math.min(x, rect.width - mapTitle.getBBox().width));
-        y = Math.max(20, Math.min(y, rect.height - 20)); // Minim y la 20 pentru a nu se suprapune cu marginile
-
-        mapTitle.setAttribute("x", x);
-        mapTitle.setAttribute("y", y);
-      }
-    });
-
-    document.addEventListener("mouseup", () => {
-      isDragging = false;
-    });
-  } else {
-    console.error("Elementul cu ID 'mapTitle' nu a fost găsit.");
   }
 
   // Funcție de debouncing pentru îmbunătățirea performanței
@@ -509,83 +474,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return value > 0 ? getColor(value, maxValue, gradient) : "#ccc";
   }
 
-  // Exportăm harta ca PNG
-  if (exportButton) {
-    exportButton.addEventListener("click", () => {
-      // Ascundem butoanele de edit și ștergere ale legendei înainte de export
-      const legendEdit = document.getElementById("editLegendTitle");
-      const legendDelete = document.getElementById("deleteLegend");
-      legendEdit.style.display = "none";
-      legendDelete.style.display = "none";
-
-      // Exportăm harta
-      html2canvas(document.querySelector(".map-column"), { useCORS: true })
-        .then((canvas) => {
-          const link = document.createElement("a");
-          link.download = "harta.png";
-          link.href = canvas.toDataURL("image/png");
-          link.click();
-
-          // Afișăm din nou butoanele după export
-          legendEdit.style.display = "block";
-          legendDelete.style.display = "block";
-        })
-        .catch((err) => {
-          console.error("Export error:", err);
-          // Afișăm din nou butoanele în caz de eroare
-          legendEdit.style.display = "block";
-          legendDelete.style.display = "block";
-        });
-    });
-  } else {
-    console.error("Elementul cu ID 'exportMap' nu a fost găsit.");
-  }
-
-  // Eveniment pentru schimbarea hărții
-  if (mapSelector) {
-    mapSelector.addEventListener("change", (e) => {
-      loadMap(e.target.value);
-    });
-  } else {
-    console.error("Elementul cu ID 'mapSelector' nu a fost găsit.");
-  }
-
-  // Încarcă harta selectată
-  loadMap("md.json");
-
-  // Funcție pentru a colora regiunile
-  function updateMapColors() {
-    if (!regionTableBody) {
-      console.error("Elementul cu ID 'regionTable' nu a fost găsit.");
-      return;
-    }
-
-    const inputs = regionTableBody.querySelectorAll("input");
-    const selects = regionTableBody.querySelectorAll("select");
-    const values = Array.from(inputs).map((input) => parseFloat(input.value) || 0);
-    const maxValue = Math.max(...values, 1); // Evităm zero
-
-    gMap.selectAll("path").each(function (d) {
-      const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || "Unknown");
-      const input = document.querySelector(`[data-region="${regionName}"]`);
-      const select = document.querySelector(`select[data-region="${regionName}"]`);
-      const value = input ? parseFloat(input.value) || 0 : 0;
-      const categoryIndex = select ? select.value : "";
-
-      if (categoryIndex !== "" && categories[categoryIndex]) {
-        // Dacă este selectată o categorie, folosește culoarea categoriei
-        const categoryColor = categories[categoryIndex].color;
-        d3.select(this).attr("fill", categoryColor);
-      } else if (value > 0) {
-        // Folosește gradientul personalizat sau presetat
-        const fillColor = getColor(value, maxValue, currentGradient);
-        d3.select(this).attr("fill", fillColor);
-      } else {
-        d3.select(this).attr("fill", "#ccc"); // Gri pentru valoare 0 sau lipsă
-      }
-    });
-  }
-
   // Funcție pentru a genera elementele legendei
   function generateLegend() {
     const legendItemsGroup = d3.select("#legendItems");
@@ -615,6 +503,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const legendBackground = d3.select("#legendBackground");
     const dataSourceGroup = d3.select("#dataSourceGroup");
     const dataSourceBackground = dataSourceGroup.select("rect");
+    const titleGroup = d3.select("#titleGroup");
 
     // Încarcă poziția salvată a legendei
     const savedLegendPosition = JSON.parse(localStorage.getItem("legendPosition"));
@@ -632,6 +521,15 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       // Setează poziția inițială dacă nu există o poziție salvată
       dataSourceGroup.attr("transform", `translate(20, 550)`); // Ajustează după necesități
+    }
+
+    // Încarcă poziția salvată a titlului
+    const savedTitlePosition = JSON.parse(localStorage.getItem("titlePosition"));
+    if (savedTitlePosition) {
+      titleGroup.attr("transform", `translate(${savedTitlePosition.x}, ${savedTitlePosition.y})`);
+    } else {
+      // Setează poziția inițială dacă nu există o poziție salvată
+      titleGroup.attr("transform", `translate(20, 40)`); // Ajustează după necesități
     }
 
     // Drag pentru Legendă
@@ -668,257 +566,20 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     );
 
-    // Funcționalitate pentru Edit Legend Title
-    const editLegendTitle = d3.select("#editLegendTitle");
-    editLegendTitle.on("click", () => {
-      const currentTitle = d3.select("#legendTitle").text();
-      const newTitle = prompt("Introdu noul titlu pentru legendă:", currentTitle);
-      if (newTitle !== null && newTitle.trim() !== "") {
-        d3.select("#legendTitle").text(newTitle.trim());
-      }
-    });
-
-    // Funcționalitate pentru Delete Legend
-    const deleteLegend = d3.select("#deleteLegend");
-    deleteLegend.on("click", () => {
-      if (confirm("Ești sigur că vrei să ștergi legenda?")) {
-        legendGroup.selectAll("*").remove(); // Elimină toate elementele din legendă
-        categories = []; // Șterge toate categoriile
-        renderCategoryList(); // Actualizează lista de categorii
-        updateMapColors(); // Recolorează harta
-        localStorage.removeItem("legendPosition"); // Șterge poziția salvată
-      }
-    });
-  }
-
-  // Apelăm funcția pentru a face legenda și sursa de date draggable
-  makeLegendDraggable();
-
-  // Funcție pentru a genera tabelul cu regiuni
-  function generateTable(features) {
-    if (!regionTableBody) {
-      console.error("Elementul cu ID 'regionTable' nu a fost găsit.");
-      return;
-    }
-
-    regionTableBody.innerHTML = "";
-    features.forEach((feature) => {
-      const regionName = feature.properties.NAME || feature.properties.name || "Unknown";
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${regionName}</td>
-        <td>
-          <input type="number" min="0" step="1" value="0" data-region="${encodeURIComponent(regionName)}" />
-        </td>
-        <td class="select-category">
-          <select data-region="${encodeURIComponent(regionName)}">
-            <option value="">Selectează Categorie</option>
-            ${categories.map((cat, idx) => `<option value="${idx}">${cat.name}</option>`).join('')}
-          </select>
-        </td>
-      `;
-      regionTableBody.appendChild(row);
-    });
-
-    // Adaugă evenimente pentru noile select-uri de categorii
-    regionTableBody.querySelectorAll("select").forEach((select) => {
-      select.addEventListener("change", updateMapColors);
-    });
-
-    // Eveniment la modificarea valorilor din tabel
-    regionTableBody.querySelectorAll("input").forEach((input) => {
-      input.addEventListener("input", debouncedUpdateMapColors);
-    });
-
-    generateLegend(); // Generează legenda după actualizarea tabelului
-  }
-
-  // Actualizează opțiunile de categorie în tabel
-  function updateCategoryOptions() {
-    if (!regionTableBody) {
-      console.error("Elementul cu ID 'regionTable' nu a fost găsit.");
-      return;
-    }
-
-    regionTableBody.querySelectorAll("select").forEach((select) => {
-      const currentValue = select.value;
-      select.innerHTML = `<option value="">Selectează Categorie</option>` + 
-        categories.map((cat, idx) => `<option value="${idx}">${cat.name}</option>`).join('');
-      select.value = currentValue < categories.length ? currentValue : "";
-    });
-  }
-
-  // Funcție pentru a obține culoarea unei regiuni
-  function getFillColor(d) {
-    const value = getRegionValue(d);
-    const maxValue = Math.max(...Array.from(regionTableBody.querySelectorAll("input")).map(i => parseFloat(i.value) || 0), 1);
-    const gradient = currentGradient;
-    const category = getRegionCategory(d);
-    if (category) {
-      const categoryIndex = categories.findIndex(cat => cat.name === category);
-      if (categoryIndex !== -1) {
-        return categories[categoryIndex].color;
-      }
-    }
-    return value > 0 ? getColor(value, maxValue, gradient) : "#ccc";
-  }
-
-  // Exportăm harta ca PNG
-  if (exportButton) {
-    exportButton.addEventListener("click", () => {
-      // Ascundem butoanele de edit și ștergere ale legendei înainte de export
-      const legendEdit = document.getElementById("editLegendTitle");
-      const legendDelete = document.getElementById("deleteLegend");
-      legendEdit.style.display = "none";
-      legendDelete.style.display = "none";
-
-      // Exportăm harta
-      html2canvas(document.querySelector(".map-column"), { useCORS: true })
-        .then((canvas) => {
-          const link = document.createElement("a");
-          link.download = "harta.png";
-          link.href = canvas.toDataURL("image/png");
-          link.click();
-
-          // Afișăm din nou butoanele după export
-          legendEdit.style.display = "block";
-          legendDelete.style.display = "block";
-        })
-        .catch((err) => {
-          console.error("Export error:", err);
-          // Afișăm din nou butoanele în caz de eroare
-          legendEdit.style.display = "block";
-          legendDelete.style.display = "block";
-        });
-    });
-  } else {
-    console.error("Elementul cu ID 'exportMap' nu a fost găsit.");
-  }
-
-  // Eveniment pentru schimbarea hărții
-  if (mapSelector) {
-    mapSelector.addEventListener("change", (e) => {
-      loadMap(e.target.value);
-    });
-  } else {
-    console.error("Elementul cu ID 'mapSelector' nu a fost găsit.");
-  }
-
-  // Încarcă harta selectată
-  loadMap("md.json");
-
-  // Funcție pentru a colora regiunile
-  function updateMapColors() {
-    if (!regionTableBody) {
-      console.error("Elementul cu ID 'regionTable' nu a fost găsit.");
-      return;
-    }
-
-    const inputs = regionTableBody.querySelectorAll("input");
-    const selects = regionTableBody.querySelectorAll("select");
-    const values = Array.from(inputs).map((input) => parseFloat(input.value) || 0);
-    const maxValue = Math.max(...values, 1); // Evităm zero
-
-    gMap.selectAll("path").each(function (d) {
-      const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || "Unknown");
-      const input = document.querySelector(`[data-region="${regionName}"]`);
-      const select = document.querySelector(`select[data-region="${regionName}"]`);
-      const value = input ? parseFloat(input.value) || 0 : 0;
-      const categoryIndex = select ? select.value : "";
-
-      if (categoryIndex !== "" && categories[categoryIndex]) {
-        // Dacă este selectată o categorie, folosește culoarea categoriei
-        const categoryColor = categories[categoryIndex].color;
-        d3.select(this).attr("fill", categoryColor);
-      } else if (value > 0) {
-        // Folosește gradientul personalizat sau presetat
-        const fillColor = getColor(value, maxValue, currentGradient);
-        d3.select(this).attr("fill", fillColor);
-      } else {
-        d3.select(this).attr("fill", "#ccc"); // Gri pentru valoare 0 sau lipsă
-      }
-    });
-  }
-
-  // Funcție pentru a genera elementele legendei
-  function generateLegend() {
-    const legendItemsGroup = d3.select("#legendItems");
-    legendItemsGroup.selectAll("*").remove(); // Curăță legenda existentă
-
-    categories.forEach((category, index) => {
-      const legendItem = legendItemsGroup.append("g")
-        .attr("class", "legend-item")
-        .attr("transform", `translate(10, ${30 + index * 30})`);
-
-      legendItem.append("rect")
-        .attr("width", 20)
-        .attr("height", 20)
-        .attr("fill", category.color);
-
-      legendItem.append("text")
-        .attr("x", 30)
-        .attr("y", 15)
-        .attr("class", "legend-text")
-        .text(category.name);
-    });
-  }
-
-  // Funcționalitate Drag-and-Drop pentru Legendă și Sursa Datelor
-  function makeLegendDraggable() {
-    const legendGroup = d3.select("#legendGroup");
-    const legendBackground = d3.select("#legendBackground");
-    const dataSourceGroup = d3.select("#dataSourceGroup");
-    const dataSourceBackground = dataSourceGroup.select("rect");
-
-    // Încarcă poziția salvată a legendei
-    const savedLegendPosition = JSON.parse(localStorage.getItem("legendPosition"));
-    if (savedLegendPosition) {
-      legendGroup.attr("transform", `translate(${savedLegendPosition.x}, ${savedLegendPosition.y})`);
-    } else {
-      // Setează poziția inițială dacă nu există o poziție salvată
-      legendGroup.attr("transform", `translate(20, 20)`);
-    }
-
-    // Încarcă poziția salvată a sursei datelor
-    const savedDataSourcePosition = JSON.parse(localStorage.getItem("dataSourcePosition"));
-    if (savedDataSourcePosition) {
-      dataSourceGroup.attr("transform", `translate(${savedDataSourcePosition.x}, ${savedDataSourcePosition.y})`);
-    } else {
-      // Setează poziția inițială dacă nu există o poziție salvată
-      dataSourceGroup.attr("transform", `translate(20, 550)`); // Ajustează după necesități
-    }
-
-    // Drag pentru Legendă
-    legendGroup.call(
+    // Drag pentru Titlu
+    titleGroup.call(
       d3.drag()
         .on("start", (event) => {
-          legendGroup.raise();
-          legendGroup.attr("opacity", 0.8);
+          titleGroup.raise();
+          titleGroup.attr("opacity", 0.8);
         })
         .on("drag", (event) => {
-          legendGroup.attr("transform", `translate(${event.x}, ${event.y})`);
+          titleGroup.attr("transform", `translate(${event.x}, ${event.y})`);
         })
         .on("end", (event) => {
-          legendGroup.attr("opacity", 1);
-          // Salvează poziția legendei
-          localStorage.setItem("legendPosition", JSON.stringify({ x: event.x, y: event.y }));
-        })
-    );
-
-    // Drag pentru Sursa Datelor
-    dataSourceGroup.call(
-      d3.drag()
-        .on("start", (event) => {
-          dataSourceGroup.raise();
-          dataSourceGroup.attr("opacity", 0.8);
-        })
-        .on("drag", (event) => {
-          dataSourceGroup.attr("transform", `translate(${event.x}, ${event.y})`);
-        })
-        .on("end", (event) => {
-          dataSourceGroup.attr("opacity", 1);
-          // Salvează poziția sursei datelor
-          localStorage.setItem("dataSourcePosition", JSON.stringify({ x: event.x, y: event.y }));
+          titleGroup.attr("opacity", 1);
+          // Salvează poziția titlului
+          localStorage.setItem("titlePosition", JSON.stringify({ x: event.x, y: event.y }));
         })
     );
 
@@ -945,7 +606,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Apelăm funcția pentru a face legenda și sursa de date draggable
+  // Apelăm funcția pentru a face legenda, titlul și sursa de date draggable
   makeLegendDraggable();
 
   // Funcție pentru a genera tabelul cu regiuni
@@ -969,5 +630,16 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Elementul cu ID 'toggleLegend' nu a fost găsit.");
   }
+
+  // Funcționalitate pentru titlu
+  // Actualizarea titlului în grupul SVG
+  if (titleInput) {
+    titleInput.addEventListener("input", () => {
+      updateTitle(titleInput.value);
+    });
+  }
+
+  // Funcționalitate pentru Sursa Datelor
+  // ... funcția updateDataSource este deja definită mai sus ...
 
 });
