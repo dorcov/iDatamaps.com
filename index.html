@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Harta Interactivă</title>
   
-  <!-- Fonturi Google -->
+  <!-- Includerea Fonturilor de la Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-
-  <!-- Fișier CSS -->
+  
+  <!-- Legătura către fișierul CSS -->
   <link rel="stylesheet" href="style.css" />
-
-  <!-- D3.js pentru manipularea datelor -->
+  
+  <!-- Incluzând D3.js pentru manipularea hărților -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
-
-  <!-- html2canvas pentru exportarea hărții -->
+  
+  <!-- Incluzând html2canvas pentru exportarea hărții -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -24,27 +24,34 @@
     <div class="map-column">
       <svg id="mapSVG">
         <g class="map-group"></g>
+        <!-- Grup pentru Sursa datelor -->
         <g id="dataSourceGroup" class="footer data-source-group">
           <rect x="0" y="0" width="200" height="30" rx="4" ry="4"></rect>
           <text id="dataSourceText" x="10" y="20" class="draggable" draggable="true">Sursa datelor: N/A</text>
         </g>
+        <!-- Grup pentru Legendă -->
         <g id="legendGroup" class="legend-group">
           <rect id="legendBackground" x="0" y="0" width="180" height="200" rx="4" ry="4" fill="rgba(255, 255, 255, 0.5)"></rect>
           <text id="legendTitle" x="10" y="20" class="legend-title">Legendă</text>
+          <!-- Categoria entries vor fi adăugate din JavaScript -->
           <g id="legendItems"></g>
+          <!-- Butoane pentru editarea și ștergerea legendei -->
           <text id="editLegendTitle" x="160" y="10" class="legend-edit" cursor="pointer">✏️</text>
           <text id="deleteLegend" x="160" y="30" class="legend-delete" cursor="pointer">🗑️</text>
         </g>
+        <!-- Grup pentru Titlu -->
         <g id="titleGroup" class="title-group">
           <text id="mapTitle" class="legend-title">Adaugă un titlu</text>
         </g>
       </svg>
+      
+      <!-- Footer în dreapta jos -->
       <div class="footer">
         <span>Creat cu iDataMaps</span>
       </div>
     </div>
-
     <div class="right-panel">
+      <!-- Secțiunea de Selectare a Hărții -->
       <div class="option-section">
         <h4>Selectează Harta</h4>
         <select id="mapSelector" class="custom-select">
@@ -52,19 +59,23 @@
           <option value="europe.geojson">Europa</option>
         </select>
       </div>
-
+      
+      <!-- Secțiunea de Titlu -->
       <div class="option-section">
         <h4>Adaugă Titlu</h4>
         <input type="text" id="infographicTitle" class="input-text" placeholder="Introdu Titlul" />
       </div>
-
+      
+      <!-- Secțiunea de Sursa Datelor -->
       <div class="option-section">
         <h4>Adaugă Sursa Datelor</h4>
         <input type="text" id="dataSource" class="input-text" placeholder="Introdu Sursa Datelor" />
       </div>
-
+      
+      <!-- Secțiunea de Gradient Personalizat și Presetat -->
       <div class="option-section">
         <h4>Selectează Gradient</h4>
+        <!-- Dropdown pentru Gradienturi Presetate -->
         <div class="preset-gradient">
           <label for="presetGradient">Gradient Presetat:</label>
           <select id="presetGradient" class="custom-select">
@@ -74,22 +85,40 @@
             <option value="purplePink">Mov la Roz</option>
             <option value="orangeBlue">Portocaliu la Albastru</option>
             <option value="grey">Gri</option>
+            <option value="tealIndigo">Turcoaz la Indigo</option>
+            <option value="coralMint">Coral la Mentă</option>
+            <option value="sunset">Apus la Auriu</option>
+            <option value="navyLime">Bleumarin la Lime</option>
+            <option value="magentaCyan">Magenta la Cyan</option>
+            <option value="violetYellow">Violet la Galben</option>
+            <option value="pinkOrange">Roz la Portocaliu</option>
+            <option value="limeBlue">Lime la Albastru</option>
+            <option value="burgundyGold">Burgundy la Auriu</option>
+            <option value="cyanPurple">Cyan la Indigo</option>
+            <!-- Adaugă mai multe opțiuni după necesitate -->
           </select>
         </div>
+        
+        <!-- Divider -->
         <hr />
+        
+        <!-- Secțiunea de Gradient Personalizat -->
         <div class="custom-gradient">
           <div class="color-picker">
             <label for="gradientStart">Culoare valori minime:</label>
             <input type="color" id="gradientStart" value="#2A73FF" />
           </div>
+          
           <div class="color-picker">
             <label for="gradientEnd">Culoare valori maxime:</label>
-            <input type="color" id="gradientEnd" value="#2A73FF" />
+            <input type="color" id="gradientEnd" value="#00FF7F" />
           </div>
+          
           <button id="applyGradient" class="btn btn-primary">Aplică Gradient Personalizat</button>
         </div>
       </div>
-
+      
+      <!-- Secțiunea de Categorii -->
       <div class="option-section">
         <h4>Gestionare Categorii</h4>
         <div class="category-manager">
@@ -99,11 +128,14 @@
             <button id="addCategory" class="btn btn-primary">Adaugă Categorie</button>
           </div>
           <div class="category-list">
-            <ul id="categoryList"></ul>
+            <ul id="categoryList">
+              <!-- Categorii adăugate din JavaScript -->
+            </ul>
           </div>
         </div>
       </div>
-
+      
+      <!-- Secțiunea de Tabel de Date -->
       <div class="option-section">
         <h4>Tabel de Date</h4>
         <div class="table-container">
@@ -115,32 +147,40 @@
                 <th>Categorie</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              <!-- Populat din JavaScript -->
+            </tbody>
           </table>
         </div>
       </div>
-
+      
+      <!-- Secțiunea de Export -->
       <div class="option-section">
         <button id="exportMap" class="btn btn-export">Exportă ca PNG</button>
       </div>
-
+      
+      <!-- Secțiunea de Resetare -->
       <div class="option-section">
         <button id="resetAll" class="btn btn-reset">Resetează datele</button>
       </div>
-
+      
+      <!-- Secțiunea pentru a controla vizibilitatea legendei -->
       <div class="option-section">
         <button id="toggleLegend" class="btn btn-primary">Ascunde/Adaugă Legenda</button>
       </div>
-
+      
+      <!-- Spațiu pentru viitoare funcționalități -->
       <div class="option-section future-feature">
         <h4>Viitoare Funcționalități</h4>
         <p>Aici va fi adăugată funcționalitatea viitoare.</p>
       </div>
     </div>
   </div>
-
+  
+  <!-- Tooltip pentru informații suplimentare -->
   <div class="tooltip"></div>
-
+  
+  <!-- Legătura către fișierul JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>

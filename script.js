@@ -40,17 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     redYellow: { start: "#FF0000", end: "#FFFF00" },    // Roșu la Galben
     purplePink: { start: "#800080", end: "#FFC0CB" },    // Mov la Roz
     orangeBlue: { start: "#FFA500", end: "#0000FF" },    // Portocaliu la Albastru
-    grey: { start: "#808080", end: "#D3D3D3" },          // Gri
-    tealIndigo: { start: "#008080", end: "#4B0082" },    // Turcoaz la Indigo
-    coralMint: { start: "#FF7F50", end: "#98FF98" },     // Coral la Mentă
-    sunset: { start: "#FF4500", end: "#FFD700" },        // Apus la Auriu
-    navyLime: { start: "#000080", end: "#32CD32" },      // Bleumarin la Lime
-    magentaCyan: { start: "#FF00FF", end: "#00FFFF" },   // Magenta la Cyan
-    violetYellow: { start: "#9400D3", end: "#FFFF00" },  // Violet la Galben
-    pinkOrange: { start: "#FF69B4", end: "#FFA07A" },     // Roz la Portocaliu
-    limeBlue: { start: "#32CD32", end: "#1E90FF" },       // Lime la Albastru
-    burgundyGold: { start: "#800020", end: "#FFD700" },  // Burgundy la Auriu
-    cyanPurple: { start: "#00FFFF", end: "#8A2BE2" }      // Cyan la Indigo
+    grey: { start: "#808080", end: "#D3D3D3" }          // Gri
   };
 
   // Declararea tooltip-ului
@@ -300,11 +290,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const values = Array.from(inputs).map((input) => parseFloat(input.value) || 0);
     const maxValue = Math.max(...values, 1); // Evităm zero
 
-    // Definește un color scale folosind D3
-    const colorScale = d3.scaleLinear()
-      .domain([0, maxValue])
-      .range([currentGradient.start, currentGradient.end]);
-
     gMap.selectAll("path").each(function (d) {
       const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || "Unknown");
       const input = document.querySelector(`[data-region="${regionName}"]`);
@@ -318,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
         d3.select(this).attr("fill", categoryColor);
       } else if (value > 0) {
         // Folosește gradientul personalizat sau presetat
-        const fillColor = colorScale(value);
+        const fillColor = getColor(value, maxValue, currentGradient);
         d3.select(this).attr("fill", fillColor);
       } else {
         d3.select(this).attr("fill", "#ccc"); // Gri pentru valoare 0 sau lipsă
@@ -326,9 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Funcție pentru a obține culoarea pe baza gradientului
-  // Aceasta a fost înlocuită de colorScale în updateMapColors
-  /*
+  // Calculăm culoarea pe baza gradientului personalizat sau presetat
   function getColor(value, maxValue, gradient) {
     const ratio = value / maxValue;
 
@@ -339,7 +322,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return interpolatedColor.toString();
   }
-  */
 
   // Funcționalitate Tooltip
   function showTooltip(event, d) {
@@ -348,7 +330,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const category = getRegionCategory(d);
     tooltip.style("visibility", "visible")
            .html(`<strong>${regionName}</strong><br/>Valoare: ${value}<br/>Categorie: ${category || "N/A"}`);
-    tooltip.classed("visible", true);
   }
 
   function moveTooltip(event) {
@@ -357,8 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function hideTooltip() {
-    tooltip.style("visibility", "hidden")
-           .classed("visible", false);
+    tooltip.style("visibility", "hidden");
   }
 
   // Funcție pentru a obține valoarea unei regiuni
@@ -407,14 +387,13 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("stroke", "#fff")
         .attr("stroke-width", 0.5)
         .on("mouseover", function (event, d) {
-          d3.select(this).attr("stroke", "#000").attr("stroke-width", 1.5);
+          d3.select(this).attr("fill", "orange");
           showTooltip(event, d);
         })
         .on("mousemove", function (event) {
           moveTooltip(event);
         })
         .on("mouseout", function (event, d) {
-          d3.select(this).attr("stroke", "#fff").attr("stroke-width", 0.5);
           d3.select(this).attr("fill", getFillColor(d));
           hideTooltip();
         });
@@ -500,57 +479,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const legendItemsGroup = d3.select("#legendItems");
     legendItemsGroup.selectAll("*").remove(); // Curăță legenda existentă
 
-    // Adaugă gradientul de bază în legendă dacă nu există categorii
-    if (categories.length === 0) {
+    categories.forEach((category, index) => {
       const legendItem = legendItemsGroup.append("g")
         .attr("class", "legend-item")
-        .attr("transform", `translate(10, 10)`);
-
-      // Crează un gradient SVG
-      const defs = svg.append("defs");
-      const linearGradient = defs.append("linearGradient")
-        .attr("id", "legendGradient")
-        .attr("x1", "0%")
-        .attr("y1", "0%")
-        .attr("x2", "100%")
-        .attr("y2", "0%");
-
-      linearGradient.append("stop")
-        .attr("offset", "0%")
-        .attr("stop-color", currentGradient.start);
-
-      linearGradient.append("stop")
-        .attr("offset", "100%")
-        .attr("stop-color", currentGradient.end);
+        .attr("transform", `translate(10, ${30 + index * 30})`);
 
       legendItem.append("rect")
-        .attr("width", 150)
+        .attr("width", 20)
         .attr("height", 20)
-        .style("fill", "url(#legendGradient)");
+        .attr("fill", category.color);
 
       legendItem.append("text")
-        .attr("x", 0)
-        .attr("y", 35)
-        .text("Valori crescătoare");
-    } else {
-      // Afișează categoriile
-      categories.forEach((category, index) => {
-        const legendItem = legendItemsGroup.append("g")
-          .attr("class", "legend-item")
-          .attr("transform", `translate(10, ${30 + index * 30})`);
-
-        legendItem.append("rect")
-          .attr("width", 20)
-          .attr("height", 20)
-          .attr("fill", category.color);
-
-        legendItem.append("text")
-          .attr("x", 30)
-          .attr("y", 15)
-          .attr("class", "legend-text")
-          .text(category.name);
-      });
-    }
+        .attr("x", 30)
+        .attr("y", 15)
+        .attr("class", "legend-text")
+        .text(category.name);
+    });
   }
 
   // Funcționalitate Drag-and-Drop pentru Legendă, Titlu și Sursa Datelor
@@ -742,11 +686,49 @@ document.addEventListener("DOMContentLoaded", () => {
   loadMap("md.json");
 
   // Funcție pentru a încărca harta
-  // Aceasta a fost duplicată în codul tău original. Asigură-te că există o singură definiție.
-  // Am eliminat a doua definiție pentru a preveni conflictele.
-  /*
   function loadMap(geojsonFile) {
-    // Codul duplicat a fost eliminat
+    console.log(`Încerc să încarc GeoJSON: data/${geojsonFile}`);
+    d3.json(`data/${geojsonFile}`).then((data) => {
+      console.log(`Harta ${geojsonFile} a fost încărcată cu succes.`);
+
+      if (!data || !data.features) {
+        console.error("GeoJSON invalid sau lipsă features.");
+        return;
+      }
+
+      geoDataFeatures = data.features;
+
+      const projection = d3.geoMercator()
+        .fitSize([svgWidth, svgHeight], data);
+
+      const path = d3.geoPath().projection(projection);
+
+      gMap.selectAll("path").remove();
+
+      gMap.selectAll("path")
+        .data(geoDataFeatures)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .attr("fill", "#ccc")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 0.5)
+        .on("mouseover", function (event, d) {
+          d3.select(this).attr("fill", "orange");
+          showTooltip(event, d);
+        })
+        .on("mousemove", function (event) {
+          moveTooltip(event);
+        })
+        .on("mouseout", function (event, d) {
+          d3.select(this).attr("fill", getFillColor(d));
+          hideTooltip();
+        });
+
+      generateTable(data.features);
+      updateMapColors();
+    }).catch((err) => {
+      console.error(`Eroare la încărcarea GeoJSON (${geojsonFile}):`, err);
+    });
   }
-  */
 });
