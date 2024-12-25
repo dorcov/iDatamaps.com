@@ -11,9 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const svg = d3.select("#mapSVG");
   const gMap = svg.select(".map-group");
   const titleInput = document.getElementById("infographicTitle");
-  const dataSourceInput = document.getElementById("dataSource"); // Nou
-  const mapTitle = d3.select("#mapTitle");
-  const dataSourceTextElement = d3.select("#dataSourceText"); // Nou
+  const dataSourceInput = document.getElementById("dataSource");
+  const dataSourceTextElement = d3.select("#dataSourceText");
 
   const svgWidth = 800;
   const svgHeight = 600;
@@ -44,38 +43,38 @@ document.addEventListener("DOMContentLoaded", () => {
     grey: { start: "#808080", end: "#D3D3D3" }          // Gri
   };
 
-  // Declararea tooltip-ului o singură dată
+  // Declararea tooltip-ului
   const tooltip = d3.select(".tooltip");
 
   // Funcție pentru a actualiza titlul
   function updateTitle(text) {
-    mapTitle.text(text || "Titlu Implicitar");
+    d3.select("#mapTitle").text(text || "Titlu Implicitar");
   }
 
   // Funcție pentru a actualiza sursa datelor
   function updateDataSource(text) {
     dataSourceTextElement.text(`Sursa datelor: ${text || "N/A"}`);
-    
+
     // După actualizarea textului, măsurăm dimensiunea textului
     setTimeout(() => { // Folosim setTimeout pentru a ne asigura că textul este actualizat în DOM
       const textElement = document.getElementById("dataSourceText");
       const bbox = textElement.getBBox();
-      
+
       // Setăm lățimea dreptunghiului în funcție de lățimea textului + padding
       const padding = 20; // Ajustează padding-ul după necesități
       const newWidth = bbox.width + padding;
-      
+
       // Actualizăm atributul width al rect-ului
       const rect = document.querySelector(".footer.data-source-group rect");
       rect.setAttribute("width", newWidth);
-      
+
       // Poziționăm dreptunghiul astfel încât să înconjoare textul
       const x = parseFloat(dataSourceTextElement.attr("x")) - 10; // 10px padding stânga
       const y = parseFloat(dataSourceTextElement.attr("y")) - 14; // Ajustăm pentru vertical
       rect.setAttribute("x", x);
       rect.setAttribute("y", y);
       rect.setAttribute("height", 30); // Asigură o înălțime constantă
-      
+
       // Opțional: Poți ajusta y în funcție de necesități
     }, 0);
   }
@@ -361,8 +360,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a încărca harta
   function loadMap(geojsonFile) {
+    console.log(`Încerc să încarc GeoJSON: data/${geojsonFile}`);
     d3.json(`data/${geojsonFile}`).then((data) => {
-      console.log(`Loaded GeoJSON (${geojsonFile}):`, data);
+      console.log(`Harta ${geojsonFile} a fost încărcată cu succes.`);
 
       if (!data || !data.features) {
         console.error("GeoJSON invalid sau lipsă features.");
@@ -401,7 +401,7 @@ document.addEventListener("DOMContentLoaded", () => {
       generateTable(data.features);
       updateMapColors();
     }).catch((err) => {
-      console.error("Eroare la încărcarea GeoJSON:", err);
+      console.error(`Eroare la încărcarea GeoJSON (${geojsonFile}):`, err);
     });
   }
 
@@ -497,12 +497,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Funcționalitate Drag-and-Drop pentru Legendă și Sursa Datelor
-  function makeLegendDraggable() {
+  // Funcționalitate Drag-and-Drop pentru Legendă, Titlu și Sursa Datelor
+  function makeElementsDraggable() {
     const legendGroup = d3.select("#legendGroup");
-    const legendBackground = d3.select("#legendBackground");
     const dataSourceGroup = d3.select("#dataSourceGroup");
-    const dataSourceBackground = dataSourceGroup.select("rect");
     const titleGroup = d3.select("#titleGroup");
 
     // Încarcă poziția salvată a legendei
@@ -535,7 +533,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Drag pentru Legendă
     legendGroup.call(
       d3.drag()
-        .on("start", (event) => {
+        .on("start", () => {
           legendGroup.raise();
           legendGroup.attr("opacity", 0.8);
         })
@@ -552,7 +550,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Drag pentru Sursa Datelor
     dataSourceGroup.call(
       d3.drag()
-        .on("start", (event) => {
+        .on("start", () => {
           dataSourceGroup.raise();
           dataSourceGroup.attr("opacity", 0.8);
         })
@@ -569,7 +567,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Drag pentru Titlu
     titleGroup.call(
       d3.drag()
-        .on("start", (event) => {
+        .on("start", () => {
           titleGroup.raise();
           titleGroup.attr("opacity", 0.8);
         })
@@ -607,16 +605,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Apelăm funcția pentru a face legenda, titlul și sursa de date draggable
-  makeLegendDraggable();
-
-  // Funcție pentru a genera tabelul cu regiuni
-  // ... funcția generateTable este deja definită mai sus ...
-
-  // Funcție pentru a genera elementele legendei
-  // ... funcția generateLegend este deja definită mai sus ...
-
-  // Generăm lista de categorii inițială
-  renderCategoryList();
+  makeElementsDraggable();
 
   // Funcție pentru a controla vizibilitatea legendei
   const toggleLegendButton = d3.select("#toggleLegend");
@@ -631,15 +620,102 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Elementul cu ID 'toggleLegend' nu a fost găsit.");
   }
 
-  // Funcționalitate pentru titlu
-  // Actualizarea titlului în grupul SVG
-  if (titleInput) {
-    titleInput.addEventListener("input", () => {
-      updateTitle(titleInput.value);
+  // Exportăm harta ca PNG
+  if (exportButton) {
+    exportButton.addEventListener("click", () => {
+      // Ascundem butoanele de edit și ștergere ale legendei înainte de export
+      const legendEdit = document.getElementById("editLegendTitle");
+      const legendDelete = document.getElementById("deleteLegend");
+      const titleGroupElement = document.getElementById("titleGroup");
+
+      // Ascundem elementele care nu ar trebui să apară în export
+      legendEdit.style.display = "none";
+      legendDelete.style.display = "none";
+      // Dacă dorești să ascunzi și titlul, decommentază următoarea linie
+      // titleGroupElement.style.display = "none";
+
+      // Exportăm harta
+      html2canvas(document.querySelector(".map-column"), { useCORS: true })
+        .then((canvas) => {
+          const link = document.createElement("a");
+          link.download = "harta.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+
+          // Afișăm din nou butoanele după export
+          legendEdit.style.display = "block";
+          legendDelete.style.display = "block";
+          // Dacă ai ascuns și titlul, afișează-l din nou
+          // titleGroupElement.style.display = "block";
+        })
+        .catch((err) => {
+          console.error("Export error:", err);
+          // Afișăm din nou butoanele în caz de eroare
+          legendEdit.style.display = "block";
+          legendDelete.style.display = "block";
+          // titleGroupElement.style.display = "block";
+        });
     });
+  } else {
+    console.error("Elementul cu ID 'exportMap' nu a fost găsit.");
   }
 
-  // Funcționalitate pentru Sursa Datelor
-  // ... funcția updateDataSource este deja definită mai sus ...
+  // Eveniment pentru schimbarea hărții
+  if (mapSelector) {
+    mapSelector.addEventListener("change", (e) => {
+      loadMap(e.target.value);
+    });
+  } else {
+    console.error("Elementul cu ID 'mapSelector' nu a fost găsit.");
+  }
 
+  // Încarcă harta selectată inițial
+  loadMap("md.json");
+
+  // Funcție pentru a încărca harta
+  function loadMap(geojsonFile) {
+    console.log(`Încerc să încarc GeoJSON: data/${geojsonFile}`);
+    d3.json(`data/${geojsonFile}`).then((data) => {
+      console.log(`Harta ${geojsonFile} a fost încărcată cu succes.`);
+
+      if (!data || !data.features) {
+        console.error("GeoJSON invalid sau lipsă features.");
+        return;
+      }
+
+      geoDataFeatures = data.features;
+
+      const projection = d3.geoMercator()
+        .fitSize([svgWidth, svgHeight], data);
+
+      const path = d3.geoPath().projection(projection);
+
+      gMap.selectAll("path").remove();
+
+      gMap.selectAll("path")
+        .data(geoDataFeatures)
+        .enter()
+        .append("path")
+        .attr("d", path)
+        .attr("fill", "#ccc")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 0.5)
+        .on("mouseover", function (event, d) {
+          d3.select(this).attr("fill", "orange");
+          showTooltip(event, d);
+        })
+        .on("mousemove", function (event) {
+          moveTooltip(event);
+        })
+        .on("mouseout", function (event, d) {
+          d3.select(this).attr("fill", getFillColor(d));
+          hideTooltip();
+        });
+
+      generateTable(data.features);
+      updateMapColors();
+    }).catch((err) => {
+      console.error(`Eroare la încărcarea GeoJSON (${geojsonFile}):`, err);
+    });
+  }
 });
