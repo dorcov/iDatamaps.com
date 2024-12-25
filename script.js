@@ -14,13 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const dataSourceInput = document.getElementById("dataSource");
   const dataSourceTextElement = d3.select("#dataSourceText");
 
-  // Noile referințe pentru personalizarea titlului
-  const titleFontSelect = document.getElementById("titleFont");
-  const titleColorPicker = document.getElementById("titleColor");
-  const titleBorderColorPicker = document.getElementById("titleBorderColor");
-  const titleBorderWidthInput = document.getElementById("titleBorderWidth");
-  const titleBorderStyleSelect = document.getElementById("titleBorderStyle");
-
   const svgWidth = 800;
   const svgHeight = 600;
 
@@ -103,81 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   } else {
     console.error("Elementul cu ID 'dataSource' nu a fost găsit.");
-  }
-
-  // Noile evenimente pentru personalizarea titlului
-  // Eveniment pentru schimbarea fontului titlului
-  if (titleFontSelect) {
-    titleFontSelect.addEventListener("change", () => {
-      const selectedFont = titleFontSelect.value;
-      d3.select("#mapTitle").style("font-family", selectedFont);
-    });
-  } else {
-    console.error("Elementul cu ID 'titleFont' nu a fost găsit.");
-  }
-
-  // Eveniment pentru schimbarea culorii textului titlului
-  if (titleColorPicker) {
-    titleColorPicker.addEventListener("input", () => {
-      const selectedColor = titleColorPicker.value;
-      d3.select("#mapTitle").style("fill", selectedColor);
-    });
-  } else {
-    console.error("Elementul cu ID 'titleColor' nu a fost găsit.");
-  }
-
-  // Eveniment pentru schimbarea culorii chenarului titlului
-  if (titleBorderColorPicker) {
-    titleBorderColorPicker.addEventListener("input", () => {
-      const selectedBorderColor = titleBorderColorPicker.value;
-      const borderWidth = titleBorderWidthInput.value;
-      const borderStyle = titleBorderStyleSelect.value;
-      d3.select("#mapTitle")
-        .style("stroke", selectedBorderColor)
-        .style("stroke-width", borderWidth)
-        .style("stroke-dasharray", borderStyle === "solid" ? "0" :
-                                        borderStyle === "dashed" ? "4,2" :
-                                        borderStyle === "dotted" ? "1,2" :
-                                        borderStyle === "double" ? "6,2,6,2" : "0");
-    });
-  } else {
-    console.error("Elementul cu ID 'titleBorderColor' nu a fost găsit.");
-  }
-
-  // Eveniment pentru schimbarea grosimii chenarului titlului
-  if (titleBorderWidthInput) {
-    titleBorderWidthInput.addEventListener("input", () => {
-      const selectedBorderColor = titleBorderColorPicker.value;
-      const borderWidth = titleBorderWidthInput.value;
-      const borderStyle = titleBorderStyleSelect.value;
-      d3.select("#mapTitle")
-        .style("stroke", selectedBorderColor)
-        .style("stroke-width", borderWidth)
-        .style("stroke-dasharray", borderStyle === "solid" ? "0" :
-                                        borderStyle === "dashed" ? "4,2" :
-                                        borderStyle === "dotted" ? "1,2" :
-                                        borderStyle === "double" ? "6,2,6,2" : "0");
-    });
-  } else {
-    console.error("Elementul cu ID 'titleBorderWidth' nu a fost găsit.");
-  }
-
-  // Eveniment pentru schimbarea stilului chenarului titlului
-  if (titleBorderStyleSelect) {
-    titleBorderStyleSelect.addEventListener("change", () => {
-      const selectedBorderColor = titleBorderColorPicker.value;
-      const borderWidth = titleBorderWidthInput.value;
-      const borderStyle = titleBorderStyleSelect.value;
-      d3.select("#mapTitle")
-        .style("stroke", selectedBorderColor)
-        .style("stroke-width", borderWidth)
-        .style("stroke-dasharray", borderStyle === "solid" ? "0" :
-                                        borderStyle === "dashed" ? "4,2" :
-                                        borderStyle === "dotted" ? "1,2" :
-                                        borderStyle === "double" ? "6,2,6,2" : "0");
-    });
-  } else {
-    console.error("Elementul cu ID 'titleBorderStyle' nu a fost găsit.");
   }
 
   // Funcție de debouncing pentru îmbunătățirea performanței
@@ -337,19 +255,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (titleInput) {
       updateTitle("");
       titleInput.value = "";
-      // Resetăm stilurile titlului la valorile implicite
-      if (titleFontSelect) titleFontSelect.value = "Montserrat";
-      if (titleColorPicker) titleColorPicker.value = "#000000";
-      if (titleBorderColorPicker) titleBorderColorPicker.value = "#000000";
-      if (titleBorderWidthInput) titleBorderWidthInput.value = 1;
-      if (titleBorderStyleSelect) titleBorderStyleSelect.value = "solid";
-
-      d3.select("#mapTitle")
-        .style("font-family", "Montserrat")
-        .style("fill", "#000000")
-        .style("stroke", "#000000")
-        .style("stroke-width", 1)
-        .style("stroke-dasharray", "0");
     }
 
     // Resetăm sursa datelor

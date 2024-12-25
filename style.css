@@ -1,221 +1,495 @@
-/* Resetări de bază */
-body, html {
+/* Reset de bază pentru consistență între browsere */
+* {
   margin: 0;
   padding: 0;
-  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Aplicarea fonturilor globale */
+body {
   font-family: 'Roboto', sans-serif;
-  background-color: #f8f9fa;
+  background-color: #f5f5f5;
+  color: #333;
 }
 
-.container-fluid {
-  padding: 20px;
+/* Container principal folosind Flexbox pentru layout 50/50 */
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh; /* Înălțimea completă a viewport-ului */
 }
 
+/* Coloana pentru hartă */
 .map-column {
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  position: relative;
-}
-
-/* Control Panel */
-.control-panel {
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
+  flex: 1; /* Ocupă 50% din lățime */
+  position: relative; /* Pentru poziționarea absolută a titlului și footer-ului */
   padding: 20px;
-  height: 600px;
-  overflow-y: auto;
+  background-color: #f0f0f0; /* Fundal ușor pentru contrast */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.right-panel .option-section {
-  margin-bottom: 30px;
+/* SVG-ul hărții să ocupe întreg spațiul disponibil */
+.map-column svg {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  /* Eliminare box-shadow */
+  box-shadow: none;
+  position: relative; /* Pentru a poziționa elementele absolute în interior */
 }
 
-.right-panel .option-section h4 {
-  margin-bottom: 15px;
+/* Stiluri pentru containerul cu sursa datelor */
+.footer.data-source-group rect {
+  fill: rgba(255, 255, 255, 0.8);
+  stroke: #ccc;
+  stroke-width: 1;
+  rx: 4;
+  ry: 4;
+  /* Eliminare box-shadow */
+  filter: none;
+  transition: all 0.3s ease;
+}
+
+.footer.data-source-group text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  fill: #333;
+  transition: all 0.3s ease;
+  cursor: move;
+}
+
+/* Stil pentru titlul hartii */
+.title-group text#mapTitle {
   font-family: 'Montserrat', sans-serif;
-  font-size: 18px;
-  color: #343a40;
+  font-size: 24px;
+  font-weight: 700;
+  fill: #000;
+  cursor: move;
+  user-select: none;
+  pointer-events: all;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 5px 10px;
+  border-radius: 4px;
+  /* Eliminare box-shadow */
+  filter: none;
+  transition: all 0.3s ease;
 }
 
-.right-panel .option-section h5 {
+/* Stil pentru footer */
+.footer {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  border-radius: 4px;
+  /* Eliminare box-shadow */
+  box-shadow: none;
+  max-width: 200px; /* Asigură suficient spațiu */
+  flex-wrap: wrap; /* Permite rânduri suplimentare pe ecrane mici */
+  transition: all 0.3s ease;
+}
+
+/* Stil pentru textul din footer */
+.footer span {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Panoul drept pentru opțiuni */
+.right-panel {
+  flex: 1; /* Ocupă 50% din lățime */
+  padding: 20px;
+  background-color: #ffffff; /* Fundal alb pentru opțiuni */
+  overflow-y: auto; /* Adaugă scroll dacă conținutul depășește înălțimea */
+  border-left: 1px solid #e0e0e0;
+}
+
+/* Secțiune de opțiuni */
+.option-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Titluri pentru secțiuni */
+.option-section h4 {
   margin-bottom: 10px;
   font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  color: #495057;
+  font-size: 18px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
 }
 
-.right-panel .option-item {
-  margin-bottom: 15px;
-}
-
-.right-panel .option-item label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  font-family: 'Montserrat', sans-serif;
-  color: #343a40;
-}
-
-.right-panel .option-item input[type="color"],
-.right-panel .option-item input[type="number"],
-.right-panel .option-item select,
-.right-panel .option-item textarea {
+/* Stiluri pentru input-uri de text */
+.input-text {
   width: 100%;
-  padding: 6px 10px;
-  border: 1px solid #ced4da;
+  padding: 8px 12px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
   font-family: 'Roboto', sans-serif;
   transition: border-color 0.3s;
 }
 
-.right-panel .option-item input[type="color"]:focus,
-.right-panel .option-item input[type="number"]:focus,
-.right-panel .option-item select:focus,
-.right-panel .option-item textarea:focus {
-  border-color: #80bdff;
+.input-text:focus {
+  border-color: #007bff;
   outline: none;
 }
 
-.right-panel .btn {
+/* Stiluri pentru select-uri personalizate */
+.custom-select {
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  transition: border-color 0.3s;
+}
+
+.custom-select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Stil pentru preset gradient dropdown */
+.preset-gradient label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Lista de Categorii */
-#categoryList {
-  max-height: 200px;
-  overflow-y: auto;
+.preset-gradient select {
+  margin-top: 5px;
 }
 
-#categoryList .list-group-item {
+/* Stil pentru gradient personalizat */
+.custom-gradient {
+  display: flex;
+  flex-direction: column;
+}
+
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.color-picker label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.custom-gradient input[type="color"] {
+  width: 100%;
+  height: 40px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Stil pentru butoane */
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.btn-export {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-export:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+.btn-reset {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-reset:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+/* Opțional: Stil pentru secțiunea de resetare */
+.option-section button.btn-reset {
+  width: 100%;
+}
+
+/* Stil pentru tabel */
+.table-container {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+}
+
+th {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* Stil pentru categoria selectată în tabel */
+td.select-category {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 5px 10px;
 }
 
-#categoryList .category-color {
+td.select-category select {
+  width: 100%;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Stil pentru gestionarea categoriilor */
+.category-manager {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-category {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.add-category input[type="text"] {
+  margin-bottom: 10px;
+}
+
+.category-list ul {
+  list-style-type: none;
+}
+
+.category-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.category-color {
   width: 20px;
   height: 20px;
-  border-radius: 4px;
+  border-radius: 50%;
   margin-right: 10px;
 }
 
-#categoryList .delete-category {
+.category-item {
+  flex: 1;
+}
+
+.delete-category {
   background-color: #dc3545;
+  color: #fff;
   border: none;
-  color: #ffffff;
-  padding: 5px 10px;
+  padding: 5px 8px;
   border-radius: 4px;
   cursor: pointer;
 }
 
-#categoryList .delete-category:hover {
+.delete-category:hover {
   background-color: #c82333;
 }
 
-/* Titlu Harta */
+/* Stil pentru tooltip */
+.tooltip {
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+  padding: 6px 10px;
+  font: 12px sans-serif;
+  background: rgba(0, 0, 0, 0.7);
+  border: 0px;
+  border-radius: 4px;
+  color: #fff;
+  z-index: 10;
+}
+
+/* Stil pentru viitoarele funcționalități */
+.future-feature {
+  background-color: #e9ecef;
+  text-align: center;
+  padding: 10px;
+  border: 2px dashed #ced4da;
+  color: #6c757d;
+}
+
+/* Stil pentru legendă */
+.legend-group {
+  cursor: move; /* Indică că elementul poate fi mutat */
+}
+
+#legendBackground {
+  fill: rgba(255, 255, 255, 0.5); /* Fundal semi-transparent */
+  stroke: #ccc;
+  stroke-width: 1;
+  rx: 4;
+  ry: 4;
+  filter: none; /* Eliminare umbră */
+  transition: all 0.3s ease;
+}
+
+.legend-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  fill: #333;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.legend-item rect {
+  width: 20px;
+  height: 20px;
+  rx: 2;
+  ry: 2;
+  margin-right: 10px;
+}
+
+.legend-edit, .legend-delete {
+  font-size: 16px;
+  fill: #333;
+  cursor: pointer;
+  user-select: none;
+}
+
+.legend-edit:hover, .legend-delete:hover {
+  fill: #007bff;
+}
+
+/* Stil pentru grupul titlului */
+.title-group {
+  cursor: move; /* Indică că elementul poate fi mutat */
+}
+
 .title-group text#mapTitle {
   font-family: 'Montserrat', sans-serif;
   font-size: 24px;
   font-weight: 700;
-  fill: #000000;
-  stroke: #000000;
-  stroke-width: 1;
-  stroke-dasharray: 0;
+  fill: #000;
   cursor: move;
   user-select: none;
   pointer-events: all;
-  white-space: pre-wrap; /* Permite textul pe mai multe rânduri */
-  text-anchor: middle;
-}
-
-/* Legendă */
-#legendGroup {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  border-radius: 4px;
-  cursor: move;
-}
-
-#legendGroup rect {
-  display: none; /* Ascunde chenarul implicit */
-}
-
-.legend-item {
-  cursor: default;
-}
-
-.legend-text {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  fill: #000000;
-}
-
-/* Sursa Datelor */
-.footer.data-source-group {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.7);
   padding: 5px 10px;
   border-radius: 4px;
-  cursor: move;
+  filter: none; /* Eliminare umbră */
+  transition: all 0.3s ease;
 }
 
-.footer.data-source-group rect {
-  display: none; /* Ascunde chenarul implicit */
-}
-
-.footer.data-source-group text#dataSourceText {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  fill: #000000;
-}
-
-/* Tooltip */
-.tooltip {
-  position: absolute;
-  text-align: center;
-  padding: 8px;
-  font: 12px sans-serif;
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  border: 0px;
-  border-radius: 4px;
-  pointer-events: none;
-  visibility: hidden;
-  z-index: 10;
-}
-
-/* Scrollbar pentru Control Panel */
-.control-panel::-webkit-scrollbar {
-  width: 8px;
-}
-
-.control-panel::-webkit-scrollbar-track {
-  background: #f1f1f1; 
-}
-
-.control-panel::-webkit-scrollbar-thumb {
-  background: #888; 
-  border-radius: 4px;
-}
-
-.control-panel::-webkit-scrollbar-thumb:hover {
-  background: #555; 
-}
-
-/* Responsive Adjustments */
+/* Responsivitate pentru legendă */
 @media (max-width: 768px) {
-  .map-column, .control-panel {
-    padding: 10px;
+  #legendBackground {
+    width: 140px;
+    height: 160px;
+  }
+
+  .legend-title {
+    font-size: 14px;
+  }
+
+  .legend-edit, .legend-delete {
+    font-size: 14px;
   }
   
-  #titleGroup text#mapTitle {
-    font-size: 18px;
+  /* Responsive Design pentru ecrane mici */
+  .container {
+    flex-direction: column;
+  }
+
+  .map-column, .right-panel {
+    flex: none;
+    width: 100%;
+    height: 50vh; /* Ajustează înălțimea pentru ecrane mici */
+  }
+
+  /* Ajustări pentru titlu pe ecrane mici */
+  .title-group text#mapTitle {
+    font-size: 20px;
+    /* Poziția inițială poate fi ajustată din JavaScript */
+  }
+
+  /* Ajustări pentru Sursa Datelor pe ecrane mici */
+  .footer.data-source-group rect {
+    x: 10px;
+    y: 560px;
+    /* Lățimea se ajustează automat prin JS */
+  }
+
+  .footer.data-source-group text {
+    x: 20px;
+    y: 580px;
+    font-size: 14px;
+  }
+
+  /* Poziționare și dimensiuni pentru legendă pe ecrane mici */
+  .legend-group rect {
+    x: 0;
+    y: 0;
+    /* Lățimea se ajustează automat prin JS */
+  }
+
+  .legend-group text#legendTitle {
+    x: 10px;
+    y: 20px;
+    font-size: 16px;
+  }
+
+  .legend-edit, .legend-delete {
+    x: 160px;
+    y: 10px;
   }
 }
