@@ -365,10 +365,7 @@ td.select-category select {
 /* Stil pentru legendă */
 .legend-group {
   cursor: move; /* Indică că elementul poate fi mutat */
-  /* Poziționare absolută pentru a putea fi mutată */
-  position: absolute;
-  top: 20px;
-  left: 600px;
+  /* Poziționare absolută eliminată pentru a evita conflicte */
 }
 
 #legendBackground {
@@ -461,19 +458,19 @@ td.select-category select {
 
   /* Poziționare și dimensiuni pentru legendă pe ecrane mici */
   .legend-group rect {
-    x: 10px;
-    y: 20px;
+    x: 0;
+    y: 0;
     /* Lățimea se ajustează automat prin JS */
   }
 
   .legend-group text#legendTitle {
-    x: 20px;
-    y: 40px;
+    x: 10px;
+    y: 20px;
     font-size: 16px;
   }
 
   .legend-edit, .legend-delete {
-    x: 10px;
+    x: 160px;
     y: 10px;
   }
 }
