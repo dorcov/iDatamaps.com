@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a actualiza titlul
   function updateTitle(text) {
-    d3.select("#mapTitle").text(text || "Titlu Implicitar");
+    d3.select("#mapTitle").text(text || "Adaugă un titlu");
   }
 
   // Funcție pentru a actualiza sursa datelor
