@@ -291,7 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const maxValue = Math.max(...values, 1); // Evităm zero
 
     gMap.selectAll("path").each(function (d) {
-      const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || "Unknown");
+      const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || d.properties.region_nam || "Unknown");
       const input = document.querySelector(`[data-region="${regionName}"]`);
       const select = document.querySelector(`select[data-region="${regionName}"]`);
       const value = input ? parseFloat(input.value) || 0 : 0;
