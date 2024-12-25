@@ -66,6 +66,47 @@
         <input type="text" id="infographicTitle" class="input-text" placeholder="Introdu Titlul" />
       </div>
       
+      <!-- Secțiunea de Stilizare Titlu -->
+      <div class="option-section">
+        <h4>Stilizare Titlu</h4>
+        <div class="title-styling">
+          <div class="style-item">
+            <label for="titleFont">Font:</label>
+            <select id="titleFont" class="custom-select">
+              <option value="Montserrat">Montserrat</option>
+              <option value="Roboto">Roboto</option>
+              <!-- Poți adăuga mai multe fonturi dacă dorești -->
+            </select>
+          </div>
+          <div class="style-item">
+            <label for="titleColor">Culoare:</label>
+            <input type="color" id="titleColor" value="#000000" />
+          </div>
+          <div class="style-item">
+            <label for="titleBold">Bold:</label>
+            <input type="checkbox" id="titleBold" />
+          </div>
+          <div class="style-item">
+            <label for="titleItalic">Italic:</label>
+            <input type="checkbox" id="titleItalic" />
+          </div>
+          <div class="style-item">
+            <label for="titleBorder">Ramă:</label>
+            <input type="checkbox" id="titleBorder" />
+          </div>
+          <div class="style-item" id="titleBorderOptions" style="display: none;">
+            <label for="titleBorderColor">Culoare Ramă:</label>
+            <input type="color" id="titleBorderColor" value="#000000" />
+            <label for="titleBorderWidth">Grosime Ramă:</label>
+            <input type="number" id="titleBorderWidth" min="1" max="10" value="1" />
+          </div>
+          <div class="style-item">
+            <label for="titleMultiline">Multiplin Rânduri:</label>
+            <input type="checkbox" id="titleMultiline" />
+          </div>
+        </div>
+      </div>
+      
       <!-- Secțiunea de Sursa Datelor -->
       <div class="option-section">
         <h4>Adaugă Sursa Datelor</h4>
