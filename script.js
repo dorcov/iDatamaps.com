@@ -763,6 +763,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       selectedTextBox = div;
       selectedTextBox.classList.add('selected');
+      updateFreeTextControls(selectedTextBox);
     });
 
     div.addEventListener('input', () => {
@@ -774,6 +775,13 @@ document.addEventListener("DOMContentLoaded", () => {
         d3.select(div).style('left', `${event.x}px`).style('top', `${event.y}px`);
       })
     );
+  }
+
+  function updateFreeTextControls(textBox) {
+    freeTextInput.value = textBox.innerText;
+    freeTextFontSelect.value = textBox.style.fontFamily;
+    freeTextSizeInput.value = parseInt(textBox.style.fontSize);
+    freeTextColorInput.value = textBox.style.color;
   }
 
   if (addFreeTextButton) {
@@ -804,4 +812,28 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Elementul cu ID 'removeFreeText' nu a fost găsit.");
   }
+
+  freeTextInput.addEventListener('input', () => {
+    if (selectedTextBox) {
+      selectedTextBox.innerText = freeTextInput.value;
+    }
+  });
+
+  freeTextFontSelect.addEventListener('change', () => {
+    if (selectedTextBox) {
+      selectedTextBox.style.fontFamily = freeTextFontSelect.value;
+    }
+  });
+
+  freeTextSizeInput.addEventListener('input', () => {
+    if (selectedTextBox) {
+      selectedTextBox.style.fontSize = freeTextSizeInput.value + 'px';
+    }
+  });
+
+  freeTextColorInput.addEventListener('input', () => {
+    if (selectedTextBox) {
+      selectedTextBox.style.color = freeTextColorInput.value;
+    }
+  });
 });
