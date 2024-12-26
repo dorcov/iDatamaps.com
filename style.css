@@ -430,6 +430,20 @@ td.select-category select {
   transition: all 0.3s ease;
 }
 
+/* Stiluri pentru text liber adăugat pe hartă */
+.free-text {
+  fill: #333;               /* Culoarea textului */
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  cursor: move;
+  user-select: none;        /* Previne selectarea textului */
+  pointer-events: all;      /* Permite evenimentele de mouse */
+  background: rgba(255, 255, 255, 0.0);
+  padding: 3px 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease; /* Mică tranziție pentru any property changes */
+}
+
 /* Stiluri pentru secțiunea de stilizare a titlului */
 .option-section label[for="titleFont"],
 .option-section label[for="titleSize"],

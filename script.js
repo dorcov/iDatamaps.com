@@ -51,6 +51,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const titleSizeInput = document.getElementById("titleSize");
   const titleColorInput = document.getElementById("titleColor");
 
+  // Adaugă referințe la buton și input pentru text liber
+  const addFreeTextBtn = document.getElementById("addFreeText");
+  const freeTextInput = document.getElementById("freeTextInput");
+
   // Funcție pentru actualizarea titlului cu proprietăți noi
   function updateTitle(userText) {
     const titleElement = d3.select("#mapTitle");
@@ -750,5 +754,47 @@ document.addEventListener("DOMContentLoaded", () => {
     }).catch((err) => {
       console.error(`Eroare la încărcarea GeoJSON (${geojsonFile}):`, err);
     });
+  }
+
+  // Simplu set de funcții pentru drag & drop (similar cu legendGroup)
+  function dragStarted(event, d) {
+    d3.select(this).raise().classed("active", true);
+  }
+
+  function dragged(event, d) {
+    d3.select(this)
+      .attr("x", event.x)
+      .attr("y", event.y);
+  }
+
+  function dragEnded(event, d) {
+    d3.select(this).classed("active", false);
+  }
+
+  // Funcție pentru crearea unui text liber
+  function createFreeText() {
+    const textValue = freeTextInput.value.trim() || "Text nou";
+    
+    // Creează și stilizează un nou element <text>
+    const newText = d3.select("#mapSVG")
+      .append("text")
+      .attr("x", 50)
+      .attr("y", 50)
+      .attr("class", "draggable free-text")
+      .text(textValue)
+      .call(d3.drag()
+        .on("start", dragStarted)
+        .on("drag", dragged)
+        .on("end", dragEnded)
+      )
+      // Elimină textul la dublu-clic
+      .on("dblclick", function() {
+        d3.select(this).remove();
+      });
+  }
+
+  // Ascultă evenimentul de click pe butonul de adăugare
+  if (addFreeTextBtn) {
+    addFreeTextBtn.addEventListener("click", createFreeText);
   }
 });
