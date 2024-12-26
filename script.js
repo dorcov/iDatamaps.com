@@ -642,17 +642,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const freeTextFontSelect = document.getElementById("freeTextFont");
   const freeTextSizeInput = document.getElementById("freeTextSize");
   const freeTextColorInput = document.getElementById("freeTextColor");
+  const freeTextBorderCheckbox = document.getElementById("freeTextBorder");
+  const freeTextBoldCheckbox = document.getElementById("freeTextBold");
+  const freeTextItalicCheckbox = document.getElementById("freeTextItalic");
   const removeFreeTextButton = document.getElementById("removeFreeText");
   // const mapContainer = document.querySelector('.map-column');
   // let selectedTextBox = null;
 
-  function createFreeTextContainer(text, font, size, color) {
+  function createFreeTextContainer(text, font, size, color, border, bold, italic) {
     const div = document.createElement('div');
     div.className = 'free-text-container';
     div.contentEditable = true;
     div.style.fontFamily = font;
     div.style.fontSize = size + 'px';
     div.style.color = color;
+    div.style.border = border ? '1px solid #000' : 'none';
+    div.style.fontWeight = bold ? 'bold' : 'normal';
+    div.style.fontStyle = italic ? 'italic' : 'normal';
     div.innerText = text;
     mapContainer.appendChild(div);
 
@@ -683,6 +689,9 @@ document.addEventListener("DOMContentLoaded", () => {
     freeTextFontSelect.value = textBox.style.fontFamily;
     freeTextSizeInput.value = parseInt(textBox.style.fontSize);
     freeTextColorInput.value = textBox.style.color;
+    freeTextBorderCheckbox.checked = textBox.style.border !== 'none';
+    freeTextBoldCheckbox.checked = textBox.style.fontWeight === 'bold';
+    freeTextItalicCheckbox.checked = textBox.style.fontStyle === 'italic';
   }
 
   if (addFreeTextButton) {
@@ -691,11 +700,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const font = freeTextFontSelect.value;
       const size = freeTextSizeInput.value;
       const color = freeTextColorInput.value;
+      const border = freeTextBorderCheckbox.checked;
+      const bold = freeTextBoldCheckbox.checked;
+      const italic = freeTextItalicCheckbox.checked;
       if (text === "") {
         alert("Textul nu poate fi gol.");
         return;
       }
-      createFreeTextContainer(text, font, size, color);
+      createFreeTextContainer(text, font, size, color, border, bold, italic);
     });
   } else {
     console.error("Elementul cu ID 'addFreeText' nu a fost găsit.");
@@ -735,6 +747,24 @@ document.addEventListener("DOMContentLoaded", () => {
   freeTextColorInput.addEventListener('input', () => {
     if (selectedTextBox) {
       selectedTextBox.style.color = freeTextColorInput.value;
+    }
+  });
+
+  freeTextBorderCheckbox.addEventListener('change', () => {
+    if (selectedTextBox) {
+      selectedTextBox.style.border = freeTextBorderCheckbox.checked ? '1px solid #000' : 'none';
+    }
+  });
+
+  freeTextBoldCheckbox.addEventListener('change', () => {
+    if (selectedTextBox) {
+      selectedTextBox.style.fontWeight = freeTextBoldCheckbox.checked ? 'bold' : 'normal';
+    }
+  });
+
+  freeTextItalicCheckbox.addEventListener('change', () => {
+    if (selectedTextBox) {
+      selectedTextBox.style.fontStyle = freeTextItalicCheckbox.checked ? 'italic' : 'normal';
     }
   });
 
