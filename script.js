@@ -737,4 +737,55 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Elementul cu ID 'addTitle' nu a fost găsit.");
   }
+
+  const addFreeTextButton = document.getElementById("addFreeText");
+  const freeTextInput = document.getElementById("freeTextInput");
+  const freeTextFontSelect = document.getElementById("freeTextFont");
+  const freeTextSizeInput = document.getElementById("freeTextSize");
+  const freeTextColorInput = document.getElementById("freeTextColor");
+
+  function createFreeTextContainer(text, font, size, color) {
+    const div = document.createElement('div');
+    div.className = 'free-text-container';
+    div.contentEditable = true;
+    div.style.fontFamily = font;
+    div.style.fontSize = size + 'px';
+    div.style.color = color;
+    div.innerText = text;
+    mapContainer.appendChild(div);
+
+    div.addEventListener('click', () => {
+      if (selectedTextBox) {
+        selectedTextBox.classList.remove('selected');
+      }
+      selectedTextBox = div;
+      selectedTextBox.classList.add('selected');
+    });
+
+    div.addEventListener('input', () => {
+      freeTextInput.value = div.innerText;
+    });
+
+    d3.select(div).call(d3.drag()
+      .on('drag', (event) => {
+        d3.select(div).style('left', `${event.x}px`).style('top', `${event.y}px`);
+      })
+    );
+  }
+
+  if (addFreeTextButton) {
+    addFreeTextButton.addEventListener('click', () => {
+      const text = freeTextInput.value.trim();
+      const font = freeTextFontSelect.value;
+      const size = freeTextSizeInput.value;
+      const color = freeTextColorInput.value;
+      if (text === "") {
+        alert("Textul nu poate fi gol.");
+        return;
+      }
+      createFreeTextContainer(text, font, size, color);
+    });
+  } else {
+    console.error("Elementul cu ID 'addFreeText' nu a fost găsit.");
+  }
 });
