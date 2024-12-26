@@ -574,7 +574,9 @@ document.addEventListener("DOMContentLoaded", () => {
           legendGroup.attr("opacity", 0.8);
         })
         .on("drag", (event) => {
-          legendGroup.attr("transform", `translate(${event.x}, ${event.y})`);
+          const newX = Math.max(0, Math.min(event.x, mapContainer.clientWidth - legendGroup.node().getBBox().width));
+          const newY = Math.max(0, Math.min(event.y, mapContainer.clientHeight - legendGroup.node().getBBox().height));
+          legendGroup.attr("transform", `translate(${newX}, ${newY})`);
         })
         .on("end", (event) => {
           legendGroup.attr("opacity", 1);
@@ -591,7 +593,9 @@ document.addEventListener("DOMContentLoaded", () => {
           dataSourceGroup.attr("opacity", 0.8);
         })
         .on("drag", (event) => {
-          dataSourceGroup.attr("transform", `translate(${event.x}, ${event.y})`);
+          const newX = Math.max(0, Math.min(event.x, mapContainer.clientWidth - dataSourceGroup.node().getBBox().width));
+          const newY = Math.max(0, Math.min(event.y, mapContainer.clientHeight - dataSourceGroup.node().getBBox().height));
+          dataSourceGroup.attr("transform", `translate(${newX}, ${newY})`);
         })
         .on("end", (event) => {
           dataSourceGroup.attr("opacity", 1);
@@ -608,7 +612,9 @@ document.addEventListener("DOMContentLoaded", () => {
           titleGroup.attr("opacity", 0.8);
         })
         .on("drag", (event) => {
-          titleGroup.attr("transform", `translate(${event.x}, ${event.y})`);
+          const newX = Math.max(0, Math.min(event.x, mapContainer.clientWidth - titleGroup.node().getBBox().width));
+          const newY = Math.max(0, Math.min(event.y, mapContainer.clientHeight - titleGroup.node().getBBox().height));
+          titleGroup.attr("transform", `translate(${newX}, ${newY})`);
         })
         .on("end", (event) => {
           titleGroup.attr("opacity", 1);
@@ -772,7 +778,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     d3.select(div).call(d3.drag()
       .on('drag', (event) => {
-        d3.select(div).style('left', `${event.x}px`).style('top', `${event.y}px`);
+        const newX = Math.max(0, Math.min(event.x, mapContainer.clientWidth - div.clientWidth));
+        const newY = Math.max(0, Math.min(event.y, mapContainer.clientHeight - div.clientHeight));
+        d3.select(div).style('left', `${newX}px`).style('top', `${newY}px`);
       })
     );
   }
@@ -836,4 +844,26 @@ document.addEventListener("DOMContentLoaded", () => {
       selectedTextBox.style.color = freeTextColorInput.value;
     }
   });
+
+  function makeElementDraggable(element, container) {
+    d3.select(element).call(d3.drag()
+      .on('drag', (event) => {
+        const newX = Math.max(0, Math.min(event.x, container.clientWidth - element.getBBox().width));
+        const newY = Math.max(0, Math.min(event.y, container.clientHeight - element.getBBox().height));
+        d3.select(element).attr('transform', `translate(${newX}, ${newY})`);
+      })
+    );
+  }
+
+  function makeElementsDraggable() {
+    const legendGroup = d3.select("#legendGroup");
+    const dataSourceGroup = d3.select("#dataSourceGroup");
+    const titleGroup = d3.select("#titleGroup");
+
+    makeElementDraggable(legendGroup.node(), mapContainer);
+    makeElementDraggable(dataSourceGroup.node(), mapContainer);
+    makeElementDraggable(titleGroup.node(), mapContainer);
+  }
+
+  makeElementsDraggable();
 });
