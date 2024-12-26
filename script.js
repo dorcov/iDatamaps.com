@@ -722,4 +722,19 @@ document.addEventListener("DOMContentLoaded", () => {
   function dragEnded(event, d) {
     d3.select(this).classed("active", false);
   }
+
+  const addTitleButton = document.getElementById("addTitle");
+
+  if (addTitleButton) {
+    addTitleButton.addEventListener("click", () => {
+      const titleText = titleInput.value.trim();
+      if (titleText === "") {
+        alert("Titlul nu poate fi gol.");
+        return;
+      }
+      updateTitle(titleText);
+    });
+  } else {
+    console.error("Elementul cu ID 'addTitle' nu a fost găsit.");
+  }
 });
