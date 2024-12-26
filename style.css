@@ -458,7 +458,7 @@ td.select-category select {
 .option-section #titleFont:focus,
 .option-section #titleSize:focus,
 .option-section #titleColor:focus {
-  border-color: #007bff;
+  border-color: #007bff00;
   outline: none;
 }
 

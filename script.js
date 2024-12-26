@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const resetButton = document.getElementById("resetAll");
   const svg = d3.select("#mapSVG");
   const gMap = svg.select(".map-group");
-  const titleInput = document.getElementById("infographicTitle");
   const dataSourceInput = document.getElementById("dataSource");
   const dataSourceTextElement = d3.select("#dataSourceText");
 
@@ -56,15 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let selectedTextBox = null;
   const mapContainer = document.querySelector('.map-column');
 
-  // Funcție pentru actualizarea titlului cu proprietăți noi
-  function updateTitle(userText) {
-    const titleElement = d3.select("#mapTitle");
-    titleElement.text(userText || "Adaugă un titlu");
-    titleElement.style("font-family", titleFontSelect.value);
-    titleElement.style("font-size", titleSizeInput.value + "px");
-    titleElement.style("fill", titleColorInput.value);
-  }
-
   // Funcție pentru a actualiza sursa datelor
   function updateDataSource(text) {
     dataSourceTextElement.text(`Sursa datelor: ${text || "N/A"}`);
@@ -91,25 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Opțional: Poți ajusta y în funcție de necesități
     }, 0);
-  }
-
-  // Verificare existență elemente înainte de a adăuga event listeners
-  if (titleInput) {
-    // Eveniment pentru actualizarea titlului din input
-    titleInput.addEventListener("input", () => {
-      updateTitle(titleInput.value);
-    });
-    titleFontSelect.addEventListener("change", () => {
-      updateTitle(titleInput.value);
-    });
-    titleSizeInput.addEventListener("input", () => {
-      updateTitle(titleInput.value);
-    });
-    titleColorInput.addEventListener("input", () => {
-      updateTitle(titleInput.value);
-    });
-  } else {
-    console.error("Elementul cu ID 'infographicTitle' nu a fost găsit.");
   }
 
   if (dataSourceInput) {
@@ -273,12 +244,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Ștergem toate categoriile
     categories = [];
     renderCategoryList();
-
-    // Actualizăm titlul la valoarea implicită
-    if (titleInput) {
-      updateTitle("");
-      titleInput.value = "";
-    }
 
     // Resetăm sursa datelor
     if (dataSourceInput) {
@@ -524,7 +489,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function makeElementsDraggable() {
     const legendGroup = d3.select("#legendGroup");
     const dataSourceGroup = d3.select("#dataSourceGroup");
-    const titleGroup = d3.select("#titleGroup");
 
     // Definirea comportamentului de zoom
     const zoom = d3.zoom()
@@ -555,15 +519,6 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       // Setează poziția inițială dacă nu există o poziție salvată
       dataSourceGroup.attr("transform", `translate(20, 550)`); // Ajustează după necesități
-    }
-
-    // Încarcă poziția salvată a titlului
-    const savedTitlePosition = JSON.parse(localStorage.getItem("titlePosition"));
-    if (savedTitlePosition) {
-      titleGroup.attr("transform", `translate(${savedTitlePosition.x}, ${savedTitlePosition.y})`);
-    } else {
-      // Setează poziția inițială dacă nu există o poziție salvată
-      titleGroup.attr("transform", `translate(20, 40)`); // Ajustează după necesități
     }
 
     // Drag pentru Legendă
@@ -601,25 +556,6 @@ document.addEventListener("DOMContentLoaded", () => {
           dataSourceGroup.attr("opacity", 1);
           // Salvează poziția sursei datelor
           localStorage.setItem("dataSourcePosition", JSON.stringify({ x: event.x, y: event.y }));
-        })
-    );
-
-    // Drag pentru Titlu
-    titleGroup.call(
-      d3.drag()
-        .on("start", () => {
-          titleGroup.raise();
-          titleGroup.attr("opacity", 0.8);
-        })
-        .on("drag", (event) => {
-          const newX = Math.max(0, Math.min(event.x, mapContainer.clientWidth - titleGroup.node().getBBox().width));
-          const newY = Math.max(0, Math.min(event.y, mapContainer.clientHeight - titleGroup.node().getBBox().height));
-          titleGroup.attr("transform", `translate(${newX}, ${newY})`);
-        })
-        .on("end", (event) => {
-          titleGroup.attr("opacity", 1);
-          // Salvează poziția titlului
-          localStorage.setItem("titlePosition", JSON.stringify({ x: event.x, y: event.y }));
         })
     );
 
@@ -668,13 +604,10 @@ document.addEventListener("DOMContentLoaded", () => {
       // Ascundem butoanele de edit și ștergere ale legendei înainte de export
       const legendEdit = document.getElementById("editLegendTitle");
       const legendDelete = document.getElementById("deleteLegend");
-      const titleGroupElement = document.getElementById("titleGroup");
 
       // Ascundem elementele care nu ar trebui să apară în export
       legendEdit.style.display = "none";
       legendDelete.style.display = "none";
-      // Dacă dorești să ascunzi și titlul, decommentază următoarea linie
-      // titleGroupElement.style.display = "none";
 
       // Exportăm harta
       html2canvas(document.querySelector(".map-column"), { useCORS: true })
@@ -687,15 +620,12 @@ document.addEventListener("DOMContentLoaded", () => {
           // Afișăm din nou butoanele după export
           legendEdit.style.display = "block";
           legendDelete.style.display = "block";
-          // Dacă ai ascuns și titlul, afișează-l din nou
-          // titleGroupElement.style.display = "block";
         })
         .catch((err) => {
           console.error("Export error:", err);
           // Afișăm din nou butoanele în caz de eroare
           legendEdit.style.display = "block";
           legendDelete.style.display = "block";
-          // titleGroupElement.style.display = "block";
         });
     });
   } else {
@@ -727,21 +657,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function dragEnded(event, d) {
     d3.select(this).classed("active", false);
-  }
-
-  const addTitleButton = document.getElementById("addTitle");
-
-  if (addTitleButton) {
-    addTitleButton.addEventListener("click", () => {
-      const titleText = titleInput.value.trim();
-      if (titleText === "") {
-        alert("Titlul nu poate fi gol.");
-        return;
-      }
-      updateTitle(titleText);
-    });
-  } else {
-    console.error("Elementul cu ID 'addTitle' nu a fost găsit.");
   }
 
   const addFreeTextButton = document.getElementById("addFreeText");
@@ -858,12 +773,19 @@ document.addEventListener("DOMContentLoaded", () => {
   function makeElementsDraggable() {
     const legendGroup = d3.select("#legendGroup");
     const dataSourceGroup = d3.select("#dataSourceGroup");
-    const titleGroup = d3.select("#titleGroup");
 
     makeElementDraggable(legendGroup.node(), mapContainer);
     makeElementDraggable(dataSourceGroup.node(), mapContainer);
-    makeElementDraggable(titleGroup.node(), mapContainer);
   }
 
   makeElementsDraggable();
+
+  // Restore zoom functionality
+  const zoom = d3.zoom()
+    .scaleExtent([0.5, 8])
+    .on("zoom", (event) => {
+      gMap.attr("transform", event.transform);
+    });
+
+  svg.call(zoom);
 });
