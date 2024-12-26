@@ -749,3 +749,28 @@ td.select-category select {
   background-color: #c82333;
   transform: translateY(-2px);
 }
+
+.text-box {
+  position: absolute;
+  min-width: 100px;
+  min-height: 30px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  color: #333;
+  cursor: text;
+  z-index: 1000;
+}
+
+.text-box:hover {
+  border-color: #007bff;
+}
+
+.text-box:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}

@@ -55,6 +55,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const addFreeTextBtn = document.getElementById("addFreeText");
   const freeTextInput = document.getElementById("freeTextInput");
 
+  // Add these variables at the top with other declarations
+  let selectedTextBox = null;
+  const mapContainer = document.querySelector('.map-column');
+
   // Funcție pentru actualizarea titlului cu proprietăți noi
   function updateTitle(userText) {
     const titleElement = d3.select("#mapTitle");
@@ -1008,4 +1012,83 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Elementul cu ID 'addFreeText' nu a fost găsit.");
   }
+
+  // Add this function for text box creation
+  function createTextBox() {
+    const text = document.getElementById('freeTextInput').value.trim() || 'Text nou';
+    
+    const textBox = document.createElement('div');
+    textBox.className = 'text-box';
+    textBox.contentEditable = true;
+    textBox.innerHTML = text;
+    textBox.style.position = 'absolute';
+    textBox.style.left = '100px';
+    textBox.style.top = '100px';
+    
+    // Make draggable
+    textBox.addEventListener('mousedown', function(e) {
+      if (e.target === textBox) {
+        selectedTextBox = textBox;
+        const rect = textBox.getBoundingClientRect();
+        textBox.dataset.offsetX = e.clientX - rect.left;
+        textBox.dataset.offsetY = e.clientY - rect.top;
+        textBox.style.cursor = 'move';
+      }
+    });
+
+    // Handle style changes
+    textBox.addEventListener('click', function() {
+      selectedTextBox = textBox;
+      updateStyleControls(textBox);
+    });
+
+    mapContainer.appendChild(textBox);
+    document.getElementById('freeTextInput').value = '';
+  }
+
+  // Add drag functionality
+  document.addEventListener('mousemove', function(e) {
+    if (selectedTextBox && !selectedTextBox.isContentEditable) {
+      const x = e.clientX - selectedTextBox.dataset.offsetX;
+      const y = e.clientY - selectedTextBox.dataset.offsetY;
+      selectedTextBox.style.left = x + 'px';
+      selectedTextBox.style.top = y + 'px';
+    }
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (selectedTextBox) {
+      selectedTextBox.style.cursor = 'text';
+      selectedTextBox = null;
+    }
+  });
+
+  // Update style controls
+  function updateStyleControls(textBox) {
+    document.getElementById('titleFont').value = textBox.style.fontFamily || "'Montserrat', sans-serif";
+    document.getElementById('titleSize').value = parseInt(textBox.style.fontSize) || 16;
+    document.getElementById('titleColor').value = textBox.style.color || '#333333';
+  }
+
+  // Apply styles to selected text box
+  document.getElementById('titleFont').addEventListener('change', function(e) {
+    if (selectedTextBox) {
+      selectedTextBox.style.fontFamily = e.target.value;
+    }
+  });
+
+  document.getElementById('titleSize').addEventListener('change', function(e) {
+    if (selectedTextBox) {
+      selectedTextBox.style.fontSize = e.target.value + 'px';
+    }
+  });
+
+  document.getElementById('titleColor').addEventListener('change', function(e) {
+    if (selectedTextBox) {
+      selectedTextBox.style.color = e.target.value;
+    }
+  });
+
+  // Add event listener for the add text button
+  document.getElementById('addFreeText').addEventListener('click', createTextBox);
 });
