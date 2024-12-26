@@ -460,6 +460,9 @@ td.select-category select {
   cursor: text;
   user-select: text;
   resize: none; /* Dezactivează redimensionarea */
+  /* Permite mai multe linii */
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .free-text-multiline:focus {
@@ -624,4 +627,18 @@ td.select-category select {
     x: 160px;
     y: 10px;
   }
+}
+
+/* Exemplu de stiluri suplimentare pentru a permite personalizarea textului liber */
+.option-section .free-text-controls {
+  display: flex;
+  flex-direction: column;
+}
+
+.option-section .free-text-controls label,
+.option-section .free-text-controls input,
+.option-section .free-text-controls select {
+  margin-top: 5px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
 }

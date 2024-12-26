@@ -98,6 +98,15 @@ document.addEventListener("DOMContentLoaded", () => {
     titleInput.addEventListener("input", () => {
       updateTitle(titleInput.value);
     });
+    titleFontSelect.addEventListener("change", () => {
+      updateTitle(titleInput.value);
+    });
+    titleSizeInput.addEventListener("input", () => {
+      updateTitle(titleInput.value);
+    });
+    titleColorInput.addEventListener("input", () => {
+      updateTitle(titleInput.value);
+    });
   } else {
     console.error("Elementul cu ID 'infographicTitle' nu a fost găsit.");
   }
@@ -110,17 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Elementul cu ID 'dataSource' nu a fost găsit.");
   }
-
-  // Detectează modificările din input-uri și aplică titlul
-  titleFontSelect.addEventListener("change", () => {
-    updateTitle(titleInput.value);
-  });
-  titleSizeInput.addEventListener("input", () => {
-    updateTitle(titleInput.value);
-  });
-  titleColorInput.addEventListener("input", () => {
-    updateTitle(titleInput.value);
-  });
 
   // Funcție de debouncing pentru îmbunătățirea performanței
   function debounce(func, wait) {
