@@ -558,28 +558,6 @@ document.addEventListener("DOMContentLoaded", () => {
           localStorage.setItem("dataSourcePosition", JSON.stringify({ x: event.x, y: event.y }));
         })
     );
-
-    // Funcționalitate pentru Edit Legend Title
-    const editLegendTitle = d3.select("#editLegendTitle");
-    editLegendTitle.on("click", () => {
-      const currentTitle = d3.select("#legendTitle").text();
-      const newTitle = prompt("Introdu noul titlu pentru legendă:", currentTitle);
-      if (newTitle !== null && newTitle.trim() !== "") {
-        d3.select("#legendTitle").text(newTitle.trim());
-      }
-    });
-
-    // Funcționalitate pentru Delete Legend
-    const deleteLegend = d3.select("#deleteLegend");
-    deleteLegend.on("click", () => {
-      if (confirm("Ești sigur că vrei să ștergi legenda?")) {
-        legendGroup.selectAll("*").remove(); // Elimină toate elementele din legendă
-        categories = []; // Șterge toate categoriile
-        renderCategoryList(); // Actualizează lista de categorii
-        updateMapColors(); // Recolorează harta
-        localStorage.removeItem("legendPosition"); // Șterge poziția salvată
-      }
-    });
   }
 
   // Apelăm funcția pentru a face legenda, titlul și sursa de date draggable

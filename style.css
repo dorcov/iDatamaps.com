@@ -41,6 +41,11 @@ body {
 }
 
 /* Stiluri pentru containerul cu sursa datelor */
+.footer.data-source-group {
+  pointer-events: all;
+  z-index: 10;
+}
+
 .footer.data-source-group rect {
   fill: rgba(255, 255, 255, 0.8);
   stroke: #ccc;
@@ -60,23 +65,6 @@ body {
   cursor: move;
 }
 
-/* Stil pentru titlul hartii */
-.title-group text#mapTitle {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 24px;
-  font-weight: 700;
-  fill: #000;
-  cursor: move;
-  user-select: none;
-  pointer-events: all;
-  background: rgba(255, 255, 255, 0.7);
-  padding: 5px 10px;
-  border-radius: 4px;
-  /* Eliminare box-shadow */
-  filter: none;
-  transition: all 0.3s ease;
-}
-
 /* Stil pentru footer */
 .footer {
   position: absolute;
@@ -92,6 +80,7 @@ body {
   max-width: 200px; /* Asigură suficient spațiu */
   flex-wrap: wrap; /* Permite rânduri suplimentare pe ecrane mici */
   transition: all 0.3s ease;
+  z-index: 10;
 }
 
 /* Stil pentru textul din footer */
@@ -367,6 +356,8 @@ td.select-category select {
 /* Stil pentru legendă */
 .legend-group {
   cursor: move; /* Indică că elementul poate fi mutat */
+  pointer-events: all;
+  z-index: 10;
 }
 
 #legendBackground {
@@ -487,211 +478,6 @@ td.select-category select {
   outline: none;
 }
 
-.btn {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  font-family: 'Roboto', sans-serif;
-  transition: background-color 0.3s, transform 0.2s;
-  margin-top: 5px;
-}
-
-.btn-primary {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px);
-}
-
-.btn-export {
-  background-color: #28a745;
-  color: #fff;
-}
-
-.btn-export:hover {
-  background-color: #218838;
-  transform: translateY(-2px);
-}
-
-.btn-reset {
-  background-color: #dc3545;
-  color: #fff;
-}
-
-.btn-reset:hover {
-  background-color: #c82333;
-  transform: translateY(-2px);
-}
-
-.text-box {
-  position: absolute;
-  min-width: 100px;
-  min-height: 30px;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid transparent;
-  border-radius: 4px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  color: #333;
-  cursor: text;
-  z-index: 1000;
-}
-
-.text-box:hover {
-  border-color: #007bff;
-}
-
-.text-box:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
-}
-
-/* Responsivitate pentru legendă */
-@media (max-width: 768px) {
-  #legendBackground {
-    width: 140px;
-    height: 160px;
-  }
-
-  .legend-title {
-    font-size: 14px;
-  }
-
-  .legend-edit, .legend-delete {
-    font-size: 14px;
-  }
-  
-  /* Responsive Design pentru ecrane mici */
-  .container {
-    flex-direction: column;
-  }
-
-  .map-column, .right-panel {
-    flex: none;
-    width: 100%;
-    height: 50vh; /* Ajustează înălțimea pentru ecrane mici */
-  }
-
-  /* Ajustări pentru titlu pe ecrane mici */
-  .title-group text#mapTitle {
-    font-size: 20px;
-    /* Poziția inițială poate fi ajustată din JavaScript */
-  }
-
-  /* Ajustări pentru Sursa Datelor pe ecrane mici */
-  .footer.data-source-group rect {
-    x: 10px;
-    y: 560px;
-    /* Lățimea se ajustează automat prin JS */
-  }
-
-  .footer.data-source-group text {
-    x: 20px;
-    y: 580px;
-    font-size: 14px;
-  }
-
-  /* Poziționare și dimensiuni pentru legendă pe ecrane mici */
-  .legend-group rect {
-    x: 0;
-    y: 0;
-    /* Lățimea se ajustează automat prin JS */
-  }
-
-  .legend-group text#legendTitle {
-    x: 10px;
-    y: 20px;
-    font-size: 16px;
-  }
-
-  .legend-edit, .legend-delete {
-    x: 160px;
-    y: 10px;
-  }
-}
-
-/* Exemplu de stiluri suplimentare pentru a permite personalizarea textului liber */
-.option-section .free-text-controls {
-  display: flex;
-  flex-direction: column;
-}
-
-.option-section .free-text-controls label,
-.option-section .free-text-controls input,
-.option-section .free-text-controls select {
-  margin-top: 5px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-}
-
-/* Stiluri pentru text liber adăugat pe hartă */
-.free-text-div {
-  position: absolute;
-  padding: 4px 8px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.7);
-  cursor: move;
-  user-select: text;
-  min-width: 50px;
-  min-height: 20px;
-  overflow: hidden;
-}
-
-.free-text-div.selected {
-  border-color: #007bff;
-}
-
-.free-text-div:focus {
-  outline: none;
-}
-
-/* Stiluri pentru secțiunea de stilizare a textului liber */
-.option-section {
-  margin-top: 20px;
-}
-
-.option-section h4 {
-  margin-bottom: 10px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 18px;
-  color: #333;
-}
-
-.option-section label {
-  display: block;
-  margin-top: 10px;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 500;
-}
-
-.option-section .custom-select,
-.option-section .input-text {
-  width: 100%;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  transition: border-color 0.3s ease;
-}
-
-.option-section .custom-select:focus,
-.option-section .input-text:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
-/* Stiluri pentru butoane */
 .btn {
   padding: 8px 12px;
   border: none;
