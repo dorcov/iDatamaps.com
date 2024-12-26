@@ -46,9 +46,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // Declararea tooltip-ului
   const tooltip = d3.select(".tooltip");
 
-  // Funcție pentru a actualiza titlul
-  function updateTitle(text) {
-    d3.select("#mapTitle").text(text || "Adaugă un titlu");
+  // Referințe la elementele pentru stilizarea titlului (asigură-te că există în HTML)
+  const titleFontSelect = document.getElementById("titleFont");
+  const titleSizeInput = document.getElementById("titleSize");
+  const titleColorInput = document.getElementById("titleColor");
+
+  // Funcție pentru actualizarea titlului cu proprietăți noi
+  function updateTitle(userText) {
+    const titleElement = d3.select("#mapTitle");
+    titleElement.text(userText || "Adaugă un titlu");
+    titleElement.style("font-family", titleFontSelect.value);
+    titleElement.style("font-size", titleSizeInput.value + "px");
+    titleElement.style("fill", titleColorInput.value);
   }
 
   // Funcție pentru a actualiza sursa datelor
@@ -97,6 +106,17 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Elementul cu ID 'dataSource' nu a fost găsit.");
   }
+
+  // Detectează modificările din input-uri și aplică titlul
+  titleFontSelect.addEventListener("change", () => {
+    updateTitle(titleInput.value);
+  });
+  titleSizeInput.addEventListener("input", () => {
+    updateTitle(titleInput.value);
+  });
+  titleColorInput.addEventListener("input", () => {
+    updateTitle(titleInput.value);
+  });
 
   // Funcție de debouncing pentru îmbunătățirea performanței
   function debounce(func, wait) {

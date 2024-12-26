@@ -430,6 +430,36 @@ td.select-category select {
   transition: all 0.3s ease;
 }
 
+/* Stiluri pentru secțiunea de stilizare a titlului */
+.option-section label[for="titleFont"],
+.option-section label[for="titleSize"],
+.option-section label[for="titleColor"] {
+  display: block;
+  margin-top: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+
+.option-section #titleFont,
+.option-section #titleSize,
+.option-section #titleColor {
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.option-section #titleFont:focus,
+.option-section #titleSize:focus,
+.option-section #titleColor:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
 /* Responsivitate pentru legendă */
 @media (max-width: 768px) {
   #legendBackground {
