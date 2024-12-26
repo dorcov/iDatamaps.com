@@ -647,3 +647,105 @@ td.select-category select {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
 }
+
+/* Stiluri pentru text liber adăugat pe hartă */
+.free-text-div {
+  position: absolute;
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.7);
+  cursor: move;
+  user-select: text;
+  min-width: 50px;
+  min-height: 20px;
+  overflow: hidden;
+}
+
+.free-text-div.selected {
+  border-color: #007bff;
+}
+
+.free-text-div:focus {
+  outline: none;
+}
+
+/* Stiluri pentru secțiunea de stilizare a textului liber */
+.option-section {
+  margin-top: 20px;
+}
+
+.option-section h4 {
+  margin-bottom: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #333;
+}
+
+.option-section label {
+  display: block;
+  margin-top: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+
+.option-section .custom-select,
+.option-section .input-text {
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.option-section .custom-select:focus,
+.option-section .input-text:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Stiluri pentru butoane */
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 5px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.btn-export {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-export:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+.btn-reset {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-reset:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
