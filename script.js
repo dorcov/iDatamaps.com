@@ -708,53 +708,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Încarcă harta selectată inițial
   loadMap("md.json");
 
-  // Funcție pentru a încărca harta
-  function loadMap(geojsonFile) {
-    console.log(`Încerc să încarc GeoJSON: data/${geojsonFile}`);
-    d3.json(`data/${geojsonFile}`).then((data) => {
-      console.log(`Harta ${geojsonFile} a fost încărcată cu succes.`);
-
-      if (!data || !data.features) {
-        console.error("GeoJSON invalid sau lipsă features.");
-        return;
-      }
-
-      geoDataFeatures = data.features;
-
-      const projection = d3.geoMercator()
-        .fitSize([svgWidth, svgHeight], data);
-
-      const path = d3.geoPath().projection(projection);
-
-      gMap.selectAll("path").remove();
-
-      gMap.selectAll("path")
-        .data(geoDataFeatures)
-        .enter()
-        .append("path")
-        .attr("d", path)
-        .attr("fill", "#ccc")
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 0.5)
-        .on("mouseover", function (event, d) {
-          d3.select(this).attr("fill", "orange");
-          showTooltip(event, d);
-        })
-        .on("mousemove", function (event) {
-          moveTooltip(event);
-        })
-        .on("mouseout", function (event, d) {
-          d3.select(this).attr("fill", getFillColor(d));
-          hideTooltip();
-        });
-
-      generateTable(data.features);
-      updateMapColors();
-    }).catch((err) => {
-      console.error(`Eroare la încărcarea GeoJSON (${geojsonFile}):`, err);
-    });
-  }
-
   // Simplu set de funcții pentru drag & drop (similar cu legendGroup)
   function dragStarted(event, d) {
     d3.select(this).raise().classed("active", true);
@@ -768,4 +721,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function dragEnded(event, d) {
     d3.select(this).classed("active", false);
-  };
+  }
+});
