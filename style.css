@@ -430,49 +430,6 @@ td.select-category select {
   transition: all 0.3s ease;
 }
 
-/* Stiluri pentru text liber adăugat pe hartă */
-.free-text {
-  fill: #333;               /* Culoarea textului */
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  cursor: move;
-  user-select: none;        /* Previne selectarea textului */
-  pointer-events: all;      /* Permite evenimentele de mouse */
-  background: rgba(255, 255, 255, 0.7);
-  padding: 3px 6px;
-  border-radius: 4px;
-  transition: all 0.2s ease; /* Mică tranziție pentru orice schimbare a proprietăților */
-}
-
-/* Stiluri pentru text liber multi-linie adăugat pe hartă */
-.free-text-multiline {
-  width: 100%;
-  height: 100%;
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  color: #333;
-  background: rgba(255, 255, 255, 0.7);
-  border: none;
-  outline: none;
-  overflow: auto;
-  padding: 3px 6px;
-  border-radius: 4px;
-  cursor: text;
-  user-select: text;
-  resize: none; /* Dezactivează redimensionarea */
-  /* Permite mai multe linii */
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-.free-text-multiline:focus {
-  border: 1px solid #007bff; /* Evidențiază când este în focus */
-}
-
-/* Stiluri pentru text liber adăugat pe hartă */
-.free-text-container {
-  overflow: visible; /* Permite conținutului să depășească containerul dacă este necesar */
-}
 
 /* Stiluri pentru secțiunea de stilizare a titlului */
 .option-section label[for="titleFont"],
