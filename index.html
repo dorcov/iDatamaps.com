@@ -197,6 +197,24 @@
         <input type="text" id="freeTextInput" class="input-text" placeholder="Introdu textul" />
         <button id="addFreeText" class="btn btn-primary">Adaugă Text</button>
       </div>
+
+      <!-- Secțiunea pentru stilizarea textului liber -->
+      <div class="option-section">
+        <h4>Stilizare Text Liber</h4>
+        <label for="titleFont">Font:</label>
+        <select id="titleFont" class="custom-select">
+          <option value="'Montserrat', sans-serif">Montserrat</option>
+          <option value="'Roboto', sans-serif">Roboto</option>
+          <option value="'Open Sans', sans-serif">Open Sans</option>
+          <option value="'Lobster', cursive">Lobster</option>
+        </select>
+
+        <label for="titleSize">Mărime (px):</label>
+        <input type="number" id="titleSize" class="input-text" value="16" min="10" max="50" />
+
+        <label for="titleColor">Culoare:</label>
+        <input type="color" id="titleColor" value="#333333" />
+      </div>
       
       <!-- Spațiu pentru viitoare funcționalități -->
       <div class="option-section future-feature">

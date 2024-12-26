@@ -469,6 +469,11 @@ td.select-category select {
   border: 1px solid #007bff; /* Evidențiază când este în focus */
 }
 
+/* Stiluri pentru text liber adăugat pe hartă */
+.free-text-container {
+  overflow: visible; /* Permite conținutului să depășească containerul dacă este necesar */
+}
+
 /* Stiluri pentru secțiunea de stilizare a titlului */
 .option-section label[for="titleFont"],
 .option-section label[for="titleSize"],

@@ -848,4 +848,164 @@ document.addEventListener("DOMContentLoaded", () => {
   if (addMultiLineTextBtn) {
     addMultiLineTextBtn.addEventListener("click", createEditableFreeText);
   }
+
+  // Array to store free text elements for persistence
+  let freeTexts = [];
+
+  // Funcții de drag & drop pentru <foreignObject>
+  function dragStartedFO(event, d) {
+    d3.select(this).raise().classed("active", true);
+  }
+
+  function draggedFO(event, d) {
+    d3.select(this)
+      .attr("x", event.x)
+      .attr("y", event.y);
+  }
+
+  function dragEndedFO(event, d) {
+    d3.select(this).classed("active", false);
+  }
+
+  // Funcție pentru crearea unui text liber multi-linie editabil și draggable
+  function createEditableFreeText() {
+    const textValue = freeTextInput.value.trim() || "Text nou";
+
+    // Creează un obiect pentru textul liber
+    const freeText = {
+      id: Date.now(), // Un ID unic
+      text: textValue,
+      x: 100,
+      y: 100,
+      fontFamily: 'Roboto, sans-serif',
+      fontSize: '16px',
+      color: '#333'
+    };
+
+    freeTexts.push(freeText);
+    saveFreeTexts();
+
+    renderFreeText(freeText);
+  }
+
+  // Funcție pentru renderizarea unui text liber din array
+  function renderFreeText(freeText) {
+    const foreignObj = svg.append("foreignObject")
+      .attr("x", freeText.x)
+      .attr("y", freeText.y)
+      .attr("width", 200)
+      .attr("height", 100)
+      .attr("data-id", freeText.id)
+      .attr("class", "free-text-container")
+      .call(
+        d3.drag()
+          .on("start", dragStartedFO)
+          .on("drag", draggedFO)
+          .on("end", dragEndedFO)
+      );
+
+    foreignObj.html(`
+      <div class="free-text-multiline" contenteditable="true" style="
+        font-family: ${freeText.fontFamily};
+        font-size: ${freeText.fontSize};
+        color: ${freeText.color};
+      ">
+        ${freeText.text}
+      </div>
+    `);
+
+    // Actualizează textul în array la modificare
+    foreignObj.select("div").on("input", function() {
+      const updatedText = this.innerText;
+      const id = d3.select(this.parentNode).attr("data-id");
+      const textObj = freeTexts.find(ft => ft.id == id);
+      if (textObj) {
+        textObj.text = updatedText;
+        saveFreeTexts();
+      }
+    });
+
+    // Selectează textul pentru stilizare
+    foreignObj.select("div").on("click", function() {
+      const id = d3.select(this.parentNode).attr("data-id");
+      selectFreeText(id);
+    });
+
+    // Elimină textul la dublu-clic
+    foreignObj.on("dblclick", function() {
+      const id = d3.select(this).attr("data-id");
+      freeTexts = freeTexts.filter(ft => ft.id != id);
+      saveFreeTexts();
+      d3.select(this).remove();
+      deselectFreeText();
+    });
+  }
+
+  // Selectează un text liber pentru editare a proprietăților
+  let selectedFreeTextId = null;
+
+  function selectFreeText(id) {
+    selectedFreeTextId = id;
+    const freeText = freeTexts.find(ft => ft.id == id);
+    if (freeText) {
+      titleFontSelect.value = freeText.fontFamily;
+      titleSizeInput.value = parseInt(freeText.fontSize);
+      titleColorInput.value = freeText.color;
+    }
+  }
+
+  function deselectFreeText() {
+    selectedFreeTextId = null;
+    titleFontSelect.value = "'Montserrat', sans-serif";
+    titleSizeInput.value = 24;
+    titleColorInput.value = "#000000";
+  }
+
+  // Actualizează stilurile textului liber selectat
+  function updateSelectedFreeText() {
+    if (selectedFreeTextId) {
+      const freeText = freeTexts.find(ft => ft.id == selectedFreeTextId);
+      if (freeText) {
+        freeText.fontFamily = titleFontSelect.value;
+        freeText.fontSize = `${titleSizeInput.value}px`;
+        freeText.color = titleColorInput.value;
+        saveFreeTexts();
+
+        // Actualizează stilurile elementului din SVG
+        svg.select(`foreignObject[data-id='${freeText.id}'] div`)
+          .style("font-family", freeText.fontFamily)
+          .style("font-size", freeText.fontSize)
+          .style("color", freeText.color);
+      }
+    }
+  }
+
+  // Event listeners pentru stilizare
+  titleFontSelect.addEventListener("change", updateSelectedFreeText);
+  titleSizeInput.addEventListener("input", updateSelectedFreeText);
+  titleColorInput.addEventListener("input", updateSelectedFreeText);
+
+  // Funcție pentru salvarea textelor libere în localStorage
+  function saveFreeTexts() {
+    localStorage.setItem("freeTexts", JSON.stringify(freeTexts));
+  }
+
+  // Funcție pentru încărcarea textelor libere din localStorage
+  function loadFreeTexts() {
+    const savedTexts = localStorage.getItem("freeTexts");
+    if (savedTexts) {
+      freeTexts = JSON.parse(savedTexts);
+      freeTexts.forEach(ft => renderFreeText(ft));
+    }
+  }
+
+  // Încarcă textele libere la încărcarea paginii
+  document.addEventListener("DOMContentLoaded", loadFreeTexts);
+
+  // Event listener pentru butonul de adăugare text liber
+  if (addFreeTextBtn) {
+    addFreeTextBtn.addEventListener("click", createEditableFreeText);
+  } else {
+    console.error("Elementul cu ID 'addFreeText' nu a fost găsit.");
+  }
 });
