@@ -438,10 +438,32 @@ td.select-category select {
   cursor: move;
   user-select: none;        /* Previne selectarea textului */
   pointer-events: all;      /* Permite evenimentele de mouse */
-  background: rgba(255, 255, 255, 0.0);
+  background: rgba(255, 255, 255, 0.7);
   padding: 3px 6px;
   border-radius: 4px;
-  transition: all 0.2s ease; /* Mică tranziție pentru any property changes */
+  transition: all 0.2s ease; /* Mică tranziție pentru orice schimbare a proprietăților */
+}
+
+/* Stiluri pentru text liber multi-linie adăugat pe hartă */
+.free-text-multiline {
+  width: 100%;
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  color: #333;
+  background: rgba(255, 255, 255, 0.7);
+  border: none;
+  outline: none;
+  overflow: auto;
+  padding: 3px 6px;
+  border-radius: 4px;
+  cursor: text;
+  user-select: text;
+  resize: none; /* Dezactivează redimensionarea */
+}
+
+.free-text-multiline:focus {
+  border: 1px solid #007bff; /* Evidențiază când este în focus */
 }
 
 /* Stiluri pentru secțiunea de stilizare a titlului */
@@ -472,6 +494,72 @@ td.select-category select {
 .option-section #titleColor:focus {
   border-color: #007bff;
   outline: none;
+}
+
+/* Stiluri pentru secțiunea de adăugare a textului liber */
+.option-section h4 {
+  margin-bottom: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: #333;
+}
+
+.option-section #freeTextInput {
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.option-section #freeTextInput:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 5px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.btn-export {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-export:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+}
+
+.btn-reset {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn-reset:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
 }
 
 /* Responsivitate pentru legendă */

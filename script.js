@@ -797,4 +797,57 @@ document.addEventListener("DOMContentLoaded", () => {
   if (addFreeTextBtn) {
     addFreeTextBtn.addEventListener("click", createFreeText);
   }
+
+  // Funcții de drag & drop pentru un <foreignObject> care conține textul
+  function dragStartedFO(event, d) {
+    d3.select(this).raise().classed("active", true);
+  }
+
+  function draggedFO(event, d) {
+    d3.select(this)
+      .attr("x", event.x)
+      .attr("y", event.y);
+  }
+
+  function dragEndedFO(event, d) {
+    d3.select(this).classed("active", false);
+  }
+
+  // Creează un <foreignObject> cu un <div> contenteditable pentru text liber multi-linie
+  function createEditableFreeText() {
+    const widthFO = 200;
+    const heightFO = 60;
+
+    // Adăugăm un <foreignObject> în interiorul SVG-ului
+    const foreignObj = d3.select("#mapSVG")
+      .append("foreignObject")
+      .attr("x", 50)
+      .attr("y", 50)
+      .attr("width", widthFO)
+      .attr("height", heightFO)
+      .call(
+        d3.drag()
+          .on("start", dragStartedFO)
+          .on("drag", draggedFO)
+          .on("end", dragEndedFO)
+      );
+
+    // Inserăm un <div> cu contentEditable pentru a permite editare directă și multi-linie
+    foreignObj.html(`
+      <div class="free-text-multiline" contenteditable="true">
+        Introdu textul aici...
+      </div>
+    `);
+
+    // La dublu-clic, eliminăm întregul foreignObject
+    foreignObj.on("dblclick", function() {
+      d3.select(this).remove();
+    });
+  }
+
+  // Exemplu de utilizare cu un buton dedicat (asigură-te că ai în HTML: <button id="addFreeTextMultiLine">Adaugă Text</button>)
+  const addMultiLineTextBtn = document.getElementById("addFreeTextMultiLine");
+  if (addMultiLineTextBtn) {
+    addMultiLineTextBtn.addEventListener("click", createEditableFreeText);
+  }
 });
