@@ -743,6 +743,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const freeTextFontSelect = document.getElementById("freeTextFont");
   const freeTextSizeInput = document.getElementById("freeTextSize");
   const freeTextColorInput = document.getElementById("freeTextColor");
+  const removeFreeTextButton = document.getElementById("removeFreeText");
+  // const mapContainer = document.querySelector('.map-column');
+  // let selectedTextBox = null;
 
   function createFreeTextContainer(text, font, size, color) {
     const div = document.createElement('div');
@@ -787,5 +790,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   } else {
     console.error("Elementul cu ID 'addFreeText' nu a fost găsit.");
+  }
+
+  if (removeFreeTextButton) {
+    removeFreeTextButton.addEventListener('click', () => {
+      if (selectedTextBox) {
+        mapContainer.removeChild(selectedTextBox);
+        selectedTextBox = null;
+      } else {
+        alert("Selectează un text pentru a-l elimina.");
+      }
+    });
+  } else {
+    console.error("Elementul cu ID 'removeFreeText' nu a fost găsit.");
   }
 });
