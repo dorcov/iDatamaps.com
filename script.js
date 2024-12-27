@@ -47,10 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let selectedTextBox = null;
   const mapContainer = document.querySelector('.map-column');
 
-  // Adăugăm un nou grup pentru legenda numerică
+  // Adăugăm un nou grup pentru legenda numerică, ascuns by default
   const numericLegendGroup = svg.append("g")
     .attr("id", "numericLegendGroup")
-    .attr("class", "legend-group");
+    .attr("class", "legend-group")
+    .attr("visibility", "hidden"); // implicit ascuns
 
   // Funcție de debouncing pentru îmbunătățirea performanței
   function debounce(func, wait) {
@@ -630,6 +631,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   } else {
     console.error("Elementul cu ID 'toggleLegend' nu a fost găsit.");
+  }
+
+  // Adăugăm un buton pentru a afișa/ascunde legenda numerică
+  const toggleNumericLegendBtn = document.getElementById("toggleNumericLegend");
+  if (toggleNumericLegendBtn) {
+    toggleNumericLegendBtn.addEventListener("click", () => {
+      const isVisible = numericLegendGroup.attr("visibility") !== "hidden";
+      const newState = isVisible ? "hidden" : "visible";
+      numericLegendGroup.attr("visibility", newState);
+      localStorage.setItem("numericLegendVisible", newState);
+    });
   }
 
   // Exportăm harta ca PNG
