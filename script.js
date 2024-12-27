@@ -571,6 +571,14 @@ document.addEventListener("DOMContentLoaded", () => {
       legendGroup.attr("transform", `translate(20, 20)`);
     }
 
+    // Load stored visibility for the original legend
+    const savedLegendVisibility = localStorage.getItem("legendVisibility");
+    if (savedLegendVisibility) {
+      legendGroup.attr("visibility", savedLegendVisibility);
+    } else {
+      legendGroup.attr("visibility", "visible");
+    }
+
     // Drag pentru Legendă
     legendGroup.call(
       d3.drag()
@@ -627,7 +635,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (toggleLegendButton) {
     toggleLegendButton.on("click", () => {
       const isVisible = legendGroupSelection.attr("visibility") !== "hidden";
-      legendGroupSelection.attr("visibility", isVisible ? "hidden" : "visible");
+      const newState = isVisible ? "hidden" : "visible";
+      legendGroupSelection.attr("visibility", newState);
+      // Salvează în localStorage
+      localStorage.setItem("legendVisibility", newState);
     });
   } else {
     console.error("Elementul cu ID 'toggleLegend' nu a fost găsit.");
