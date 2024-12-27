@@ -17,17 +17,23 @@ body {
   display: flex;
   flex-direction: row;
   height: 100vh; /* Înălțimea completă a viewport-ului */
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f5f5;
 }
 
 /* Coloana pentru hartă */
 .map-column {
-  flex: 1; /* Ocupă 50% din lățime */
+  flex: 2; /* Ocupă 50% din lățime */
   position: relative; /* Pentru poziționarea absolută a titlului și footer-ului */
   padding: 20px;
   background-color: #ffffff; /* Fundal ușor pentru contrast */
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 /* SVG-ul hărții să ocupe întreg spațiul disponibil */
@@ -41,11 +47,17 @@ body {
   overflow: visible !important;
 }
 
+/* SVG Styling */
+#mapSVG {
+  width: 100%;
+  height: 100%;
+}
+
 /* Stil pentru footer */
 .footer {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 10px;
+  right: 10px;
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.8);
@@ -57,6 +69,8 @@ body {
   flex-wrap: wrap; /* Permite rânduri suplimentare pe ecrane mici */
   transition: all 0.3s ease;
   z-index: 10;
+  font-size: 12px;
+  color: #888888;
 }
 
 /* Stil pentru textul din footer */
@@ -68,11 +82,14 @@ body {
 
 /* Panoul drept pentru opțiuni */
 .right-panel {
-  flex: 0.5; /* Ocupă 25% din lățime */
+  flex: 1; /* Ocupă 25% din lățime */
   padding: 20px;
   background-color: #ffffff; /* Fundal alb pentru opțiuni */
   overflow-y: auto; /* Adaugă scroll dacă conținutul depășește înălțimea */
   border-left: 1px solid #e0e0e0;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  border-radius: 8px;
 }
 
 /* Secțiune de opțiuni */
@@ -122,6 +139,7 @@ body {
   font-size: 14px;
   font-family: 'Roboto', sans-serif;
   transition: border-color 0.3s;
+  appearance: none;
 }
 
 .custom-select:focus {
@@ -171,7 +189,7 @@ body {
 
 /* Stil pentru butoane */
 .btn {
-  padding: 8px 12px;
+  padding: 10px 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -183,32 +201,32 @@ body {
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background-color: #2A73FF;
   color: #fff;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #1c54d1;
   transform: translateY(-2px);
 }
 
 .btn-export {
-  background-color: #28a745;
+  background-color: #52c41a;
   color: #fff;
 }
 
 .btn-export:hover {
-  background-color: #218838;
+  background-color: #389e0d;
   transform: translateY(-2px);
 }
 
 .btn-reset {
-  background-color: #dc3545;
+  background-color: #ff4d4f;
   color: #fff;
 }
 
 .btn-reset:hover {
-  background-color: #c82333;
+  background-color: #d9363e;
   transform: translateY(-2px);
 }
 
@@ -319,6 +337,9 @@ td.select-category select {
   border-radius: 4px;
   color: #fff;
   z-index: 10;
+  background: rgba(50, 50, 50, 0.9);
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Stil pentru viitoarele funcționalități */
@@ -359,6 +380,9 @@ td.select-category select {
   font-weight: bold;
   fill: #333;
   user-select: none;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333333;
 }
 
 .legend-item {
@@ -373,6 +397,7 @@ td.select-category select {
   rx: 2;
   ry: 2;
   margin-right: 10px;
+  border-radius: 4px;
 }
 
 .legend-edit, .legend-delete {
@@ -416,6 +441,23 @@ td.select-category select {
 .text-options {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.text-options label {
+  font-size: 14px;
+  color: #555555;
+}
+
+.text-options select, 
+.text-options input[type="number"],
+.text-options input[type="color"] {
+  padding: 6px 10px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 /* Stiluri pentru grupul de butoane */
@@ -561,10 +603,12 @@ td.select-category select {
   min-width: 100px;
   min-height: 30px;
   overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .free-text-container.selected {
   border-color: #007bff;
+  border: 2px dashed #2A73FF;
 }
 
 .free-text-container:focus {
@@ -584,6 +628,7 @@ td.select-category select {
   flex-direction: column;
   align-items: center;
   position: relative;
+  pointer-events: all;
 }
 
 /* Style for numeric legend background */
@@ -700,4 +745,142 @@ td.select-category select {
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
+}
+
+/* Table Styling */
+.table-container {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+}
+
+#regionTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#regionTable th, #regionTable td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e8e8e8;
+  text-align: left;
+  font-size: 14px;
+  color: #333333;
+}
+
+#regionTable th {
+  background-color: #fafafa;
+}
+
+#regionTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Toggle Buttons */
+#toggleLegend, #toggleNumericLegend {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Free Text Options */
+.text-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.text-options label {
+  font-size: 14px;
+  color: #555555;
+}
+
+.text-options select, 
+.text-options input[type="number"],
+.text-options input[type="color"] {
+  padding: 6px 10px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Free Text Container */
+.free-text-container {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: move;
+}
+
+.free-text-container.selected {
+  border: 2px dashed #2A73FF;
+}
+
+/* Footer Styling */
+.footer {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 12px;
+  color: #888888;
+}
+
+/* Tooltip Styling */
+.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 8px;
+  font-size: 14px;
+  background: rgba(50, 50, 50, 0.9);
+  color: #ffffff;
+  border-radius: 8px;
+  pointer-events: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Legend Styling */
+.legend-group {
+  cursor: move;
+}
+
+.legend-background {
+  fill: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+}
+
+.legend-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333333;
+}
+
+.legend-item rect {
+  border-radius: 4px;
+}
+
+.legend-text {
+  font-size: 14px;
+  fill: #333333;
+}
+
+/* Numeric Legend Styling */
+.numeric-legend-background {
+  fill: rgba(255, 255, 255, 0.8);
+}
+
+.numeric-legend-text {
+  font-size: 14px;
+  color: #333333;
+}
+
+.numeric-legend-text {
+  text-anchor: middle;
 }

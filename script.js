@@ -251,6 +251,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
+    gMap.selectAll("path")
+      .transition()
+      .duration(500)
+      .attr("fill", d => getFillColor(d));
+
     generateBothLegends();
   }
 
@@ -272,7 +277,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const value = getRegionValue(d);
     const category = getRegionCategory(d);
     tooltip.style("visibility", "visible")
-           .html(`<strong>${regionName}</strong><br/>Valoare: ${value}<br/>Categorie: ${category || "N/A"}`);
+           .html(`<strong>${regionName}</strong><br/>Valoare: ${value}<br/>Categorie: ${category || "N/A"}`)
+           .transition()
+           .duration(200)
+           .style("opacity", 1);
   }
 
   function moveTooltip(event) {
@@ -281,7 +289,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function hideTooltip() {
-    tooltip.style("visibility", "hidden");
+    tooltip.transition()
+           .duration(200)
+           .style("opacity", 0)
+           .on("end", () => {
+             tooltip.style("visibility", "hidden");
+           });
   }
 
   // Funcție pentru a obține valoarea unei regiuni
@@ -493,7 +506,9 @@ document.addEventListener("DOMContentLoaded", () => {
     numericLegendGroup.append("rect")
       .attr("x", 10).attr("y", 20)
       .attr("width", 120).attr("height", 10)
-      .style("fill", `url(#${gradientID})`);
+      .style("fill", `url(#${gradientID})`)
+      .attr("rx", 5)
+      .attr("ry", 5);
 
     // Valorile Min și Max
     numericLegendGroup.append("text")
@@ -514,7 +529,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("width", 10)
       .attr("height", 16)
       .style("cursor", "ew-resize")
-      .attr("fill", "#333");
+      .attr("fill", "#555")
+      .attr("rx", 2)
+      .attr("ry", 2);
 
     // Funcție pentru redimensionarea barei de gradient numeric
     const resizeDrag = d3.drag()
@@ -750,6 +767,7 @@ document.addEventListener("DOMContentLoaded", () => {
     freeTextBorderCheckbox.checked = textBox.style.border !== 'none';
     freeTextBoldCheckbox.checked = textBox.style.fontWeight === 'bold';
     freeTextItalicCheckbox.checked = textBox.style.fontStyle === 'italic';
+    textBox.style.boxShadow = "0 0 5px rgba(42, 115, 255, 0.6)";
   }
 
   if (addFreeTextButton) {
