@@ -662,11 +662,11 @@ document.addEventListener("DOMContentLoaded", () => {
   makeElementsDraggable();
 
   // Funcție pentru a controla vizibilitatea legendei
-  const toggleLegendButton = d3.select("#toggleLegend");
+  const toggleLegendButton = document.getElementById("toggleLegend");
   const legendGroupSelection = d3.select("#legendGroup");
 
   if (toggleLegendButton) {
-    toggleLegendButton.on("click", () => {
+    toggleLegendButton.addEventListener("click", () => {
       const isVisible = legendGroupSelection.attr("visibility") !== "hidden";
       const newState = isVisible ? "hidden" : "visible";
       legendGroupSelection.attr("visibility", newState);

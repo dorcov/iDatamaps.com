@@ -333,6 +333,11 @@ td.select-category select {
 .legend-group {
   cursor: move; /* Indică că elementul poate fi mutat */
   pointer-events: all;
+  user-select: none;
+  z-index: 1000;
+}
+
+#legendGroup, #numericLegendGroup {
   z-index: 1000;
 }
 
@@ -351,6 +356,7 @@ td.select-category select {
   font-size: 14px;
   font-weight: bold;
   fill: #333;
+  user-select: none;
 }
 
 .legend-item {
