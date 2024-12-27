@@ -572,3 +572,27 @@ td.select-category select {
   border-color: #007bff;
   box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
 }
+
+/* Style for numeric legend group */
+.legend-group {
+  cursor: move;
+}
+
+/* Ensure the numeric legend has a higher z-index if overlapping issues occur */
+#numericLegendGroup {
+  pointer-events: all;
+}
+
+/* Style for delete icon in numeric legend */
+#deleteNumericLegend {
+  font-size: 16px;
+}
+
+/* Optional: Style adjustments for better visibility */
+.numeric-legend-background {
+  fill: rgba(255, 255, 255, 0.8);
+}
+
+.numeric-legend-text {
+  font-size: 12px;
+}
