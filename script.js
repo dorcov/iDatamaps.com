@@ -523,6 +523,18 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
     d3.select("#numericResizeHandle").call(resizeDrag);
+
+    // Adaugă buton de ștergere
+    numericLegendGroup.append("text")
+      .attr("id", "deleteNumericLegend")
+      .attr("x", 160)  // Poziționează acest buton cum dorești
+      .attr("y", 15)
+      .style("cursor", "pointer")
+      .text("🗑️");
+
+    d3.select("#deleteNumericLegend").on("click", () => {
+      numericLegendGroup.remove();
+    });
   }
 
   // Afișăm ambele legende după ce actualizăm tabelul/gradientul
@@ -578,6 +590,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Drag pentru numericLegendGroup
     const numericGroup = d3.select("#numericLegendGroup");
+    const savedNumericPos = JSON.parse(localStorage.getItem("numericLegendPos"));
+    if (savedNumericPos) {
+      numericGroup.attr("transform", `translate(${savedNumericPos.x}, ${savedNumericPos.y})`);
+    }
+
     numericGroup.call(
       d3.drag()
         .on("start", () => {
@@ -585,11 +602,12 @@ document.addEventListener("DOMContentLoaded", () => {
           numericGroup.attr("opacity", 0.8);
         })
         .on("drag", (event) => {
-          const newX = Math.max(0, Math.min(event.x, mapContainer.clientWidth - numericGroup.node().getBBox().width));
-          const newY = Math.max(0, Math.min(event.y, mapContainer.clientHeight - numericGroup.node().getBBox().height));
-          numericGroup.attr("transform", `translate(${newX}, ${newY})`);
+          numericGroup.attr("transform", `translate(${event.x}, ${event.y})`);
         })
-        .on("end", () => numericGroup.attr("opacity", 1))
+        .on("end", (event) => {
+          numericGroup.attr("opacity", 1);
+          localStorage.setItem("numericLegendPos", JSON.stringify({ x: event.x, y: event.y }));
+        })
     );
   }
 
