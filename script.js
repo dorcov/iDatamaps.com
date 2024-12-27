@@ -442,6 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("class", "legend-text")
         .text(category.name);
     });
+    d3.select("#legendGroup").raise(); // Aduce legendGroup în față
   }
 
   // Funcție nouă pentru afișarea legendei numerice
@@ -495,6 +496,33 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("x", 130).attr("y", 40)
       .style("text-anchor", "end")
       .text("Max: " + maxValue);
+    
+    numericLegendGroup.raise(); // Aduce numericLegendGroup în față
+
+    // Adăugăm un mâner (handle) pentru redimensionare
+    numericLegendGroup.append("rect")
+      .attr("id", "numericResizeHandle")
+      .attr("x", 130) // Valoare inițială aprox. la capătul barei
+      .attr("y", 17)
+      .attr("width", 10)
+      .attr("height", 16)
+      .style("cursor", "ew-resize")
+      .attr("fill", "#333");
+
+    // Funcție pentru redimensionarea barei de gradient numeric
+    const resizeDrag = d3.drag()
+      .on("start", (event) => {
+        d3.select("#numericResizeHandle").raise();
+      })
+      .on("drag", (event) => {
+        const newWidth = Math.max(20, Math.min(event.x - 10, 300));
+        // Ajustăm dimensiunea rect ului
+        numericLegendGroup.select("rect[width='120']").attr("width", newWidth);
+        // Ajustăm poziția mânerului
+        d3.select("#numericResizeHandle").attr("x", newWidth + 10);
+      });
+
+    d3.select("#numericResizeHandle").call(resizeDrag);
   }
 
   // Afișăm ambele legende după ce actualizăm tabelul/gradientul
