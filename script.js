@@ -444,6 +444,12 @@ document.addEventListener("DOMContentLoaded", () => {
         .text(category.name);
     });
     d3.select("#legendGroup").raise(); // Aduce legendGroup în față
+
+    // If there are no categories, force legend visibility:
+    if (!categories.length) {
+      d3.select("#legendGroup").attr("visibility", "visible");
+      localStorage.setItem("legendVisibility", "visible");
+    }
   }
 
   // Funcție nouă pentru afișarea legendei numerice
