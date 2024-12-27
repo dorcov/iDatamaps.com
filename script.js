@@ -549,6 +549,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function generateBothLegends() {
     generateLegend();
     generateNumericLegend();
+    
+    // Restore visibility states after generation
+    const mainVisible = localStorage.getItem("legendVisibility") || "visible";
+    const numericVisible = localStorage.getItem("numericLegendVisible") || "hidden";
+    
+    d3.select("#legendGroup").attr("visibility", mainVisible);
+    d3.select("#numericLegendGroup").attr("visibility", numericVisible);
   }
 
   // Funcționalitate Drag-and-Drop pentru Legendă, Titlu și Sursa Datelor
@@ -873,20 +880,35 @@ document.addEventListener("DOMContentLoaded", () => {
   function setupLegendControls() {
     const toggleMainBtn = document.getElementById("toggleLegend");
     const toggleNumericBtn = document.getElementById("toggleNumericLegend");
+    const legendGroup = d3.select("#legendGroup");
+    const numericLegendGroup = d3.select("#numericLegendGroup");
+
+    // Set initial states
+    const mainVisible = localStorage.getItem("legendVisibility") || "visible";
+    const numericVisible = localStorage.getItem("numericLegendVisible") || "hidden";
+    
+    legendGroup.attr("visibility", mainVisible);
+    numericLegendGroup.attr("visibility", numericVisible);
 
     if (toggleMainBtn) {
       toggleMainBtn.addEventListener("click", () => {
-        const legendGroup = d3.select("#legendGroup");
         const isVisible = legendGroup.attr("visibility") === "visible";
-        legendGroup.attr("visibility", isVisible ? "hidden" : "visible");
+        const newState = isVisible ? "hidden" : "visible";
+        legendGroup
+          .attr("visibility", newState)
+          .raise();
+        localStorage.setItem("legendVisibility", newState);
       });
     }
 
     if (toggleNumericBtn) {
       toggleNumericBtn.addEventListener("click", () => {
-        const numericLegend = d3.select("#numericLegendGroup");
-        const isVisible = numericLegend.attr("visibility") === "visible";
-        numericLegend.attr("visibility", isVisible ? "hidden" : "visible");
+        const isVisible = numericLegendGroup.attr("visibility") === "visible";
+        const newState = isVisible ? "hidden" : "visible";
+        numericLegendGroup
+          .attr("visibility", newState)
+          .raise();
+        localStorage.setItem("numericLegendVisible", newState);
       });
     }
   }
