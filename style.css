@@ -422,6 +422,23 @@ td.select-category select {
   transition: all 0.3s ease;
 }
 
+/* Stiluri pentru secțiunea de gradient */
+.gradient-options {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Stiluri pentru secțiunea de text liber */
+.text-options {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Stiluri pentru grupul de butoane */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
 
 /* Stiluri pentru secțiunea de stilizare a titlului */
 .option-section label[for="titleFont"],
