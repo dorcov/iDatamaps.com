@@ -555,7 +555,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function makeElementsDraggable() {
     const legends = [
       { element: "#legendGroup", defaultX: 20, defaultY: 20 },
-      { element: "#numericLegendGroup", defaultX: 20, defaultY: 240 }
+      { element: "#numericLegendGroup", defaultX: svgWidth - 200, defaultY: 20 }
     ];
 
     legends.forEach(({ element, defaultX, defaultY }) => {
@@ -619,35 +619,20 @@ document.addEventListener("DOMContentLoaded", () => {
   // Exportăm harta ca PNG
   if (exportButton) {
     exportButton.addEventListener("click", () => {
-      // Ensure both legends are visible during export
-      const legends = svg.selectAll(".legend-group");
-      const originalVisibility = {};
-      
-      // Store current visibility states
-      legends.each(function() {
-        const el = d3.select(this);
-        originalVisibility[el.attr("id")] = el.attr("visibility");
-        el.attr("visibility", "visible");
-      });
+      // Force show legends during export
+      svg.selectAll(".legend-group")
+        .attr("visibility", "visible")
+        .attr("opacity", 1);
 
-      // Export with increased quality
       html2canvas(document.querySelector(".map-column"), {
         useCORS: true,
         scale: 2,
-        backgroundColor: null,
-        logging: true
+        backgroundColor: null
       }).then(canvas => {
-        // Create and trigger download
         const link = document.createElement("a");
         link.download = "harta.png";
         link.href = canvas.toDataURL("image/png");
         link.click();
-
-        // Restore original visibility states
-        legends.each(function() {
-          const el = d3.select(this);
-          el.attr("visibility", originalVisibility[el.attr("id")]);
-        });
       });
     });
   } else {
@@ -836,19 +821,38 @@ document.addEventListener("DOMContentLoaded", () => {
     // Clear any existing legends
     svg.selectAll(".legend-group").remove();
 
-    // Create main legend
+    // Create main legend (left side)
     const legendGroup = svg.append("g")
       .attr("id", "legendGroup")
       .attr("class", "legend-group")
       .attr("visibility", "visible")
       .attr("transform", "translate(20, 20)");
 
-    // Create numeric legend with initial content
+    // Add background and title to main legend
+    legendGroup.append("rect")
+      .attr("id", "legendBackground")
+      .attr("width", 180)
+      .attr("height", 200)
+      .attr("rx", 4)
+      .attr("ry", 4)
+      .attr("fill", "rgba(255, 255, 255, 0.8)");
+
+    legendGroup.append("text")
+      .attr("id", "legendTitle")
+      .attr("x", 10)
+      .attr("y", 20)
+      .attr("class", "legend-title")
+      .text("Legendă");
+
+    legendGroup.append("g")
+      .attr("id", "legendItems");
+
+    // Create numeric legend (right side)
     const numericLegendGroup = svg.append("g")
       .attr("id", "numericLegendGroup")
       .attr("class", "legend-group")
-      .attr("transform", "translate(20, 240)")
-      .attr("visibility", localStorage.getItem("numericLegendVisible") || "hidden");
+      .attr("visibility", "visible")
+      .attr("transform", `translate(${svgWidth - 200}, 20)`);
 
     // Add background to numeric legend
     numericLegendGroup.append("rect")
@@ -857,6 +861,10 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("rx", 4)
       .attr("ry", 4)
       .attr("fill", "rgba(255, 255, 255, 0.8)");
+
+    // Force both legends to be visible initially
+    localStorage.setItem("legendVisibility", "visible");
+    localStorage.setItem("numericLegendVisible", "visible");
 
     return { legendGroup, numericLegendGroup };
   }
