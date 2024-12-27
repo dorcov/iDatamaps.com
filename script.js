@@ -432,6 +432,47 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("class", "legend-text")
         .text(category.name);
     });
+
+    // Calculează valorile minime și maxime din tabel
+    const inputs = regionTableBody.querySelectorAll("input");
+    const values = Array.from(inputs).map((i) => parseFloat(i.value) || 0);
+    if (values.length > 0) {
+      const minValue = Math.min(...values);
+      const maxValue = Math.max(...values);
+
+      // Definim un gradient liniar pentru afișarea numerică
+      const gradientID = "numericGradient";
+      const gradientDefs = legendItemsGroup.append("defs")
+        .append("linearGradient")
+        .attr("id", gradientID)
+        .attr("x1", "0%").attr("x2", "100%")
+        .attr("y1", "0%").attr("y2", "0%");
+      gradientDefs.selectAll("stop")
+        .data([
+          { offset: "0%", color: currentGradient.start },
+          { offset: "100%", color: currentGradient.end }
+        ])
+        .enter()
+        .append("stop")
+        .attr("offset", d => d.offset)
+        .attr("stop-color", d => d.color);
+
+      // Afișăm bara de gradient numeric
+      const gradientY = 30 + categories.length * 30;
+      legendItemsGroup.append("rect")
+        .attr("x", 10).attr("y", gradientY)
+        .attr("width", 120).attr("height", 10)
+        .style("fill", `url(#${gradientID})`);
+
+      // Afișăm valorile Min și Max
+      legendItemsGroup.append("text")
+        .attr("x", 10).attr("y", gradientY + 24)
+        .text("Min: " + minValue);
+      legendItemsGroup.append("text")
+        .attr("x", 130).attr("y", gradientY + 24)
+        .style("text-anchor", "end")
+        .text("Max: " + maxValue);
+    }
   }
 
   // Funcționalitate Drag-and-Drop pentru Legendă, Titlu și Sursa Datelor
