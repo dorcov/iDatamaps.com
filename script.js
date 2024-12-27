@@ -524,16 +524,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     d3.select("#numericResizeHandle").call(resizeDrag);
 
-    // Adaugă buton de ștergere
+    // Adaugă buton de ștergere (acum doar ascunde legenda)
     numericLegendGroup.append("text")
       .attr("id", "deleteNumericLegend")
-      .attr("x", 160)  // Poziționează acest buton cum dorești
+      .attr("x", 160)
       .attr("y", 15)
       .style("cursor", "pointer")
       .text("🗑️");
 
     d3.select("#deleteNumericLegend").on("click", () => {
-      numericLegendGroup.remove();
+      numericLegendGroup.attr("visibility", "hidden");
+      localStorage.setItem("numericLegendVisible", "hidden");
     });
   }
 
@@ -593,6 +594,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedNumericPos = JSON.parse(localStorage.getItem("numericLegendPos"));
     if (savedNumericPos) {
       numericGroup.attr("transform", `translate(${savedNumericPos.x}, ${savedNumericPos.y})`);
+    }
+    const savedNumericVisibility = localStorage.getItem("numericLegendVisible");
+    if (savedNumericVisibility) {
+      numericGroup.attr("visibility", savedNumericVisibility);
     }
 
     numericGroup.call(
