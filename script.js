@@ -907,4 +907,81 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
+
+  // Replace the setupLegendControls function with this fixed version
+  function setupLegendControls() {
+    const toggleMainBtn = document.getElementById("toggleLegend");
+    const toggleNumericBtn = document.getElementById("toggleNumericLegend");
+
+    // Ensure numeric legend exists and is properly initialized
+    if (!d3.select("#numericLegendGroup").size()) {
+      generateNumericLegend();
+    }
+
+    if (toggleMainBtn) {
+      toggleMainBtn.onclick = function() {
+        const legendGroup = d3.select("#legendGroup");
+        const isVisible = legendGroup.attr("visibility") === "visible";
+        legendGroup
+          .attr("visibility", isVisible ? "hidden" : "visible")
+          .raise();
+        localStorage.setItem("legendVisibility", isVisible ? "hidden" : "visible");
+      };
+    }
+
+    if (toggleNumericBtn) {
+      toggleNumericBtn.onclick = function() {
+        const numericGroup = d3.select("#numericLegendGroup");
+        const isVisible = numericGroup.attr("visibility") === "visible";
+        numericGroup
+          .attr("visibility", isVisible ? "hidden" : "visible")
+          .raise();
+        localStorage.setItem("numericLegendVisible", isVisible ? "hidden" : "visible");
+      };
+    }
+  }
+
+  // Add this fix to the generateBothLegends function
+  function generateBothLegends() {
+    // Generate main legend
+    generateLegend();
+
+    // Generate numeric legend if there are values
+    const hasValues = regionTableBody && 
+                     Array.from(regionTableBody.querySelectorAll("input"))
+                     .some(input => parseFloat(input.value) > 0);
+
+    if (hasValues) {
+      generateNumericLegend();
+      // Restore numeric legend visibility
+      const savedNumericVisibility = localStorage.getItem("numericLegendVisible") || "hidden";
+      d3.select("#numericLegendGroup")
+        .attr("visibility", savedNumericVisibility)
+        .raise();
+    }
+
+    // Restore main legend visibility
+    const savedMainVisibility = localStorage.getItem("legendVisibility") || "visible";
+    d3.select("#legendGroup")
+      .attr("visibility", savedMainVisibility)
+      .raise();
+  }
+
+  // Update the event listener initialization
+  function initializeEventListeners() {
+    const toggleMainBtn = document.getElementById("toggleLegend");
+    const toggleNumericBtn = document.getElementById("toggleNumericLegend");
+
+    if (toggleMainBtn && toggleNumericBtn) {
+      // Remove any existing listeners
+      toggleMainBtn.replaceWith(toggleMainBtn.cloneNode(true));
+      toggleNumericBtn.replaceWith(toggleNumericBtn.cloneNode(true));
+      
+      // Setup new listeners
+      setupLegendControls();
+    }
+  }
+
+  // Call this after DOM content is loaded and after legends are initialized
+  initializeEventListeners();
 });
