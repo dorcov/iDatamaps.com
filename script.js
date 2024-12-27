@@ -462,7 +462,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     d3.select("#legendGroup").raise(); // Aduce legendGroup în față
 
-    // If there are no categories, force legend visibility:
+    // Aplicați stilurile din CSS variabile
+    d3.select("#legendTitle")
+      .attr("class", "legend-title");
+
+    d3.selectAll(".legend-text")
+      .attr("class", "legend-text");
+
+    // Dacă nu există categorii, forțați vizibilitatea legendei
     if (!categories.length) {
       d3.select("#legendGroup").attr("visibility", "visible");
       localStorage.setItem("legendVisibility", "visible");
@@ -895,7 +902,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("height", 200)
       .attr("rx", 4)
       .attr("ry", 4)
-      .attr("fill", "rgba(255, 255, 255, 0.8)");
+      .attr("fill", "rgba(255, 255, 255, var(--legend-bg-transparency, 0.8))"); // Utilizare variabilă CSS
 
     legendGroup.append("text")
       .attr("id", "legendTitle")
@@ -920,7 +927,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("height", 60)
       .attr("rx", 4)
       .attr("ry", 4)
-      .attr("fill", "rgba(255, 255, 255, 0.8)");
+      .attr("fill", "rgba(255, 255, 255, var(--legend-bg-transparency, 0.8))"); // Utilizare variabilă CSS
 
     // Force both legends to be visible initially
     localStorage.setItem("legendVisibility", "visible");
@@ -1111,13 +1118,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const color = legendColor.value;
     const bgTransparency = legendBgTransparency.value;
 
+    // Separă font-style și font-weight
+    const fontWeight = fontStyle.includes("bold") ? "bold" : "normal";
+    const computedFontStyle = legendFontStyle.value.includes("italic") ? "italic" : "normal";
+
     // Aplică stilurile folosind variabile CSS
     document.documentElement.style.setProperty('--legend-font', font);
     document.documentElement.style.setProperty('--legend-font-size', fontSize);
-    document.documentElement.style.setProperty('--legend-font-style', finalFontStyle);
+    document.documentElement.style.setProperty('--legend-font-style', computedFontStyle);
+    document.documentElement.style.setProperty('--legend-font-weight', fontWeight);
     document.documentElement.style.setProperty('--legend-color', color);
     document.documentElement.style.setProperty('--legend-bg-transparency', bgTransparency);
-    
+
     // Regenerează legendele pentru a aplica noile stiluri
     generateBothLegends();
   }

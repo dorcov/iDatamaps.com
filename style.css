@@ -921,6 +921,7 @@ td.select-category select {
   font-family: var(--legend-font, 'Roboto, sans-serif');
   font-size: var(--legend-font-size, 14px);
   font-style: var(--legend-font-style, normal);
+  font-weight: var(--legend-font-weight, normal);
   color: var(--legend-color, #000000);
   background-color: rgba(255, 255, 255, var(--legend-bg-transparency, 0.8));
 }
@@ -929,6 +930,24 @@ td.select-category select {
   font-family: var(--legend-font, 'Roboto, sans-serif');
   font-size: var(--legend-font-size, 14px);
   font-style: var(--legend-font-style, normal);
+  font-weight: var(--legend-font-weight, normal);
   color: var(--legend-color, #000000);
   background-color: rgba(255, 255, 255, var(--legend-bg-transparency, 0.8));
+}
+
+/* Stiluri pentru Texte în Legende */
+.legend-title {
+  font-family: var(--legend-font, 'Roboto, sans-serif');
+  font-size: var(--legend-font-size, 16px);
+  font-style: var(--legend-font-style, normal);
+  font-weight: var(--legend-font-weight, bold);
+  color: var(--legend-color, #000000);
+}
+
+.legend-text {
+  font-family: var(--legend-font, 'Roboto, sans-serif');
+  font-size: var(--legend-font-size, 14px);
+  font-style: var(--legend-font-style, normal);
+  font-weight: var(--legend-font-weight, normal);
+  color: var(--legend-color, #000000);
 }
