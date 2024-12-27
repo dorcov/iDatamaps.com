@@ -915,3 +915,20 @@ td.select-category select {
   text-anchor: middle;
   user-select: none;
 }
+
+/* Stili pentru Legende */
+.legend-group {
+  font-family: var(--legend-font, 'Roboto, sans-serif');
+  font-size: var(--legend-font-size, 14px);
+  font-style: var(--legend-font-style, normal);
+  color: var(--legend-color, #000000);
+  background-color: rgba(255, 255, 255, var(--legend-bg-transparency, 0.8));
+}
+
+.numericLegendGroup {
+  font-family: var(--legend-font, 'Roboto, sans-serif');
+  font-size: var(--legend-font-size, 14px);
+  font-style: var(--legend-font-style, normal);
+  color: var(--legend-color, #000000);
+  background-color: rgba(255, 255, 255, var(--legend-bg-transparency, 0.8));
+}

@@ -571,6 +571,13 @@ document.addEventListener("DOMContentLoaded", () => {
       numericLegendGroup.attr("visibility", "hidden");
       localStorage.setItem("numericLegendVisible", "hidden");
     });
+
+    // Apply styles to numeric legend
+    numericLegendGroup.style("font-family", "var(--legend-font, 'Roboto, sans-serif')")
+                      .style("font-size", "var(--legend-font-size, 14px)")
+                      .style("font-style", "var(--legend-font-style, normal)")
+                      .style("color", "var(--legend-color, #000000)")
+                      .style("background-color", `rgba(255, 255, 255, var(--legend-bg-transparency, 0.8))`);
   }
 
   // Afișăm ambele legende după ce actualizăm tabelul/gradientul
@@ -1087,4 +1094,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Apelăm restaurarea setărilor la încărcarea paginii
   restoreValuesSettings();
+
+  // Referințe la noile elemente de stilizare legende
+  const legendFont = document.getElementById("legendFont");
+  const legendFontSize = document.getElementById("legendFontSize");
+  const legendFontStyle = document.getElementById("legendFontStyle");
+  const legendColor = document.getElementById("legendColor");
+  const legendBgTransparency = document.getElementById("legendBgTransparency");
+
+  // Funcție pentru aplicarea stilurilor la legendă
+  function applyLegendStyles() {
+    const font = legendFont.value;
+    const fontSize = legendFontSize.value + "px";
+    const fontStyle = legendFontStyle.value.includes("bold") ? "bold " : "";
+    const finalFontStyle = fontStyle + (legendFontStyle.value.includes("italic") ? "italic" : "normal");
+    const color = legendColor.value;
+    const bgTransparency = legendBgTransparency.value;
+
+    // Aplică stilurile folosind variabile CSS
+    document.documentElement.style.setProperty('--legend-font', font);
+    document.documentElement.style.setProperty('--legend-font-size', fontSize);
+    document.documentElement.style.setProperty('--legend-font-style', finalFontStyle);
+    document.documentElement.style.setProperty('--legend-color', color);
+    document.documentElement.style.setProperty('--legend-bg-transparency', bgTransparency);
+    
+    // Regenerează legendele pentru a aplica noile stiluri
+    generateBothLegends();
+  }
+
+  // Adaugă evenimente pentru noile controale
+  if (legendFont) {
+    legendFont.addEventListener("change", applyLegendStyles);
+  } else {
+    console.error("Elementul cu ID 'legendFont' nu a fost găsit.");
+  }
+
+  if (legendFontSize) {
+    legendFontSize.addEventListener("input", applyLegendStyles);
+  } else {
+    console.error("Elementul cu ID 'legendFontSize' nu a fost găsit.");
+  }
+
+  if (legendFontStyle) {
+    legendFontStyle.addEventListener("change", applyLegendStyles);
+  } else {
+    console.error("Elementul cu ID 'legendFontStyle' nu a fost găsit.");
+  }
+
+  if (legendColor) {
+    legendColor.addEventListener("input", applyLegendStyles);
+  } else {
+    console.error("Elementul cu ID 'legendColor' nu a fost găsit.");
+  }
+
+  if (legendBgTransparency) {
+    legendBgTransparency.addEventListener("input", applyLegendStyles);
+  } else {
+    console.error("Elementul cu ID 'legendBgTransparency' nu a fost găsit.");
+  }
 });
