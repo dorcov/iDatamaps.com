@@ -178,6 +178,7 @@ body {
   font-family: 'Roboto', sans-serif;
   transition: background-color 0.3s, transform 0.2s;
   margin-top: 5px;
+  cursor: pointer;
 }
 
 .btn-primary {
@@ -332,13 +333,13 @@ td.select-category select {
 .legend-group {
   cursor: move; /* Indică că elementul poate fi mutat */
   pointer-events: all;
-  z-index: 10;
+  z-index: 1000;
 }
 
 #legendBackground {
-  fill: rgba(255, 255, 255, 0.0); /* Fundal semi-transparent */
+  fill: rgba(255, 255, 255, 0.8); /* Fundal semi-transparent */
   stroke: #ccc;
-  stroke-width: 0;
+  stroke-width: 1px;
   rx: 4;
   ry: 4;
   filter: none; /* Eliminare umbră */
@@ -347,8 +348,8 @@ td.select-category select {
 
 .legend-title {
   font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: bold;
   fill: #333;
 }
 
