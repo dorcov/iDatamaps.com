@@ -937,17 +937,11 @@ td.select-category select {
 
 /* Stiluri pentru Texte în Legende */
 .legend-title {
-  font-family: var(--legend-font, 'Roboto, sans-serif');
-  font-size: var(--legend-font-size, 16px);
-  font-style: var(--legend-font-style, normal);
-  font-weight: var(--legend-font-weight, bold);
+  /* ...existing styles... */
   color: var(--legend-color, #000000);
 }
 
 .legend-text {
-  font-family: var(--legend-font, 'Roboto, sans-serif');
-  font-size: var(--legend-font-size, 14px);
-  font-style: var(--legend-font-style, normal);
-  font-weight: var(--legend-font-weight, normal);
+  /* ...existing styles... */
   color: var(--legend-color, #000000);
 }
