@@ -522,11 +522,16 @@ document.addEventListener("DOMContentLoaded", () => {
         d3.select("#numericResizeHandle").raise();
       })
       .on("drag", (event) => {
-        const newWidth = Math.max(20, Math.min(event.x - 10, 300));
-        // Ajustăm dimensiunea rect ului
+        const newWidth = Math.max(100, Math.min(event.x - 10, 300)); // Adjusted minimum width for better usability
         numericLegendGroup.select("rect[width='120']").attr("width", newWidth);
-        // Ajustăm poziția mânerului
+        // Adjust the position of texts based on new width
+        numericLegendGroup.selectAll(".numeric-legend-text")
+          .attr("x", newWidth / 2);
+        // Adjust the position of the resize handle
         d3.select("#numericResizeHandle").attr("x", newWidth + 10);
+      })
+      .on("end", (event) => {
+        // Optional: Save the new width to localStorage or state if needed
       });
 
     d3.select("#numericResizeHandle").call(resizeDrag);
