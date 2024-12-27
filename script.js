@@ -547,15 +547,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Afișăm ambele legende după ce actualizăm tabelul/gradientul
   function generateBothLegends() {
+    // Store current visibility states
+    const mainVisible = d3.select("#legendGroup").attr("visibility");
+    const numericVisible = d3.select("#numericLegendGroup").attr("visibility");
+    
+    // Generate legends
     generateLegend();
     generateNumericLegend();
     
-    // Restore visibility states after generation
-    const mainVisible = localStorage.getItem("legendVisibility") || "visible";
-    const numericVisible = localStorage.getItem("numericLegendVisible") || "hidden";
-    
-    d3.select("#legendGroup").attr("visibility", mainVisible);
-    d3.select("#numericLegendGroup").attr("visibility", numericVisible);
+    // Restore visibility states
+    d3.select("#legendGroup").attr("visibility", mainVisible || "visible");
+    d3.select("#numericLegendGroup").attr("visibility", numericVisible || "hidden");
   }
 
   // Funcționalitate Drag-and-Drop pentru Legendă, Titlu și Sursa Datelor
@@ -876,39 +878,32 @@ document.addEventListener("DOMContentLoaded", () => {
     return { legendGroup, numericLegendGroup };
   }
 
-  // Update toggle button handlers
+  // Update the setupLegendControls function with this corrected version:
   function setupLegendControls() {
     const toggleMainBtn = document.getElementById("toggleLegend");
     const toggleNumericBtn = document.getElementById("toggleNumericLegend");
-    const legendGroup = d3.select("#legendGroup");
-    const numericLegendGroup = d3.select("#numericLegendGroup");
 
-    // Set initial states
-    const mainVisible = localStorage.getItem("legendVisibility") || "visible";
-    const numericVisible = localStorage.getItem("numericLegendVisible") || "hidden";
-    
-    legendGroup.attr("visibility", mainVisible);
-    numericLegendGroup.attr("visibility", numericVisible);
+    // Initialize both legends with default visibility
+    const legendGroup = d3.select("#legendGroup")
+      .attr("visibility", "visible");
+    const numericLegendGroup = d3.select("#numericLegendGroup")
+      .attr("visibility", "hidden");
 
     if (toggleMainBtn) {
-      toggleMainBtn.addEventListener("click", () => {
+      toggleMainBtn.addEventListener("click", function() {
         const isVisible = legendGroup.attr("visibility") === "visible";
-        const newState = isVisible ? "hidden" : "visible";
         legendGroup
-          .attr("visibility", newState)
+          .attr("visibility", isVisible ? "hidden" : "visible")
           .raise();
-        localStorage.setItem("legendVisibility", newState);
       });
     }
 
     if (toggleNumericBtn) {
-      toggleNumericBtn.addEventListener("click", () => {
+      toggleNumericBtn.addEventListener("click", function() {
         const isVisible = numericLegendGroup.attr("visibility") === "visible";
-        const newState = isVisible ? "hidden" : "visible";
         numericLegendGroup
-          .attr("visibility", newState)
+          .attr("visibility", isVisible ? "hidden" : "visible")
           .raise();
-        localStorage.setItem("numericLegendVisible", newState);
       });
     }
   }
