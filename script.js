@@ -846,14 +846,6 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  function makeElementsDraggable() {
-    const legendGroup = d3.select("#legendGroup");
-
-    makeElementDraggable(legendGroup.node(), mapContainer);
-  }
-
-  makeElementsDraggable();
-
   // Restore zoom functionality
   const zoom = d3.zoom()
     .scaleExtent([0.5, 8])
