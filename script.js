@@ -607,9 +607,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleNumericLegendBtn = document.getElementById("toggleNumericLegend");
   if (toggleNumericLegendBtn) {
     toggleNumericLegendBtn.addEventListener("click", () => {
-      const isVisible = numericLegendGroup.attr("visibility") !== "hidden";
+      const numericLegend = d3.select("#numericLegendGroup");
+      const isVisible = numericLegend.attr("visibility") === "visible";
       const newState = isVisible ? "hidden" : "visible";
-      numericLegendGroup.attr("visibility", newState);
+      numericLegend.attr("visibility", newState)
+        .raise();
       localStorage.setItem("numericLegendVisible", newState);
     });
   }
@@ -617,32 +619,36 @@ document.addEventListener("DOMContentLoaded", () => {
   // Exportăm harta ca PNG
   if (exportButton) {
     exportButton.addEventListener("click", () => {
-      // Ascundem butoanele de edit și ștergere ale legendei înainte de export
-      const legendEdit = document.getElementById("editLegendTitle");
-      const legendDelete = document.getElementById("deleteLegend");
+      // Ensure both legends are visible during export
+      const legends = svg.selectAll(".legend-group");
+      const originalVisibility = {};
+      
+      // Store current visibility states
+      legends.each(function() {
+        const el = d3.select(this);
+        originalVisibility[el.attr("id")] = el.attr("visibility");
+        el.attr("visibility", "visible");
+      });
 
-      // Ascundem elementele care nu ar trebui să apară în export
-      legendEdit.style.display = "none";
-      legendDelete.style.display = "none";
+      // Export with increased quality
+      html2canvas(document.querySelector(".map-column"), {
+        useCORS: true,
+        scale: 2,
+        backgroundColor: null,
+        logging: true
+      }).then(canvas => {
+        // Create and trigger download
+        const link = document.createElement("a");
+        link.download = "harta.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
 
-      // Exportăm harta
-      html2canvas(document.querySelector(".map-column"), { useCORS: true })
-        .then((canvas) => {
-          const link = document.createElement("a");
-          link.download = "harta.png";
-          link.href = canvas.toDataURL("image/png");
-          link.click();
-
-          // Afișăm din nou butoanele după export
-          legendEdit.style.display = "block";
-          legendDelete.style.display = "block";
-        })
-        .catch((err) => {
-          console.error("Export error:", err);
-          // Afișăm din nou butoanele în caz de eroare
-          legendEdit.style.display = "block";
-          legendDelete.style.display = "block";
+        // Restore original visibility states
+        legends.each(function() {
+          const el = d3.select(this);
+          el.attr("visibility", originalVisibility[el.attr("id")]);
         });
+      });
     });
   } else {
     console.error("Elementul cu ID 'exportMap' nu a fost găsit.");
@@ -837,33 +843,20 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("visibility", "visible")
       .attr("transform", "translate(20, 20)");
 
-    // Main legend background
-    legendGroup.append("rect")
-      .attr("id", "legendBackground")
-      .attr("width", 180)
-      .attr("height", 200)
-      .attr("rx", 4)
-      .attr("ry", 4)
-      .attr("fill", "rgba(255, 255, 255, 0.8)");
-
-    // Main legend title
-    legendGroup.append("text")
-      .attr("id", "legendTitle")
-      .attr("x", 10)
-      .attr("y", 20)
-      .attr("class", "legend-title")
-      .text("Legendă");
-
-    // Container for legend items
-    legendGroup.append("g")
-      .attr("id", "legendItems");
-
-    // Create numeric legend
+    // Create numeric legend with initial content
     const numericLegendGroup = svg.append("g")
       .attr("id", "numericLegendGroup")
       .attr("class", "legend-group")
-      .attr("visibility", "hidden")
-      .attr("transform", "translate(20, 240)");
+      .attr("transform", "translate(20, 240)")
+      .attr("visibility", localStorage.getItem("numericLegendVisible") || "hidden");
+
+    // Add background to numeric legend
+    numericLegendGroup.append("rect")
+      .attr("width", 180)
+      .attr("height", 60)
+      .attr("rx", 4)
+      .attr("ry", 4)
+      .attr("fill", "rgba(255, 255, 255, 0.8)");
 
     return { legendGroup, numericLegendGroup };
   }
