@@ -47,6 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let selectedTextBox = null;
   const mapContainer = document.querySelector('.map-column');
 
+  // Adăugăm un nou grup pentru legenda numerică
+  const numericLegendGroup = svg.append("g")
+    .attr("id", "numericLegendGroup")
+    .attr("class", "legend-group");
+
   // Funcție de debouncing pentru îmbunătățirea performanței
   function debounce(func, wait) {
     let timeout;
@@ -135,12 +140,12 @@ document.addEventListener("DOMContentLoaded", () => {
         categories.splice(index, 1);
         renderCategoryList();
         generateTable(geoDataFeatures); // Regenerează tabelul pentru a actualiza opțiunile de categorie
-        generateLegend(); // Actualizează legenda
+        generateBothLegends(); // Actualizează legenda
         updateMapColors();
       });
     });
 
-    generateLegend(); // Generează legenda după actualizarea listei de categorii
+    generateBothLegends(); // Generează legenda după actualizarea listei de categorii
   }
 
   if (addCategoryButton) {
@@ -246,6 +251,8 @@ document.addEventListener("DOMContentLoaded", () => {
         d3.select(this).attr("fill", "#ccc"); // Gri pentru valoare 0 sau lipsă
       }
     });
+
+    generateBothLegends();
   }
 
   // Calculăm culoarea pe baza gradientului personalizat sau presetat
@@ -375,10 +382,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Eveniment la modificarea valorilor din tabel
     regionTableBody.querySelectorAll("input").forEach((input) => {
-      input.addEventListener("input", debouncedUpdateMapColors);
+      input.addEventListener("input", () => {
+        debouncedUpdateMapColors();
+        generateBothLegends();
+      });
     });
 
-    generateLegend(); // Generează legenda după actualizarea tabelului
+    generateBothLegends(); // Generează legenda după actualizarea tabelului
   }
 
   // Actualizează opțiunile de categorie în tabel
@@ -432,47 +442,65 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("class", "legend-text")
         .text(category.name);
     });
+  }
+
+  // Funcție nouă pentru afișarea legendei numerice
+  function generateNumericLegend() {
+    numericLegendGroup.selectAll("*").remove();
 
     // Calculează valorile minime și maxime din tabel
     const inputs = regionTableBody.querySelectorAll("input");
     const values = Array.from(inputs).map((i) => parseFloat(i.value) || 0);
-    if (values.length > 0) {
-      const minValue = Math.min(...values);
-      const maxValue = Math.max(...values);
+    if (!values.length) return;
 
-      // Definim un gradient liniar pentru afișarea numerică
-      const gradientID = "numericGradient";
-      const gradientDefs = legendItemsGroup.append("defs")
-        .append("linearGradient")
-        .attr("id", gradientID)
-        .attr("x1", "0%").attr("x2", "100%")
-        .attr("y1", "0%").attr("y2", "0%");
-      gradientDefs.selectAll("stop")
-        .data([
-          { offset: "0%", color: currentGradient.start },
-          { offset: "100%", color: currentGradient.end }
-        ])
-        .enter()
-        .append("stop")
-        .attr("offset", d => d.offset)
-        .attr("stop-color", d => d.color);
+    const minValue = Math.min(...values);
+    const maxValue = Math.max(...values);
 
-      // Afișăm bara de gradient numeric
-      const gradientY = 30 + categories.length * 30;
-      legendItemsGroup.append("rect")
-        .attr("x", 10).attr("y", gradientY)
-        .attr("width", 120).attr("height", 10)
-        .style("fill", `url(#${gradientID})`);
+    // Creăm fundal
+    numericLegendGroup.append("rect")
+      .attr("id", "numericLegendBackground")
+      .attr("x", 0).attr("y", 0)
+      .attr("width", 180).attr("height", 60)
+      .attr("rx", 4).attr("ry", 4)
+      .attr("fill", "rgba(255, 255, 255, 0.5)");
 
-      // Afișăm valorile Min și Max
-      legendItemsGroup.append("text")
-        .attr("x", 10).attr("y", gradientY + 24)
-        .text("Min: " + minValue);
-      legendItemsGroup.append("text")
-        .attr("x", 130).attr("y", gradientY + 24)
-        .style("text-anchor", "end")
-        .text("Max: " + maxValue);
-    }
+    // Definim un gradient liniar
+    const gradientID = "numericGradient2";
+    const defs = numericLegendGroup.append("defs")
+      .append("linearGradient")
+      .attr("id", gradientID)
+      .attr("x1", "0%").attr("x2", "100%")
+      .attr("y1", "0%").attr("y2", "0%");
+    defs.selectAll("stop")
+      .data([
+        { offset: "0%", color: currentGradient.start },
+        { offset: "100%", color: currentGradient.end }
+      ])
+      .enter()
+      .append("stop")
+      .attr("offset", d => d.offset)
+      .attr("stop-color", d => d.color);
+
+    // Bara de gradient numeric
+    numericLegendGroup.append("rect")
+      .attr("x", 10).attr("y", 20)
+      .attr("width", 120).attr("height", 10)
+      .style("fill", `url(#${gradientID})`);
+
+    // Valorile Min și Max
+    numericLegendGroup.append("text")
+      .attr("x", 10).attr("y", 40)
+      .text("Min: " + minValue);
+    numericLegendGroup.append("text")
+      .attr("x", 130).attr("y", 40)
+      .style("text-anchor", "end")
+      .text("Max: " + maxValue);
+  }
+
+  // Afișăm ambele legende după ce actualizăm tabelul/gradientul
+  function generateBothLegends() {
+    generateLegend();
+    generateNumericLegend();
   }
 
   // Funcționalitate Drag-and-Drop pentru Legendă, Titlu și Sursa Datelor
@@ -518,6 +546,22 @@ document.addEventListener("DOMContentLoaded", () => {
           // Salvează poziția legendei
           localStorage.setItem("legendPosition", JSON.stringify({ x: event.x, y: event.y }));
         })
+    );
+
+    // Drag pentru numericLegendGroup
+    const numericGroup = d3.select("#numericLegendGroup");
+    numericGroup.call(
+      d3.drag()
+        .on("start", () => {
+          numericGroup.raise();
+          numericGroup.attr("opacity", 0.8);
+        })
+        .on("drag", (event) => {
+          const newX = Math.max(0, Math.min(event.x, mapContainer.clientWidth - numericGroup.node().getBBox().width));
+          const newY = Math.max(0, Math.min(event.y, mapContainer.clientHeight - numericGroup.node().getBBox().height));
+          numericGroup.attr("transform", `translate(${newX}, ${newY})`);
+        })
+        .on("end", () => numericGroup.attr("opacity", 1))
     );
   }
 
