@@ -38,6 +38,7 @@ body {
   /* Eliminare box-shadow */
   box-shadow: none;
   position: relative; /* Pentru a poziționa elementele absolute în interior */
+  overflow: visible !important;
 }
 
 /* Stil pentru footer */
@@ -332,13 +333,14 @@ td.select-category select {
 /* Stil pentru legendă */
 .legend-group {
   cursor: move; /* Indică că elementul poate fi mutat */
-  pointer-events: all;
+  pointer-events: all !important;
+  z-index: 1000 !important;
   user-select: none;
-  z-index: 1000;
 }
 
 #legendGroup, #numericLegendGroup {
   z-index: 1000;
+  cursor: move;
 }
 
 #legendBackground {
