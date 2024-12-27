@@ -40,31 +40,6 @@ body {
   position: relative; /* Pentru a poziționa elementele absolute în interior */
 }
 
-/* Stiluri pentru containerul cu sursa datelor */
-.footer.data-source-group {
-  pointer-events: all;
-  z-index: 10;
-}
-
-.footer.data-source-group rect {
-  fill: rgba(255, 255, 255, 0.8);
-  stroke: #ccc;
-  stroke-width: 1;
-  rx: 4;
-  ry: 4;
-  /* Eliminare box-shadow */
-  filter: none;
-  transition: all 0.3s ease;
-}
-
-.footer.data-source-group text {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  fill: #333;
-  transition: all 0.3s ease;
-  cursor: move;
-}
-
 /* Stil pentru footer */
 .footer {
   position: absolute;
@@ -92,7 +67,7 @@ body {
 
 /* Panoul drept pentru opțiuni */
 .right-panel {
-  flex: 1; /* Ocupă 50% din lățime */
+  flex: 0.5; /* Ocupă 25% din lățime */
   padding: 20px;
   background-color: #ffffff; /* Fundal alb pentru opțiuni */
   overflow-y: auto; /* Adaugă scroll dacă conținutul depășește înălțimea */

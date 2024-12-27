@@ -24,11 +24,6 @@
     <div class="map-column">
       <svg id="mapSVG">
         <g class="map-group"></g>
-        <!-- Grup pentru Sursa datelor -->
-        <g id="dataSourceGroup" class="footer data-source-group">
-          <rect x="0" y="0" width="200" height="30" rx="4" ry="4"></rect>
-          <text id="dataSourceText" x="10" y="20" class="draggable" draggable="true">Sursa datelor: N/A</text>
-        </g>
         <!-- Grup pentru Legendă -->
         <g id="legendGroup" class="legend-group">
           <rect id="legendBackground" x="0" y="0" width="180" height="200" rx="4" ry="4" fill="rgba(255, 255, 255, 0.5)"></rect>
@@ -58,12 +53,6 @@
           <option value="europe.geojson">Europa</option>
           <option value="idataRegions.geojson">Regiuni statistice iData</option>
         </select>
-      </div>
-      
-      <!-- Secțiunea de Sursa Datelor -->
-      <div class="option-section">
-        <h4>Adaugă Sursa Datelor</h4>
-        <input type="text" id="dataSource" class="input-text" placeholder="Introdu Sursa Datelor" />
       </div>
       
       <!-- Secțiunea de Gradient Personalizat și Presetat -->

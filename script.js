@@ -10,8 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const resetButton = document.getElementById("resetAll");
   const svg = d3.select("#mapSVG");
   const gMap = svg.select(".map-group");
-  const dataSourceInput = document.getElementById("dataSource");
-  const dataSourceTextElement = d3.select("#dataSourceText");
 
   const svgWidth = 800;
   const svgHeight = 600;
@@ -45,52 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Declararea tooltip-ului
   const tooltip = d3.select(".tooltip");
 
-  // Referințe la elementele pentru stilizarea titlului (asigură-te că există în HTML)
-  const titleFontSelect = document.getElementById("titleFont");
-  const titleSizeInput = document.getElementById("titleSize");
-  const titleColorInput = document.getElementById("titleColor");
-
-
   // Add these variables at the top with other declarations
   let selectedTextBox = null;
   const mapContainer = document.querySelector('.map-column');
-
-  // Funcție pentru a actualiza sursa datelor
-  function updateDataSource(text) {
-    dataSourceTextElement.text(`Sursa datelor: ${text || "N/A"}`);
-
-    // După actualizarea textului, măsurăm dimensiunea textului
-    setTimeout(() => { // Folosim setTimeout pentru a ne asigura că textul este actualizat în DOM
-      const textElement = document.getElementById("dataSourceText");
-      const bbox = textElement.getBBox();
-
-      // Setăm lățimea dreptunghiului în funcție de lățimea textului + padding
-      const padding = 20; // Ajustează padding-ul după necesități
-      const newWidth = bbox.width + padding;
-
-      // Actualizăm atributul width al rect-ului
-      const rect = document.querySelector(".footer.data-source-group rect");
-      rect.setAttribute("width", newWidth);
-
-      // Poziționăm dreptunghiul astfel încât să înconjoare textul
-      const x = parseFloat(dataSourceTextElement.attr("x")) - 10; // 10px padding stânga
-      const y = parseFloat(dataSourceTextElement.attr("y")) - 14; // Ajustăm pentru vertical
-      rect.setAttribute("x", x);
-      rect.setAttribute("y", y);
-      rect.setAttribute("height", 30); // Asigură o înălțime constantă
-
-      // Opțional: Poți ajusta y în funcție de necesități
-    }, 0);
-  }
-
-  if (dataSourceInput) {
-    // Eveniment pentru actualizarea sursei datelor din input
-    dataSourceInput.addEventListener("input", () => {
-      updateDataSource(dataSourceInput.value);
-    });
-  } else {
-    console.error("Elementul cu ID 'dataSource' nu a fost găsit.");
-  }
 
   // Funcție de debouncing pentru îmbunătățirea performanței
   function debounce(func, wait) {
@@ -244,12 +199,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Ștergem toate categoriile
     categories = [];
     renderCategoryList();
-
-    // Resetăm sursa datelor
-    if (dataSourceInput) {
-      updateDataSource("");
-      dataSourceInput.value = "";
-    }
 
     // Recolorăm harta
     updateMapColors();
@@ -488,7 +437,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Funcționalitate Drag-and-Drop pentru Legendă, Titlu și Sursa Datelor
   function makeElementsDraggable() {
     const legendGroup = d3.select("#legendGroup");
-    const dataSourceGroup = d3.select("#dataSourceGroup");
 
     // Definirea comportamentului de zoom
     const zoom = d3.zoom()
@@ -512,15 +460,6 @@ document.addEventListener("DOMContentLoaded", () => {
       legendGroup.attr("transform", `translate(20, 20)`);
     }
 
-    // Încarcă poziția salvată a sursei datelor
-    const savedDataSourcePosition = JSON.parse(localStorage.getItem("dataSourcePosition"));
-    if (savedDataSourcePosition) {
-      dataSourceGroup.attr("transform", `translate(${savedDataSourcePosition.x}, ${savedDataSourcePosition.y})`);
-    } else {
-      // Setează poziția inițială dacă nu există o poziție salvată
-      dataSourceGroup.attr("transform", `translate(20, 550)`); // Ajustează după necesități
-    }
-
     // Drag pentru Legendă
     legendGroup.call(
       d3.drag()
@@ -537,25 +476,6 @@ document.addEventListener("DOMContentLoaded", () => {
           legendGroup.attr("opacity", 1);
           // Salvează poziția legendei
           localStorage.setItem("legendPosition", JSON.stringify({ x: event.x, y: event.y }));
-        })
-    );
-
-    // Drag pentru Sursa Datelor
-    dataSourceGroup.call(
-      d3.drag()
-        .on("start", () => {
-          dataSourceGroup.raise();
-          dataSourceGroup.attr("opacity", 0.8);
-        })
-        .on("drag", (event) => {
-          const newX = Math.max(0, Math.min(event.x, mapContainer.clientWidth - dataSourceGroup.node().getBBox().width));
-          const newY = Math.max(0, Math.min(event.y, mapContainer.clientHeight - dataSourceGroup.node().getBBox().height));
-          dataSourceGroup.attr("transform", `translate(${newX}, ${newY})`);
-        })
-        .on("end", (event) => {
-          dataSourceGroup.attr("opacity", 1);
-          // Salvează poziția sursei datelor
-          localStorage.setItem("dataSourcePosition", JSON.stringify({ x: event.x, y: event.y }));
         })
     );
   }
@@ -780,10 +700,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function makeElementsDraggable() {
     const legendGroup = d3.select("#legendGroup");
-    const dataSourceGroup = d3.select("#dataSourceGroup");
 
     makeElementDraggable(legendGroup.node(), mapContainer);
-    makeElementDraggable(dataSourceGroup.node(), mapContainer);
   }
 
   makeElementsDraggable();
