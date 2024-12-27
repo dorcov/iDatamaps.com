@@ -450,6 +450,8 @@ document.addEventListener("DOMContentLoaded", () => {
       d3.select("#legendGroup").attr("visibility", "visible");
       localStorage.setItem("legendVisibility", "visible");
     }
+    d3.select("#legendGroup").attr("visibility", "visible");
+    localStorage.setItem("legendVisibility", "visible");
   }
 
   // Funcție nouă pentru afișarea legendei numerice
@@ -577,13 +579,10 @@ document.addEventListener("DOMContentLoaded", () => {
       legendGroup.attr("transform", `translate(20, 20)`);
     }
 
-    // Load stored visibility for the original legend
-    const savedLegendVisibility = localStorage.getItem("legendVisibility");
-    if (savedLegendVisibility) {
-      legendGroup.attr("visibility", savedLegendVisibility);
-    } else {
-      legendGroup.attr("visibility", "visible");
-    }
+    // Remove localStorage check for base legend visibility
+    // legendGroup.attr("visibility", savedLegendVisibility);
+
+    legendGroup.attr("visibility", "visible");
 
     // Drag pentru Legendă
     legendGroup.call(
