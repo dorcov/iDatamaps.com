@@ -51,6 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const { legendGroup, numericLegendGroup } = initializeLegends();
   setupLegendControls();
 
+  // Define projection as a global variable
+  let projection;
+
   // Funcție de debouncing pentru îmbunătățirea performanței
   function debounce(func, wait) {
     let timeout;
@@ -328,7 +331,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       geoDataFeatures = data.features;
 
-      const projection = d3.geoMercator()
+      // Set the projection once
+      projection = d3.geoMercator()
         .fitSize([svgWidth, svgHeight], data);
 
       const path = d3.geoPath().projection(projection);
@@ -1004,12 +1008,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a obține centrul unei regiuni
   function getRegionCentroid(feature) {
-    const projection = d3.geoMercator()
-      .fitSize([svgWidth, svgHeight], { type: "FeatureCollection", features: [feature] });
-
     const centroid = d3.geoCentroid(feature);
     const [x, y] = projection(centroid);
-    return [x + mapContainer.offsetLeft, y + mapContainer.offsetTop];
+    return [x, y];
   }
 
   // Eveniment pentru toggle-ul valorilor
