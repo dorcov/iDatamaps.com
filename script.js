@@ -257,6 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("fill", d => getFillColor(d));
 
     generateBothLegends();
+    updateValueLabels();
   }
 
   // Calculăm culoarea pe baza gradientului personalizat sau presetat
@@ -401,6 +402,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     generateBothLegends(); // Generează legenda după actualizarea tabelului
+    updateValueLabels();
   }
 
   // Actualizează opțiunile de categorie în tabel
@@ -967,4 +969,121 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Call this after DOM content is loaded and after legends are initialized
   initializeEventListeners();
+
+  // Referințe la noile elemente DOM
+  const toggleValuesCheckbox = document.getElementById("toggleValues");
+  const valuesFontSizeInput = document.getElementById("valuesFontSize");
+  const valuesColorInput = document.getElementById("valuesColor");
+
+  // Array pentru a stoca label-urile
+  let valueLabels = [];
+
+  // Funcție pentru a crea label-uri pe hartă
+  function createValueLabels() {
+    // Elimină label-urile existente
+    valueLabels.forEach(label => label.remove());
+    valueLabels = [];
+
+    geoDataFeatures.forEach(feature => {
+      const regionName = encodeURIComponent(feature.properties.NAME || feature.properties.name || feature.properties.region_nam || feature.properties.nume_regiu || "Unknown");
+      const value = getRegionValue(feature);
+      if (value > 0) {
+        const [x, y] = getRegionCentroid(feature);
+        const div = document.createElement('div');
+        div.className = 'value-label';
+        div.style.left = `${x}px`;
+        div.style.top = `${y}px`;
+        div.style.fontSize = `${valuesFontSizeInput.value}px`;
+        div.style.color = valuesColorInput.value;
+        div.innerText = value;
+        mapContainer.appendChild(div);
+        valueLabels.push(div);
+      }
+    });
+  }
+
+  // Funcție pentru a obține centrul unei regiuni
+  function getRegionCentroid(feature) {
+    const projection = d3.geoMercator()
+      .fitSize([svgWidth, svgHeight], { type: "FeatureCollection", features: [feature] });
+
+    const centroid = d3.geoCentroid(feature);
+    const [x, y] = projection(centroid);
+    return [x + mapContainer.offsetLeft, y + mapContainer.offsetTop];
+  }
+
+  // Eveniment pentru toggle-ul valorilor
+  if (toggleValuesCheckbox) {
+    toggleValuesCheckbox.addEventListener("change", () => {
+      if (toggleValuesCheckbox.checked) {
+        createValueLabels();
+        localStorage.setItem("valuesVisible", "true");
+      } else {
+        valueLabels.forEach(label => label.remove());
+        valueLabels = [];
+        localStorage.setItem("valuesVisible", "false");
+      }
+    });
+  } else {
+    console.error("Elementul cu ID 'toggleValues' nu a fost găsit.");
+  }
+
+  // Eveniment pentru schimbarea mărimii fontului
+  if (valuesFontSizeInput) {
+    valuesFontSizeInput.addEventListener("input", () => {
+      valueLabels.forEach(label => {
+        label.style.fontSize = `${valuesFontSizeInput.value}px`;
+      });
+      localStorage.setItem("valuesFontSize", valuesFontSizeInput.value);
+    });
+  } else {
+    console.error("Elementul cu ID 'valuesFontSize' nu a fost găsit.");
+  }
+
+  // Eveniment pentru schimbarea culorii fontului
+  if (valuesColorInput) {
+    valuesColorInput.addEventListener("input", () => {
+      valueLabels.forEach(label => {
+        label.style.color = valuesColorInput.value;
+      });
+      localStorage.setItem("valuesColor", valuesColorInput.value);
+    });
+  } else {
+    console.error("Elementul cu ID 'valuesColor' nu a fost găsit.");
+  }
+
+  // Funcție pentru a actualiza label-urile atunci când harta se încarcă sau se actualizează
+  function updateValueLabels() {
+    if (toggleValuesCheckbox.checked) {
+      createValueLabels();
+    }
+  }
+
+  // Restore values visibility and styles from localStorage
+  function restoreValuesSettings() {
+    const valuesVisible = localStorage.getItem("valuesVisible") === "true";
+    toggleValuesCheckbox.checked = valuesVisible;
+    if (valuesVisible) {
+      createValueLabels();
+    }
+
+    const savedFontSize = localStorage.getItem("valuesFontSize");
+    if (savedFontSize) {
+      valuesFontSizeInput.value = savedFontSize;
+      valueLabels.forEach(label => {
+        label.style.fontSize = `${savedFontSize}px`;
+      });
+    }
+
+    const savedColor = localStorage.getItem("valuesColor");
+    if (savedColor) {
+      valuesColorInput.value = savedColor;
+      valueLabels.forEach(label => {
+        label.style.color = savedColor;
+      });
+    }
+  }
+
+  // Apelăm restaurarea setărilor la încărcarea paginii
+  restoreValuesSettings();
 });

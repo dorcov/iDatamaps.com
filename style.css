@@ -884,3 +884,34 @@ td.select-category select {
 .numeric-legend-text {
   text-anchor: middle;
 }
+
+/* Control Values Section */
+.control-values {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.control-values label {
+  font-size: 14px;
+  color: #555555;
+}
+
+.control-values input[type="number"],
+.control-values input[type="color"] {
+  padding: 6px 10px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Value Labels Styling */
+.value-label {
+  position: absolute;
+  pointer-events: none;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #000000;
+  text-anchor: middle;
+  user-select: none;
+}
