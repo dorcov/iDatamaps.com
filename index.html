@@ -24,16 +24,7 @@
     <div class="map-column">
       <svg id="mapSVG">
         <g class="map-group"></g>
-        <!-- Grup pentru Legendă -->
-        <g id="legendGroup" class="legend-group">
-          <rect id="legendBackground" x="0" y="0" width="180" height="200" rx="4" ry="4" fill="rgba(255, 255, 255, 0.5)"></rect>
-          <text id="legendTitle" x="10" y="20" class="legend-title">Legendă</text>
-          <!-- Categoria entries vor fi adăugate din JavaScript -->
-          <g id="legendItems"></g>
-          <!-- Butoane pentru editarea și ștergerea legendei -->
-          <text id="editLegendTitle" x="160" y="10" class="legend-edit" cursor="pointer">✏️</text>
-          <text id="deleteLegend" x="160" y="30" class="legend-delete" cursor="pointer">🗑️</text>
-        </g>
+        <!-- Remove the static legendGroup from here since we create it in JS -->
       </svg>
       
       <!-- Footer în dreapta jos -->

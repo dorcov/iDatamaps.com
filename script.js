@@ -53,6 +53,34 @@ document.addEventListener("DOMContentLoaded", () => {
     .attr("class", "legend-group")
     .attr("visibility", "hidden"); // implicit ascuns
 
+  // Initialize the legendGroup right after SVG creation
+  const legendGroup = svg.append("g")
+    .attr("id", "legendGroup")
+    .attr("class", "legend-group")
+    .attr("visibility", "visible");
+
+  // Add background and title to legend
+  legendGroup.append("rect")
+    .attr("id", "legendBackground")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 180)
+    .attr("height", 200)
+    .attr("rx", 4)
+    .attr("ry", 4)
+    .attr("fill", "rgba(255, 255, 255, 0.5)");
+
+  legendGroup.append("text")
+    .attr("id", "legendTitle")
+    .attr("x", 10)
+    .attr("y", 20)
+    .attr("class", "legend-title")
+    .text("Legendă");
+
+  // Create legendItems group
+  legendGroup.append("g")
+    .attr("id", "legendItems");
+
   // Funcție de debouncing pentru îmbunătățirea performanței
   function debounce(func, wait) {
     let timeout;
