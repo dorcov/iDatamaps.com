@@ -47,39 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let selectedTextBox = null;
   const mapContainer = document.querySelector('.map-column');
 
-  // Adăugăm un nou grup pentru legenda numerică, ascuns by default
-  const numericLegendGroup = svg.append("g")
-    .attr("id", "numericLegendGroup")
-    .attr("class", "legend-group")
-    .attr("visibility", "hidden"); // implicit ascuns
-
   // Initialize the legendGroup right after SVG creation
-  const legendGroup = svg.append("g")
-    .attr("id", "legendGroup")
-    .attr("class", "legend-group")
-    .attr("visibility", "visible");
-
-  // Add background and title to legend
-  legendGroup.append("rect")
-    .attr("id", "legendBackground")
-    .attr("x", 0)
-    .attr("y", 0)
-    .attr("width", 180)
-    .attr("height", 200)
-    .attr("rx", 4)
-    .attr("ry", 4)
-    .attr("fill", "rgba(255, 255, 255, 0.5)");
-
-  legendGroup.append("text")
-    .attr("id", "legendTitle")
-    .attr("x", 10)
-    .attr("y", 20)
-    .attr("class", "legend-title")
-    .text("Legendă");
-
-  // Create legendItems group
-  legendGroup.append("g")
-    .attr("id", "legendItems");
+  const { legendGroup, numericLegendGroup } = initializeLegends();
+  setupLegendControls();
 
   // Funcție de debouncing pentru îmbunătățirea performanței
   function debounce(func, wait) {
@@ -583,79 +553,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcționalitate Drag-and-Drop pentru Legendă, Titlu și Sursa Datelor
   function makeElementsDraggable() {
-    const legendGroup = d3.select("#legendGroup");
+    const legends = [
+      { element: "#legendGroup", defaultX: 20, defaultY: 20 },
+      { element: "#numericLegendGroup", defaultX: 20, defaultY: 240 }
+    ];
 
-    // Definirea comportamentului de zoom
-    const zoom = d3.zoom()
-      .scaleExtent([0.5, 8]) // Intervalul de zoom: de la 0.5 (normal) la 8 (mărire maximă)
-      .on("zoom", zoomed);
+    legends.forEach(({ element, defaultX, defaultY }) => {
+      const group = d3.select(element);
+      const savedPos = JSON.parse(localStorage.getItem(`${element}Position`));
+      
+      if (savedPos) {
+        group.attr("transform", `translate(${savedPos.x}, ${savedPos.y})`);
+      } else {
+        group.attr("transform", `translate(${defaultX}, ${defaultY})`);
+      }
 
-    // Aplicarea comportamentului de zoom la SVG
-    svg.call(zoom);
-
-    // Funcția care se execută la zoom/pan
-    function zoomed(event) {
-      gMap.attr("transform", event.transform);
-    }
-
-    // Încarcă poziția salvată a legendei
-    const savedLegendPosition = JSON.parse(localStorage.getItem("legendPosition"));
-    if (savedLegendPosition) {
-      legendGroup.attr("transform", `translate(${savedLegendPosition.x}, ${savedLegendPosition.y})`);
-    } else {
-      // Setează poziția inițială dacă nu există o poziție salvată
-      legendGroup.attr("transform", `translate(20, 20)`);
-    }
-
-    // Remove localStorage check for base legend visibility
-    // legendGroup.attr("visibility", savedLegendVisibility);
-
-    legendGroup.attr("visibility", "visible");
-
-    // Drag pentru Legendă
-    legendGroup.call(
-      d3.drag()
-        .on("start", () => {
-          legendGroup.raise();
-          legendGroup.attr("opacity", 0.8);
-        })
-        .on("drag", (event) => {
-          const newX = Math.max(0, Math.min(event.x, mapContainer.clientWidth - legendGroup.node().getBBox().width));
-          const newY = Math.max(0, Math.min(event.y, mapContainer.clientHeight - legendGroup.node().getBBox().height));
-          legendGroup.attr("transform", `translate(${newX}, ${newY})`);
-        })
-        .on("end", (event) => {
-          legendGroup.attr("opacity", 1);
-          // Salvează poziția legendei
-          localStorage.setItem("legendPosition", JSON.stringify({ x: event.x, y: event.y }));
-        })
-    );
-
-    // Drag pentru numericLegendGroup
-    const numericGroup = d3.select("#numericLegendGroup");
-    const savedNumericPos = JSON.parse(localStorage.getItem("numericLegendPos"));
-    if (savedNumericPos) {
-      numericGroup.attr("transform", `translate(${savedNumericPos.x}, ${savedNumericPos.y})`);
-    }
-    const savedNumericVisibility = localStorage.getItem("numericLegendVisible");
-    if (savedNumericVisibility) {
-      numericGroup.attr("visibility", savedNumericVisibility);
-    }
-
-    numericGroup.call(
-      d3.drag()
-        .on("start", () => {
-          numericGroup.raise();
-          numericGroup.attr("opacity", 0.8);
-        })
-        .on("drag", (event) => {
-          numericGroup.attr("transform", `translate(${event.x}, ${event.y})`);
-        })
-        .on("end", (event) => {
-          numericGroup.attr("opacity", 1);
-          localStorage.setItem("numericLegendPos", JSON.stringify({ x: event.x, y: event.y }));
-        })
-    );
+      group.call(
+        d3.drag()
+          .on("start", () => {
+            group.raise().attr("opacity", 0.8);
+          })
+          .on("drag", (event) => {
+            group.attr("transform", `translate(${event.x}, ${event.y})`);
+          })
+          .on("end", (event) => {
+            group.attr("opacity", 1);
+            localStorage.setItem(`${element}Position`, JSON.stringify({ x: event.x, y: event.y }));
+          })
+      );
+    });
   }
 
   // Apelăm funcția pentru a face legenda, titlul și sursa de date draggable
@@ -898,4 +824,69 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   svg.call(zoom);
+
+  // After SVG initialization, add:
+  function initializeLegends() {
+    // Clear any existing legends
+    svg.selectAll(".legend-group").remove();
+
+    // Create main legend
+    const legendGroup = svg.append("g")
+      .attr("id", "legendGroup")
+      .attr("class", "legend-group")
+      .attr("visibility", "visible")
+      .attr("transform", "translate(20, 20)");
+
+    // Main legend background
+    legendGroup.append("rect")
+      .attr("id", "legendBackground")
+      .attr("width", 180)
+      .attr("height", 200)
+      .attr("rx", 4)
+      .attr("ry", 4)
+      .attr("fill", "rgba(255, 255, 255, 0.8)");
+
+    // Main legend title
+    legendGroup.append("text")
+      .attr("id", "legendTitle")
+      .attr("x", 10)
+      .attr("y", 20)
+      .attr("class", "legend-title")
+      .text("Legendă");
+
+    // Container for legend items
+    legendGroup.append("g")
+      .attr("id", "legendItems");
+
+    // Create numeric legend
+    const numericLegendGroup = svg.append("g")
+      .attr("id", "numericLegendGroup")
+      .attr("class", "legend-group")
+      .attr("visibility", "hidden")
+      .attr("transform", "translate(20, 240)");
+
+    return { legendGroup, numericLegendGroup };
+  }
+
+  // Update toggle button handlers
+  function setupLegendControls() {
+    const toggleMainBtn = document.getElementById("toggleLegend");
+    const toggleNumericBtn = document.getElementById("toggleNumericLegend");
+
+    if (toggleMainBtn) {
+      toggleMainBtn.addEventListener("click", () => {
+        const legendGroup = d3.select("#legendGroup");
+        const isVisible = legendGroup.attr("visibility") === "visible";
+        legendGroup.attr("visibility", isVisible ? "hidden" : "visible");
+      });
+    }
+
+    if (toggleNumericBtn) {
+      toggleNumericBtn.addEventListener("click", () => {
+        const numericLegend = d3.select("#numericLegendGroup");
+        const isVisible = numericLegend.attr("visibility") === "visible";
+        numericLegend.attr("visibility", isVisible ? "hidden" : "visible");
+      });
+    }
+  }
 });
