@@ -1336,26 +1336,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleMapLockButton = document.getElementById('toggleMapLock');
 
   function lockAllInteractions() {
-    // Dezactivează zoom și pan pentru hartă
-    svg.on('.zoom', null);
+    // Disable zoom and pan
+    svg.on(".zoom", null);
     
-    // Dezactivează drag pentru legende
-    d3.selectAll('.legend-group').style('pointer-events', 'none');
+    // Disable dragging for legends
+    d3.selectAll('.legend-group')
+      .style('pointer-events', 'none')
+      .style('cursor', 'default');
     
-    // Dezactivează drag pentru texte libere
+    // Disable text editing and dragging
     document.querySelectorAll('.free-text-container').forEach(el => {
       el.contentEditable = false;
       el.style.cursor = 'default';
       el.style.pointerEvents = 'none';
     });
     
-    // Dezactivează drag pentru forme
+    // Disable shape dragging
     document.querySelectorAll('.shape').forEach(el => {
       el.style.pointerEvents = 'none';
       el.style.cursor = 'default';
     });
     
-    // Dezactivează selecția textului
+    // Disable text selection
     mapContainer.style.userSelect = 'none';
     
     toggleMapLockButton.textContent = 'Deblochează Harta';
@@ -1363,26 +1365,28 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   function unlockAllInteractions() {
-    // Reactivează zoom și pan pentru hartă
+    // Re-enable zoom and pan
     applyZoomBehavior();
     
-    // Reactivează drag pentru legende
-    d3.selectAll('.legend-group').style('pointer-events', 'all');
+    // Re-enable legend dragging
+    d3.selectAll('.legend-group')
+      .style('pointer-events', 'all')
+      .style('cursor', 'move');
     
-    // Reactivează drag pentru texte libere
+    // Re-enable text editing and dragging
     document.querySelectorAll('.free-text-container').forEach(el => {
       el.contentEditable = true;
       el.style.cursor = 'move';
       el.style.pointerEvents = 'auto';
     });
     
-    // Reactivează drag pentru forme
+    // Re-enable shape dragging
     document.querySelectorAll('.shape').forEach(el => {
       el.style.pointerEvents = 'auto';
       el.style.cursor = 'move';
     });
     
-    // Reactivează selecția textului
+    // Re-enable text selection
     mapContainer.style.userSelect = 'auto';
     
     toggleMapLockButton.textContent = 'Blochează Harta';
@@ -1407,4 +1411,76 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     svg.call(zoom);
   }
+
+  // Define zoom behavior globaly
+  const zoomBehavior = d3.zoom()
+    .scaleExtent([0.5, 8])
+    .on("zoom", (event) => {
+      gMap.attr("transform", event.transform);
+    });
+
+  function applyZoomBehavior() {
+    svg.call(zoomBehavior);
+  }
+
+  function lockAllInteractions() {
+    // Disable zoom and pan
+    svg.on(".zoom", null);
+    
+    // Disable dragging for legends
+    d3.selectAll('.legend-group')
+      .style('pointer-events', 'none')
+      .style('cursor', 'default');
+    
+    // Disable text editing and dragging
+    document.querySelectorAll('.free-text-container').forEach(el => {
+      el.contentEditable = false;
+      el.style.cursor = 'default';
+      el.style.pointerEvents = 'none';
+    });
+    
+    // Disable shape dragging
+    document.querySelectorAll('.shape').forEach(el => {
+      el.style.pointerEvents = 'none';
+      el.style.cursor = 'default';
+    });
+    
+    // Disable text selection
+    mapContainer.style.userSelect = 'none';
+    
+    toggleMapLockButton.textContent = 'Deblochează Harta';
+    toggleMapLockButton.classList.add('active');
+  }
+
+  function unlockAllInteractions() {
+    // Re-enable zoom and pan
+    applyZoomBehavior();
+    
+    // Re-enable legend dragging
+    d3.selectAll('.legend-group')
+      .style('pointer-events', 'all')
+      .style('cursor', 'move');
+    
+    // Re-enable text editing and dragging
+    document.querySelectorAll('.free-text-container').forEach(el => {
+      el.contentEditable = true;
+      el.style.cursor = 'move';
+      el.style.pointerEvents = 'auto';
+    });
+    
+    // Re-enable shape dragging
+    document.querySelectorAll('.shape').forEach(el => {
+      el.style.pointerEvents = 'auto';
+      el.style.cursor = 'move';
+    });
+    
+    // Re-enable text selection
+    mapContainer.style.userSelect = 'auto';
+    
+    toggleMapLockButton.textContent = 'Blochează Harta';
+    toggleMapLockButton.classList.remove('active');
+  }
+
+  // Initialize zoom behavior
+  applyZoomBehavior();
 });
