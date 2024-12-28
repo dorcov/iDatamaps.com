@@ -1089,4 +1089,14 @@ svg .selected {
   background-color: #c0392b;
 }
 
+/* Highlight selected shape */
+.rectangle, .circle {
+  cursor: pointer;
+}
+
+.rectangle:hover, .circle:hover {
+  stroke: #555;
+  stroke-width: 1.5;
+}
+
 /* ...existing code... */

@@ -1385,33 +1385,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to handle adding a rectangle
   function handleAddRectangle() {
-    const rect = gMap.append("rect")
-      .attr("x", 100)
-      .attr("y", 100)
-      .attr("width", 100)
-      .attr("height", 50)
-      .attr("fill", "#ff0000")
-      .attr("stroke", "none")
-      .attr("class", "shape rectangle")
-      .call(d3.drag()
-        .on("drag", dragged))
-      .on("click", selectShape);
+    const rect = gMap.append('rect')
+      .attr('x', svgWidth / 2 - 50)
+      .attr('y', svgHeight / 2 - 25)
+      .attr('width', 100)
+      .attr('height', 50)
+      .attr('fill', currentGradient.start)
+      .attr('opacity', currentGradient.end)
+      .attr('class', 'rectangle'); // Assign 'rectangle' class
+  
+    rect.on('click', selectShape);
   }
-
+  
   // Function to handle adding a circle
   function handleAddCircle() {
-    const circle = gMap.append("circle")
-      .attr("cx", 200)
-      .attr("cy", 200)
-      .attr("r", 50)
-      .attr("fill", "#0000ff")
-      .attr("stroke", "none")
-      .attr("class", "shape circle")
-      .call(d3.drag()
-        .on("drag", dragged))
-      .on("click", selectShape);
+    const circle = gMap.append('circle')
+      .attr('cx', svgWidth / 2)
+      .attr('cy', svgHeight / 2)
+      .attr('r', 50)
+      .attr('fill', currentGradient.start)
+      .attr('opacity', currentGradient.end)
+      .attr('class', 'circle'); // Assign 'circle' class
+  
+    circle.on('click', selectShape);
   }
-
+  
+  // Function to select a shape
+  function selectShape(event, d) {
+    if (selectedShape) {
+      selectedShape.style('stroke', null);
+    }
+  
+    selectedShape = d3.select(this);
+    selectedShape.style('stroke', '#0000FF')
+                .style('stroke-width', 2);
+  
+    updateShapeControls();
+  }
+  
   // Function to handle dragging a shape
   function dragged(event, d) {
     const element = d3.select(this);
@@ -1422,17 +1433,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     // Add handling for other shapes if necessary
   }
-
-  // Function to select a shape
-  function selectShape(event, d) {
-    if (selectedShape) {
-      selectedShape.attr("stroke", "none");
-    }
-    selectedShape = d3.select(this);
-    selectedShape.attr("stroke", "black");
-    updateShapeControls();
-  }
-
+  
   // Function to remove the selected shape
   function handleRemoveShape() {
     if (selectedShape) {
@@ -1443,7 +1444,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Selectați o formă pentru a o elimina.");
     }
   }
-
+  
   // References to shape control elements
   const shapeControls = document.getElementById('shapeControls');
   const shapeColorInput = document.getElementById('shapeColor');
@@ -1451,7 +1452,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const shapeWidthInput = document.getElementById('shapeWidth');
   const shapeHeightInput = document.getElementById('shapeHeight');
   const deleteShapeButton = document.getElementById('deleteShape');
-
+  
   // Function to show or hide shape controls based on selection
   function updateShapeControls() {
     if (selectedShape) {
@@ -1477,7 +1478,7 @@ document.addEventListener("DOMContentLoaded", () => {
       shapeControls.style.display = 'none';
     }
   }
-
+  
   // Event listeners for shape controls
   if (shapeColorInput) {
     shapeColorInput.addEventListener('input', () => {
@@ -1488,7 +1489,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Elementul cu ID 'shapeColor' nu a fost găsit.");
   }
-
+  
   if (shapeTransparencyInput) {
     shapeTransparencyInput.addEventListener('input', () => {
       if (selectedShape) {
@@ -1498,28 +1499,29 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Elementul cu ID 'shapeTransparency' nu a fost găsit.");
   }
-
+  
   if (shapeWidthInput) {
     shapeWidthInput.addEventListener('input', () => {
       if (selectedShape && selectedShape.classed('rectangle')) {
         selectedShape.attr('width', shapeWidthInput.value);
+        selectedShape.attr('x', selectedShape.attr('x')); // Optional: Adjust position if needed
       }
     });
   } else {
     console.error("Elementul cu ID 'shapeWidth' nu a fost găsit.");
   }
-
+  
   if (shapeHeightInput) {
     shapeHeightInput.addEventListener('input', () => {
       if (selectedShape && selectedShape.classed('rectangle')) {
         selectedShape.attr('height', shapeHeightInput.value);
+        selectedShape.attr('y', selectedShape.attr('y')); // Optional: Adjust position if needed
       }
     });
   } else {
     console.error("Elementul cu ID 'shapeHeight' nu a fost găsit.");
   }
-
-  // Event listener for delete button
+  
   if (deleteShapeButton) {
     deleteShapeButton.addEventListener('click', () => {
       if (selectedShape) {
@@ -1533,7 +1535,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Elementul cu ID 'deleteShape' nu a fost găsit.");
   }
-
+  
   // Helper function to convert RGB to Hex
   function rgbToHex(rgb) {
     // Handle rgb or hex inputs
@@ -1546,5 +1548,5 @@ document.addEventListener("DOMContentLoaded", () => {
       ("0" + parseInt(result[2], 10).toString(16)).slice(-2) +
       ("0" + parseInt(result[3], 10).toString(16)).slice(-2) : '#000000';
   }
-
+  
 });
