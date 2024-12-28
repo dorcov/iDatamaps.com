@@ -952,3 +952,17 @@ td.select-category select {
   font-weight: var(--legend-font-weight, normal);
   color: var(--legend-color, #000000);
 }
+
+.legend-title,
+.legend-text {
+  fill: var(--legend-color, #000);
+  font-family: var(--legend-font, 'Roboto, sans-serif');
+  font-size: var(--legend-font-size, 14px);
+  font-style: var(--legend-font-style, normal);
+  font-weight: var(--legend-font-weight, normal);
+}
+
+#legendBackground,
+#numericLegendBackground {
+  fill: rgba(255, 255, 255, var(--legend-bg-transparency, 0.8));
+}
