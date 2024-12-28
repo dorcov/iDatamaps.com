@@ -44,7 +44,40 @@
           <option value="idataRegions.geojson">Regiuni statistice iData</option>
         </select>
       </div>
-      
+
+      <!-- Secțiunea de Setări Canvas -->
+      <div class="option-section">
+        <h4>Canvas Settings</h4>
+        <label for="canvasColor">Canvas Color:</label>
+        <input type="color" id="canvasColor" value="#ffffff" />
+
+        <label for="canvasTransparency">Canvas Transparency:</label>
+        <input type="range" id="canvasTransparency" min="0" max="1" step="0.1" value="1" />
+
+        <label for="canvasWidth">Canvas Width (px):</label>
+        <input type="number" id="canvasWidth" value="800" />
+
+        <label for="canvasHeight">Canvas Height (px):</label>
+        <input type="number" id="canvasHeight" value="600" />
+      </div>
+
+      <!-- Secțiunea de Gestionare Categorii -->
+      <div class="option-section">
+        <h4>Gestionare Categorii</h4>
+        <div class="category-manager">
+          <div class="add-category">
+            <input type="text" id="newCategoryName" class="input-text" placeholder="Nume Categorie" />
+            <input type="color" id="newCategoryColor" value="#FF5733" />
+            <button id="addCategory" class="btn btn-primary">Adaugă Categorie</button>
+          </div>
+          <div class="category-list">
+            <ul id="categoryList">
+              <!-- Categorii adăugate din JavaScript -->
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <!-- Secțiunea de Gradient Personalizat și Presetat -->
       <div class="option-section">
         <h4>Selectează Gradient</h4>
@@ -92,24 +125,7 @@
           </div>
         </div>
       </div>
-      
-      <!-- Secțiunea de Categorii -->
-      <div class="option-section">
-        <h4>Gestionare Categorii</h4>
-        <div class="category-manager">
-          <div class="add-category">
-            <input type="text" id="newCategoryName" class="input-text" placeholder="Nume Categorie" />
-            <input type="color" id="newCategoryColor" value="#FF5733" />
-            <button id="addCategory" class="btn btn-primary">Adaugă Categorie</button>
-          </div>
-          <div class="category-list">
-            <ul id="categoryList">
-              <!-- Categorii adăugate din JavaScript -->
-            </ul>
-          </div>
-        </div>
-      </div>
-      
+
       <!-- Secțiunea de Tabel de Date -->
       <div class="option-section">
         <h4>Tabel de Date</h4>
@@ -128,23 +144,20 @@
           </table>
         </div>
       </div>
-      
-      <!-- Secțiunea de Resetare și Export -->
-      <div class="option-section">
-        <div class="button-group">
-          <button id="resetAll" class="btn btn-reset">Resetează datele</button>
-          <button id="exportMap" class="btn btn-export">Exportă ca PNG</button>
-        </div>
-      </div>
-    
-      <!-- Secțiunea pentru a controla vizibilitatea legendei -->
-      <div class="option-section">
-        <button id="toggleLegend" class="btn btn-primary">Ascunde/Adaugă Legenda</button>
-      </div>
 
-      <!-- Secțiunea pentru a controla vizibilitatea legendei numerice -->
+      <!-- Secțiunea pentru Controlul Valorilor pe Harta -->
       <div class="option-section">
-        <button id="toggleNumericLegend" class="btn btn-primary">Afișează/Ascunde Legenda Numerică</button>
+        <h4>Control Valori pe Harta</h4>
+        <div class="control-values">
+          <label for="toggleValues">Afișează/Ascunde Valorile:</label>
+          <input type="checkbox" id="toggleValues" checked />
+          
+          <label for="valuesFontSize">Mărime Font:</label>
+          <input type="number" id="valuesFontSize" class="input-text" value="14" min="10" max="50" />
+          
+          <label for="valuesColor">Culoare Font:</label>
+          <input type="color" id="valuesColor" value="#000000" />
+        </div>
       </div>
 
       <!-- Secțiunea de Adăugare Text Liber -->
@@ -174,21 +187,6 @@
         <button id="removeFreeText" class="btn btn-reset">Elimină Text</button>
       </div>
 
-      <!-- Secțiunea pentru Controlul Valorilor pe Harta -->
-      <div class="option-section">
-        <h4>Control Valori pe Harta</h4>
-        <div class="control-values">
-          <label for="toggleValues">Afișează/Ascunde Valorile:</label>
-          <input type="checkbox" id="toggleValues" checked />
-          
-          <label for="valuesFontSize">Mărime Font:</label>
-          <input type="number" id="valuesFontSize" class="input-text" value="14" min="10" max="50" />
-          
-          <label for="valuesColor">Culoare Font:</label>
-          <input type="color" id="valuesColor" value="#000000" />
-        </div>
-      </div>
-      
       <!-- Secțiunea de Stilizare Legende -->
       <div class="option-section">
         <h4>Stilizează Legende</h4>
@@ -221,22 +219,24 @@
         </div>
       </div>
 
-      <!-- Secțiunea de Setări Canvas -->
+      <!-- Secțiunea pentru a controla vizibilitatea legendei -->
       <div class="option-section">
-        <h4>Canvas Settings</h4>
-        <label for="canvasColor">Canvas Color:</label>
-        <input type="color" id="canvasColor" value="#ffffff" />
-
-        <label for="canvasTransparency">Canvas Transparency:</label>
-        <input type="range" id="canvasTransparency" min="0" max="1" step="0.1" value="1" />
-
-        <label for="canvasWidth">Canvas Width (px):</label>
-        <input type="number" id="canvasWidth" value="800" />
-
-        <label for="canvasHeight">Canvas Height (px):</label>
-        <input type="number" id="canvasHeight" value="600" />
+        <button id="toggleLegend" class="btn btn-primary">Ascunde/Adaugă Legenda</button>
       </div>
-      
+
+      <!-- Secțiunea pentru a controla vizibilitatea legendei numerice -->
+      <div class="option-section">
+        <button id="toggleNumericLegend" class="btn btn-primary">Afișează/Ascunde Legenda Numerică</button>
+      </div>
+
+      <!-- Secțiunea de Resetare și Export -->
+      <div class="option-section">
+        <div class="button-group">
+          <button id="resetAll" class="btn btn-reset">Resetează datele</button>
+          <button id="exportMap" class="btn btn-export">Exportă ca PNG</button>
+        </div>
+      </div>
+
       <!-- Spațiu pentru viitoare funcționalități -->
       <div class="option-section future-feature">
         <h4>Viitoare Funcționalități</h4>
