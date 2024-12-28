@@ -994,3 +994,35 @@ td.select-category select {
 .shape.rectangle {
   border-radius: 4px;
 }
+
+/* ...existing code... */
+
+.shape-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+.shape-controls label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.shape-controls input[type="number"] {
+  width: 80px;
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.shape-controls input[type="range"] {
+  width: 100%;
+}
+
+/* ...existing code... */
