@@ -1349,10 +1349,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Exemplu minimal pentru reactivarea pan/zoom:
-  // function applyZoomBehavior() {
-  //   const zoom = d3.zoom().on('zoom', (event) => {
-  //     gMap.attr('transform', event.transform);
-  //   });
-  //   svg.call(zoom);
-  // }
+  function applyZoomBehavior() {
+    const zoom = d3.zoom().on('zoom', (event) => {
+      gMap.attr('transform', event.transform);
+    });
+    svg.call(zoom);
+  }
 });
