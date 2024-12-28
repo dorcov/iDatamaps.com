@@ -1164,4 +1164,25 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Elementul cu ID 'legendBgTransparency' nu a fost găsit.");
   }
+
+  const canvasColorInput = document.getElementById("canvasColor");
+  const canvasTransparencyInput = document.getElementById("canvasTransparency");
+  const canvasWidthInput = document.getElementById("canvasWidth");
+  const canvasHeightInput = document.getElementById("canvasHeight");
+
+  function updateCanvas() {
+    const bgColor = canvasColorInput.value;
+    const alpha = canvasTransparencyInput.value;
+    const widthValue = canvasWidthInput.value;
+    const heightValue = canvasHeightInput.value;
+
+    const mapColumn = document.querySelector(".map-column");
+    mapColumn.style.backgroundColor = bgColor;
+    mapColumn.style.opacity = alpha;
+    mapColumn.style.width = widthValue + "px";
+    mapColumn.style.height = heightValue + "px";
+  }
+
+  [canvasColorInput, canvasTransparencyInput, canvasWidthInput, canvasHeightInput]
+    .forEach(input => input.addEventListener("input", updateCanvas));
 });
