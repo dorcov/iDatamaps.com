@@ -1176,13 +1176,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const widthValue = canvasWidthInput.value;
     const heightValue = canvasHeightInput.value;
 
-    const mapColumn = document.querySelector(".map-column");
-    mapColumn.style.backgroundColor = bgColor;
-    mapColumn.style.opacity = alpha;
+    // Convert hex to RGB
+    const rgb = hexToRgb(bgColor); // Implement or reuse a suitable function
+    // Set background with custom alpha
+    mapColumn.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+
     mapColumn.style.width = widthValue + "px";
     mapColumn.style.height = heightValue + "px";
   }
 
   [canvasColorInput, canvasTransparencyInput, canvasWidthInput, canvasHeightInput]
     .forEach(input => input.addEventListener("input", updateCanvas));
+
+  function hexToRgb(hex) {
+    // For example:
+    const strippedHex = hex.replace(/^#/, "");
+    const bigint = parseInt(strippedHex, 16);
+    return {
+      r: (bigint >> 16) & 255,
+      g: (bigint >> 8) & 255,
+      b: bigint & 255,
+    };
+  }
 });
