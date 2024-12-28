@@ -1429,6 +1429,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize zoom behavior
   applyZoomBehavior();
 
+  // Create a separate SVG group for shapes
+  const shapesGroup = svg.append("g")
+                         .attr("class", "shapes-group");
+
   function createSVGShape(type) {
     const w = parseFloat(shapeWidthInput.value) || 50;
     const h = parseFloat(shapeHeightInput.value) || 50;
@@ -1437,7 +1441,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     let shape;
     if (type === 'rectangle') {
-      shape = gMap.append('rect')
+      shape = shapesGroup.append('rect')
         .attr('x', 100)
         .attr('y', 100)
         .attr('width', w)
@@ -1445,14 +1449,14 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr('fill', color)
         .attr('opacity', opacity);
     } else if (type === 'circle') {
-      shape = gMap.append('circle')
+      shape = shapesGroup.append('circle')
         .attr('cx', 120)
         .attr('cy', 120)
         .attr('r', Math.min(w, h)/2)
         .attr('fill', color)
         .attr('opacity', opacity);
     } else if (type === 'line') {
-      shape = gMap.append('line')
+      shape = shapesGroup.append('line')
         .attr('x1', 50)
         .attr('y1', 50)
         .attr('x2', 150)
@@ -1461,7 +1465,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr('stroke-width', w) // Using width as stroke-width
         .attr('opacity', opacity);
     } else if (type === 'ellipse') {
-      shape = gMap.append('ellipse')
+      shape = shapesGroup.append('ellipse')
         .attr('cx', 200)
         .attr('cy', 100)
         .attr('rx', w/2)
@@ -1469,12 +1473,12 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr('fill', color)
         .attr('opacity', opacity);
     } else if (type === 'polygon') {
-      shape = gMap.append('polygon')
+      shape = shapesGroup.append('polygon')
         .attr('points', `100,${100} ${100 + w},${100} ${100 + w/2},${100 - h}`)
         .attr('fill', color)
         .attr('opacity', opacity);
     } else if (type === 'path') {
-      shape = gMap.append('path')
+      shape = shapesGroup.append('path')
         .attr('d', `M10 10 H ${10 + w} V ${10 + h} H 10 Z`)
         .attr('fill', 'none')
         .attr('stroke', color)
