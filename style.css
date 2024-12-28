@@ -1029,15 +1029,6 @@ td.select-category select {
 
 /* ...existing code... */
 
-.btn-primary.active {
-  background-color: #dc3545;
-  color: white;
-}
-
 /* Stil pentru elementele blocate */
-.locked {
-  pointer-events: none !important;
-  cursor: default !important;
-}
 
 /* ...existing code... */
