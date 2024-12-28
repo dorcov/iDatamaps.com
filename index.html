@@ -24,6 +24,8 @@
     <div class="map-column">
       <svg id="mapSVG">
         <g class="map-group"></g>
+        <!-- New group for shapes to keep them independent -->
+        <g id="shapesGroup"></g>
       </svg>
       
       <!-- Footer în dreapta jos -->
@@ -245,11 +247,15 @@
           <label for="shapeTransparency">Transparență:</label>
           <input type="range" id="shapeTransparency" min="0" max="1" step="0.01" />
         
-          <label for="shapeWidth">Lățime:</label>
-          <input type="number" id="shapeWidth" min="10" />
+          <label for="shapeWidth" style="display: none;">Lățime:</label>
+          <input type="number" id="shapeWidth" min="10" style="display: none;" />
         
-          <label for="shapeHeight">Înălțime:</label>
-          <input type="number" id="shapeHeight" min="10" />
+          <label for="shapeHeight" style="display: none;">Înălțime:</label>
+          <input type="number" id="shapeHeight" min="10" style="display: none;" />
+          
+          <!-- New Radius Control for Circles -->
+          <label for="shapeRadius" style="display: none;">Rază:</label>
+          <input type="number" id="shapeRadius" min="10" style="display: none;" />
         
           <!-- Delete Button -->
           <button id="deleteShape" class="btn btn-delete">Șterge Forma</button>

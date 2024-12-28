@@ -1468,11 +1468,12 @@ document.addEventListener("DOMContentLoaded", () => {
         shapeHeightInput.value = selectedShape.attr('height');
         shapeWidthInput.disabled = false;
         shapeHeightInput.disabled = false;
+        shapeRadiusInput.style.display = 'none';
       } else if (selectedShape.classed('circle')) {
-        shapeWidthInput.value = selectedShape.attr('r') * 2;
-        shapeHeightInput.value = selectedShape.attr('r') * 2;
+        shapeRadiusInput.value = selectedShape.attr('r');
         shapeWidthInput.disabled = true;
         shapeHeightInput.disabled = true;
+        shapeRadiusInput.style.display = 'block';
       }
     } else {
       shapeControls.style.display = 'none';
@@ -1547,6 +1548,65 @@ document.addEventListener("DOMContentLoaded", () => {
       ("0" + parseInt(result[1], 10).toString(16)).slice(-2) +
       ("0" + parseInt(result[2], 10).toString(16)).slice(-2) +
       ("0" + parseInt(result[3], 10).toString(16)).slice(-2) : '#000000';
+  }
+  
+  // Create a separate group for shapes to keep them independent of the map
+  const shapesGroup = svg.append("g")
+    .attr("id", "shapesGroup");
+
+  // Function to handle adding a circle (modified to append to shapesGroup)
+  function handleAddCircle() {
+    const circle = shapesGroup.append('circle')
+      .attr('cx', svgWidth / 2)
+      .attr('cy', svgHeight / 2)
+      .attr('r', 50)
+      .attr('fill', currentGradient.start)
+      .attr('opacity', currentGradient.end)
+      .attr('class', 'circle'); // Assign 'circle' class
+
+    circle.on('click', selectShape);
+  }
+
+  // Update the updateShapeControls function to handle radius
+  function updateShapeControls() {
+    if (selectedShape) {
+      shapeControls.style.display = 'block';
+      if (selectedShape.classed('rectangle')) {
+        shapeWidthInput.value = selectedShape.attr('width');
+        shapeHeightInput.value = selectedShape.attr('height');
+        shapeWidthInput.disabled = false;
+        shapeHeightInput.disabled = false;
+        shapeRadiusInput.style.display = 'none';
+      } else if (selectedShape.classed('circle')) {
+        shapeRadiusInput.value = selectedShape.attr('r');
+        shapeWidthInput.disabled = true;
+        shapeHeightInput.disabled = true;
+        shapeRadiusInput.style.display = 'block';
+      }
+    } else {
+      shapeControls.style.display = 'none';
+    }
+  }
+
+  // Add event listener for radius adjustment
+  if (shapeRadiusInput) {
+    shapeRadiusInput.addEventListener('input', () => {
+      if (selectedShape && selectedShape.classed('circle')) {
+        selectedShape.attr('r', shapeRadiusInput.value);
+      }
+    });
+  } else {
+    console.error("Elementul cu ID 'shapeRadius' nu a fost găsit.");
+  }
+
+  // Ensure shapesGroup is not affected by map transformations
+  function applyZoomBehavior() {
+    svg.call(zoomBehavior);
+    
+    zoomBehavior.on("zoom", (event) => {
+      gMap.attr("transform", event.transform);
+      // Do not apply transform to shapesGroup to keep shapes independent
+    });
   }
   
 });
