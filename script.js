@@ -1177,15 +1177,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateCanvas() {
     const bgColor = canvasColorInput.value;
-    const alpha = canvasTransparencyInput.value;
-    const widthValue = canvasWidthInput.value;
-    const heightValue = canvasHeightInput.value;
-    const mapColumn = document.querySelector(".map-column");
+    const alpha = parseFloat(canvasTransparencyInput.value);
 
-    const rgb = hexToRgb(bgColor); // make sure hexToRgb is defined
-    mapColumn.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
-    mapColumn.style.width = widthValue + "px";
-    mapColumn.style.height = heightValue + "px";
+    if (alpha === 0) {
+      mapContainer.style.backgroundColor = "transparent";
+    } else {
+      const rgb = hexToRgb(bgColor);
+      mapContainer.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+    }
+    mapContainer.style.width = canvasWidthInput.value + "px";
+    mapContainer.style.height = canvasHeightInput.value + "px";
   }
 
   [canvasColorInput, canvasTransparencyInput, canvasWidthInput, canvasHeightInput]
