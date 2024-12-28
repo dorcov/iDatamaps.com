@@ -1441,12 +1441,41 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr('height', h)
         .attr('fill', color)
         .attr('opacity', opacity);
-    } else {
+    } else if (type === 'circle') {
       shape = gMap.append('circle')
         .attr('cx', 120)
         .attr('cy', 120)
         .attr('r', Math.min(w, h)/2)
         .attr('fill', color)
+        .attr('opacity', opacity);
+    } else if (type === 'line') {
+      shape = gMap.append('line')
+        .attr('x1', 50)
+        .attr('y1', 50)
+        .attr('x2', 150)
+        .attr('y2', 150)
+        .attr('stroke', color)
+        .attr('stroke-width', w) // Using width as stroke-width
+        .attr('opacity', opacity);
+    } else if (type === 'ellipse') {
+      shape = gMap.append('ellipse')
+        .attr('cx', 200)
+        .attr('cy', 100)
+        .attr('rx', w/2)
+        .attr('ry', h/2)
+        .attr('fill', color)
+        .attr('opacity', opacity);
+    } else if (type === 'polygon') {
+      shape = gMap.append('polygon')
+        .attr('points', `100,${100} ${100 + w},${100} ${100 + w/2},${100 - h}`)
+        .attr('fill', color)
+        .attr('opacity', opacity);
+    } else if (type === 'path') {
+      shape = gMap.append('path')
+        .attr('d', `M10 10 H ${10 + w} V ${10 + h} H 10 Z`)
+        .attr('fill', 'none')
+        .attr('stroke', color)
+        .attr('stroke-width', w)
         .attr('opacity', opacity);
     }
   
@@ -1454,8 +1483,25 @@ document.addEventListener("DOMContentLoaded", () => {
       .on('drag', (event) => {
         if (type === 'rectangle') {
           shape.attr('x', event.x).attr('y', event.y);
-        } else {
+        } else if (type === 'circle') {
           shape.attr('cx', event.x).attr('cy', event.y);
+        } else if (type === 'line') {
+          const dx = event.dx;
+          const dy = event.dy;
+          const x1 = parseFloat(shape.attr('x1')) + dx;
+          const y1 = parseFloat(shape.attr('y1')) + dy;
+          const x2 = parseFloat(shape.attr('x2')) + dx;
+          const y2 = parseFloat(shape.attr('y2')) + dy;
+          shape.attr('x1', x1).attr('y1', y1).attr('x2', x2).attr('y2', y2);
+        } else if (type === 'ellipse') {
+          shape.attr('cx', event.x).attr('cy', event.y);
+        } else if (type === 'polygon' || type === 'path') {
+          // For simplicity, moving the entire polygon or path
+          const transform = shape.attr('transform') || 'translate(0,0)';
+          const translate = transform.match(/translate\(([-\d.]+),\s*([-\d.]+)\)/);
+          const currentX = parseFloat(translate[1]) + event.dx;
+          const currentY = parseFloat(translate[2]) + event.dy;
+          shape.attr('transform', `translate(${currentX},${currentY})`);
         }
       })
     );
@@ -1472,4 +1518,58 @@ document.addEventListener("DOMContentLoaded", () => {
       createSVGShape('circle');
     });
   }
+  
+  // Add event listeners for new shape buttons
+  const addLineBtn = document.getElementById('addLine');
+  if (addLineBtn) {
+    addLineBtn.addEventListener('click', () => {
+      createSVGShape('line');
+    });
+  }
+  
+  const addEllipseBtn = document.getElementById('addEllipse');
+  if (addEllipseBtn) {
+    addEllipseBtn.addEventListener('click', () => {
+      createSVGShape('ellipse');
+    });
+  }
+  
+  const addPolygonBtn = document.getElementById('addPolygon');
+  if (addPolygonBtn) {
+    addPolygonBtn.addEventListener('click', () => {
+      createSVGShape('polygon');
+    });
+  }
+  
+  const addPathBtn = document.getElementById('addPath');
+  if (addPathBtn) {
+    addPathBtn.addEventListener('click', () => {
+      createSVGShape('path');
+    });
+  }
+  
+  // Function to remove selected shape
+  function removeSelectedShape() {
+    if (selectedShapeElement) {
+      selectedShapeElement.remove();
+      selectedShapeElement = null;
+    }
+  }
+  
+  if (removeShapeButton) {
+    removeShapeButton.addEventListener('click', () => {
+      removeSelectedShape();
+    });
+  }
+  
+  // Function to select a shape
+  gMap.on('click', function(event) {
+    const clickedShape = d3.select(event.target);
+    if (clickedShape.node().tagName !== 'g') { // Prevent selecting the group
+      selectedShapeElement = clickedShape;
+      // Add a stroke or highlight to indicate selection
+      gMap.selectAll('*').attr('stroke', null);
+      clickedShape.attr('stroke', 'black').attr('stroke-width', 2);
+    }
+  });
 });

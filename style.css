@@ -1043,3 +1043,9 @@ td.select-category select {
 .shape-circle {
   border-radius: 50%;
 }
+
+/* Highlight selected shape */
+svg .selected {
+  stroke: black;
+  stroke-width: 2;
+}
