@@ -1330,4 +1330,29 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // Add map lock/unlock functionality
+  let mapLocked = false;
+  const toggleMapLockButton = document.getElementById('toggleMapLock');
+
+  if (toggleMapLockButton) {
+    toggleMapLockButton.addEventListener('click', () => {
+      mapLocked = !mapLocked;
+      if (mapLocked) {
+        svg.on('.zoom', null);
+        toggleMapLockButton.textContent = 'Deblochează Harta';
+      } else {
+        applyZoomBehavior(); // Reatașează zoom & drag dacă există o funcție
+        toggleMapLockButton.textContent = 'Blochează Harta';
+      }
+    });
+  }
+
+  // Exemplu minimal pentru reactivarea pan/zoom:
+  // function applyZoomBehavior() {
+  //   const zoom = d3.zoom().on('zoom', (event) => {
+  //     gMap.attr('transform', event.transform);
+  //   });
+  //   svg.call(zoom);
+  // }
 });
