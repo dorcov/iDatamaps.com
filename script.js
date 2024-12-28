@@ -1335,15 +1335,67 @@ document.addEventListener("DOMContentLoaded", () => {
   let mapLocked = false;
   const toggleMapLockButton = document.getElementById('toggleMapLock');
 
+  function lockAllInteractions() {
+    // Dezactivează zoom și pan pentru hartă
+    svg.on('.zoom', null);
+    
+    // Dezactivează drag pentru legende
+    d3.selectAll('.legend-group').style('pointer-events', 'none');
+    
+    // Dezactivează drag pentru texte libere
+    document.querySelectorAll('.free-text-container').forEach(el => {
+      el.contentEditable = false;
+      el.style.cursor = 'default';
+      el.style.pointerEvents = 'none';
+    });
+    
+    // Dezactivează drag pentru forme
+    document.querySelectorAll('.shape').forEach(el => {
+      el.style.pointerEvents = 'none';
+      el.style.cursor = 'default';
+    });
+    
+    // Dezactivează selecția textului
+    mapContainer.style.userSelect = 'none';
+    
+    toggleMapLockButton.textContent = 'Deblochează Harta';
+    toggleMapLockButton.classList.add('active');
+  }
+  
+  function unlockAllInteractions() {
+    // Reactivează zoom și pan pentru hartă
+    applyZoomBehavior();
+    
+    // Reactivează drag pentru legende
+    d3.selectAll('.legend-group').style('pointer-events', 'all');
+    
+    // Reactivează drag pentru texte libere
+    document.querySelectorAll('.free-text-container').forEach(el => {
+      el.contentEditable = true;
+      el.style.cursor = 'move';
+      el.style.pointerEvents = 'auto';
+    });
+    
+    // Reactivează drag pentru forme
+    document.querySelectorAll('.shape').forEach(el => {
+      el.style.pointerEvents = 'auto';
+      el.style.cursor = 'move';
+    });
+    
+    // Reactivează selecția textului
+    mapContainer.style.userSelect = 'auto';
+    
+    toggleMapLockButton.textContent = 'Blochează Harta';
+    toggleMapLockButton.classList.remove('active');
+  }
+  
   if (toggleMapLockButton) {
     toggleMapLockButton.addEventListener('click', () => {
       mapLocked = !mapLocked;
       if (mapLocked) {
-        svg.on('.zoom', null);
-        toggleMapLockButton.textContent = 'Deblochează Harta';
+        lockAllInteractions();
       } else {
-        applyZoomBehavior(); // Reatașează zoom & drag dacă există o funcție
-        toggleMapLockButton.textContent = 'Blochează Harta';
+        unlockAllInteractions();
       }
     });
   }
