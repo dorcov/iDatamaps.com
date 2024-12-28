@@ -1514,16 +1514,24 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
   
-  if (addRectangleBtn) {
-    addRectangleBtn.addEventListener('click', () => {
-      createSVGShape('rectangle');
-    });
+  // Define handler functions
+  function handleAddRectangle() {
+    createSVGShape('rectangle');
   }
-  
+
+  function handleAddCircle() {
+    createSVGShape('circle');
+  }
+
+  // Attach event listeners once
+  if (addRectangleBtn) {
+    addRectangleBtn.removeEventListener('click', handleAddRectangle);
+    addRectangleBtn.addEventListener('click', handleAddRectangle);
+  }
+
   if (addCircleBtn) {
-    addCircleBtn.addEventListener('click', () => {
-      createSVGShape('circle');
-    });
+    addCircleBtn.removeEventListener('click', handleAddCircle);
+    addCircleBtn.addEventListener('click', handleAddCircle);
   }
   
   // Add event listeners for new shape buttons
