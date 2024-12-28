@@ -685,20 +685,25 @@ document.addEventListener("DOMContentLoaded", () => {
   // Exportăm harta ca PNG
   if (exportButton) {
     exportButton.addEventListener("click", () => {
-      // Force show legends during export
-      svg.selectAll(".legend-group")
-        .attr("visibility", "visible")
-        .attr("opacity", 1);
+      const mainLegendVisibility = localStorage.getItem("legendVisibility") || "visible";
+      const numericLegendVisibility = localStorage.getItem("numericLegendVisible") || "visible";
+      
+      // Temporarily hide legends for export
+      const legendGroup = document.getElementById("legendGroup");
+      const numericLegendGroup = document.getElementById("numericLegendGroup");
+      const originalMainDisplay = legendGroup.style.display;
+      const originalNumericDisplay = numericLegendGroup.style.display;
+      if (mainLegendVisibility === "hidden") legendGroup.style.display = "none";
+      if (numericLegendVisibility === "hidden") numericLegendGroup.style.display = "none";
 
-      html2canvas(document.querySelector(".map-column"), {
-        useCORS: true,
-        scale: 2,
-        backgroundColor: null
-      }).then(canvas => {
+      html2canvas(document.querySelector(".map-column")).then(canvas => {
         const link = document.createElement("a");
-        link.download = "harta.png";
+        link.download = "map_export.png";
         link.href = canvas.toDataURL("image/png");
         link.click();
+        // Restore legends
+        legendGroup.style.display = originalMainDisplay;
+        numericLegendGroup.style.display = originalNumericDisplay;
       });
     });
   } else {
