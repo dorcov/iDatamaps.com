@@ -1450,6 +1450,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const shapeTransparencyInput = document.getElementById('shapeTransparency');
   const shapeWidthInput = document.getElementById('shapeWidth');
   const shapeHeightInput = document.getElementById('shapeHeight');
+  const deleteShapeButton = document.getElementById('deleteShape');
 
   // Function to show or hide shape controls based on selection
   function updateShapeControls() {
@@ -1516,6 +1517,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   } else {
     console.error("Elementul cu ID 'shapeHeight' nu a fost găsit.");
+  }
+
+  // Event listener for delete button
+  if (deleteShapeButton) {
+    deleteShapeButton.addEventListener('click', () => {
+      if (selectedShape) {
+        selectedShape.remove();
+        selectedShape = null;
+        updateShapeControls();
+      } else {
+        alert("Selectați o formă pentru a o șterge.");
+      }
+    });
+  } else {
+    console.error("Elementul cu ID 'deleteShape' nu a fost găsit.");
   }
 
   // Helper function to convert RGB to Hex

@@ -1075,4 +1075,18 @@ svg .selected {
   margin-bottom: 10px;
 }
 
+/* Styles for Delete Button in Shape Controls */
+.btn-delete {
+  background-color: #e74c3c;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-delete:hover {
+  background-color: #c0392b;
+}
+
 /* ...existing code... */
