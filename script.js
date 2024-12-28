@@ -1175,12 +1175,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const alpha = canvasTransparencyInput.value;
     const widthValue = canvasWidthInput.value;
     const heightValue = canvasHeightInput.value;
+    const mapColumn = document.querySelector(".map-column");
 
-    // Convert hex to RGB
-    const rgb = hexToRgb(bgColor); // Implement or reuse a suitable function
-    // Set background with custom alpha
+    const rgb = hexToRgb(bgColor); // make sure hexToRgb is defined
     mapColumn.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
-
     mapColumn.style.width = widthValue + "px";
     mapColumn.style.height = heightValue + "px";
   }
