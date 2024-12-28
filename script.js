@@ -696,7 +696,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (mainLegendVisibility === "hidden") legendGroup.style.display = "none";
       if (numericLegendVisibility === "hidden") numericLegendGroup.style.display = "none";
 
-      html2canvas(document.querySelector(".map-column")).then(canvas => {
+      html2canvas(document.querySelector(".map-column"), {
+        backgroundColor: null
+      }).then(canvas => {
         const link = document.createElement("a");
         link.download = "map_export.png";
         link.href = canvas.toDataURL("image/png");
