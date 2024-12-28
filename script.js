@@ -1223,16 +1223,17 @@ document.addEventListener("DOMContentLoaded", () => {
     shape.style.height = shapeHeightInput.value + 'px';
     shape.style.backgroundColor = shapeColorInput.value;
     shape.style.opacity = shapeTransparencyInput.value;
+    shape.style.position = 'absolute';
     shape.style.top = '100px';
     shape.style.left = '100px';
     shapesContainer.appendChild(shape);
 
-    d3.select(shape).call(d3.drag()
-      .on('drag', (event) => {
-        shape.style.left = event.x + 'px';
-        shape.style.top = event.y + 'px';
-      })
-    );
+    d3.select(shape).call(d3.drag().on('drag', (event) => {
+      shape.style.left = event.x + 'px';
+      shape.style.top = event.y + 'px';
+    }));
+
+    selectedShapeElement = shape;
   }
 
   if (addRectangleBtn) {
@@ -1250,16 +1251,22 @@ document.addEventListener("DOMContentLoaded", () => {
   if (shapeColorInput) {
     shapeColorInput.addEventListener('input', () => {
       if (selectedShapeElement) {
-        const rgb = hexToRgb(shapeColorInput.value);
-        const alpha = shapeTransparencyInput.value;
-        selectedShapeElement.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+        selectedShapeElement.style.backgroundColor = shapeColorInput.value;
+      }
+    });
+  }
+
+  if (shapeTransparencyInput) {
+    shapeTransparencyInput.addEventListener('input', () => {
+      if (selectedShapeElement) {
+        selectedShapeElement.style.opacity = shapeTransparencyInput.value;
       }
     });
   }
 
   if (removeShapeBtn) {
     removeShapeBtn.addEventListener('click', () => {
-      if (selectedShapeElement) {
+      if (selectedShapeElement && shapesContainer.contains(selectedShapeElement)) {
         shapesContainer.removeChild(selectedShapeElement);
         selectedShapeElement = null;
       }
