@@ -1587,4 +1587,42 @@ document.addEventListener("DOMContentLoaded", () => {
       clickedShape.attr('stroke', 'black').attr('stroke-width', 2);
     }
   });
+
+  // Define handler functions for additional shapes
+  function handleAddLine() {
+    createSVGShape('line');
+  }
+
+  function handleAddEllipse() {
+    createSVGShape('ellipse');
+  }
+
+  function handleAddPolygon() {
+    createSVGShape('polygon');
+  }
+
+  function handleAddPath() {
+    createSVGShape('path');
+  }
+
+  // Attach event listeners once for additional shape buttons
+  if (addLineBtn) {
+    addLineBtn.removeEventListener('click', handleAddLine);
+    addLineBtn.addEventListener('click', handleAddLine);
+  }
+
+  if (addEllipseBtn) {
+    addEllipseBtn.removeEventListener('click', handleAddEllipse);
+    addEllipseBtn.addEventListener('click', handleAddEllipse);
+  }
+
+  if (addPolygonBtn) {
+    addPolygonBtn.removeEventListener('click', handleAddPolygon);
+    addPolygonBtn.addEventListener('click', handleAddPolygon);
+  }
+
+  if (addPathBtn) {
+    addPathBtn.removeEventListener('click', handleAddPath);
+    addPathBtn.addEventListener('click', handleAddPath);
+  }
 });
