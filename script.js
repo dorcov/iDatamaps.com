@@ -1357,4 +1357,88 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize zoom behavior
   applyZoomBehavior();
+
+  // Add shape-related variables
+  const addRectangleBtn = document.getElementById('addRectangle');
+  const addCircleBtn = document.getElementById('addCircle');
+  const removeShapeBtn = document.getElementById('removeShape');
+  let selectedShape = null;
+
+  // Add event listeners for shape buttons
+  if (addRectangleBtn) {
+    addRectangleBtn.addEventListener('click', handleAddRectangle);
+  } else {
+    console.error("Elementul cu ID 'addRectangle' nu a fost găsit.");
+  }
+
+  if (addCircleBtn) {
+    addCircleBtn.addEventListener('click', handleAddCircle);
+  } else {
+    console.error("Elementul cu ID 'addCircle' nu a fost găsit.");
+  }
+
+  if (removeShapeBtn) {
+    removeShapeBtn.addEventListener('click', handleRemoveShape);
+  } else {
+    console.error("Elementul cu ID 'removeShape' nu a fost găsit.");
+  }
+
+  // Function to handle adding a rectangle
+  function handleAddRectangle() {
+    const rect = gMap.append("rect")
+      .attr("x", 100)
+      .attr("y", 100)
+      .attr("width", 100)
+      .attr("height", 50)
+      .attr("fill", "#ff0000")
+      .attr("stroke", "none")
+      .attr("class", "shape rectangle")
+      .call(d3.drag()
+        .on("drag", dragged))
+      .on("click", selectShape);
+  }
+
+  // Function to handle adding a circle
+  function handleAddCircle() {
+    const circle = gMap.append("circle")
+      .attr("cx", 200)
+      .attr("cy", 200)
+      .attr("r", 50)
+      .attr("fill", "#0000ff")
+      .attr("stroke", "none")
+      .attr("class", "shape circle")
+      .call(d3.drag()
+        .on("drag", dragged))
+      .on("click", selectShape);
+  }
+
+  // Function to handle dragging a shape
+  function dragged(event, d) {
+    const element = d3.select(this);
+    if (element.classed("rectangle")) {
+      element.attr("x", event.x).attr("y", event.y);
+    } else if (element.classed("circle")) {
+      element.attr("cx", event.x).attr("cy", event.y);
+    }
+    // Add handling for other shapes if necessary
+  }
+
+  // Function to select a shape
+  function selectShape(event, d) {
+    if (selectedShape) {
+      selectedShape.attr("stroke", "none");
+    }
+    selectedShape = d3.select(this);
+    selectedShape.attr("stroke", "black");
+  }
+
+  // Function to remove the selected shape
+  function handleRemoveShape() {
+    if (selectedShape) {
+      selectedShape.remove();
+      selectedShape = null;
+    } else {
+      alert("Selectați o formă pentru a o elimina.");
+    }
+  }
 });
