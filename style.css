@@ -34,6 +34,7 @@ body {
   margin: 20px;
   border-radius: 8px;
   overflow: hidden;
+  width: auto !important;
 }
 
 /* SVG-ul hărții să ocupe întreg spațiul disponibil */
