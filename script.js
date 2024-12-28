@@ -1218,86 +1218,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function createShape(type) {
     const shape = document.createElement('div');
-    shape.className = 'shape ' + type;
-    shape.style.backgroundColor = shapeColorInput.value;
+    shape.className = type === 'rectangle' ? 'shape-rectangle' : 'shape-circle';
     shape.style.width = shapeWidthInput.value + 'px';
-    shape.style.height = type === 'circle' ? shapeWidthInput.value + 'px' : shapeHeightInput.value + 'px';
-    
-    // Set initial transparency
-    const alpha = shapeTransparencyInput.value;
-    const rgb = hexToRgb(shapeColorInput.value);
-    shape.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
-    
+    shape.style.height = shapeHeightInput.value + 'px';
+    shape.style.backgroundColor = shapeColorInput.value;
+    shape.style.opacity = shapeTransparencyInput.value;
+    shape.style.top = '100px';
+    shape.style.left = '100px';
     shapesContainer.appendChild(shape);
 
-    // Select shape on click
-    shape.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (selectedShapeElement) {
-        selectedShapeElement.style.boxShadow = '';
-      }
-      selectedShapeElement = shape;
-      shape.style.boxShadow = '0 0 4px #0073ff';
-      
-      // Update controls to match selected shape
-      const currentColor = shape.style.backgroundColor.match(/\d+/g);
-      if (currentColor && currentColor.length >= 3) {
-        shapeColorInput.value = rgbToHex(parseInt(currentColor[0]), parseInt(currentColor[1]), parseInt(currentColor[2]));
-        shapeTransparencyInput.value = currentColor[3] || 1;
-      }
-      shapeWidthInput.value = parseInt(shape.style.width);
-      shapeHeightInput.value = type === 'circle' ? parseInt(shape.style.width) : parseInt(shape.style.height);
-    });
-
-    // Add drag functionality
-    d3.select(shape).call(d3.drag().on('drag', (event) => {
-      shape.style.left = event.x + 'px';
-      shape.style.top = event.y + 'px';
-    }));
-  }
-
-  // Update shape color with transparency
-  shapeColorInput.addEventListener('input', () => {
-    if (selectedShapeElement) {
-      const rgb = hexToRgb(shapeColorInput.value);
-      const alpha = shapeTransparencyInput.value;
-      selectedShapeElement.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
-    }
-  });
-
-  // Add transparency control
-  shapeTransparencyInput.addEventListener('input', () => {
-    if (selectedShapeElement) {
-      const rgb = hexToRgb(shapeColorInput.value);
-      const alpha = shapeTransparencyInput.value;
-      selectedShapeElement.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
-    }
-  });
-
-  // Add width control
-  shapeWidthInput.addEventListener('input', () => {
-    if (selectedShapeElement) {
-      const width = shapeWidthInput.value + 'px';
-      selectedShapeElement.style.width = width;
-      if (selectedShapeElement.classList.contains('circle')) {
-        selectedShapeElement.style.height = width;
-      }
-    }
-  });
-
-  // Add height control
-  shapeHeightInput.addEventListener('input', () => {
-    if (selectedShapeElement && !selectedShapeElement.classList.contains('circle')) {
-      selectedShapeElement.style.height = shapeHeightInput.value + 'px';
-    }
-  });
-
-  // Helper function to convert RGB to HEX
-  function rgbToHex(r, g, b) {
-    return '#' + [r, g, b].map(x => {
-      const hex = x.toString(16);
-      return hex.length === 1 ? '0' + hex : hex;
-    }).join('');
+    d3.select(shape).call(d3.drag()
+      .on('drag', (event) => {
+        shape.style.left = event.x + 'px';
+        shape.style.top = event.y + 'px';
+      })
+    );
   }
 
   if (addRectangleBtn) {
