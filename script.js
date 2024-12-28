@@ -1204,4 +1204,76 @@ document.addEventListener("DOMContentLoaded", () => {
       b: bigint & 255,
     };
   }
+
+  // Create a layer (div) for shapes
+  const shapesContainer = document.createElement('div');
+  shapesContainer.className = 'shapes-container';
+  mapContainer.appendChild(shapesContainer);
+
+  let selectedShapeElement = null;
+  const shapeColorInput = document.getElementById('shapeColor');
+  const addRectangleBtn = document.getElementById('addRectangle');
+  const addCircleBtn = document.getElementById('addCircle');
+  const removeShapeBtn = document.getElementById('removeShape');
+
+  function createShape(type) {
+    const shape = document.createElement('div');
+    shape.className = 'shape ' + type;
+    shape.style.backgroundColor = shapeColorInput.value;
+    shapesContainer.appendChild(shape);
+
+    // Select shape on click
+    shape.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (selectedShapeElement) {
+        selectedShapeElement.style.boxShadow = '';
+      }
+      selectedShapeElement = shape;
+      shape.style.boxShadow = '0 0 4px #0073ff';
+    });
+
+    // Drag the shape
+    d3.select(shape).call(d3.drag().on('drag', (event) => {
+      shape.style.left = event.x + 'px';
+      shape.style.top = event.y + 'px';
+    }));
+
+    // Simple resize on mouse wheel (optional)
+    shape.addEventListener('wheel', (event) => {
+      event.preventDefault();
+      const delta = event.deltaY * 0.1;
+      const size = Math.max(10, (parseInt(shape.style.width) || 50) - delta);
+      shape.style.width = size + 'px';
+      shape.style.height = (type === 'circle' ? size : size / 2) + 'px';
+    });
+  }
+
+  if (addRectangleBtn) {
+    addRectangleBtn.addEventListener('click', () => {
+      createShape('rectangle');
+    });
+  }
+
+  if (addCircleBtn) {
+    addCircleBtn.addEventListener('click', () => {
+      createShape('circle');
+    });
+  }
+
+  if (shapeColorInput) {
+    shapeColorInput.addEventListener('input', () => {
+      if (selectedShapeElement) {
+        selectedShapeElement.style.backgroundColor = shapeColorInput.value;
+      }
+    });
+  }
+
+  if (removeShapeBtn) {
+    removeShapeBtn.addEventListener('click', () => {
+      if (selectedShapeElement) {
+        shapesContainer.removeChild(selectedShapeElement);
+        selectedShapeElement = null;
+      }
+    });
+  }
 });

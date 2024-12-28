@@ -966,3 +966,31 @@ td.select-category select {
 #numericLegendBackground {
   fill: rgba(255, 255, 255, var(--legend-bg-transparency, 0.8));
 }
+
+/* ...existing code... */
+
+.shapes-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  width: 100px;
+  height: 50px;
+  cursor: move;
+  pointer-events: auto;
+  border-radius: 4px;
+}
+
+.shape.circle {
+  border-radius: 50%;
+  height: 100px;
+}
+
+.shape.rectangle {
+  border-radius: 4px;
+}
