@@ -1049,3 +1049,30 @@ svg .selected {
   stroke: black;
   stroke-width: 2;
 }
+
+/* Styles for Shape Controls */
+#shapeControls {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+#shapeControls h3 {
+  margin-top: 0;
+}
+
+#shapeControls label {
+  display: block;
+  margin: 5px 0 2px;
+}
+
+#shapeControls input[type="color"],
+#shapeControls input[type="range"],
+#shapeControls input[type="number"] {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+/* ...existing code... */

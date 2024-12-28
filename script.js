@@ -1430,6 +1430,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     selectedShape = d3.select(this);
     selectedShape.attr("stroke", "black");
+    updateShapeControls();
   }
 
   // Function to remove the selected shape
@@ -1437,8 +1438,97 @@ document.addEventListener("DOMContentLoaded", () => {
     if (selectedShape) {
       selectedShape.remove();
       selectedShape = null;
+      updateShapeControls();
     } else {
       alert("Selectați o formă pentru a o elimina.");
     }
   }
+
+  // References to shape control elements
+  const shapeControls = document.getElementById('shapeControls');
+  const shapeColorInput = document.getElementById('shapeColor');
+  const shapeTransparencyInput = document.getElementById('shapeTransparency');
+  const shapeWidthInput = document.getElementById('shapeWidth');
+  const shapeHeightInput = document.getElementById('shapeHeight');
+
+  // Function to show or hide shape controls based on selection
+  function updateShapeControls() {
+    if (selectedShape) {
+      shapeControls.style.display = 'block';
+      // Initialize control values based on the selected shape
+      const currentColor = selectedShape.attr('fill') || '#000000';
+      const currentOpacity = selectedShape.attr('opacity') || 1;
+      shapeColorInput.value = rgbToHex(currentColor);
+      shapeTransparencyInput.value = currentOpacity;
+      
+      if (selectedShape.classed('rectangle')) {
+        shapeWidthInput.value = selectedShape.attr('width');
+        shapeHeightInput.value = selectedShape.attr('height');
+        shapeWidthInput.disabled = false;
+        shapeHeightInput.disabled = false;
+      } else if (selectedShape.classed('circle')) {
+        shapeWidthInput.value = selectedShape.attr('r') * 2;
+        shapeHeightInput.value = selectedShape.attr('r') * 2;
+        shapeWidthInput.disabled = true;
+        shapeHeightInput.disabled = true;
+      }
+    } else {
+      shapeControls.style.display = 'none';
+    }
+  }
+
+  // Event listeners for shape controls
+  if (shapeColorInput) {
+    shapeColorInput.addEventListener('input', () => {
+      if (selectedShape) {
+        selectedShape.attr('fill', shapeColorInput.value);
+      }
+    });
+  } else {
+    console.error("Elementul cu ID 'shapeColor' nu a fost găsit.");
+  }
+
+  if (shapeTransparencyInput) {
+    shapeTransparencyInput.addEventListener('input', () => {
+      if (selectedShape) {
+        selectedShape.attr('opacity', shapeTransparencyInput.value);
+      }
+    });
+  } else {
+    console.error("Elementul cu ID 'shapeTransparency' nu a fost găsit.");
+  }
+
+  if (shapeWidthInput) {
+    shapeWidthInput.addEventListener('input', () => {
+      if (selectedShape && selectedShape.classed('rectangle')) {
+        selectedShape.attr('width', shapeWidthInput.value);
+      }
+    });
+  } else {
+    console.error("Elementul cu ID 'shapeWidth' nu a fost găsit.");
+  }
+
+  if (shapeHeightInput) {
+    shapeHeightInput.addEventListener('input', () => {
+      if (selectedShape && selectedShape.classed('rectangle')) {
+        selectedShape.attr('height', shapeHeightInput.value);
+      }
+    });
+  } else {
+    console.error("Elementul cu ID 'shapeHeight' nu a fost găsit.");
+  }
+
+  // Helper function to convert RGB to Hex
+  function rgbToHex(rgb) {
+    // Handle rgb or hex inputs
+    if (rgb.startsWith('#')) {
+      return rgb;
+    }
+    const result = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/.exec(rgb);
+    return result ? "#" +
+      ("0" + parseInt(result[1], 10).toString(16)).slice(-2) +
+      ("0" + parseInt(result[2], 10).toString(16)).slice(-2) +
+      ("0" + parseInt(result[3], 10).toString(16)).slice(-2) : '#000000';
+  }
+
 });
