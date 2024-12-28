@@ -1215,6 +1215,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const addRectangleBtn = document.getElementById('addRectangle');
   const addCircleBtn = document.getElementById('addCircle');
   const removeShapeBtn = document.getElementById('removeShape');
+  const shapeWidthInput = document.getElementById('shapeWidth');
+  const shapeHeightInput = document.getElementById('shapeHeight');
+  const shapeTransparencyInput = document.getElementById('shapeTransparency');
 
   function createShape(type) {
     const shape = document.createElement('div');
