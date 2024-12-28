@@ -1425,4 +1425,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize zoom behavior
   applyZoomBehavior();
+
+  function createSVGShape(type) {
+    const w = parseFloat(shapeWidthInput.value) || 50;
+    const h = parseFloat(shapeHeightInput.value) || 50;
+    const color = shapeColorInput.value || "#FF0000";
+    const opacity = parseFloat(shapeTransparencyInput.value) || 1;
+  
+    let shape;
+    if (type === 'rectangle') {
+      shape = gMap.append('rect')
+        .attr('x', 100)
+        .attr('y', 100)
+        .attr('width', w)
+        .attr('height', h)
+        .attr('fill', color)
+        .attr('opacity', opacity);
+    } else {
+      shape = gMap.append('circle')
+        .attr('cx', 120)
+        .attr('cy', 120)
+        .attr('r', Math.min(w, h)/2)
+        .attr('fill', color)
+        .attr('opacity', opacity);
+    }
+  
+    shape.call(d3.drag()
+      .on('drag', (event) => {
+        if (type === 'rectangle') {
+          shape.attr('x', event.x).attr('y', event.y);
+        } else {
+          shape.attr('cx', event.x).attr('cy', event.y);
+        }
+      })
+    );
+  }
+  
+  if (addRectangleBtn) {
+    addRectangleBtn.addEventListener('click', () => {
+      createSVGShape('rectangle');
+    });
+  }
+  
+  if (addCircleBtn) {
+    addCircleBtn.addEventListener('click', () => {
+      createSVGShape('circle');
+    });
+  }
 });
