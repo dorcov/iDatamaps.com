@@ -1006,9 +1006,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Replace the getRegionCentroid function with getRegionPointOnSurface
   function getRegionPointOnSurface(feature) {
-    return d3.geoCentroid(feature); // Placeholder: Replace with point on surface logic
-    // Example using turf.js:
-    // return turf.pointOnFeature(feature).geometry.coordinates;
+    const point = turf.pointOnFeature(feature);
+    return point.geometry.coordinates;
   }
 
   // Funcție pentru a crea label-uri pe hartă
@@ -1094,11 +1093,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     gMap.selectAll(".value-label")
       .attr("x", d => {
-        const [cx, cy] = getRegionCentroid(d);
+        const coords = getRegionPointOnSurface(d);
+        const [cx, cy] = projection(coords);
         return cx;
       })
       .attr("y", d => {
-        const [cx, cy] = getRegionCentroid(d);
+        const coords = getRegionPointOnSurface(d);
+        const [cx, cy] = projection(coords);
         return cy;
       })
       .text(d => {
