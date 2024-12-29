@@ -605,6 +605,8 @@ td.select-category select {
   min-height: 30px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  white-space: pre-wrap; /* Allow multiple lines */
+  word-wrap: break-word;
 }
 
 .free-text-container.selected {
@@ -819,6 +821,8 @@ td.select-category select {
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: move;
+  white-space: pre-wrap; /* Allow multiple lines */
+  word-wrap: break-word;
 }
 
 .free-text-container.selected {

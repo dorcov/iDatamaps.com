@@ -751,87 +751,107 @@ document.addEventListener("DOMContentLoaded", () => {
   // const mapContainer = document.querySelector('.map-column');
   // let selectedTextBox = null;
 
-  function createFreeTextContainer(text, font, size, color, border, bold, italic) {
+  let freeTexts = [];
+  let selectedTextBox = null;
+
+  // Function to add new free text
+  function addFreeText() {
+    const text = freeTextInput.value.trim();
+    if (text === "") return;
+
+    const textId = `freeText_${Date.now()}`;
+    freeTexts.push({ id: textId, content: text });
+
+    createFreeTextContainer(text, textId);
+
+    freeTextInput.value = "";
+  }
+
+  // Modify createFreeTextContainer to accept textId
+  function createFreeTextContainer(text, textId) {
     const div = document.createElement('div');
     div.className = 'free-text-container';
+    div.id = textId;
     div.contentEditable = true;
-    div.style.fontFamily = font;
-    div.style.fontSize = size + 'px';
-    div.style.color = color;
-    div.style.border = border ? '1px solid #000' : 'none';
-    div.style.fontWeight = bold ? 'bold' : 'normal';
-    div.style.fontStyle = italic ? 'italic' : 'normal';
+    div.style.fontFamily = freeTextFontSelect.value;
+    div.style.fontSize = `${freeTextSizeInput.value}px`;
+    div.style.color = freeTextColorInput.value;
+    div.style.border = freeTextBorderCheckbox.checked ? '1px solid #000' : 'none';
+    div.style.fontWeight = freeTextBoldCheckbox.checked ? 'bold' : 'normal';
+    div.style.fontStyle = freeTextItalicCheckbox.checked ? 'italic' : 'normal';
     div.innerText = text;
     mapContainer.appendChild(div);
 
-    div.addEventListener('click', () => {
-      if (selectedTextBox) {
-        selectedTextBox.classList.remove('selected');
+    // Add event listeners for editing
+    div.addEventListener('click', () => selectFreeText(div));
+
+    div.addEventListener('blur', () => {
+      const updatedText = div.innerText.trim();
+      const index = freeTexts.findIndex(ft => ft.id === textId);
+      if (index !== -1) {
+        freeTexts[index].content = updatedText;
       }
-      selectedTextBox = div;
-      selectedTextBox.classList.add('selected');
-      updateFreeTextControls(selectedTextBox);
     });
 
-    div.addEventListener('input', () => {
-      freeTextInput.value = div.innerText;
-    });
-
+    // Make the text draggable
     d3.select(div).call(d3.drag()
       .on('drag', (event) => {
-        const newX = Math.max(0, Math.min(event.x, mapContainer.clientWidth - div.clientWidth));
-        const newY = Math.max(0, Math.min(event.y, mapContainer.clientHeight - div.clientHeight));
-        d3.select(div).style('left', `${newX}px`).style('top', `${newY}px`);
+        div.style.left = `${event.x}px`;
+        div.style.top = `${event.y}px`;
       })
     );
   }
 
-  function updateFreeTextControls(textBox) {
-    freeTextInput.value = textBox.innerText;
-    freeTextFontSelect.value = textBox.style.fontFamily;
-    freeTextSizeInput.value = parseInt(textBox.style.fontSize);
-    freeTextColorInput.value = textBox.style.color;
-    freeTextBorderCheckbox.checked = textBox.style.border !== 'none';
-    freeTextBoldCheckbox.checked = textBox.style.fontWeight === 'bold';
-    freeTextItalicCheckbox.checked = textBox.style.fontStyle === 'italic';
-    textBox.style.boxShadow = "0 0 5px rgba(42, 115, 255, 0.6)";
-  }
-
+  // Update event listener for addFreeTextButton
   if (addFreeTextButton) {
-    addFreeTextButton.addEventListener('click', () => {
-      const text = freeTextInput.value.trim();
-      const font = freeTextFontSelect.value;
-      const size = freeTextSizeInput.value;
-      const color = freeTextColorInput.value;
-      const border = freeTextBorderCheckbox.checked;
-      const bold = freeTextBoldCheckbox.checked;
-      const italic = freeTextItalicCheckbox.checked;
-      if (text === "") {
-        alert("Textul nu poate fi gol.");
-        return;
-      }
-      createFreeTextContainer(text, font, size, color, border, bold, italic);
-    });
+    addFreeTextButton.addEventListener("click", addFreeText);
   } else {
     console.error("Elementul cu ID 'addFreeText' nu a fost găsit.");
   }
 
+  // Modify removeFreeTextButton to handle multiple texts
+  function removeFreeText() {
+    if (selectedTextBox) {
+      mapContainer.removeChild(selectedTextBox);
+      freeTexts = freeTexts.filter(ft => ft.id !== selectedTextBox.id);
+      selectedTextBox = null;
+      updateFreeTextControls(null);
+    }
+  }
+
   if (removeFreeTextButton) {
-    removeFreeTextButton.addEventListener('click', () => {
-      if (selectedTextBox) {
-        mapContainer.removeChild(selectedTextBox);
-        selectedTextBox = null;
-      } else {
-        alert("Selectează un text pentru a-l elimina.");
-      }
-    });
+    removeFreeTextButton.addEventListener("click", removeFreeText);
   } else {
     console.error("Elementul cu ID 'removeFreeText' nu a fost găsit.");
   }
 
+  // Function to select a free text box
+  function selectFreeText(textBox) {
+    selectedTextBox = textBox;
+    updateFreeTextControls(textBox);
+  }
+
+  // Function to update controls based on selected text
+  function updateFreeTextControls(textBox) {
+    if (textBox) {
+      freeTextInput.value = textBox.innerText;
+      freeTextFontSelect.value = textBox.style.fontFamily;
+      freeTextSizeInput.value = parseInt(textBox.style.fontSize);
+      freeTextColorInput.value = textBox.style.color;
+      freeTextBorderCheckbox.checked = textBox.style.border !== 'none';
+      freeTextBoldCheckbox.checked = textBox.style.fontWeight === 'bold';
+      freeTextItalicCheckbox.checked = textBox.style.fontStyle === 'italic';
+    } else {
+      freeTextInput.value = "";
+      // Reset other controls if necessary
+    }
+  }
+
+  // Event listeners for free text controls
   freeTextInput.addEventListener('input', () => {
     if (selectedTextBox) {
       selectedTextBox.innerText = freeTextInput.value;
+      freeTexts.find(ft => ft.id === selectedTextBox.id).content = freeTextInput.value;
     }
   });
 
@@ -843,7 +863,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   freeTextSizeInput.addEventListener('input', () => {
     if (selectedTextBox) {
-      selectedTextBox.style.fontSize = freeTextSizeInput.value + 'px';
+      selectedTextBox.style.fontSize = `${freeTextSizeInput.value}px`;
     }
   });
 
@@ -1080,7 +1100,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (valuesFontSelect) {
-    valuesFontSelect.addEventListener("change", () => {
+    valuesFontSelect.addEventListener('change', () => {
       updateValueLabels();
     });
   }
