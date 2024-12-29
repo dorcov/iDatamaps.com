@@ -1436,13 +1436,9 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Function to remove the selected shape
   function handleRemoveShape() {
-    if (selectedShape) {
-      selectedShape.remove();
-      selectedShape = null;
-      updateShapeControls();
-    } else {
-      alert("Selectați o formă pentru a o elimina.");
-    }
+    selectedShape.remove();
+    selectedShape = null;
+    updateShapeControls();
   }
   
   // References to shape control elements
