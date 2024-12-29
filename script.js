@@ -1100,7 +1100,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return toggleValuesCheckbox.checked ? val : "";
       })
       .style("font-size", valuesFontSizeInput.value + "px")
-      .style("fill", valuesColorInput.value);
+      .style("fill", valuesColorInput.value)
+      .style("display", d => getRegionValue(d) > 0 ? 'block' : 'none'); // Hide label if value is zero
 
     const selectedFont = valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif";
     valueLabels.forEach(label => {
