@@ -1153,3 +1153,14 @@ svg .selected {
 }
 
 /* ...existing code... */
+
+.legend {
+  border: 1px solid #000; /* Existing border */
+  /* ...other legend styles... */
+}
+
+.legend.no-border {
+  border: none;
+}
+
+/* ...existing code... */

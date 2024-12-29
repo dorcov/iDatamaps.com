@@ -1886,4 +1886,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   
+  // Add reference to the new legendBorder checkbox
+  const legendBorderCheckbox = document.getElementById("legendBorder");
+
+  // Function to toggle legend border
+  function toggleLegendBorder() {
+    const legend = d3.select("#legendGroup");
+    if (legendBorderCheckbox.checked) {
+      legend.classed("no-border", false);
+    } else {
+      legend.classed("no-border", true);
+    }
+  }
+
+  // Event listener for legendBorder checkbox
+  if (legendBorderCheckbox) {
+    legendBorderCheckbox.addEventListener("change", toggleLegendBorder);
+  } else {
+    console.error("Elementul cu ID 'legendBorder' nu a fost găsit.");
+  }
+  
 });
