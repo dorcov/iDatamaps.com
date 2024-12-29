@@ -752,7 +752,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // let selectedTextBox = null;
 
   let freeTexts = [];
-  let selectedTextBox = null;
+  // let selectedTextBox = null;
 
   // Function to add new free text
   function addFreeText() {
