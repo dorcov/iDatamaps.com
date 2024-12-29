@@ -1732,4 +1732,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
+  // Referințe la noile elemente DOM pentru ajustarea dimensiunii legendelor
+  const legendWidthInput = document.getElementById("legendWidth");
+  const legendHeightInput = document.getElementById("legendHeight");
+
+  if (legendWidthInput) {
+    legendWidthInput.addEventListener("input", (e) => {
+      document.documentElement.style.setProperty('--legend-width', `${e.target.value}px`);
+    });
+  } else {
+    console.error("Elementul cu ID 'legendWidth' nu a fost găsit.");
+  }
+
+  if (legendHeightInput) {
+    legendHeightInput.addEventListener("input", (e) => {
+      document.documentElement.style.setProperty('--legend-height', `${e.target.value}px`);
+    });
+  } else {
+    console.error("Elementul cu ID 'legendHeight' nu a fost găsit.");
+  }
+  
 });

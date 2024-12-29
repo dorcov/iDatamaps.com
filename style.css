@@ -1110,3 +1110,25 @@ svg .selected {
 }
 
 /* ...existing code... */
+
+/* ...existing code... */
+
+:root {
+  --legend-width: 200px;
+  --legend-height: 100px;
+  /* ...existing CSS variables... */
+}
+
+#legendGroup {
+  width: var(--legend-width);
+  height: var(--legend-height);
+  /* ...existing styles... */
+}
+
+#numericLegendGroup {
+  width: var(--legend-width);
+  height: var(--legend-height);
+  /* ...existing styles... */
+}
+
+/* ...existing code... */
