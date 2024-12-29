@@ -1051,6 +1051,7 @@ document.addEventListener("DOMContentLoaded", () => {
         label.style.fontSize = `${valuesFontSizeInput.value}px`;
       });
       localStorage.setItem("valuesFontSize", valuesFontSizeInput.value);
+      updateValueLabels();
     });
   } else {
     console.error("Elementul cu ID 'valuesFontSize' nu a fost găsit.");
@@ -1063,6 +1064,7 @@ document.addEventListener("DOMContentLoaded", () => {
         label.style.color = valuesColorInput.value;
       });
       localStorage.setItem("valuesColor", valuesColorInput.value);
+      updateValueLabels();
     });
   } else {
     console.error("Elementul cu ID 'valuesColor' nu a fost găsit.");
