@@ -1004,6 +1004,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Array pentru a stoca label-urile
   let valueLabels = [];
 
+  // Replace the getRegionCentroid function with getRegionPointOnSurface
+  function getRegionPointOnSurface(feature) {
+    return d3.geoCentroid(feature); // Placeholder: Replace with point on surface logic
+    // Example using turf.js:
+    // return turf.pointOnFeature(feature).geometry.coordinates;
+  }
+
   // Funcție pentru a crea label-uri pe hartă
   function createValueLabels() {
     // 1) Remove or comment out any old HTML label creation
