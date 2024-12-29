@@ -1005,26 +1005,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a crea label-uri pe hartă
   function createValueLabels() {
-    // Elimină label-urile existente
-    valueLabels.forEach(label => label.remove());
-    valueLabels = [];
+    // 1) Remove or comment out any old HTML label creation
+    // ...existing code...
 
-    geoDataFeatures.forEach(feature => {
-      const regionName = encodeURIComponent(feature.properties.NAME || feature.properties.name || feature.properties.region_nam || feature.properties.nume_regiu || "Unknown");
-      const value = getRegionValue(feature);
-      if (value > 0) {
-        const [x, y] = getRegionCentroid(feature);
-        const div = document.createElement('div');
-        div.className = 'value-label';
-        div.style.left = `${x}px`;
-        div.style.top = `${y}px`;
-        div.style.fontSize = `${valuesFontSizeInput.value}px`;
-        div.style.color = valuesColorInput.value;
-        div.innerText = value;
-        mapContainer.appendChild(div);
-        valueLabels.push(div);
-      }
-    });
+    // 2) Clear existing SVG labels
+    gMap.selectAll(".value-label").remove();
+
+    // 3) Append new text elements for each region
+    gMap.selectAll(".value-label")
+      .data(geoDataFeatures)
+      .enter()
+      .append("text")
+      .attr("class", "value-label")
+      .attr("text-anchor", "middle")
+      .style("pointer-events", "none"); // ensure text doesn’t interfere with mouse events
   }
 
   // Funcție pentru a obține centrul unei regiuni
@@ -1079,6 +1073,23 @@ document.addEventListener("DOMContentLoaded", () => {
     if (toggleValuesCheckbox.checked) {
       createValueLabels();
     }
+
+    gMap.selectAll(".value-label")
+      .attr("x", d => {
+        const [cx, cy] = getRegionCentroid(d);
+        return cx;
+      })
+      .attr("y", d => {
+        const [cx, cy] = getRegionCentroid(d);
+        return cy;
+      })
+      .text(d => {
+        // Use getRegionValue(d)
+        const val = getRegionValue(d) || 0;
+        return toggleValuesCheckbox.checked ? val : "";
+      })
+      .style("font-size", valuesFontSizeInput.value + "px")
+      .style("fill", valuesColorInput.value);
   }
 
   // Restore values visibility and styles from localStorage
