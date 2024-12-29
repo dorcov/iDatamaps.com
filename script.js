@@ -999,6 +999,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleValuesCheckbox = document.getElementById("toggleValues");
   const valuesFontSizeInput = document.getElementById("valuesFontSize");
   const valuesColorInput = document.getElementById("valuesColor");
+  const valuesFontSelect = document.getElementById("valuesFont");
 
   // Array pentru a stoca label-urile
   let valueLabels = [];
@@ -1039,6 +1040,7 @@ document.addEventListener("DOMContentLoaded", () => {
         valueLabels = [];
         localStorage.setItem("valuesVisible", "false");
       }
+      updateValueLabels();
     });
   } else {
     console.error("Elementul cu ID 'toggleValues' nu a fost găsit.");
@@ -1070,6 +1072,12 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Elementul cu ID 'valuesColor' nu a fost găsit.");
   }
 
+  if (valuesFontSelect) {
+    valuesFontSelect.addEventListener("change", () => {
+      updateValueLabels();
+    });
+  }
+
   // Funcție pentru a actualiza label-urile atunci când harta se încarcă sau se actualizează
   function updateValueLabels() {
     if (toggleValuesCheckbox.checked) {
@@ -1092,6 +1100,11 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .style("font-size", valuesFontSizeInput.value + "px")
       .style("fill", valuesColorInput.value);
+
+    const selectedFont = valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif";
+    valueLabels.forEach(label => {
+      label.style.fontFamily = selectedFont;
+    });
   }
 
   // Restore values visibility and styles from localStorage
