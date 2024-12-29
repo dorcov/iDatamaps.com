@@ -1395,7 +1395,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr('class', 'rectangle') // Assign 'rectangle' class
       .call(shapeDrag); // Apply drag behavior
   
-    rect.on('click', selectShape);
+    rect.on('click', function() {
+      selectShape(d3.select(this));
+    });
   }
   
   // Function to handle adding a circle
@@ -1409,31 +1411,27 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr('class', 'circle') // Assign 'circle' class
       .call(shapeDrag); // Apply drag behavior
   
-    circle.on('click', selectShape);
+    circle.on('click', function() {
+      selectShape(d3.select(this));
+    });
   }
   
   // Function to select a shape
-  function selectShape(event, d) {
-    if (selectedShape) {
-      selectedShape.style('stroke', null);
-    }
-  
-    selectedShape = d3.select(this);
-    selectedShape.style('stroke', '#0000FF')
-                .style('stroke-width', 2);
-  
+  function selectShape(shape) {
+    selectedShape = shape;
     updateShapeControls();
   }
   
   // Function to handle dragging a shape
   function dragged(event, d) {
-    const element = d3.select(this);
-    if (element.classed("rectangle")) {
-      element.attr("x", event.x).attr("y", event.y);
-    } else if (element.classed("circle")) {
-      element.attr("cx", event.x).attr("cy", event.y);
+    const shape = d3.select(event.sourceEvent.target);
+    if (shape.node().tagName === "rect") {
+      shape.attr("x", +shape.attr("x") + event.dx)
+           .attr("y", +shape.attr("y") + event.dy);
+    } else {
+      shape.attr("cx", +shape.attr("cx") + event.dx)
+           .attr("cy", +shape.attr("cy") + event.dy);
     }
-    // Add handling for other shapes if necessary
   }
   
   // Function to remove the selected shape
@@ -1567,7 +1565,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr('class', 'circle') // Assign 'circle' class
       .call(shapeDrag); // Apply drag behavior
 
-    circle.on('click', selectShape);
+    circle.on('click', function() {
+      selectShape(d3.select(this));
+    });
   }
 
   // Update the updateShapeControls function to handle radius
@@ -1648,7 +1648,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr('class', 'rectangle') // Assign 'rectangle' class
       .call(shapeDrag); // Apply drag behavior
   
-    rect.on('click', selectShape);
+    rect.on('click', function() {
+      selectShape(d3.select(this));
+    });
   }
 
   // Modify handleAddCircle to apply drag
@@ -1662,7 +1664,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr('class', 'circle') // Assign 'circle' class
       .call(shapeDrag); // Apply drag behavior
   
-    circle.on('click', selectShape);
+    circle.on('click', function() {
+      selectShape(d3.select(this));
+    });
   }
 
   // In updateShapeControls, ensure dimension fields are shown properly
