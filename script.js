@@ -1019,7 +1019,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .append("text")
       .attr("class", "value-label")
       .attr("text-anchor", "middle")
-      .style("pointer-events", "none"); // ensure text doesn’t interfere with mouse events
+      .style("pointer-events", "none") // ensure text doesn’t interfere with mouse events
+      .style("font-family", valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif"); // Set initial font family
   }
 
   // Funcție pentru a obține centrul unei regiuni

@@ -1100,3 +1100,13 @@ svg .selected {
 }
 
 /* ...existing code... */
+
+/* ...existing code... */
+
+.value-label {
+  position: absolute;
+  pointer-events: none;
+  /* Additional styling as needed */
+}
+
+/* ...existing code... */
