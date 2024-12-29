@@ -1136,3 +1136,20 @@ svg .selected {
 }
 
 /* ...existing code... */
+
+/* ...existing code... */
+
+.map-title {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: transparent;
+  padding: 5px 10px;
+  cursor: move;
+  /* Additional styling as needed */
+  pointer-events: all;
+  user-select: none;
+  /* Ensure text is selectable for editing */
+}
+
+/* ...existing code... */

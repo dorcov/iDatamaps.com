@@ -748,7 +748,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const freeTextBoldCheckbox = document.getElementById("freeTextBold");
   const freeTextItalicCheckbox = document.getElementById("freeTextItalic");
   const removeFreeTextButton = document.getElementById("removeFreeText");
-  // const mapContainer = document.querySelector('.map-column');
+  // const mapContainer = document.querySelector('.map-column'); // Removed duplicate declaration
   // let selectedTextBox = null;
 
   let freeTexts = [];
@@ -1779,5 +1779,111 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Elementul cu ID 'legendHeight' nu a fost găsit.");
   }
+  
+  const addTitleButton = document.getElementById("addTitle");
+  const removeTitleButton = document.getElementById("removeTitle");
+  const titleInput = document.getElementById("titleInput");
+  const titleFontSelect = document.getElementById("titleFont");
+  const titleSizeInput = document.getElementById("titleSize");
+  const titleColorInput = document.getElementById("titleColor");
+  const titleBoldCheckbox = document.getElementById("titleBold");
+  const titleItalicCheckbox = document.getElementById("titleItalic");
+  // const mapContainer = document.querySelector('.map-column');
+
+  let titleElement = null;
+
+  // Function to add new title
+  function addTitle() {
+    const text = titleInput.value.trim();
+    if (text === "") return;
+
+    if (titleElement) {
+      mapContainer.removeChild(titleElement);
+    }
+
+    titleElement = document.createElement('div');
+    titleElement.className = 'map-title';
+    titleElement.contentEditable = true;
+    titleElement.style.fontFamily = titleFontSelect.value;
+    titleElement.style.fontSize = `${titleSizeInput.value}px`;
+    titleElement.style.color = titleColorInput.value;
+    titleElement.style.fontWeight = titleBoldCheckbox.checked ? 'bold' : 'normal';
+    titleElement.style.fontStyle = titleItalicCheckbox.checked ? 'italic' : 'normal';
+    titleElement.innerText = text;
+    mapContainer.appendChild(titleElement);
+
+    // Make the title draggable
+    d3.select(titleElement).call(d3.drag()
+      .on('drag', (event) => {
+        titleElement.style.left = `${event.x}px`;
+        titleElement.style.top = `${event.y}px`;
+      })
+    );
+
+    // Add event listener for editing
+    titleElement.addEventListener('blur', () => {
+      titleInput.value = titleElement.innerText.trim();
+    });
+  }
+
+  // Function to remove the title
+  function removeTitle() {
+    if (titleElement) {
+      mapContainer.removeChild(titleElement);
+      titleElement = null;
+      titleInput.value = "";
+    }
+  }
+
+  // Event listener for adding title
+  if (addTitleButton) {
+    addTitleButton.addEventListener("click", addTitle);
+  } else {
+    console.error("Elementul cu ID 'addTitle' nu a fost găsit.");
+  }
+
+  // Event listener for removing title
+  if (removeTitleButton) {
+    removeTitleButton.addEventListener("click", removeTitle);
+  } else {
+    console.error("Elementul cu ID 'removeTitle' nu a fost găsit.");
+  }
+
+  // Event listeners for title controls
+  titleInput.addEventListener('input', () => {
+    if (titleElement) {
+      titleElement.innerText = titleInput.value;
+    }
+  });
+
+  titleFontSelect.addEventListener('change', () => {
+    if (titleElement) {
+      titleElement.style.fontFamily = titleFontSelect.value;
+    }
+  });
+
+  titleSizeInput.addEventListener('input', () => {
+    if (titleElement) {
+      titleElement.style.fontSize = `${titleSizeInput.value}px`;
+    }
+  });
+
+  titleColorInput.addEventListener('input', () => {
+    if (titleElement) {
+      titleElement.style.color = titleColorInput.value;
+    }
+  });
+
+  titleBoldCheckbox.addEventListener('change', () => {
+    if (titleElement) {
+      titleElement.style.fontWeight = titleBoldCheckbox.checked ? 'bold' : 'normal';
+    }
+  });
+
+  titleItalicCheckbox.addEventListener('change', () => {
+    if (titleElement) {
+      titleElement.style.fontStyle = titleItalicCheckbox.checked ? 'italic' : 'normal';
+    }
+  });
   
 });
