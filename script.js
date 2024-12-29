@@ -1385,27 +1385,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to handle adding a rectangle
   function handleAddRectangle() {
-    const rect = gMap.append('rect')
+    const rect = shapesGroup.append('rect')
       .attr('x', svgWidth / 2 - 50)
       .attr('y', svgHeight / 2 - 25)
       .attr('width', 100)
       .attr('height', 50)
       .attr('fill', currentGradient.start)
       .attr('opacity', currentGradient.end)
-      .attr('class', 'rectangle'); // Assign 'rectangle' class
+      .attr('class', 'rectangle') // Assign 'rectangle' class
+      .call(shapeDrag); // Apply drag behavior
   
     rect.on('click', selectShape);
   }
   
   // Function to handle adding a circle
   function handleAddCircle() {
-    const circle = gMap.append('circle')
+    const circle = shapesGroup.append('circle')
       .attr('cx', svgWidth / 2)
       .attr('cy', svgHeight / 2)
       .attr('r', 50)
       .attr('fill', currentGradient.start)
       .attr('opacity', currentGradient.end)
-      .attr('class', 'circle'); // Assign 'circle' class
+      .attr('class', 'circle') // Assign 'circle' class
+      .call(shapeDrag); // Apply drag behavior
   
     circle.on('click', selectShape);
   }
@@ -1562,7 +1564,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr('r', 50)
       .attr('fill', currentGradient.start)
       .attr('opacity', currentGradient.end)
-      .attr('class', 'circle'); // Assign 'circle' class
+      .attr('class', 'circle') // Assign 'circle' class
+      .call(shapeDrag); // Apply drag behavior
 
     circle.on('click', selectShape);
   }
@@ -1572,17 +1575,25 @@ document.addEventListener("DOMContentLoaded", () => {
     if (selectedShape) {
       shapeControls.style.display = 'block';
       if (selectedShape.classed('rectangle')) {
+        shapeWidthInput.style.display = 'block';
+        shapeHeightInput.style.display = 'block';
+        shapeRadiusInput.style.display = 'none';
         shapeWidthInput.value = selectedShape.attr('width');
         shapeHeightInput.value = selectedShape.attr('height');
         shapeWidthInput.disabled = false;
         shapeHeightInput.disabled = false;
-        shapeRadiusInput.style.display = 'none';
       } else if (selectedShape.classed('circle')) {
+        shapeRadiusInput.style.display = 'block';
+        shapeWidthInput.style.display = 'none';
+        shapeHeightInput.style.display = 'none';
         shapeRadiusInput.value = selectedShape.attr('r');
         shapeWidthInput.disabled = true;
         shapeHeightInput.disabled = true;
-        shapeRadiusInput.style.display = 'block';
       }
+      const currentColor = selectedShape.attr('fill') || '#000000';
+      const currentOpacity = selectedShape.attr('opacity') || 1;
+      shapeColorInput.value = rgbToHex(currentColor);
+      shapeTransparencyInput.value = currentOpacity;
     } else {
       shapeControls.style.display = 'none';
     }
@@ -1605,7 +1616,90 @@ document.addEventListener("DOMContentLoaded", () => {
     
     zoomBehavior.on("zoom", (event) => {
       gMap.attr("transform", event.transform);
-      // Do not apply transform to shapesGroup to keep shapes independent
+      // shapesGroup remains without transform
+    });
+  }
+
+  // Define shape drag behavior
+  const shapeDrag = d3.drag()
+    .on('start', (event) => {
+      d3.select(event.sourceEvent.target).raise().classed('active', true);
+    })
+    .on('drag', (event) => {
+      const shape = d3.select(event.sourceEvent.target);
+      shape.attr('cx', +shape.attr('cx') + event.dx)
+           .attr('cy', +shape.attr('cy') + event.dy)
+           .attr('x', +shape.attr('x') + event.dx)
+           .attr('y', +shape.attr('y') + event.dy);
+    })
+    .on('end', (event) => {
+      d3.select(event.sourceEvent.target).classed('active', false);
+    });
+
+  // Modify handleAddRectangle to apply drag
+  function handleAddRectangle() {
+    const rect = shapesGroup.append('rect')
+      .attr('x', svgWidth / 2 - 50)
+      .attr('y', svgHeight / 2 - 25)
+      .attr('width', 100)
+      .attr('height', 50)
+      .attr('fill', currentGradient.start)
+      .attr('opacity', currentGradient.end)
+      .attr('class', 'rectangle') // Assign 'rectangle' class
+      .call(shapeDrag); // Apply drag behavior
+  
+    rect.on('click', selectShape);
+  }
+
+  // Modify handleAddCircle to apply drag
+  function handleAddCircle() {
+    const circle = shapesGroup.append('circle')
+      .attr('cx', svgWidth / 2)
+      .attr('cy', svgHeight / 2)
+      .attr('r', 50)
+      .attr('fill', currentGradient.start)
+      .attr('opacity', currentGradient.end)
+      .attr('class', 'circle') // Assign 'circle' class
+      .call(shapeDrag); // Apply drag behavior
+  
+    circle.on('click', selectShape);
+  }
+
+  // In updateShapeControls, ensure dimension fields are shown properly
+  function updateShapeControls() {
+    if (selectedShape) {
+      shapeControls.style.display = 'block';
+      if (selectedShape.classed('rectangle')) {
+        shapeWidthInput.style.display = 'block';
+        shapeHeightInput.style.display = 'block';
+        shapeRadiusInput.style.display = 'none';
+        shapeWidthInput.value = selectedShape.attr('width');
+        shapeHeightInput.value = selectedShape.attr('height');
+        shapeWidthInput.disabled = false;
+        shapeHeightInput.disabled = false;
+      } else if (selectedShape.classed('circle')) {
+        shapeRadiusInput.style.display = 'block';
+        shapeWidthInput.style.display = 'none';
+        shapeHeightInput.style.display = 'none';
+        shapeRadiusInput.value = selectedShape.attr('r');
+        shapeWidthInput.disabled = true;
+        shapeHeightInput.disabled = true;
+      }
+      const currentColor = selectedShape.attr('fill') || '#000000';
+      const currentOpacity = selectedShape.attr('opacity') || 1;
+      shapeColorInput.value = rgbToHex(currentColor);
+      shapeTransparencyInput.value = currentOpacity;
+    } else {
+      shapeControls.style.display = 'none';
+    }
+  }
+
+  // Keep shapesGroup untransformed in applyZoomBehavior
+  function applyZoomBehavior() {
+    svg.call(zoomBehavior);
+    zoomBehavior.on('zoom', (event) => {
+      gMap.attr('transform', event.transform);
+      // shapesGroup remains without transform
     });
   }
   
