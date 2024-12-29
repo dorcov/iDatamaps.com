@@ -82532,246 +82532,6 @@
         {
             "type": "Feature",
             "properties": {
-                "id": 19,
-                "region_nam": "Edineț",
-                "region_id": 19,
-                "mapdata_value": 46.0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    27.103986106778464,
-                    48.26191868897274
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 20,
-                "region_nam": "Rîșcani-Nord",
-                "region_id": 20,
-                "mapdata_value": 31.3
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    27.468918120829652,
-                    48.043599054423
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 2,
-                "region_nam": "Soroca",
-                "region_id": 2,
-                "mapdata_value": 46.9
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    28.019212896526604,
-                    48.1452559
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 3,
-                "region_nam": "Florești",
-                "region_id": 3,
-                "mapdata_value": 47.0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    28.693235987854784,
-                    47.80327245
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 4,
-                "region_nam": "Bălți",
-                "region_id": 4,
-                "mapdata_value": 44.6
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    27.959986055180693,
-                    47.82830990652116
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 5,
-                "region_nam": "Ungheni",
-                "region_id": 5,
-                "mapdata_value": 40.2
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    27.95760087185041,
-                    47.2728216
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 6,
-                "region_nam": "Orhei",
-                "region_id": 6,
-                "mapdata_value": 35.4
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    28.952005761015016,
-                    47.4249949
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 7,
-                "region_nam": "Călărași",
-                "region_id": 7,
-                "mapdata_value": 52.8
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    28.383601911016648,
-                    47.35664380432455
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 8,
-                "region_nam": "Hîncești",
-                "region_id": 8,
-                "mapdata_value": 48.9
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    28.47555624769943,
-                    46.91508445
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 9,
-                "region_nam": "Anenii Noi",
-                "region_id": 9,
-                "mapdata_value": 52.9
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    29.325204257989995,
-                    47.07317515
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 10,
-                "region_nam": "Căușeni",
-                "region_id": 10,
-                "mapdata_value": 36.0
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    29.495669618218606,
-                    46.66770282014064
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 11,
-                "region_nam": "Cimișlia",
-                "region_id": 11,
-                "mapdata_value": 60.8
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    28.626005222904038,
-                    46.5039224
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 12,
-                "region_nam": "Comrat",
-                "region_id": 12,
-                "mapdata_value": 43.8
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    28.757623458340774,
-                    46.119981531812634
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 13,
-                "region_nam": "Cahul",
-                "region_id": 13,
-                "mapdata_value": 48.1
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    28.393316656817326,
-                    45.8865889
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
-                "id": 1,
-                "region_nam": "Fălești",
-                "region_id": 1,
-                "mapdata_value": 38.5
-            },
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    27.789762458189863,
-                    47.65184879139819
-                ]
-            }
-        },
-        {
-            "type": "Feature",
-            "properties": {
                 "id": 21,
                 "region_nam": "Buiucani",
                 "region_id": 14,
@@ -82780,8 +82540,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    29.50477678039666,
-                    45.987469129520534
+                    29.318103538781696,
+                    46.1280306434993
                 ]
             }
         },
@@ -82796,8 +82556,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    29.986504520498947,
-                    45.695546856062634
+                    29.636988663858173,
+                    45.65947596705128
                 ]
             }
         },
@@ -82812,8 +82572,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    30.055201749240005,
-                    45.730667037066304
+                    30.329253955015165,
+                    45.572400234930846
                 ]
             }
         },
@@ -82828,8 +82588,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    29.86167946921718,
-                    45.98889690821843
+                    29.83784884262804,
+                    46.220219333799555
                 ]
             }
         },
@@ -82844,8 +82604,8 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    30.092223757945938,
-                    45.92037802857651
+                    30.485429096666813,
+                    45.842962379318806
                 ]
             }
         }
