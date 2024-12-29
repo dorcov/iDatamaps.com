@@ -1361,7 +1361,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Add shape-related variables
   const addRectangleBtn = document.getElementById('addRectangle');
   const addCircleBtn = document.getElementById('addCircle');
-  const removeShapeBtn = document.getElementById('removeShape');
+  const deleteShapeBtn = document.getElementById('deleteShape');
   let selectedShape = null;
 
   // Add event listeners for shape buttons
@@ -1377,10 +1377,10 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Elementul cu ID 'addCircle' nu a fost găsit.");
   }
 
-  if (removeShapeBtn) {
-    removeShapeBtn.addEventListener('click', handleRemoveShape);
+  if (deleteShapeBtn) {
+    deleteShapeBtn.addEventListener('click', handleRemoveShape);
   } else {
-    console.error("Elementul cu ID 'removeShape' nu a fost găsit.");
+    console.error("Elementul cu ID 'deleteShape' nu a fost găsit.");
   }
 
   // Function to handle adding a rectangle
@@ -1451,6 +1451,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const shapeTransparencyInput = document.getElementById('shapeTransparency');
   const shapeWidthInput = document.getElementById('shapeWidth');
   const shapeHeightInput = document.getElementById('shapeHeight');
+  const shapeRadiusInput = document.getElementById('shapeRadius');
   const deleteShapeButton = document.getElementById('deleteShape');
   
   // Function to show or hide shape controls based on selection
