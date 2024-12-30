@@ -1029,13 +1029,6 @@ td.select-category select {
   width: 100%;
 }
 
-/* ...existing code... */
-
-/* ...existing code... */
-
-/* Stil pentru elementele blocate */
-
-/* ...existing code... */
 
 .shape-rectangle,
 .shape-circle {
@@ -1163,4 +1156,25 @@ svg .selected {
   border: none;
 }
 
+/* ...existing code... */
+
+/* ...existing code... */
+.control-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.control-group {
+  flex: 1 1 200px;
+  background-color: #FFF;
+  border: 1px solid #DDD;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.control-group h3 {
+  margin-top: 0;
+}
 /* ...existing code... */
