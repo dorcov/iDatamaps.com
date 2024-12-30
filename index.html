@@ -50,7 +50,7 @@
       <div class="control-panel">
 
         <section class="control-group">
-          <h3>Map Controls</h3>
+          <h3>Stările hărții</h3>
           <!-- Secțiunea de Selectare a Hărții -->
           <div class="option-section">
             <h4>Selectează Harta</h4>
@@ -66,11 +66,11 @@
 
           <!-- Secțiunea de Setări Canvas -->
           <div class="option-section">
-            <h4>Canvas Settings</h4>
-            <label for="canvasColor">Canvas Color:</label>
+            <h4>Setările fundalului</h4>
+            <label for="canvasColor">Culoare:</label>
             <input type="color" id="canvasColor" value="#ffffff" />
 
-            <label for="canvasTransparency">Canvas Transparency:</label>
+            <label for="canvasTransparency">Transparență:</label>
             <input type="range" id="canvasTransparency" min="0" max="1" step="0.1" value="1" />
 
             <label for="canvasWidth">Canvas Width (px):</label>
@@ -90,7 +90,7 @@
         </section>
 
         <section class="control-group">
-          <h3>Gradient Controls</h3>
+          <h3>Gradient</h3>
           <!-- Secțiunea de Gradient Personalizat și Presetat -->
           <div class="option-section">
             <h4>Selectează Gradient</h4>
@@ -141,10 +141,10 @@
         </section>
 
         <section class="control-group">
-          <h3>Category Controls</h3>
+          <h3>Date categorice</h3>
           <!-- Secțiunea de Gestionare Categorii -->
           <div class="option-section">
-            <h4>Gestionare Categorii</h4>
+            <h4>Alege una sau mai multe categorii</h4>
             <div class="category-manager">
               <div class="add-category">
                 <input type="text" id="newCategoryName" class="input-text" placeholder="Nume Categorie" />
@@ -161,7 +161,7 @@
         </section>
 
         <section class="control-group">
-          <h3>Text Elements</h3>
+          <h3>Text</h3>
           <!-- Secțiunea de Adăugare Text Liber -->
           <div class="option-section">
             <h4>Adaugă Text Liber</h4>
@@ -220,10 +220,10 @@
         </section>
 
         <section class="control-group">
-          <h3>Shapes</h3>
+          <h3>Forme geometrice</h3>
           <!-- Secțiunea de Forme Geometrice -->
           <div class="option-section">
-            <h4>Forme Geometrice</h4>
+            <h4>Adaugă o formă geometrică</h4>
             <button id="addRectangle" class="btn btn-primary">Adaugă Dreptunghi</button>
             <button id="addCircle" class="btn btn-primary">Adaugă Cerc</button>
             
@@ -260,7 +260,7 @@
             <table id="regionTable">
               <thead>
                 <tr>
-                  <th>Regiune</th>
+                  <th>Regiune/Țară</th>
                   <th>Valoare</th>
                   <th>Categorie</th>
                 </tr>
@@ -297,7 +297,7 @@
 
         <!-- Secțiunea de Stilizare Legende -->
         <div class="option-section">
-          <h4>Stilizează Legende</h4>
+          <h4>Stilizează legendele</h4>
           <div class="legend-styling">
             <label for="legendFont">Font:</label>
             <select id="legendFont" class="custom-select">

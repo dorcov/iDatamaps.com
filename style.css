@@ -588,8 +588,6 @@ td.select-category select {
   box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
 }
 
-/* ...existing code... */
-
 .free-text-container {
   position: absolute;
   padding: 8px;
@@ -971,7 +969,6 @@ td.select-category select {
   fill: rgba(255, 255, 255, var(--legend-bg-transparency, 0.8));
 }
 
-/* ...existing code... */
 
 .shapes-container {
   position: absolute;
@@ -999,7 +996,7 @@ td.select-category select {
   border-radius: 4px;
 }
 
-/* ...existing code... */
+
 
 .shape-controls {
   display: flex;
@@ -1096,9 +1093,6 @@ svg .selected {
   stroke-width: 1.5;
 }
 
-/* ...existing code... */
-
-/* ...existing code... */
 
 .value-label {
   position: absolute;
@@ -1106,31 +1100,22 @@ svg .selected {
   /* Additional styling as needed */
 }
 
-/* ...existing code... */
-
-/* ...existing code... */
 
 :root {
   --legend-width: 200px;
   --legend-height: 100px;
-  /* ...existing CSS variables... */
 }
 
 #legendGroup {
   width: var(--legend-width);
-  height: var(--legend-height);
-  /* ...existing styles... */
+  height: var(--legend-height); 
 }
 
 #numericLegendGroup {
   width: var(--legend-width);
   height: var(--legend-height);
-  /* ...existing styles... */
 }
 
-/* ...existing code... */
-
-/* ...existing code... */
 
 .map-title {
   position: absolute;
@@ -1142,10 +1127,9 @@ svg .selected {
   /* Additional styling as needed */
   pointer-events: all;
   user-select: none;
-  /* Ensure text is selectable for editing */
+  
 }
 
-/* ...existing code... */
 
 .legend {
   border: 1px solid #000; /* Existing border */
@@ -1156,9 +1140,6 @@ svg .selected {
   border: none;
 }
 
-/* ...existing code... */
-
-/* ...existing code... */
 .control-panel {
   display: flex;
   flex-wrap: wrap;
@@ -1177,7 +1158,6 @@ svg .selected {
 .control-group h3 {
   margin-top: 0;
 }
-/* ...existing code... */
 
 body, button, input, select, .btn {
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Roboto", sans-serif;
@@ -1189,9 +1169,7 @@ body, button, input, select, .btn {
   background-color: #007aff;
   color: #ffffff;
   border: none;
-  /* ...existing code within .btn... */
 }
-/* ...existing code... */
 
 /* Ensure consistent font family for control panel elements */
 .control-panel,
