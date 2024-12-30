@@ -1206,6 +1206,13 @@ body, button, input, select, .btn {
   transform: translateY(-2px);
 }
 
+/* Ensure no conflicting styles override green hover */
+button#addFreeText:hover,
+button#addTitle:hover {
+  background-color: #28a745; /* Green */
+  transform: translateY(-2px);
+}
+
 /* Red hover for "Resetează Datele" button in table section */
 #resetAll:hover {
   background-color: #c82333; /* Dark Red */
