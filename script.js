@@ -1906,4 +1906,50 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Elementul cu ID 'legendBorder' nu a fost găsit.");
   }
   
+  // Step 2: Define translation strings
+  const translations = {
+    ro: {
+        legendTitle: "Legendă",
+        // Add more Romanian translations here
+    },
+    en: {
+        legendTitle: "Legend",
+        // Add more English translations here
+    }
+  };
+
+  // Step 3: Implement language switching
+  const languageSelector = document.getElementById("languageSelector");
+
+  function setLanguage(lang) {
+      // Update the language attribute in the HTML tag
+      document.documentElement.lang = lang;
+
+      // Update UI elements with translations
+      d3.select("#legendTitle").text(translations[lang].legendTitle);
+      // Add more UI element updates here
+  }
+
+  // Initialize with default language
+  setLanguage(languageSelector.value);
+
+  // Add event listener for language change
+  if (languageSelector) {
+      languageSelector.addEventListener("change", (e) => {
+          const selectedLang = e.target.value;
+          setLanguage(selectedLang);
+          // Optionally, save the selected language to localStorage
+          localStorage.setItem("selectedLanguage", selectedLang);
+      });
+  } else {
+      console.error("Elementul cu ID 'languageSelector' nu a fost găsit.");
+  }
+
+  // Optionally, restore the selected language from localStorage on load
+  const savedLanguage = localStorage.getItem("selectedLanguage");
+  if (savedLanguage && translations[savedLanguage]) {
+      languageSelector.value = savedLanguage;
+      setLanguage(savedLanguage);
+  }
+  
 });
