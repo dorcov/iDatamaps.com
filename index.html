@@ -50,7 +50,7 @@
       <div class="control-panel">
 
         <section class="control-group">
-          <h3>Stările hărții</h3>
+          <h3>Setările hărții</h3>
           <!-- Secțiunea de Selectare a Hărții -->
           <div class="option-section">
             <h4>Selectează Harta</h4>
@@ -295,48 +295,71 @@
           </div>
         </div>
 
-        <!-- Secțiunea de Stilizare Legende -->
         <div class="option-section">
           <h4>Stilizează legendele</h4>
+          
           <div class="legend-styling">
-            <label for="legendFont">Font:</label>
-            <select id="legendFont" class="custom-select">
-              <option value="Roboto, sans-serif">Roboto</option>
-              <option value="Montserrat, sans-serif">Montserrat</option>
-              <option value="Open Sans, sans-serif">Open Sans</option>
-              <option value="Lobster, cursive">Lobster</option>
-              <!-- Adaugă alte fonturi după necesitate -->
-            </select>
-
-            <label for="legendFontSize">Mărime Font (px):</label>
-            <input type="number" id="legendFontSize" class="input-text" value="14" min="10" max="50" />
-
-            <label for="legendFontStyle">Stil Font:</label>
-            <select id="legendFontStyle" class="custom-select">
-              <option value="normal">Normal</option>
-              <option value="italic">Italic</option>
-              <option value="bold">Bold</option>
-              <option value="bold italic">Bold Italic</option>
-            </select>
-
-            <label for="legendColor">Culoare Font:</label>
-            <input type="color" id="legendColor" value="#000000" />
-
-            <label for="legendBgTransparency">Transparență Fundal:</label>
-            <input type="range" id="legendBgTransparency" min="0" max="1" step="0.1" value="0.8" />
-
-            <!-- New Controls for Legend Size -->
-            <label for="legendWidth">Lățime Legendă (px):</label>
-            <input type="number" id="legendWidth" class="input-text" value="200" min="100" max="500" />
-
-            <label for="legendHeight">Înălțime Legendă (px):</label>
-            <input type="number" id="legendHeight" class="input-text" value="100" min="50" max="300" />
-
-            <!-- New Checkbox for Legend Border -->
-            <label for="legendBorder">Chenar:</label>
-            <input type="checkbox" id="legendBorder" checked />
+            <!-- Grup 1: Font -->
+            <div class="control-group">
+              <label for="legendFont">Font:</label>
+              <select id="legendFont" class="custom-select">
+                <option value="Roboto, sans-serif">Roboto</option>
+                <option value="Montserrat, sans-serif">Montserrat</option>
+                <option value="Open Sans, sans-serif">Open Sans</option>
+                <option value="Lobster, cursive">Lobster</option>
+              </select>
+            </div>
+        
+            <!-- Grup 2: Mărime Font -->
+            <div class="control-group">
+              <label for="legendFontSize">Mărime Font (px):</label>
+              <input type="number" id="legendFontSize" class="input-text" value="14" min="10" max="50" />
+            </div>
+        
+            <!-- Grup 3: Stil Font -->
+            <div class="control-group">
+              <label for="legendFontStyle">Stil Font:</label>
+              <select id="legendFontStyle" class="custom-select">
+                <option value="normal">Normal</option>
+                <option value="italic">Italic</option>
+                <option value="bold">Bold</option>
+                <option value="bold italic">Bold Italic</option>
+              </select>
+            </div>
+        
+            <!-- Grup 4: Culoare Font -->
+            <div class="control-group">
+              <label for="legendColor">Culoare Font:</label>
+              <input type="color" id="legendColor" value="#000000" />
+            </div>
+        
+            <!-- Grup 5: Transparență Fundal -->
+            <div class="control-group">
+              <label for="legendBgTransparency">Transparență Fundal:</label>
+              <input type="range" id="legendBgTransparency" min="0" max="1" step="0.1" value="0.8" />
+            </div>
+        
+            <!-- Grup 6: Lățime Legendă -->
+            <div class="control-group">
+              <label for="legendWidth">Lățime Legendă (px):</label>
+              <input type="number" id="legendWidth" class="input-text" value="200" min="100" max="500" />
+            </div>
+        
+            <!-- Grup 7: Înălțime Legendă -->
+            <div class="control-group">
+              <label for="legendHeight">Înălțime Legendă (px):</label>
+              <input type="number" id="legendHeight" class="input-text" value="100" min="50" max="300" />
+            </div>
+        
+            <!-- Grup 8: Chenar -->
+            <div class="control-group">
+              <label for="legendBorder">Chenar:</label>
+              <input type="checkbox" id="legendBorder" checked />
+            </div>
+            
           </div>
         </div>
+        
 
         <!-- Secțiunea pentru a controla vizibilitatea legendei -->
         <div class="option-section">
