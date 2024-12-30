@@ -1192,3 +1192,26 @@ body, button, input, select, .btn {
   /* ...existing code within .btn... */
 }
 /* ...existing code... */
+
+/* Ensure consistent font family for control panel elements */
+.control-panel,
+.control-panel * {
+  font-family: inherit; /* Inherits from body for uniform font */
+}
+
+/* Standardize Apple-style buttons within the control panel */
+.control-panel .btn {
+  border-radius: 8px;
+  background-color: #007aff;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  transition: background-color 0.3s, transform 0.2s;
+  cursor: pointer;
+}
+
+/* Optional: Adjust hover effects for control panel buttons */
+.control-panel .btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
