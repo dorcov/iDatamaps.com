@@ -1178,3 +1178,17 @@ svg .selected {
   margin-top: 0;
 }
 /* ...existing code... */
+
+body, button, input, select, .btn {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Roboto", sans-serif;
+}
+
+/* Example Apple-style button with subtle rounded corners and minimal borders */
+.btn {
+  border-radius: 8px;
+  background-color: #007aff;
+  color: #ffffff;
+  border: none;
+  /* ...existing code within .btn... */
+}
+/* ...existing code... */
