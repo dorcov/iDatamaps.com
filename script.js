@@ -1086,7 +1086,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Elementul cu ID 'valuesFontSize' nu a fost găsit.");
   }
 
-  // Eveniment pentru schimbarea culorii fontului
+  // Eveniment pentru schimbarea culorii fontului,
   if (valuesColorInput) {
     valuesColorInput.addEventListener("input", () => {
       valueLabels.forEach(label => {
