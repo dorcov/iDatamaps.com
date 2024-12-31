@@ -33,11 +33,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Lista de gradienturi presetate
   const presetGradients = {
-    blueGreen: ["#2A73FF", "#00FF7F"],
-    redYellow: ["#FF0000", "#FFFF00"],
-    purplePink: ["#800080", "#FFC0CB"],
-    orangeBlue: ["#FFA500", "#0000FF"],
-    grey: ["#808080", "#D3D3D3"]
+    blueGreen: { start: "#2A73FF", end: "#00FF7F" },
+    redYellow: { start: "#FF0000", end: "#FFFF00" },
+    purplePink: { start: "#800080", end: "#FFC0CB" },
+    orangeBlue: { start: "#FFA500", end: "#0000FF" },
+    grey: { start: "#808080", end: "#D3D3D3" }
   };
 
   // Declararea tooltip-ului
@@ -89,13 +89,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a aplica gradientul presetat
   function applyPresetGradient() {
-    const select = document.getElementById("presetGradient");
-    if (!select || !select.value) return;
-    const stops = select.options[select.selectedIndex].dataset.gradientStops.split(",");
-    // Apply multi-stop gradient logic (simplified)
-    // e.g., color scale or direct interpolation
-    // ...existing code to apply gradient...
+    const selectedPreset = presetGradientSelect.value;
+    if (selectedPreset && presetGradients[selectedPreset]) {
+        const gradient = presetGradients[selectedPreset];
+        currentGradient = gradient;
+        gradientStart.value = gradient.start;
+        gradientEnd.value = gradient.end;
+        updateMapColors();
+    }
   }
+
+  // Add preview functionality
+  presetGradientSelect.addEventListener('change', (e) => {
+    const preview = document.querySelector('.gradient-preview');
+    const selectedGradient = presetGradients[e.target.value];
+    if (selectedGradient) {
+        preview.style.background = `linear-gradient(to right, ${selectedGradient.start}, ${selectedGradient.end})`;
+        applyPresetGradient();
+    }
+  });
+
+  // Show preview on hover
+  presetGradientSelect.addEventListener('mouseover', (e) => {
+    if (e.target.tagName === 'OPTION' && presetGradients[e.target.value]) {
+        const gradient = presetGradients[e.target.value];
+        const preview = document.querySelector('.gradient-preview');
+        preview.style.background = `linear-gradient(to right, ${gradient.start}, ${gradient.end})`;
+    }
+  });
 
   if (presetGradientSelect) {
     presetGradientSelect.addEventListener("change", applyPresetGradient);
