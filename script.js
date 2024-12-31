@@ -2079,7 +2079,11 @@ document.addEventListener("DOMContentLoaded", () => {
   
   function highlightRegion(regionName) {
     d3.selectAll(".highlighted").classed("highlighted", false);
-    d3.select(`[data-region-name="${regionName}"]`).classed("highlighted", true);
+    const selected = d3.select(`[data-region-name="${regionName}"]`);
+    selected.classed("highlighted", true);
+    setTimeout(() => {
+      selected.classed("highlighted", false);
+    }, 2000);
   }
   
 });
