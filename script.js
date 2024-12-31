@@ -347,6 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("fill", "#ccc")
         .attr("stroke", "#fff")
         .attr("stroke-width", 0.5)
+        .attr("data-region-name", d => d.properties.name)
         .on("mouseover", function (event, d) {
           d3.select(this).attr("fill", "orange");
           showTooltip(event, d);
@@ -391,7 +392,7 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
       regionTableBody.appendChild(row);
       row.addEventListener("click", () => {
-        highlightRegion(feature);
+        highlightRegion(feature.properties.name);
       });
     });
 
@@ -2076,11 +2077,9 @@ document.addEventListener("DOMContentLoaded", () => {
       setLanguage(savedLanguage);
   }
   
-  function highlightRegion(feature) {
-    // Remove previous highlights
-    d3.selectAll(".highlighted-region").classed("highlighted-region", false);
-    // Highlight the selected region based on a known property (e.g., name)
-    d3.select(`[data-name="${feature.properties.name}"]`).classed("highlighted-region", true);
+  function highlightRegion(regionName) {
+    d3.selectAll(".highlighted").classed("highlighted", false);
+    d3.select(`[data-region-name="${regionName}"]`).classed("highlighted", true);
   }
   
 });

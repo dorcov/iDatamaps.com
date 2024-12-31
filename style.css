@@ -1253,3 +1253,10 @@ button#addTitle:hover {
   stroke: #000;
   stroke-width: 2px;
 }
+
+/* ...existing code... */
+.highlighted {
+  stroke: #000;
+  stroke-width: 2px;
+}
+/* ...existing code... */
