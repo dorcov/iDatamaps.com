@@ -146,7 +146,7 @@
             <h4 data-key="chooseCategories">Alege una sau mai multe categorii</h4>
             <div class="category-manager">
               <div class="add-category">
-                <input type="text" id="newCategoryName" class="input-text" placeholder="Nume Categorie" />
+                <input type="text" id="newCategoryName" class="input-text" data-placeholder="categoryNamePlaceholder" placeholder="Nume Categorie" />
                 <input type="color" id="newCategoryColor" value="#FF5733" />
                 <button id="addCategory" class="btn btn-primary" data-key="addCategory">Adaugă Categorie</button>
               </div>
@@ -164,7 +164,7 @@
           <!-- Secțiunea de Adăugare Text Liber -->
           <div class="option-section">
             <h4 data-key="addText">Adaugă Text</h4>
-            <textarea id="freeTextInput" class="input-text" placeholder="Introdu Textul" rows="4"></textarea>
+            <textarea id="freeTextInput" class="input-text" data-placeholder="textPlaceholder" placeholder="Introdu Textul" rows="4"></textarea>
             <div class="text-options">
               <label for="freeTextFont" data-key="font">Font:</label>
               <select id="freeTextFont" class="custom-select">
@@ -195,7 +195,7 @@
           <!-- Secțiunea de Adăugare Titlu -->
           <div class="option-section">
             <h4 data-key="addTitle">Adaugă Titlu</h4>
-            <input type="text" id="titleInput" class="input-text" placeholder="Introdu Titlul" />
+            <input type="text" id="titleInput" class="input-text" data-placeholder="titlePlaceholder" placeholder="Introdu Titlul" />
             <div class="title-options">
               <label for="titleFont" data-key="font">Font:</label>
               <select id="titleFont" class="custom-select">
@@ -364,6 +364,7 @@
           </div>
         </div>
         
+        <h5 data-key="legendTitle">Legendă</h5>
 
         <!-- Secțiunea pentru a controla vizibilitatea legendei -->
         <div class="option-section">

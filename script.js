@@ -1960,6 +1960,9 @@ document.addEventListener("DOMContentLoaded", () => {
         futureFeatures: "Viitoare Funcționalități",
         futureFeatureDescription: "Aici va fi adăugată funcționalitatea viitoare.",
         language: "Limba",
+        categoryNamePlaceholder: "Nume Categorie",
+        textPlaceholder: "Introdu Textul",
+        titlePlaceholder: "Introdu Titlul",
     },
     en: {
         legendTitle: "Legend",
@@ -2013,6 +2016,9 @@ document.addEventListener("DOMContentLoaded", () => {
         futureFeatures: "Future Features",
         futureFeatureDescription: "Future functionality will be added here.",
         language: "Language",
+        categoryNamePlaceholder: "Category Name",
+        textPlaceholder: "Enter your text",
+        titlePlaceholder: "Enter your title",
     }
   };
 
@@ -2024,6 +2030,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const key = element.getAttribute('data-key');
       if (translations[lang] && translations[lang][key]) {
         element.innerText = translations[lang][key];
+      }
+    });
+
+    // New code to handle placeholders
+    document.querySelectorAll('[data-placeholder]').forEach(element => {
+      const key = element.getAttribute('data-placeholder');
+      if (translations[lang][key]) {
+        element.placeholder = translations[lang][key];
       }
     });
   }
