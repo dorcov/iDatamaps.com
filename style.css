@@ -361,6 +361,10 @@ td.select-category select {
   ry: 4;
   filter: none; /* Eliminare umbră */
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Distributează etichetele în interior */
+  padding: 0 10px; /* Spațiu interior pentru etichete */
 }
 
 .legend-title {
@@ -1334,5 +1338,14 @@ button#addTitle:hover {
 /* Highlight pentru rezultatele căutării */
 .highlight-search {
   background-color: rgba(255, 255, 0, 0.2);
+}
+
+/* Stil pentru etichetele numerice din legendă */
+.legend-label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  color: #333;
+  /* Asigură că etichetele sunt vizibile în interiorul barei */
+  white-space: nowrap;
 }
 
