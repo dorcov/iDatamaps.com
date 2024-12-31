@@ -2035,4 +2035,87 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2000);
   }
   
+  // Adăugăm referințele pentru elementele CSV
+  const csvFileInput = document.getElementById("csvFileInput");
+  const importCSVButton = document.getElementById("importCSV");
+  const downloadTemplateButton = document.getElementById("downloadTemplate");
+
+  // Funcție pentru procesarea CSV-ului
+  function processCSV(csv) {
+    const lines = csv.split("\n");
+    const data = {};
+    
+    // Ignorăm prima linie (header) și procesăm restul
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line) {
+        const [region, value] = line.split(",").map(item => item.trim());
+        data[region] = parseFloat(value) || 0;
+      }
+    }
+    
+    return data;
+  }
+
+  // Funcție pentru actualizarea valorilor în tabel și pe hartă
+  function updateValuesFromCSV(csvData) {
+    const inputs = regionTableBody.querySelectorAll("input[type='number']");
+    inputs.forEach(input => {
+      const regionName = decodeURIComponent(input.getAttribute("data-region"));
+      if (csvData[regionName] !== undefined) {
+        input.value = csvData[regionName];
+      }
+    });
+
+    // Actualizăm harta cu noile valori
+    updateMapColors();
+    generateBothLegends();
+  }
+
+  // Event listener pentru butonul de import CSV
+  if (importCSVButton) {
+    importCSVButton.addEventListener("click", () => {
+      const file = csvFileInput.files[0];
+      if (!file) {
+        alert("Vă rugăm selectați un fișier CSV");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const csvData = processCSV(e.target.result);
+        updateValuesFromCSV(csvData);
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  // Funcție pentru descărcarea template-ului CSV
+  function downloadCSVTemplate() {
+    const headers = "Region,Value\n";
+    let csvContent = headers;
+    
+    // Adăugăm toate regiunile din tabel
+    const rows = regionTableBody.querySelectorAll("tr");
+    rows.forEach(row => {
+      const regionName = row.cells[0].textContent;
+      csvContent += `${regionName},0\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'map_data_template.csv');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  // Event listener pentru descărcarea template-ului
+  if (downloadTemplateButton) {
+    downloadTemplateButton.addEventListener("click", downloadCSVTemplate);
+  }
+  
 });

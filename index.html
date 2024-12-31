@@ -239,6 +239,18 @@
         <!-- Secțiunea de Tabel de Date -->
         <div class="option-section">
           <h4 data-key="dataTable">Tabel de Date</h4>
+          
+          <!-- Adăugăm secțiunea de import CSV -->
+          <div class="csv-import-section">
+            <h5 data-key="csvImport">Import din CSV</h5>
+            <input type="file" id="csvFileInput" accept=".csv" class="input-text" />
+            <button id="importCSV" class="btn btn-primary" data-key="importCSV">Importă CSV</button>
+            <div class="csv-template">
+              <small data-key="csvTemplate">Format CSV: Region,Value</small>
+              <button id="downloadTemplate" class="btn btn-export" data-key="downloadTemplate">Descarcă Template</button>
+            </div>
+          </div>
+          
           <div class="table-container">
             <table id="regionTable">
               <thead>

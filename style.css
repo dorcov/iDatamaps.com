@@ -1250,3 +1250,39 @@ button#addTitle:hover {
   filter: drop-shadow(0 0 6px rgba(241, 105, 26, 0.7));
 }
 
+/* Stiluri pentru secțiunea de import CSV */
+.csv-import-section {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.csv-import-section h5 {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #495057;
+}
+
+.csv-import-section input[type="file"] {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.csv-template {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.csv-template small {
+  color: #6c757d;
+  font-size: 12px;
+}
+
+#downloadTemplate {
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
