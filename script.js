@@ -2210,7 +2210,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       rows.forEach(row => regionTableBody.appendChild(row));
-      sortByNameBtn.textContent = `Sortare după nume ${sortNameAsc ? '↓' : '↑'}`;
+      
+      // Actualizăm textul butonului folosind traducerea corectă
+      const currentLang = languageSelector.value;
+      sortByNameBtn.setAttribute('data-key', 'sortByName');
+      sortByNameBtn.textContent = `${translations[currentLang].sortByName} ${sortNameAsc ? '↓' : '↑'}`;
   }
 
   function sortTableByValue() {
@@ -2224,7 +2228,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       rows.forEach(row => regionTableBody.appendChild(row));
-      sortByValueBtn.textContent = `Sortare după valoare ${sortValueAsc ? '↓' : '↑'}`;
+      
+      // Actualizăm textul butonului folosind traducerea corectă
+      const currentLang = languageSelector.value;
+      sortByValueBtn.setAttribute('data-key', 'sortByValue');
+      sortByValueBtn.textContent = `${translations[currentLang].sortByValue} ${sortValueAsc ? '↓' : '↑'}`;
   }
 
   // Event listeners pentru căutare și sortare
