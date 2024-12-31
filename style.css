@@ -1254,9 +1254,11 @@ button#addTitle:hover {
   stroke-width: 2px;
 }
 
-/* ...existing code... */
+
 .highlighted {
   fill: rgb(241, 105, 26);
-  fill-opacity: 0.3;
+  fill-opacity: 0.4;
+  /* Add a drop-shadow to create an outer glow */
+  filter: drop-shadow(0 0 6px rgba(241, 105, 26, 0.7));
 }
-/* ...existing code... */
+
