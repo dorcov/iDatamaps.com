@@ -2254,4 +2254,42 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Elementul cu ID 'sortByValue' nu a fost găsit.");
   }
   
+  // Event listener for legend width input
+  if (legendWidthInput) {
+    legendWidthInput.addEventListener("input", (event) => {
+        const newWidth = parseInt(event.target.value, 10);
+        d3.select("#legendBackground")
+            .attr("width", isNaN(newWidth) ? 180 : newWidth);
+    });
+} else {
+    console.error("Elementul cu ID 'legendWidth' nu a fost găsit.");
+}
+
+// Event listener for legend height input
+if (legendHeightInput) {
+    legendHeightInput.addEventListener("input", (event) => {
+        const newHeight = parseInt(event.target.value, 10);
+        d3.select("#legendBackground")
+            .attr("height", isNaN(newHeight) ? 200 : newHeight);
+    });
+} else {
+    console.error("Elementul cu ID 'legendHeight' nu a fost găsit.");
+}
+
+// Event listener for legend border checkbox
+if (legendBorderCheckbox) {
+    legendBorderCheckbox.addEventListener("change", (event) => {
+        const hasBorder = event.target.checked;
+        const legendBackground = d3.select("#legendBackground");
+        if (hasBorder) {
+            legendBackground.attr("stroke", "#000")
+                             .attr("stroke-width", 1);
+        } else {
+            legendBackground.attr("stroke", "none");
+        }
+    });
+} else {
+    console.error("Elementul cu ID 'legendBorder' nu a fost găsit.");
+}
+  
 });
