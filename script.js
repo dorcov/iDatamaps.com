@@ -519,19 +519,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     d3.select("#numericResizeHandle").call(resizeDrag);
 
-    // Adaugă buton de ștergere (acum doar ascunde legenda)
-    numericLegendGroup.append("text")
-      .attr("id", "deleteNumericLegend")
-      .attr("x", 160)
-      .attr("y", 15)
-      .style("cursor", "pointer")
-      .text("🗑️");
-
-    d3.select("#deleteNumericLegend").on("click", () => {
-      numericLegendGroup.attr("visibility", "hidden");
-      localStorage.setItem("numericLegendVisible", "hidden");
-    });
-
     // Apply styles to numeric legend
     numericLegendGroup.style("font-family", "var(--legend-font, 'Roboto, sans-serif')")
                       .style("font-size", "var(--legend-font-size, 14px)")
