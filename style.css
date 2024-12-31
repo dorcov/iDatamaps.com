@@ -583,18 +583,18 @@ td.select-category select {
 .free-text-container {
   position: absolute;
   padding: 8px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid transparent;
+  background: transparent; /* Fully transparent background */
+  border: 1px solid transparent; /* Transparent border */
   border-radius: 4px;
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
-  color: #333;
+  color: #333; /* Text color remains visible, adjust or set transparent if needed */
   cursor: move;
   user-select: text;
   min-width: 100px;
   min-height: 30px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: none; /* Remove box shadow for full transparency */
   white-space: pre-wrap; /* Allow multiple lines */
   word-wrap: break-word;
 }
