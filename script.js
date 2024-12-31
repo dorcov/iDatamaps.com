@@ -1910,11 +1910,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const translations = {
     ro: {
         legendTitle: "Legendă",
-        // Add more Romanian translations here
+        controlPanelTitle: "Setările hărții",
+        selectMap: "Selectează Harta",
+        // Add all other translation keys and their Romanian translations
+        exportAsPNG: "Exportă ca PNG",
+        selectGradient: "Selectează Gradient",
+        // Continue for all control panel texts
     },
     en: {
         legendTitle: "Legend",
-        // Add more English translations here
+        controlPanelTitle: "Map Settings",
+        selectMap: "Select Map",
+        // Add all other translation keys and their English translations
+        exportAsPNG: "Export as PNG",
+        selectGradient: "Select Gradient",
+        // Continue for all control panel texts
     }
   };
 

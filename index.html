@@ -50,10 +50,10 @@
       <div class="control-panel">
 
         <section class="control-group">
-          <h3>Setările hărții</h3>
+          <h3 data-key="controlPanelTitle">Setările hărții</h3>
           <!-- Secțiunea de Selectare a Hărții -->
           <div class="option-section">
-            <h4>Selectează Harta</h4>
+            <h4 data-key="selectMap">Selectează Harta</h4>
             <select id="mapSelector" class="custom-select">
               <option value="md.geojson">Moldova</option>
               <option value="regiuni.geojson">Moldova Regiuni</option>
@@ -66,37 +66,37 @@
 
           <!-- Secțiunea de Setări Canvas -->
           <div class="option-section">
-            <h4>Setările fundalului</h4>
-            <label for="canvasColor">Culoare:</label>
+            <h4 data-key="backgroundSettings">Setările fundalului</h4>
+            <label for="canvasColor" data-key="color">Culoare:</label>
             <input type="color" id="canvasColor" value="#ffffff" />
 
-            <label for="canvasTransparency">Transparență:</label>
+            <label for="canvasTransparency" data-key="transparency">Transparență:</label>
             <input type="range" id="canvasTransparency" min="0" max="1" step="0.1" value="1" />
 
-            <label for="canvasWidth">Canvas Width (px):</label>
+            <label for="canvasWidth" data-key="canvasWidth">Canvas Width (px):</label>
             <input type="number" id="canvasWidth" value="800" />
 
-            <label for="canvasHeight">Canvas Height (px):</label>
+            <label for="canvasHeight" data-key="canvasHeight">Canvas Height (px):</label>
             <input type="number" id="canvasHeight" value="600" />
           </div>
 
           <!-- Secțiunea de Resetare și Export -->
           <div class="option-section">
             <div class="button-group">
-              <button id="exportMap" class="btn btn-export">Exportă ca PNG</button>
+              <button id="exportMap" class="btn btn-export" data-key="exportAsPNG">Exportă ca PNG</button>
             </div>
           </div>
         </section>
 
         <section class="control-group">
-          <h3>Gradient</h3>
+          <h3 data-key="gradient">Gradient</h3>
           <!-- Secțiunea de Gradient Personalizat și Presetat -->
           <div class="option-section">
-            <h4>Selectează Gradient</h4>
+            <h4 data-key="selectGradient">Selectează Gradient</h4>
             <div class="gradient-options">
               <!-- Dropdown pentru Gradienturi Presetate -->
               <div class="preset-gradient">
-                <label for="presetGradient">Gradient Presetat:</label>
+                <label for="presetGradient" data-key="presetGradient">Gradient Presetat:</label>
                 <select id="presetGradient" class="custom-select">
                   <option value="">Selectează un Gradient Presetat</option>
                   <option value="blueGreen">Albastru la Verde</option>
@@ -124,31 +124,31 @@
               <!-- Secțiunea de Gradient Personalizat -->
               <div class="custom-gradient">
                 <div class="color-picker">
-                  <label for="gradientStart">Culoare valori minime:</label>
+                  <label for="gradientStart" data-key="minValueColor">Culoare valori minime:</label>
                   <input type="color" id="gradientStart" value="#2A73FF" />
                 </div>
                 
                 <div class="color-picker">
-                  <label for="gradientEnd">Culoare valori maxime:</label>
+                  <label for="gradientEnd" data-key="maxValueColor">Culoare valori maxime:</label>
                   <input type="color" id="gradientEnd" value="#00FF7F" />
                 </div>
                 
-                <button id="applyGradient" class="btn btn-primary">Aplică Gradient Personalizat</button>
+                <button id="applyGradient" class="btn btn-primary" data-key="applyCustomGradient">Aplică Gradient Personalizat</button>
               </div>
             </div>
           </div>
         </section>
 
         <section class="control-group">
-          <h3>Date categorice</h3>
+          <h3 data-key="categoricalData">Date categorice</h3>
           <!-- Secțiunea de Gestionare Categorii -->
           <div class="option-section">
-            <h4>Alege una sau mai multe categorii</h4>
+            <h4 data-key="chooseCategories">Alege una sau mai multe categorii</h4>
             <div class="category-manager">
               <div class="add-category">
                 <input type="text" id="newCategoryName" class="input-text" placeholder="Nume Categorie" />
                 <input type="color" id="newCategoryColor" value="#FF5733" />
-                <button id="addCategory" class="btn btn-primary">Adaugă Categorie</button>
+                <button id="addCategory" class="btn btn-primary" data-key="addCategory">Adaugă Categorie</button>
               </div>
               <div class="category-list">
                 <ul id="categoryList">
@@ -160,44 +160,44 @@
         </section>
 
         <section class="control-group">
-          <h3>Text</h3>
+          <h3 data-key="text">Text</h3>
           <!-- Secțiunea de Adăugare Text Liber -->
           <div class="option-section">
-            <h4>Adaugă Text</h4>
+            <h4 data-key="addText">Adaugă Text</h4>
             <textarea id="freeTextInput" class="input-text" placeholder="Introdu Textul" rows="4"></textarea>
             <div class="text-options">
-              <label for="freeTextFont">Font:</label>
+              <label for="freeTextFont" data-key="font">Font:</label>
               <select id="freeTextFont" class="custom-select">
                 <option value="'Roboto', sans-serif">Roboto</option>
                 <option value="'Montserrat', sans-serif">Montserrat</option>
                 <option value="'Open Sans', sans-serif">Open Sans</option>
                 <option value="'Lobster', cursive">Lobster</option>
               </select>
-              <label for="freeTextSize">Mărime (px):</label>
+              <label for="freeTextSize" data-key="size">Mărime (px):</label>
               <input type="number" id="freeTextSize" class="input-text" value="14" min="10" max="50" />
-              <label for="freeTextColor">Culoare:</label>
+              <label for="freeTextColor" data-key="color">Culoare:</label>
               <input type="color" id="freeTextColor" value="#333333" />
               <div style="display: flex; align-items: center; gap: 8px;">
-                <label for="freeTextBorder">Chenar:</label>
+                <label for="freeTextBorder" data-key="border">Chenar:</label>
                 <input type="checkbox" id="freeTextBorder" />
                 
-                <label for="freeTextBold">Bold:</label>
+                <label for="freeTextBold" data-key="bold">Bold:</label>
                 <input type="checkbox" id="freeTextBold" />
                 
-                <label for="freeTextItalic">Italic:</label>
+                <label for="freeTextItalic" data-key="italic">Italic:</label>
                 <input type="checkbox" id="freeTextItalic" />
               </div>
             </div>
-            <button id="addFreeText" class="btn btn-primary">Adaugă Text</button>
-            <button id="removeFreeText" class="btn btn-reset">Elimină Text</button>
+            <button id="addFreeText" class="btn btn-primary" data-key="addTextButton">Adaugă Text</button>
+            <button id="removeFreeText" class="btn btn-reset" data-key="removeTextButton">Elimină Text</button>
           </div>
 
           <!-- Secțiunea de Adăugare Titlu -->
           <div class="option-section">
-            <h4>Adaugă Titlu</h4>
+            <h4 data-key="addTitle">Adaugă Titlu</h4>
             <input type="text" id="titleInput" class="input-text" placeholder="Introdu Titlul" />
             <div class="title-options">
-              <label for="titleFont">Font:</label>
+              <label for="titleFont" data-key="font">Font:</label>
               <select id="titleFont" class="custom-select">
                 <option value="'Roboto', sans-serif">Roboto</option>
                 <option value="'Montserrat', sans-serif">Montserrat</option>
@@ -205,67 +205,67 @@
                 <option value="'Lobster', cursive">Lobster</option>
               </select>
               
-              <label for="titleSize">Mărime (px):</label>
+              <label for="titleSize" data-key="size">Mărime (px):</label>
               <input type="number" id="titleSize" class="input-text" value="24" min="10" max="100" />
               
-              <label for="titleColor">Culoare:</label>
+              <label for="titleColor" data-key="color">Culoare:</label>
               <input type="color" id="titleColor" value="#000000" />
               
-              <label for="titleBold">Bold:</label>
+              <label for="titleBold" data-key="bold">Bold:</label>
               <input type="checkbox" id="titleBold" />
               
-              <label for="titleItalic">Italic:</label>
+              <label for="titleItalic" data-key="italic">Italic:</label>
               <input type="checkbox" id="titleItalic" />
             </div>
-            <button id="addTitle" class="btn btn-primary">Adaugă Titlu</button>
-            <button id="removeTitle" class="btn btn-reset">Elimină Titlu</button>
+            <button id="addTitle" class="btn btn-primary" data-key="addTitleButton">Adaugă Titlu</button>
+            <button id="removeTitle" class="btn btn-reset" data-key="removeTitleButton">Elimină Titlu</button>
           </div>
         </section>
 
         <section class="control-group">
-          <h3>Forme geometrice</h3>
+          <h3 data-key="geometricShapes">Forme geometrice</h3>
           <!-- Secțiunea de Forme Geometrice -->
           <div class="option-section">
-            <h4>Adaugă o formă geometrică</h4>
-            <button id="addRectangle" class="btn btn-primary">Adaugă Dreptunghi</button>
-            <button id="addCircle" class="btn btn-primary">Adaugă Cerc</button>
+            <h4 data-key="addGeometricShape">Adaugă o formă geometrică</h4>
+            <button id="addRectangle" class="btn btn-primary" data-key="addRectangle">Adaugă Dreptunghi</button>
+            <button id="addCircle" class="btn btn-primary" data-key="addCircle">Adaugă Cerc</button>
             
             <!-- Controls for Adjusting Shapes -->
             <div id="shapeControls" style="display: none; margin-top: 20px;">
-              <h3>Ajustează Forma</h3>
+              <h3 data-key="adjustShape">Ajustează Forma</h3>
               
-              <label for="shapeColor">Culoare:</label>
+              <label for="shapeColor" data-key="color">Culoare:</label>
               <input type="color" id="shapeColor" />
             
-              <label for="shapeTransparency">Transparență:</label>
+              <label for="shapeTransparency" data-key="transparency">Transparență:</label>
               <input type="range" id="shapeTransparency" min="0" max="1" step="0.01" />
             
-              <label for="shapeWidth" style="display: none;">Lățime:</label>
+              <label for="shapeWidth" style="display: none;" data-key="width">Lățime:</label>
               <input type="number" id="shapeWidth" min="10" style="display: none;" />
             
-              <label for="shapeHeight" style="display: none;">Înălțime:</label>
+              <label for="shapeHeight" style="display: none;" data-key="height">Înălțime:</label>
               <input type="number" id="shapeHeight" min="10" style="display: none;" />
               
               <!-- New Radius Control for Circles -->
-              <label for="shapeRadius" style="display: none;">Rază:</label>
+              <label for="shapeRadius" style="display: none;" data-key="radius">Rază:</label>
               <input type="number" id="shapeRadius" min="10" style="display: none;" />
             
               <!-- Delete Button -->
-              <button id="deleteShape" class="btn btn-delete">Șterge Forma</button>
+              <button id="deleteShape" class="btn btn-delete" data-key="deleteShape">Șterge Forma</button>
             </div>
           </div>
         </section>
 
         <!-- Secțiunea de Tabel de Date -->
         <div class="option-section">
-          <h4>Tabel de Date</h4>
+          <h4 data-key="dataTable">Tabel de Date</h4>
           <div class="table-container">
             <table id="regionTable">
               <thead>
                 <tr>
-                  <th>Regiune/Țară</th>
-                  <th>Valoare</th>
-                  <th>Categorie</th>
+                  <th data-key="regionCountry">Regiune/Țară</th>
+                  <th data-key="value">Valoare</th>
+                  <th data-key="category">Categorie</th>
                 </tr>
               </thead>
               <tbody>
@@ -273,23 +273,23 @@
               </tbody>
             </table>
           </div>
-          <button id="resetAll" class="btn btn-reset">Resetează datele</button>
+          <button id="resetAll" class="btn btn-reset" data-key="resetData">Resetează datele</button>
         </div>
 
         <!-- Secțiunea pentru Controlul Valorilor pe Harta -->
         <div class="option-section">
-          <h4>Control Valori pe Harta</h4>
+          <h4 data-key="controlValuesOnMap">Control Valori pe Harta</h4>
           <div class="control-values">
-            <label for="toggleValues">Afișează/Ascunde Valorile:</label>
+            <label for="toggleValues" data-key="toggleValues">Afișează/Ascunde Valorile:</label>
             <input type="checkbox" id="toggleValues" checked />
             
-            <label for="valuesFontSize">Mărime Font:</label>
+            <label for="valuesFontSize" data-key="fontSize">Mărime Font:</label>
             <input type="number" id="valuesFontSize" class="input-text" value="14" min="10" max="50" />
             
-            <label for="valuesColor">Culoare Font:</label>
+            <label for="valuesColor" data-key="fontColor">Culoare Font:</label>
             <input type="color" id="valuesColor" value="#000000" />
 
-            <label for="valuesFont">Font Valorilor:</label>
+            <label for="valuesFont" data-key="font">Font Valorilor:</label>
             <select id="valuesFont" class="custom-select">
               <option value="'Roboto', sans-serif">Roboto</option>
               <option value="'Montserrat', sans-serif">Montserrat</option>
@@ -300,12 +300,12 @@
         </div>
 
         <div class="option-section">
-          <h4>Stilizează legendele</h4>
+          <h4 data-key="styleLegends">Stilizează legendele</h4>
           
           <div class="legend-styling">
             <!-- Grup 1: Font -->
             <div class="control-group">
-              <label for="legendFont">Font:</label>
+              <label for="legendFont" data-key="font">Font:</label>
               <select id="legendFont" class="custom-select">
                 <option value="Roboto, sans-serif">Roboto</option>
                 <option value="Montserrat, sans-serif">Montserrat</option>
@@ -316,13 +316,13 @@
         
             <!-- Grup 2: Mărime Font -->
             <div class="control-group">
-              <label for="legendFontSize">Mărime Font (px):</label>
+              <label for="legendFontSize" data-key="fontSize">Mărime Font (px):</label>
               <input type="number" id="legendFontSize" class="input-text" value="14" min="10" max="50" />
             </div>
         
             <!-- Grup 3: Stil Font -->
             <div class="control-group">
-              <label for="legendFontStyle">Stil Font:</label>
+              <label for="legendFontStyle" data-key="fontStyle">Stil Font:</label>
               <select id="legendFontStyle" class="custom-select">
                 <option value="normal">Normal</option>
                 <option value="italic">Italic</option>
@@ -333,31 +333,31 @@
         
             <!-- Grup 4: Culoare Font -->
             <div class="control-group">
-              <label for="legendColor">Culoare Font:</label>
+              <label for="legendColor" data-key="fontColor">Culoare Font:</label>
               <input type="color" id="legendColor" value="#000000" />
             </div>
         
             <!-- Grup 5: Transparență Fundal -->
             <div class="control-group">
-              <label for="legendBgTransparency">Transparență Fundal:</label>
+              <label for="legendBgTransparency" data-key="bgTransparency">Transparență Fundal:</label>
               <input type="range" id="legendBgTransparency" min="0" max="1" step="0.1" value="0.8" />
             </div>
         
             <!-- Grup 6: Lățime Legendă -->
             <div class="control-group">
-              <label for="legendWidth">Lățime Legendă (px):</label>
+              <label for="legendWidth" data-key="legendWidth">Lățime Legendă (px):</label>
               <input type="number" id="legendWidth" class="input-text" value="200" min="100" max="500" />
             </div>
         
             <!-- Grup 7: Înălțime Legendă -->
             <div class="control-group">
-              <label for="legendHeight">Înălțime Legendă (px):</label>
+              <label for="legendHeight" data-key="legendHeight">Înălțime Legendă (px):</label>
               <input type="number" id="legendHeight" class="input-text" value="100" min="50" max="300" />
             </div>
         
             <!-- Grup 8: Chenar -->
             <div class="control-group">
-              <label for="legendBorder">Chenar:</label>
+              <label for="legendBorder" data-key="border">Chenar:</label>
               <input type="checkbox" id="legendBorder" checked />
             </div>
             
@@ -367,18 +367,18 @@
 
         <!-- Secțiunea pentru a controla vizibilitatea legendei -->
         <div class="option-section">
-          <button id="toggleLegend" class="btn btn-primary">Ascunde/Adaugă Legenda</button>
+          <button id="toggleLegend" class="btn btn-primary" data-key="toggleLegend">Ascunde/Adaugă Legenda</button>
         </div>
 
         <!-- Secțiunea pentru a controla vizibilitatea legendei numerice -->
         <div class="option-section">
-          <button id="toggleNumericLegend" class="btn btn-primary">Afișează/Ascunde Legenda Numerică</button>
+          <button id="toggleNumericLegend" class="btn btn-primary" data-key="toggleNumericLegend">Afișează/Ascunde Legenda Numerică</button>
         </div>
 
         <!-- Spațiu pentru viitoare funcționalități  -->
         <div class="option-section future-feature">
-          <h4>Viitoare Funcționalități</h4>
-          <p>Aici va fi adăugată funcționalitatea viitoare.</p>
+          <h4 data-key="futureFeatures">Viitoare Funcționalități</h4>
+          <p data-key="futureFeatureDescription">Aici va fi adăugată funcționalitatea viitoare.</p>
         </div>
       </div>
     </div>
@@ -386,7 +386,7 @@
   
   <!-- Language Selector -->
   <div id="languageSelectorContainer">
-    <label for="languageSelector">Language:</label>
+    <label for="languageSelector" data-key="language">Language:</label>
     <select id="languageSelector">
         <option value="ro">Română</option>
         <option value="en">English</option>
