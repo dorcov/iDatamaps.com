@@ -2020,12 +2020,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const languageSelector = document.getElementById("languageSelector");
 
   function setLanguage(lang) {
-      // Update the language attribute in the HTML tag
-      document.documentElement.lang = lang;
-
-      // Update UI elements with translations
-      d3.select("#legendTitle").text(translations[lang].legendTitle);
-      // Add more UI element updates here
+    document.querySelectorAll('[data-key]').forEach(element => {
+      const key = element.getAttribute('data-key');
+      if (translations[lang] && translations[lang][key]) {
+        element.innerText = translations[lang][key];
+      }
+    });
   }
 
   // Initialize with default language
