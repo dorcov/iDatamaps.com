@@ -2118,17 +2118,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru descărcarea template-ului CSV
   function downloadCSVTemplate() {
+    // Adăugăm BOM pentru UTF-8
+    const BOM = '\uFEFF';
     const headers = "Region,Value\n";
-    let csvContent = headers;
+    let csvContent = BOM + headers;
     
     // Adăugăm toate regiunile din tabel
     const rows = regionTableBody.querySelectorAll("tr");
     rows.forEach(row => {
       const regionName = row.cells[0].textContent;
+      // Folosim textContent în loc de innerText pentru a păstra diacriticele
       csvContent += `${regionName},0\n`;
     });
 
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+    // Folosim blob cu encoding UTF-8
+    const blob = new Blob([csvContent], { 
+      type: 'text/csv;charset=utf-8'
+    });
+    
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.setAttribute('hidden', '');
@@ -2137,6 +2144,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 
   // Event listener pentru descărcarea template-ului
