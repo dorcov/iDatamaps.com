@@ -1909,7 +1909,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Step 2: Define translation strings
   const translations = {
     ro: {
-        legendTitle: "Legendă",
         controlPanelTitle: "Setările hărții",
         selectMap: "Selectează Harta",
         // Add all other translation keys and their Romanian translations
@@ -1963,6 +1962,11 @@ document.addEventListener("DOMContentLoaded", () => {
         categoryNamePlaceholder: "Nume Categorie",
         textPlaceholder: "Introdu Textul",
         titlePlaceholder: "Introdu Titlul",
+        presetGradient: "Gradient Presetat",
+        selectPresetGradient: "Selectează un Gradient Presetat",
+        minValueColor: "Culoare valori minime",
+        maxValueColor: "Culoare valori maxime",
+        applyCustomGradient: "Aplică Gradient Personalizat",
     },
     en: {
         legendTitle: "Legend",
@@ -2019,6 +2023,11 @@ document.addEventListener("DOMContentLoaded", () => {
         categoryNamePlaceholder: "Category Name",
         textPlaceholder: "Enter your text",
         titlePlaceholder: "Enter your title",
+        presetGradient: "Preset Gradient",
+        selectPresetGradient: "Select a Preset Gradient",
+        minValueColor: "Min Value Color",
+        maxValueColor: "Max Value Color",
+        applyCustomGradient: "Apply Custom Gradient",
     }
   };
 
