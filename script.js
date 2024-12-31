@@ -390,6 +390,9 @@ document.addEventListener("DOMContentLoaded", () => {
         </td>
       `;
       regionTableBody.appendChild(row);
+      row.addEventListener("click", () => {
+        highlightRegion(feature);
+      });
     });
 
     // Adaugă evenimente pentru noile select-uri de categorii
@@ -2071,6 +2074,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if (savedLanguage && translations[savedLanguage]) {
       languageSelector.value = savedLanguage;
       setLanguage(savedLanguage);
+  }
+  
+  function highlightRegion(feature) {
+    // Remove previous highlights
+    d3.selectAll(".highlighted-region").classed("highlighted-region", false);
+    // Highlight the selected region based on a known property (e.g., name)
+    d3.select(`[data-name="${feature.properties.name}"]`).classed("highlighted-region", true);
   }
   
 });

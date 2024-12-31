@@ -1248,3 +1248,8 @@ button#addTitle:hover {
     padding: 4px;
     font-size: 14px;
 }
+
+.highlighted-region {
+  stroke: #000;
+  stroke-width: 2px;
+}
