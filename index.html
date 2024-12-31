@@ -30,6 +30,15 @@
       /* Ensure fonts are rendered correctly */
       font-family: 'Roboto', sans-serif;
     }
+    /* Style for gradient preview inside the select */
+    .gradient-option {
+      background: linear-gradient(to right, #2A73FF, #00FF7F);
+      display: inline-block;
+      width: 100px;
+      height: 10px;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
   </style>
 </head>
 <body>
@@ -99,21 +108,66 @@
                 <label for="presetGradient" data-key="presetGradient">Gradient Presetat:</label>
                 <select id="presetGradient" class="custom-select">
                   <option value="" data-key="selectPresetGradient">Selectează un Gradient Presetat</option>
-                  <option value="blueGreen">Albastru la Verde</option>
-                  <option value="redYellow">Roșu la Galben</option>
-                  <option value="purplePink">Mov la Roz</option>
-                  <option value="orangeBlue">Portocaliu la Albastru</option>
-                  <option value="grey">Gri</option>
-                  <option value="tealIndigo">Turcoaz la Indigo</option>
-                  <option value="coralMint">Coral la Mentă</option>
-                  <option value="sunset">Apus la Auriu</option>
-                  <option value="navyLime">Bleumarin la Lime</option>
-                  <option value="magentaCyan">Magenta la Cyan</option>
-                  <option value="violetYellow">Violet la Galben</option>
-                  <option value="pinkOrange">Roz la Portocaliu</option>
-                  <option value="limeBlue">Lime la Albastru</option>
-                  <option value="burgundyGold">Burgundy la Auriu</option>
-                  <option value="cyanPurple">Cyan la Indigo</option>
+                  <option value="blueGreen" data-gradient-stops="#2A73FF,#00FF7F">
+                    Albastru la Verde
+                    <span class="gradient-option" style="background: linear-gradient(to right, #2A73FF, #00FF7F);"></span>
+                  </option>
+                  <option value="redYellow" data-gradient-stops="#FF0000,#FFFF00">
+                    Roșu la Galben
+                    <span class="gradient-option" style="background: linear-gradient(to right, #FF0000, #FFFF00);"></span>
+                  </option>
+                  <option value="purplePink" data-gradient-stops="#800080,#FFC0CB">
+                    Mov la Roz
+                    <span class="gradient-option" style="background: linear-gradient(to right, #800080, #FFC0CB);"></span>
+                  </option>
+                  <option value="orangeBlue" data-gradient-stops="#FFA500,#0000FF">
+                    Portocaliu la Albastru
+                    <span class="gradient-option" style="background: linear-gradient(to right, #FFA500, #0000FF);"></span>
+                  </option>
+                  <option value="grey" data-gradient-stops="#808080,#D3D3D3">
+                    Gri
+                    <span class="gradient-option" style="background: linear-gradient(to right, #808080, #D3D3D3);"></span>
+                  </option>
+                  <option value="tealIndigo" data-gradient-stops="#008080,#4B0082">
+                    Turcoaz la Indigo
+                    <span class="gradient-option" style="background: linear-gradient(to right, #008080, #4B0082);"></span>
+                  </option>
+                  <option value="coralMint" data-gradient-stops="#FF7F50,#98FF98">
+                    Coral la Mentă
+                    <span class="gradient-option" style="background: linear-gradient(to right, #FF7F50, #98FF98);"></span>
+                  </option>
+                  <option value="sunset" data-gradient-stops="#FF4500,#FFD700">
+                    Apus la Auriu
+                    <span class="gradient-option" style="background: linear-gradient(to right, #FF4500, #FFD700);"></span>
+                  </option>
+                  <option value="navyLime" data-gradient-stops="#000080,#00FF00">
+                    Bleumarin la Lime
+                    <span class="gradient-option" style="background: linear-gradient(to right, #000080, #00FF00);"></span>
+                  </option>
+                  <option value="magentaCyan" data-gradient-stops="#FF00FF,#00FFFF">
+                    Magenta la Cyan
+                    <span class="gradient-option" style="background: linear-gradient(to right, #FF00FF, #00FFFF);"></span>
+                  </option>
+                  <option value="violetYellow" data-gradient-stops="#8A2BE2,#FFFF00">
+                    Violet la Galben
+                    <span class="gradient-option" style="background: linear-gradient(to right, #8A2BE2, #FFFF00);"></span>
+                  </option>
+                  <option value="pinkOrange" data-gradient-stops="#FFC0CB,#FFA500">
+                    Roz la Portocaliu
+                    <span class="gradient-option" style="background: linear-gradient(to right, #FFC0CB, #FFA500);"></span>
+                  </option>
+                  <option value="limeBlue" data-gradient-stops="#00FF00,#0000FF">
+                    Lime la Albastru
+                    <span class="gradient-option" style="background: linear-gradient(to right, #00FF00, #0000FF);"></span>
+                  </option>
+                  <option value="burgundyGold" data-gradient-stops="#800020,#FFD700">
+                    Burgundy la Auriu
+                    <span class="gradient-option" style="background: linear-gradient(to right, #800020, #FFD700);"></span>
+                  </option>
+                  <option value="cyanPurple" data-gradient-stops="#00FFFF,#800080">
+                    Cyan la Indigo
+                    <span class="gradient-option" style="background: linear-gradient(to right, #00FFFF, #800080);"></span>
+                  </option>
                   <!-- Adaugă mai multe opțiuni după necesitate -->
                 </select>
               </div>

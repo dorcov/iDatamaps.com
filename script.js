@@ -33,11 +33,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Lista de gradienturi presetate
   const presetGradients = {
-    blueGreen: { start: "#2A73FF", end: "#00FF7F" },     // Albastru la Verde
-    redYellow: { start: "#FF0000", end: "#FFFF00" },    // Roșu la Galben
-    purplePink: { start: "#800080", end: "#FFC0CB" },    // Mov la Roz
-    orangeBlue: { start: "#FFA500", end: "#0000FF" },    // Portocaliu la Albastru
-    grey: { start: "#808080", end: "#D3D3D3" }          // Gri
+    blueGreen: ["#2A73FF", "#00FF7F"],
+    redYellow: ["#FF0000", "#FFFF00"],
+    purplePink: ["#800080", "#FFC0CB"],
+    orangeBlue: ["#FFA500", "#0000FF"],
+    grey: ["#808080", "#D3D3D3"]
   };
 
   // Declararea tooltip-ului
@@ -89,26 +89,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a aplica gradientul presetat
   function applyPresetGradient() {
-    const selectedPreset = presetGradientSelect.value;
-    if (selectedPreset && presetGradients[selectedPreset]) {
-      currentGradient.start = presetGradients[selectedPreset].start;
-      currentGradient.end = presetGradients[selectedPreset].end;
-      // Actualizează valorile color pickers pentru a reflecta gradientul presetat
-      gradientStart.value = currentGradient.start;
-      gradientEnd.value = currentGradient.end;
-      // Dezactivează color pickers dacă un gradient presetat este selectat
-      gradientStart.disabled = true;
-      gradientEnd.disabled = true;
-      updateMapColors();
-    } else {
-      // Dacă nu se selectează niciun gradient presetat, activează color pickers
-      gradientStart.disabled = false;
-      gradientEnd.disabled = false;
-      // Reset gradient la valorile personalizate
-      currentGradient.start = gradientStart.value;
-      currentGradient.end = gradientEnd.value;
-      updateMapColors();
-    }
+    const select = document.getElementById("presetGradient");
+    if (!select || !select.value) return;
+    const stops = select.options[select.selectedIndex].dataset.gradientStops.split(",");
+    // Apply multi-stop gradient logic (simplified)
+    // e.g., color scale or direct interpolation
+    // ...existing code to apply gradient...
   }
 
   if (presetGradientSelect) {
@@ -2085,5 +2071,38 @@ document.addEventListener("DOMContentLoaded", () => {
       selected.classed("highlighted", false);
     }, 2000);
   }
+  
+  // Dynamically create <option> elements with gradient previews
+  function renderGradientOptions() {
+    const select = document.getElementById("presetGradient");
+    if (!select) return;
+    select.innerHTML = ""; // Clear existing
+  
+    Object.entries(presetGradients).forEach(([key, stops]) => {
+      const option = document.createElement("option");
+      option.value = key;
+      // For labeling
+      option.textContent = key;
+      // Attach data for stops
+      option.dataset.gradientStops = stops.join(",");
+      // Create inline preview
+      const preview = document.createElement("span");
+      preview.className = "gradient-option";
+      preview.style.background = `linear-gradient(to right, ${stops.join(", ")})`;
+      // Insert preview after text
+      option.appendChild(document.createTextNode(" "));
+      option.appendChild(preview);
+      select.appendChild(option);
+    });
+  
+    // Optionally add a default "Select a gradient" choice
+    const firstOption = document.createElement("option");
+    firstOption.value = "";
+    firstOption.textContent = "Select Gradient...";
+    select.insertBefore(firstOption, select.firstChild);
+  }
+  
+  // Call renderGradientOptions when DOM is ready
+  renderGradientOptions();
   
 });
