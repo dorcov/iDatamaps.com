@@ -148,22 +148,6 @@ body {
   outline: none;
 }
 
-/* Stil pentru preset gradient dropdown */
-.preset-gradient label {
-  font-weight: bold;
-  margin-bottom: 5px;
-  display: block;
-  font-family: 'Montserrat', sans-serif;
-}
-
-.preset-gradient select {
-  margin-top: 5px;
-}
-
-.preset-gradient {
-  position: relative;
-}
-
 /* Stil pentru gradient personalizat */
 .custom-gradient {
   display: flex;
@@ -1264,13 +1248,5 @@ button#addTitle:hover {
   fill-opacity: 0.4;
   /* Add a drop-shadow to create an outer glow */
   filter: drop-shadow(0 0 6px rgba(241, 105, 26, 0.7));
-}
-
-.gradient-preview {
-    width: 100%;
-    height: 20px;
-    border-radius: 4px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
 }
 
