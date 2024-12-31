@@ -1170,7 +1170,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const canvasColorInput = document.getElementById("canvasColor");
   const canvasTransparencyInput = document.getElementById("canvasTransparency");
-  const canvasWidthInput = document.getElementById("canvasWidth");
   const canvasHeightInput = document.getElementById("canvasHeight");
 
   function updateCanvas() {
@@ -1183,11 +1182,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const rgb = hexToRgb(bgColor);
       mapContainer.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
     }
-    mapContainer.style.width = canvasWidthInput.value + "px";
     mapContainer.style.height = canvasHeightInput.value + "px";
   }
 
-  [canvasColorInput, canvasTransparencyInput, canvasWidthInput, canvasHeightInput]
+  [canvasColorInput, canvasTransparencyInput, canvasHeightInput]
     .forEach(input => input.addEventListener("input", updateCanvas));
 
   function hexToRgb(hex) {
