@@ -1933,6 +1933,10 @@ document.addEventListener("DOMContentLoaded", () => {
         height: "Înălțime",
         radius: "Rază",
         selectShape: "Selectați o formă pentru a o șterge",
+        searchRegionsPlaceholder: "Caută regiuni...",
+        sortByName: "Sortare după nume ↕",
+        sortByValue: "Sortare după valoare ↕",
+        noResults: "Nu s-au găsit rezultate"
     },
     en: {
         legendTitle: "Legend",
@@ -2007,6 +2011,10 @@ document.addEventListener("DOMContentLoaded", () => {
         height: "Height",
         radius: "Radius",
         selectShape: "Select a shape to delete",
+        searchRegionsPlaceholder: "Search regions...",
+        sortByName: "Sort by name ↕",
+        sortByValue: "Sort by value ↕",
+        noResults: "No results found"
     }
 };
 
@@ -2150,6 +2158,92 @@ document.addEventListener("DOMContentLoaded", () => {
   // Event listener pentru descărcarea template-ului
   if (downloadTemplateButton) {
     downloadTemplateButton.addEventListener("click", downloadCSVTemplate);
+  }
+  
+  // Adăugăm referințele pentru noile elemente
+  const searchInput = document.getElementById("searchRegions");
+  const sortByNameBtn = document.getElementById("sortByName");
+  const sortByValueBtn = document.getElementById("sortByValue");
+
+  let sortNameAsc = true;
+  let sortValueAsc = true;
+
+  // Funcție pentru căutare în tabel
+  function searchTable() {
+      const searchText = searchInput.value.toLowerCase();
+      const rows = regionTableBody.querySelectorAll("tr");
+      let hasResults = false;
+
+      rows.forEach(row => {
+          const regionName = row.cells[0].textContent.toLowerCase();
+          const match = regionName.includes(searchText);
+          row.style.display = match ? "" : "none";
+          row.classList.toggle("highlight-search", match && searchText.length > 0);
+          if (match) hasResults = true;
+      });
+
+      // Afișăm mesaj dacă nu sunt rezultate
+      const existingMsg = regionTableBody.querySelector(".no-results");
+      if (!hasResults && searchText.length > 0) {
+          if (!existingMsg) {
+              const noResultsRow = document.createElement("tr");
+              noResultsRow.className = "no-results";
+              noResultsRow.innerHTML = `<td colspan="3">${translations[languageSelector.value].noResults}</td>`;
+              regionTableBody.appendChild(noResultsRow);
+          }
+      } else if (existingMsg) {
+          existingMsg.remove();
+      }
+  }
+
+  // Funcții pentru sortare
+  function sortTableByName() {
+      const rows = Array.from(regionTableBody.querySelectorAll("tr"));
+      sortNameAsc = !sortNameAsc;
+      
+      rows.sort((a, b) => {
+          const nameA = a.cells[0].textContent.toLowerCase();
+          const nameB = b.cells[0].textContent.toLowerCase();
+          return sortNameAsc ? 
+              nameA.localeCompare(nameB) : 
+              nameB.localeCompare(nameA);
+      });
+
+      rows.forEach(row => regionTableBody.appendChild(row));
+      sortByNameBtn.textContent = `Sortare după nume ${sortNameAsc ? '↓' : '↑'}`;
+  }
+
+  function sortTableByValue() {
+      const rows = Array.from(regionTableBody.querySelectorAll("tr"));
+      sortValueAsc = !sortValueAsc;
+      
+      rows.sort((a, b) => {
+          const valueA = parseFloat(a.querySelector('input[type="number"]')?.value) || 0;
+          const valueB = parseFloat(b.querySelector('input[type="number"]')?.value) || 0;
+          return sortValueAsc ? valueA - valueB : valueB - valueA;
+      });
+
+      rows.forEach(row => regionTableBody.appendChild(row));
+      sortByValueBtn.textContent = `Sortare după valoare ${sortValueAsc ? '↓' : '↑'}`;
+  }
+
+  // Event listeners pentru căutare și sortare
+  if (searchInput) {
+      searchInput.addEventListener("input", searchTable);
+  } else {
+      console.error("Elementul cu ID 'searchRegions' nu a fost găsit.");
+  }
+
+  if (sortByNameBtn) {
+      sortByNameBtn.addEventListener("click", sortTableByName);
+  } else {
+      console.error("Elementul cu ID 'sortByName' nu a fost găsit.");
+  }
+
+  if (sortByValueBtn) {
+      sortByValueBtn.addEventListener("click", sortTableByValue);
+  } else {
+      console.error("Elementul cu ID 'sortByValue' nu a fost găsit.");
   }
   
 });

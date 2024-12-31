@@ -1286,3 +1286,53 @@ button#addTitle:hover {
   padding: 4px 8px;
 }
 
+/* Stiluri pentru controalele tabelului */
+.table-controls {
+  margin-bottom: 15px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-container {
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.sort-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.btn-secondary.active {
+  background-color: #545b62;
+}
+
+/* Highlight pentru rezultatele căutării */
+.highlight-search {
+  background-color: rgba(255, 255, 0, 0.2);
+}
+

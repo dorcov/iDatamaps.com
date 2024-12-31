@@ -240,6 +240,21 @@
         <div class="option-section">
           <h4 data-key="dataTable">Tabel de Date</h4>
           
+          <!-- Adăugăm secțiunea de căutare și sortare -->
+          <div class="table-controls">
+            <div class="search-container">
+              <input type="text" id="searchRegions" class="input-text" data-placeholder="searchRegionsPlaceholder" placeholder="Caută regiuni..." />
+            </div>
+            <div class="sort-controls">
+              <button id="sortByName" class="btn btn-secondary" data-key="sortByName">
+                Sortare după nume ↕
+              </button>
+              <button id="sortByValue" class="btn btn-secondary" data-key="sortByValue">
+                Sortare după valoare ↕
+              </button>
+            </div>
+          </div>
+          
           <!-- Adăugăm secțiunea de import CSV -->
           <div class="csv-import-section">
             <h5 data-key="csvImport">Import din CSV</h5>
