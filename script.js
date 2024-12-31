@@ -1536,7 +1536,7 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedShape = null;
         updateShapeControls();
       } else {
-        alert("Selectați o formă pentru a o șterge.");
+        alert(translations[languageSelector.value].selectShape);
       }
     });
   } else {
@@ -1920,6 +1920,19 @@ document.addEventListener("DOMContentLoaded", () => {
         minValueColor: "Culoare valori minime",
         maxValueColor: "Culoare valori maxime",
         applyCustomGradient: "Aplică Gradient Personalizat",
+        // Adăugăm traducerile pentru funcționalitatea CSV
+        csvImport: "Import din CSV",
+        importCSV: "Importă CSV",
+        csvTemplate: "Format CSV: Region,Value",
+        downloadTemplate: "Descarcă Template",
+        selectCsvFile: "Vă rugăm selectați un fișier CSV",
+        
+        // Adăugăm traduceri pentru adjustarea formelor
+        adjustShape: "Ajustează Forma",
+        width: "Lățime",
+        height: "Înălțime",
+        radius: "Rază",
+        selectShape: "Selectați o formă pentru a o șterge",
     },
     en: {
         legendTitle: "Legend",
@@ -1981,8 +1994,21 @@ document.addEventListener("DOMContentLoaded", () => {
         minValueColor: "Min Value Color",
         maxValueColor: "Max Value Color",
         applyCustomGradient: "Apply Custom Gradient",
+        // Add CSV functionality translations
+        csvImport: "Import from CSV",
+        importCSV: "Import CSV",
+        csvTemplate: "CSV Format: Region,Value",
+        downloadTemplate: "Download Template",
+        selectCsvFile: "Please select a CSV file",
+        
+        // Add shape adjustment translations
+        adjustShape: "Adjust Shape",
+        width: "Width",
+        height: "Height",
+        radius: "Radius",
+        selectShape: "Select a shape to delete",
     }
-  };
+};
 
   // Step 3: Implement language switching
   const languageSelector = document.getElementById("languageSelector");
@@ -2077,7 +2103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     importCSVButton.addEventListener("click", () => {
       const file = csvFileInput.files[0];
       if (!file) {
-        alert("Vă rugăm selectați un fișier CSV");
+        alert(translations[languageSelector.value].selectCsvFile);
         return;
       }
 
