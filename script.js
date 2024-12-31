@@ -61,34 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const debouncedUpdateMapColors = debounce(updateMapColors, 300);
 
   // Funcție pentru a aplica gradientul personalizat
-  let colorStops = [
-    { id: 'gradientStart', color: currentGradient.start },
-    { id: 'gradientEnd', color: currentGradient.end }
-  ];
-
-  document.getElementById('addColorStop').addEventListener('click', () => {
-    const stopId = `gradientStop${Date.now()}`;
-    colorStops.splice(colorStops.length - 1, 0, { id: stopId, color: '#ffffff' });
-    const container = document.getElementById('extraStops');
-    const input = document.createElement('input');
-    input.type = 'color';
-    input.value = '#ffffff';
-    input.id = stopId;
-    container.appendChild(input);
-  });
-
   function applyCustomGradient() {
-    // Example: build an array of [offset, color]
-    // Then apply logic depending on your app's needs
-    const stops = colorStops.map((s, i) => {
-      const el = document.getElementById(s.id);
-      if (el) s.color = el.value;
-      return {
-        offset: i / (colorStops.length - 1),
-        color: s.color
-      };
-    });
-    // ...here, handle your multi-stop gradient logic as needed...
+    currentGradient.start = gradientStart.value;
+    currentGradient.end = gradientEnd.value;
+    updateMapColors();
   }
 
   if (applyGradientButton) {
