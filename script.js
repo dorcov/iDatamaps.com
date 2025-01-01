@@ -1831,19 +1831,32 @@ document.addEventListener("DOMContentLoaded", () => {
   const legendHeightInput = document.getElementById("legendHeight");
 
   if (legendWidthInput) {
-    legendWidthInput.addEventListener("input", (e) => {
-      document.documentElement.style.setProperty('--legend-width', `${e.target.value}px`);
+    legendWidthInput.addEventListener("input", () => {
+      updateLegendDimensions();
     });
   } else {
     console.error("Elementul cu ID 'legendWidth' nu a fost găsit.");
   }
 
   if (legendHeightInput) {
-    legendHeightInput.addEventListener("input", (e) => {
-      document.documentElement.style.setProperty('--legend-height', `${e.target.value}px`);
+    legendHeightInput.addEventListener("input", () => {
+      updateLegendDimensions();
     });
   } else {
     console.error("Elementul cu ID 'legendHeight' nu a fost găsit.");
+  }
+
+  // Function to update legend dimensions
+  function updateLegendDimensions() {
+    const width = parseInt(legendWidthInput.value, 10) || 200;
+    const height = parseInt(legendHeightInput.value, 10) || 100;
+
+    // Update legend group dimensions
+    legendGroup.attr("width", width).attr("height", height);
+    numericLegendGroup.attr("width", width).attr("height", height);
+
+    // Redraw legends with new dimensions
+    generateBothLegends();
   }
   
   const addTitleButton = document.getElementById("addTitle");

@@ -1390,3 +1390,42 @@ button#addTitle:hover {
   box-shadow: 0 0 0 2px rgba(42, 115, 255, 0.1);
 }
 
+/* ...existing code... */
+
+.input-range {
+  width: 100%;
+  margin: 8px 0;
+}
+
+.input-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #2A73FF;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.input-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #2A73FF;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.input-range::-webkit-slider-runnable-track {
+  height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+}
+
+.input-range::-moz-range-track {
+  height: 4px;
+  background: #ddd;
+  border-radius: 2px;
+}
+
+/* ...rest of existing code... */
+
