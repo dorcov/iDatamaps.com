@@ -597,6 +597,10 @@ td.select-category select {
   box-shadow: none; /* Remove box shadow for full transparency */
   white-space: pre-wrap; /* Allow multiple lines */
   word-wrap: break-word;
+  /* Remove shadow */
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+  /* Add transition for smooth transparency changes */
+  transition: background-color 0.3s ease;
 }
 
 .free-text-container.selected {

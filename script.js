@@ -2492,6 +2492,25 @@ calculateStatistics();
     svg.attr("height", height).attr("viewBox", `0 0 ${svgWidth} ${height}`);
   }
   
+  const freeTextBgTransparencyInput = document.getElementById("freeTextBgTransparency");
+  
+  if (freeTextBgTransparencyInput) {
+    freeTextBgTransparencyInput.addEventListener("input", () => {
+      updateFreeTextBackgroundTransparency();
+    });
+  } else {
+    console.error("Elementul cu ID 'freeTextBgTransparency' nu a fost găsit.");
+  }
+  
+  // Function to update free text background transparency
+  function updateFreeTextBackgroundTransparency() {
+    const transparency = parseFloat(freeTextBgTransparencyInput.value) || 1;
+    freeTexts.forEach(text => {
+      d3.select(text.container)
+        .style("background-color", `rgba(255, 255, 255, ${transparency})`);
+    });
+  }
+  
 });
 
 
