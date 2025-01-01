@@ -508,7 +508,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const maxValue = Math.max(...values);
       
       const numIntervals = parseInt(document.getElementById("legendIntervals").value) || 5;
-      const decimals = parseInt(legendDecimalsInput.value) || 1;
+      const decimals = parseInt(legendDecimalsInput.value, 10);
+      const effectiveDecimals = isNaN(decimals) ? 1 : decimals;
       const step = (maxValue - minValue) / numIntervals;
 
       // Create color stops array including intermediate colors
@@ -548,7 +549,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .attr("x", 30)
           .attr("y", 15)
           .attr("class", "legend-text")
-          .text(`${startValue.toFixed(decimals)} - ${endValue.toFixed(decimals)}`);
+          .text(`${startValue.toFixed(effectiveDecimals)} - ${endValue.toFixed(effectiveDecimals)}`);
       }
     }
 
@@ -631,16 +632,17 @@ document.addEventListener("DOMContentLoaded", () => {
       .style("fill", `url(#${gradientID})`)
       .attr("rx", 5).attr("ry", 5);
 
-    const decimals = parseInt(legendDecimalsInput.value) || 1;
+    const decimals = parseInt(legendDecimalsInput.value, 10);
+    const effectiveDecimals = isNaN(decimals) ? 1 : decimals;
 
     // Add min/max labels with custom decimals
     numericLegendGroup.append("text")
       .attr("x", 10).attr("y", 40)
-      .text("Min: " + minValue.toFixed(decimals));
+      .text("Min: " + minValue.toFixed(effectiveDecimals));
     numericLegendGroup.append("text")
       .attr("x", 130).attr("y", 40)
       .style("text-anchor", "end")
-      .text("Max: " + maxValue.toFixed(decimals));
+      .text("Max: " + maxValue.toFixed(effectiveDecimals));
 
     // ... rest of the existing function code ...
   }
