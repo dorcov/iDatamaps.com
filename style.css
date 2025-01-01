@@ -961,6 +961,11 @@ td.select-category select {
   fill: rgba(255, 255, 255, var(--legend-bg-transparency, 0.8));
 }
 
+.legend-section-title {
+  font-weight: bold;
+  font-size: 0.9em;
+  fill: var(--legend-color, #000);
+}
 
 .shapes-container {
   position: absolute;

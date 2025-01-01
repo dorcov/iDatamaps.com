@@ -339,6 +339,18 @@
           <h4 data-key="styleLegends">Stilizează legendele</h4>
           
           <div class="legend-styling">
+            <!-- Add this before the existing legend controls -->
+            <div class="control-group">
+              <label for="legendIntervals" data-key="legendIntervals">Număr de intervale:</label>
+              <input
+                type="number"
+                id="legendIntervals"
+                class="input-text"
+                value="5"
+                min="2"
+                max="10"
+              />
+            </div>
             <!-- Grup 1: Font -->
             <div class="control-group">
               <label for="legendFont" data-key="font">Font:</label>

@@ -465,39 +465,101 @@ document.addEventListener("DOMContentLoaded", () => {
     const legendItemsGroup = d3.select("#legendItems");
     legendItemsGroup.selectAll("*").remove(); // Curăță legenda existentă
 
-    categories.forEach((category, index) => {
-      const legendItem = legendItemsGroup.append("g")
-        .attr("class", "legend-item")
-        .attr("transform", `translate(10, ${30 + index * 30})`);
+    // Get all numeric values
+    const values = Array.from(regionTableBody.querySelectorAll('input[type="number"]'))
+      .map(input => parseFloat(input.value) || 0)
+      .filter(val => val > 0);
 
-      legendItem.append("rect")
-        .attr("width", 20)
-        .attr("height", 20)
-        .attr("fill", category.color);
+    // If we have categories, show them first
+    let yOffset = 30;
+    if (categories.length > 0) {
+      // Add a "Categories" header
+      legendItemsGroup.append("text")
+        .attr("x", 10)
+        .attr("y", yOffset)
+        .attr("class", "legend-section-title")
+        .text("Categories");
+      
+      yOffset += 25;
 
-      legendItem.append("text")
-        .attr("x", 30)
-        .attr("y", 15)
-        .attr("class", "legend-text")
-        .text(category.name);
-    });
-    d3.select("#legendGroup").raise(); // Aduce legendGroup în față
+      categories.forEach((category, index) => {
+        const legendItem = legendItemsGroup.append("g")
+          .attr("class", "legend-item")
+          .attr("transform", `translate(10, ${yOffset + index * 25})`);
 
-    // Aplicați stilurile din CSS variabile
-    d3.select("#legendTitle")
-      .attr("class", "legend-title");
+        legendItem.append("rect")
+          .attr("width", 20)
+          .attr("height", 20)
+          .attr("fill", category.color);
 
-    d3.selectAll(".legend-text")
-      .attr("class", "legend-text");
+        legendItem.append("text")
+          .attr("x", 30)
+          .attr("y", 15)
+          .attr("class", "legend-text")
+          .text(category.name);
+      });
 
-    // Dacă nu există categorii, forțați vizibilitatea legendei
-    if (!categories.length) {
-      d3.select("#legendGroup").attr("visibility", "visible");
-      localStorage.setItem("legendVisibility", "visible");
+      yOffset += categories.length * 25 + 20;
     }
-    d3.select("#legendGroup").attr("visibility", "visible");
-    localStorage.setItem("legendVisibility", "visible");
+
+    // Add value intervals if we have numeric values
+    if (values.length > 0) {
+      // Add a "Values" header
+      legendItemsGroup.append("text")
+        .attr("x", 10)
+        .attr("y", yOffset)
+        .attr("class", "legend-section-title")
+        .text("Values");
+      
+      yOffset += 25;
+
+      const minValue = Math.min(...values);
+      const maxValue = Math.max(...values);
+      
+      // Get number of intervals from input
+      const numIntervals = parseInt(document.getElementById("legendIntervals").value) || 5;
+      const step = (maxValue - minValue) / numIntervals;
+
+      // Create color scale
+      const colorScale = d3.scaleLinear()
+        .domain([minValue, maxValue])
+        .range([currentGradient.start, currentGradient.end]);
+
+      // Add intervals to legend
+      for (let i = 0; i < numIntervals; i++) {
+        const startValue = minValue + (step * i);
+        const endValue = minValue + (step * (i + 1));
+        
+        const legendItem = legendItemsGroup.append("g")
+          .attr("class", "legend-item")
+          .attr("transform", `translate(10, ${yOffset + i * 25})`);
+
+        legendItem.append("rect")
+          .attr("width", 20)
+          .attr("height", 20)
+          .attr("fill", colorScale(startValue));
+
+        legendItem.append("text")
+          .attr("x", 30)
+          .attr("y", 15)
+          .attr("class", "legend-text")
+          .text(`${startValue.toFixed(1)} - ${endValue.toFixed(1)}`);
+      }
+    }
+
+    // Adjust legend background height based on content
+    const totalItems = categories.length + (values.length > 0 ? parseInt(document.getElementById("legendIntervals").value) : 0);
+    const sectionsCount = (categories.length > 0 ? 1 : 0) + (values.length > 0 ? 1 : 0);
+    const backgroundHeight = 30 + (totalItems * 25) + (sectionsCount * 45);
+    
+    d3.select("#legendBackground")
+      .attr("height", backgroundHeight);
   }
+
+  // Add event listener for interval count changes
+  document.getElementById("legendIntervals").addEventListener("input", () => {
+    generateBothLegends();
+  });
 
   // Funcție nouă pentru afișarea legendei numerice
   function generateNumericLegend() {
