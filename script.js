@@ -463,25 +463,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Funcție pentru a genera elementele legendei
   function generateLegend() {
     const legendItemsGroup = d3.select("#legendItems");
-    legendItemsGroup.selectAll("*").remove(); // Curăță legenda existentă
+    legendItemsGroup.selectAll("*").remove(); // Clear existing legend
 
-    // Get all numeric values
-    const values = Array.from(regionTableBody.querySelectorAll('input[type="number"]'))
-      .map(input => parseFloat(input.value) || 0)
-      .filter(val => val > 0);
-
-    // If we have categories, show them first
     let yOffset = 30;
-    if (categories.length > 0) {
-      // Add a "Categories" header
-      legendItemsGroup.append("text")
-        .attr("x", 10)
-        .attr("y", yOffset)
-        .attr("class", "legend-section-title")
-        .text("Categories");
-      
-      yOffset += 25;
 
+    // Show categories first (without the "Categories" header)
+    if (categories.length > 0) {
       categories.forEach((category, index) => {
         const legendItem = legendItemsGroup.append("g")
           .attr("class", "legend-item")
@@ -499,33 +486,25 @@ document.addEventListener("DOMContentLoaded", () => {
           .text(category.name);
       });
 
-      yOffset += categories.length * 25 + 20;
+      yOffset += categories.length * 25 + 10; // Reduced spacing since we removed the header
     }
 
-    // Add value intervals if we have numeric values
-    if (values.length > 0) {
-      // Add a "Values" header
-      legendItemsGroup.append("text")
-        .attr("x", 10)
-        .attr("y", yOffset)
-        .attr("class", "legend-section-title")
-        .text("Values");
-      
-      yOffset += 25;
+    // Add value intervals if we have numeric values (without the "Values" header)
+    const values = Array.from(regionTableBody.querySelectorAll('input[type="number"]'))
+      .map(input => parseFloat(input.value) || 0)
+      .filter(val => val > 0);
 
+    if (values.length > 0) {
       const minValue = Math.min(...values);
       const maxValue = Math.max(...values);
       
-      // Get number of intervals from input
       const numIntervals = parseInt(document.getElementById("legendIntervals").value) || 5;
       const step = (maxValue - minValue) / numIntervals;
 
-      // Create color scale
       const colorScale = d3.scaleLinear()
         .domain([minValue, maxValue])
         .range([currentGradient.start, currentGradient.end]);
 
-      // Add intervals to legend
       for (let i = 0; i < numIntervals; i++) {
         const startValue = minValue + (step * i);
         const endValue = minValue + (step * (i + 1));
@@ -549,8 +528,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Adjust legend background height based on content
     const totalItems = categories.length + (values.length > 0 ? parseInt(document.getElementById("legendIntervals").value) : 0);
-    const sectionsCount = (categories.length > 0 ? 1 : 0) + (values.length > 0 ? 1 : 0);
-    const backgroundHeight = 30 + (totalItems * 25) + (sectionsCount * 45);
+    const backgroundHeight = 20 + (totalItems * 25); // Reduced height since we removed headers
     
     d3.select("#legendBackground")
       .attr("height", backgroundHeight);
