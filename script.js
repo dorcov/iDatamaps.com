@@ -2547,6 +2547,67 @@ calculateStatistics();
     } : null;
   }
   
+  // Add grid lines variables
+  const toggleGridLinesCheckbox = document.getElementById("toggleGridLines");
+  const gridGroup = svg.append("g").attr("id", "gridGroup").style("display", "none");
+
+  // Function to draw grid lines
+  function drawGridLines() {
+    const numLines = 10;
+    const width = svgWidth;
+    const height = svgHeight;
+
+    // Draw vertical lines
+    for (let i = 1; i < numLines; i++) {
+      gridGroup.append("line")
+        .attr("class", "grid-line")
+        .attr("x1", (width / numLines) * i)
+        .attr("y1", 0)
+        .attr("x2", (width / numLines) * i)
+        .attr("y2", height);
+    }
+
+    // Draw horizontal lines
+    for (let i = 1; i < numLines; i++) {
+      gridGroup.append("line")
+        .attr("class", "grid-line")
+        .attr("x1", 0)
+        .attr("y1", (height / numLines) * i)
+        .attr("x2", width)
+        .attr("y2", (height / numLines) * i);
+    }
+  }
+
+  // Initial draw of grid lines
+  drawGridLines();
+
+  // Event listener for toggling grid lines
+  if (toggleGridLinesCheckbox) {
+    toggleGridLinesCheckbox.addEventListener("change", (e) => {
+      if (e.target.checked) {
+        gridGroup.style("display", "block");
+      } else {
+        gridGroup.style("display", "none");
+      }
+    });
+  } else {
+    console.error("Elementul cu ID 'toggleGridLines' nu a fost găsit.");
+  }
+
+  // Ensure grid lines are included in the export
+  if (exportButton) {
+    exportButton.addEventListener("click", () => {
+      html2canvas(document.querySelector("#mapSVG")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "map.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    });
+  } else {
+    console.error("Elementul cu ID 'exportMap' nu a fost găsit.");
+  }
+  
 });
 
 

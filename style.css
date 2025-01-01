@@ -1436,3 +1436,9 @@ button#addTitle:hover {
 
 /* ...rest of existing code... */
 
+.grid-line {
+  stroke: #ccc;
+  stroke-width: 1;
+  stroke-dasharray: 4;
+}
+
