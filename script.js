@@ -214,6 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Recolorăm harta
     updateMapColors();
+    calculateStatistics(); // Reset statistics
   }
 
   if (resetButton) {
@@ -421,6 +422,7 @@ document.addEventListener("DOMContentLoaded", () => {
       input.addEventListener("input", () => {
         debouncedUpdateMapColors();
         generateBothLegends();
+        calculateStatistics(); // Add statistics calculation
       });
     });
 
@@ -2315,6 +2317,51 @@ if (legendBorderCheckbox) {
 } else {
     console.error("Elementul cu ID 'legendBorder' nu a fost găsit.");
 }
+
+// Add functions to calculate and update statistics
+function calculateStatistics() {
+  const values = Array.from(regionTableBody.querySelectorAll('input[type="number"]'))
+    .map(input => parseFloat(input.value) || 0)
+    .filter(val => !isNaN(val));
+
+  if (values.length === 0) {
+    document.getElementById('meanValue').textContent = '0';
+    document.getElementById('medianValue').textContent = '0';
+    return;
+  }
+
+  // Calculate mean
+  const mean = values.reduce((a, b) => a + b, 0) / values.length;
+  
+  // Calculate median
+  const sorted = [...values].sort((a, b) => a - b);
+  const middle = Math.floor(sorted.length / 2);
+  const median = sorted.length % 2 === 0 
+    ? (sorted[middle - 1] + sorted[middle]) / 2
+    : sorted[middle];
+
+  // Update display
+  document.getElementById('meanValue').textContent = mean.toFixed(2);
+  document.getElementById('medianValue').textContent = median.toFixed(2);
+}
+
+// Add to event listeners for table inputs
+regionTableBody.querySelectorAll("input").forEach((input) => {
+  input.addEventListener("input", () => {
+    debouncedUpdateMapColors();
+    generateBothLegends();
+    calculateStatistics(); // Add statistics calculation
+  });
+});
+
+// Add to resetAll function
+function resetAll() {
+  // ...existing reset code...
+  calculateStatistics(); // Reset statistics
+}
+
+// Initial calculation
+calculateStatistics();
   
 });
 
