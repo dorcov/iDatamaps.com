@@ -2493,23 +2493,52 @@ calculateStatistics();
   }
   
   const freeTextBgTransparencyInput = document.getElementById("freeTextBgTransparency");
-  
+  const freeTextBgColorInput = document.getElementById("freeTextBgColor"); // New element
+
   if (freeTextBgTransparencyInput) {
     freeTextBgTransparencyInput.addEventListener("input", () => {
-      updateFreeTextBackgroundTransparency();
+      updateFreeTextBackground();
     });
   } else {
     console.error("Elementul cu ID 'freeTextBgTransparency' nu a fost găsit.");
   }
-  
-  // Function to update free text background transparency
-  function updateFreeTextBackgroundTransparency() {
-    // Invert the transparency value
-    const transparency = 1 - (parseFloat(freeTextBgTransparencyInput.value) || 0);
-    // Select all free text containers directly from the DOM
-    document.querySelectorAll('.free-text-container').forEach(container => {
-      container.style.backgroundColor = `rgba(255, 255, 255, ${transparency})`;
+
+  if (freeTextBgColorInput) { // New listener
+    freeTextBgColorInput.addEventListener("input", () => {
+      updateFreeTextBackground();
     });
+  } else {
+    console.error("Elementul cu ID 'freeTextBgColor' nu a fost găsit.");
+  }
+
+  // Function to update free text background color and transparency
+  function updateFreeTextBackground() {
+    const transparency = parseFloat(freeTextBgTransparencyInput.value) || 0;
+    const bgColor = freeTextBgColorInput ? freeTextBgColorInput.value : "#ffffff";
+    // Convert hex to RGB
+    const rgb = hexToRgb(bgColor);
+    if (rgb) {
+      document.querySelectorAll('.free-text-container').forEach(container => {
+        container.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${transparency})`;
+      });
+    } else {
+      console.error("Conversia culorii hex la RGB a eșuat.");
+    }
+  }
+
+  // Ensure hexToRgb function exists
+  function hexToRgb(hex) {
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+      return r + r + g + g + b + b;
+    });
+
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
   }
   
 });
