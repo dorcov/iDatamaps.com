@@ -993,8 +993,6 @@ td.select-category select {
   border-radius: 4px;
 }
 
-
-
 .shape-controls {
   display: flex;
   flex-direction: column;
@@ -1022,7 +1020,6 @@ td.select-category select {
 .shape-controls input[type="range"] {
   width: 100%;
 }
-
 
 .shape-rectangle,
 .shape-circle {
@@ -1090,13 +1087,11 @@ svg .selected {
   stroke-width: 1.5;
 }
 
-
 .value-label {
   position: absolute;
   pointer-events: none;
   /* Additional styling as needed */
 }
-
 
 :root {
   --legend-width: 200px;
@@ -1113,7 +1108,6 @@ svg .selected {
   height: var(--legend-height);
 }
 
-
 .map-title {
   position: absolute;
   top: 20px;
@@ -1124,9 +1118,7 @@ svg .selected {
   /* Additional styling as needed */
   pointer-events: all;
   user-select: none;
-  
 }
-
 
 .legend {
   border: 1px solid #000; /* Existing border */
@@ -1250,7 +1242,6 @@ button#addTitle:hover {
   stroke: #000;
   stroke-width: 2px;
 }
-
 
 .highlighted {
   fill: rgb(121, 13, 13);

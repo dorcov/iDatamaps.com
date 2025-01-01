@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const exportButton = document.getElementById("exportMap");
   const resetButton = document.getElementById("resetAll");
   const legendTitleInput = document.getElementById("legendTitle"); // Add this here
+  const legendDecimalsInput = document.getElementById("legendDecimals");
   const svg = d3.select("#mapSVG");
   const gMap = svg.select(".map-group");
 
@@ -2136,7 +2137,8 @@ document.addEventListener("DOMContentLoaded", () => {
         intermediateColor2: "Intermediate Color #2:",
         intermediateColor3: "Intermediate Color #3:",
         mean: "Mean:",
-        median: "Median:"
+        median: "Median:",
+        legendDecimals: "Decimal places:"
     }
 };
 
@@ -2462,6 +2464,8 @@ function resetAll() {
 calculateStatistics();
   
 });
+
+
 
 
 
