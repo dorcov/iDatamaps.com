@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const regionTableBody = document.getElementById("regionTable").querySelector("tbody");
   const exportButton = document.getElementById("exportMap");
   const resetButton = document.getElementById("resetAll");
+  const legendTitleInput = document.getElementById("legendTitle"); // Add this here
   const svg = d3.select("#mapSVG");
   const gMap = svg.select(".map-group");
 
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let projection;
 
   // Add this with other DOM element references at the top
-  const legendTitleInput = document.getElementById("legendTitle");
+  // const legendTitleInput = document.getElementById("legendTitle");
 
   // Funcție de debouncing pentru îmbunătățirea performanței
   function debounce(func, wait) {
