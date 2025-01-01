@@ -2505,9 +2505,9 @@ calculateStatistics();
   // Function to update free text background transparency
   function updateFreeTextBackgroundTransparency() {
     const transparency = parseFloat(freeTextBgTransparencyInput.value) || 1;
-    freeTexts.forEach(text => {
-      d3.select(text.container)
-        .style("background-color", `rgba(255, 255, 255, ${transparency})`);
+    // Select all free text containers directly from the DOM
+    document.querySelectorAll('.free-text-container').forEach(container => {
+      container.style.backgroundColor = `rgba(255, 255, 255, ${transparency})`;
     });
   }
   
