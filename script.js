@@ -2068,7 +2068,10 @@ document.addEventListener("DOMContentLoaded", () => {
         intermediateColor2: "Culoare Intermediară #2:",
         intermediateColor3: "Culoare Intermediară #3:",
         mean: "Media:",
-        median: "Mediana:"
+        median: "Mediana:",
+        backgroundColor: "Culoare Fundal",
+        legendIntervals: "Număr de intervale",
+        legendDecimals: "Număr de zecimale"
     },
     en: {
         legendTitle: "Legend",
@@ -2153,7 +2156,10 @@ document.addEventListener("DOMContentLoaded", () => {
         intermediateColor3: "Intermediate Color #3:",
         mean: "Mean:",
         median: "Median:",
-        legendDecimals: "Decimal places:"
+        legendDecimals: "Decimal places:",
+        backgroundColor: "Background Color",
+        legendIntervals: "Number of intervals",
+        legendDecimals: "Decimal places"
     }
 };
 
