@@ -72,13 +72,25 @@ document.addEventListener("DOMContentLoaded", () => {
         intermediateColors.push(colorId);
         const wrapper = document.createElement('div');
         wrapper.className = 'color-picker';
+        wrapper.id = colorId + '_wrapper';
         wrapper.innerHTML = `
           <label for="${colorId}">Culoare Intermediară #${intermediateColors.length}:</label>
           <input type="color" id="${colorId}" value="#ffff00" />
+          <button type="button" class="removeColorBtn" data-color-id="${colorId}">X</button>
         `;
         intermediateColorsContainer.appendChild(wrapper);
       } else {
         alert('Ai atins numărul maxim de 3 culori intermediare.');
+      }
+    });
+
+    // Remove an intermediate color
+    intermediateColorsContainer.addEventListener('click', (e) => {
+      if (e.target.classList.contains('removeColorBtn')) {
+        const colorId = e.target.getAttribute('data-color-id');
+        intermediateColors = intermediateColors.filter(id => id !== colorId);
+        const wrapper = document.getElementById(colorId + '_wrapper');
+        if (wrapper) wrapper.remove();
       }
     });
   }
@@ -258,14 +270,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Calculăm culoarea pe baza gradientului personalizat sau presetat
   function getColor(value, maxValue, gradient) {
-    const ratio = value / maxValue;
+    // Build color array: start -> intermediates -> end
+    const stops = [];
+    stops.push({ offset: 0, color: gradient.start });
+    intermediateColors.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el) {
+        const offset = (i + 1) / (intermediateColors.length + 1);
+        stops.push({ offset, color: el.value });
+      }
+    });
+    stops.push({ offset: 1, color: gradient.end });
 
-    // Interpolare între culorile start și end
-    const startColor = d3.color(gradient.start);
-    const endColor = d3.color(gradient.end);
-    const interpolatedColor = d3.interpolateRgb(startColor, endColor)(ratio);
+    // Use stops to determine the color (replace with your interpolation logic)
+    const scale = d3.scaleLinear()
+      .domain(stops.map(s => s.offset * maxValue))
+      .range(stops.map(s => s.color));
 
-    return interpolatedColor.toString();
+    return scale(value);
   }
 
   // Funcționalitate Tooltip
@@ -2322,3 +2344,4 @@ if (legendBorderCheckbox) {
 }
   
 });
+
