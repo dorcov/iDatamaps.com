@@ -61,9 +61,53 @@ document.addEventListener("DOMContentLoaded", () => {
   const debouncedUpdateMapColors = debounce(updateMapColors, 300);
 
   // Funcție pentru a aplica gradientul personalizat
+  let intermediateColors = [];
+  const addIntermediateColorBtn = document.getElementById('addIntermediateColor');
+  const intermediateColorsContainer = document.getElementById('intermediateColors');
+
+  if (addIntermediateColorBtn && intermediateColorsContainer) {
+    addIntermediateColorBtn.addEventListener('click', () => {
+      if (intermediateColors.length < 3) {
+        const colorId = 'intermediateColor' + (intermediateColors.length + 1);
+        intermediateColors.push(colorId);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'color-picker';
+        wrapper.innerHTML = `
+          <label for="${colorId}">Culoare Intermediară #${intermediateColors.length}:</label>
+          <input type="color" id="${colorId}" value="#ffff00" />
+        `;
+        intermediateColorsContainer.appendChild(wrapper);
+      } else {
+        alert('Ai atins numărul maxim de 3 culori intermediare.');
+      }
+    });
+  }
+
   function applyCustomGradient() {
     currentGradient.start = gradientStart.value;
     currentGradient.end = gradientEnd.value;
+
+    // Optional: incorporate intermediateColors if they exist
+    const colorPoints = [];
+    // Add start color
+    colorPoints.push({ offset: 0, color: currentGradient.start });
+
+    // For each extra color, spread them evenly
+    intermediateColors.forEach((id, i) => {
+      const inputEl = document.getElementById(id);
+      if (inputEl) {
+        // calculate offset in a flexible way
+        const offset = (i + 1) / (intermediateColors.length + 1);
+        colorPoints.push({ offset, color: inputEl.value });
+      }
+    });
+
+    // Add end color
+    colorPoints.push({ offset: 1, color: currentGradient.end });
+
+    // Now apply or process colorPoints as needed
+    // Example: console.log(colorPoints);
+
     updateMapColors();
   }
 
