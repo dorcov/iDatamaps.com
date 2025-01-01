@@ -489,7 +489,7 @@ document.addEventListener("DOMContentLoaded", () => {
       yOffset += categories.length * 25 + 10; // Reduced spacing since we removed the header
     }
 
-    // Add value intervals if we have numeric values (without the "Values" header)
+    // Add value intervals with intermediate colors
     const values = Array.from(regionTableBody.querySelectorAll('input[type="number"]'))
       .map(input => parseFloat(input.value) || 0)
       .filter(val => val > 0);
@@ -501,10 +501,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const numIntervals = parseInt(document.getElementById("legendIntervals").value) || 5;
       const step = (maxValue - minValue) / numIntervals;
 
-      const colorScale = d3.scaleLinear()
-        .domain([minValue, maxValue])
-        .range([currentGradient.start, currentGradient.end]);
+      // Create color stops array including intermediate colors
+      const colorStops = [{ offset: 0, color: currentGradient.start }];
+      
+      // Add intermediate colors
+      intermediateColors.forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (el) {
+          const offset = (i + 1) / (intermediateColors.length + 1);
+          colorStops.push({ offset, color: el.value });
+        }
+      });
+      
+      colorStops.push({ offset: 1, color: currentGradient.end });
 
+      // Create color scale that uses all color stops
+      const colorScale = d3.scaleLinear()
+        .domain(colorStops.map(stop => minValue + (maxValue - minValue) * stop.offset))
+        .range(colorStops.map(stop => stop.color));
+
+      // Generate legend items
       for (let i = 0; i < numIntervals; i++) {
         const startValue = minValue + (step * i);
         const endValue = minValue + (step * (i + 1));
