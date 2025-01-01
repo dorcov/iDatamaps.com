@@ -1962,7 +1962,13 @@ document.addEventListener("DOMContentLoaded", () => {
         searchRegionsPlaceholder: "Caută regiuni...",
         sortByName: "Sortare după nume ↕",
         sortByValue: "Sortare după valoare ↕",
-        noResults: "Nu s-au găsit rezultate"
+        noResults: "Nu s-au găsit rezultate",
+        addIntermediateColor: "Adaugă Culoare Intermediară",
+        intermediateColor1: "Culoare Intermediară #1:",
+        intermediateColor2: "Culoare Intermediară #2:",
+        intermediateColor3: "Culoare Intermediară #3:",
+        mean: "Media:",
+        median: "Mediana:"
     },
     en: {
         legendTitle: "Legend",
@@ -2040,7 +2046,13 @@ document.addEventListener("DOMContentLoaded", () => {
         searchRegionsPlaceholder: "Search regions...",
         sortByName: "Sort by name ↕",
         sortByValue: "Sort by value ↕",
-        noResults: "No results found"
+        noResults: "No results found",
+        addIntermediateColor: "Add Intermediate Color",
+        intermediateColor1: "Intermediate Color #1:",
+        intermediateColor2: "Intermediate Color #2:",
+        intermediateColor3: "Intermediate Color #3:",
+        mean: "Mean:",
+        median: "Median:"
     }
 };
 
