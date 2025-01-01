@@ -601,6 +601,9 @@ td.select-category select {
   /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
   /* Add transition for smooth transparency changes */
   transition: background-color 0.3s ease;
+  /* Ensure no conflicting background-color is set here */
+  background-color: rgba(255, 255, 255, 1); /* Default to opaque */
+  /* ...existing styles... */
 }
 
 .free-text-container.selected {
