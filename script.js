@@ -985,7 +985,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add background and title to main legend
     legendGroup.append("rect")
       .attr("id", "legendBackground")
-      .attr("width", 180)
+      .attr("width", 100)
       .attr("height", 200)
       .attr("rx", 4)
       .attr("ry", 4)
@@ -2551,11 +2551,13 @@ calculateStatistics();
   const toggleGridLinesCheckbox = document.getElementById("toggleGridLines");
   const gridGroup = svg.append("g").attr("id", "gridGroup").style("display", "none");
 
-  // Function to draw grid lines
+  // Modify the drawGridLines function to use dynamic SVG dimensions
   function drawGridLines() {
+    gridGroup.selectAll(".grid-line").remove(); // Clear existing grid lines
+
     const numLines = 10;
-    const width = svgWidth;
-    const height = svgHeight;
+    const width = svg.node().clientWidth;
+    const height = svg.node().clientHeight;
 
     // Draw vertical lines
     for (let i = 1; i < numLines; i++) {
@@ -2586,6 +2588,7 @@ calculateStatistics();
     toggleGridLinesCheckbox.addEventListener("change", (e) => {
       if (e.target.checked) {
         gridGroup.style("display", "block");
+        drawGridLines(); // Redraw grid lines when enabled
       } else {
         gridGroup.style("display", "none");
       }
@@ -2593,6 +2596,13 @@ calculateStatistics();
   } else {
     console.error("Elementul cu ID 'toggleGridLines' nu a fost găsit.");
   }
+
+  // Add event listener for window resize to adjust grid lines
+  window.addEventListener("resize", () => {
+    if (toggleGridLinesCheckbox.checked) {
+      drawGridLines();
+    }
+  });
 
   // Ensure grid lines are included in the export
   if (exportButton) {
