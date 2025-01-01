@@ -2478,6 +2478,20 @@ function resetAll() {
 // Initial calculation
 calculateStatistics();
   
+  if (canvasHeightInput) {
+    canvasHeightInput.addEventListener("input", () => {
+      updateCanvasHeight();
+    });
+  } else {
+    console.error("Elementul cu ID 'canvasHeight' nu a fost găsit.");
+  }
+
+  // Function to update canvas height
+  function updateCanvasHeight() {
+    const height = parseInt(canvasHeightInput.value, 10) || 600;
+    svg.attr("height", height).attr("viewBox", `0 0 ${svgWidth} ${height}`);
+  }
+  
 });
 
 

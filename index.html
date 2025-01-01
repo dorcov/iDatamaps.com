@@ -85,7 +85,15 @@
             <!-- Removed canvasWidth label and input -->
 
             <label for="canvasHeight" data-key="canvasHeight">Canvas Height (px):</label>
-            <input type="number" id="canvasHeight" value="600" />
+            <input
+              type="range"
+              id="canvasHeight"
+              class="input-range"
+              value="600"
+              min="100"
+              max="1200"
+              step="10"
+            />
           </div>
 
           <!-- Secțiunea de Resetare și Export -->
