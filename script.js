@@ -507,6 +507,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const maxValue = Math.max(...values);
       
       const numIntervals = parseInt(document.getElementById("legendIntervals").value) || 5;
+      const decimals = parseInt(legendDecimalsInput.value) || 1;
       const step = (maxValue - minValue) / numIntervals;
 
       // Create color stops array including intermediate colors
@@ -528,7 +529,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .domain(colorStops.map(stop => minValue + (maxValue - minValue) * stop.offset))
         .range(colorStops.map(stop => stop.color));
 
-      // Generate legend items
+      // Generate legend items with custom decimals
       for (let i = 0; i < numIntervals; i++) {
         const startValue = minValue + (step * i);
         const endValue = minValue + (step * (i + 1));
@@ -546,7 +547,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .attr("x", 30)
           .attr("y", 15)
           .attr("class", "legend-text")
-          .text(`${startValue.toFixed(1)} - ${endValue.toFixed(1)}`);
+          .text(`${startValue.toFixed(decimals)} - ${endValue.toFixed(decimals)}`);
       }
     }
 
@@ -562,6 +563,15 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("legendIntervals").addEventListener("input", () => {
     generateBothLegends();
   });
+
+  // Adăugăm event listener pentru numărul de zecimale
+  if (legendDecimalsInput) {
+    legendDecimalsInput.addEventListener("input", () => {
+      generateBothLegends();
+    });
+  } else {
+    console.error("Elementul cu ID 'legendDecimals' nu a fost găsit.");
+  }
 
   // Funcție nouă pentru afișarea legendei numerice
   function generateNumericLegend() {
@@ -620,14 +630,16 @@ document.addEventListener("DOMContentLoaded", () => {
       .style("fill", `url(#${gradientID})`)
       .attr("rx", 5).attr("ry", 5);
 
-    // Add min/max labels
+    const decimals = parseInt(legendDecimalsInput.value) || 1;
+
+    // Add min/max labels with custom decimals
     numericLegendGroup.append("text")
       .attr("x", 10).attr("y", 40)
-      .text("Min: " + minValue);
+      .text("Min: " + minValue.toFixed(decimals));
     numericLegendGroup.append("text")
       .attr("x", 130).attr("y", 40)
       .style("text-anchor", "end")
-      .text("Max: " + maxValue);
+      .text("Max: " + maxValue.toFixed(decimals));
 
     // ... rest of the existing function code ...
   }

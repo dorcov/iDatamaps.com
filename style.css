@@ -1384,3 +1384,18 @@ button#addTitle:hover {
   box-shadow: 0 0 0 2px rgba(42, 115, 255, 0.1);
 }
 
+/* Adăugăm stil pentru noul input */
+#legendDecimals {
+  width: 60px;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+}
+
+#legendDecimals:focus {
+  border-color: #2A73FF;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(42, 115, 255, 0.1);
+}
+
