@@ -465,6 +465,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const legendItemsGroup = d3.select("#legendItems");
     legendItemsGroup.selectAll("*").remove(); // Clear existing legend
 
+    // Actualizăm titlul legendei cu valoarea din input
+    d3.select("#legendTitle")
+      .text(legendTitleInput.value || "Legendă");
+
     let yOffset = 30;
 
     // Show categories first (without the "Categories" header)
@@ -973,7 +977,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("x", 10)
       .attr("y", 20)
       .attr("class", "legend-title")
-      .text("Legendă");
+      .text(legendTitleInput ? legendTitleInput.value : "Legendă");
 
     legendGroup.append("g")
       .attr("id", "legendItems");

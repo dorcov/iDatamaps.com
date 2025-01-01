@@ -1369,3 +1369,18 @@ button#addTitle:hover {
 
 /* ...existing code... */
 
+.control-group input#legendTitle {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+.control-group input#legendTitle:focus {
+  border-color: #2A73FF;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(42, 115, 255, 0.1);
+}
+
