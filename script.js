@@ -205,11 +205,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Resetăm gradientul la valorile implicite
     if (gradientStart && gradientEnd) {
-      gradientStart.value = "#2A73FF";
-      gradientEnd.value = "#2A73FF";
+      gradientStart.value = "#FF0000";
+      gradientEnd.value = "#009E4F";
       currentGradient = {
-        start: "#2A73FF",
-        end: "#2A73FF"
+        start: "#FF0000",
+        end: "#009E4F"
       };
     }
 
