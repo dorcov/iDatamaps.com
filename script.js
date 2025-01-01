@@ -2130,6 +2130,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Actualizăm harta cu noile valori
     updateMapColors();
     generateBothLegends();
+    calculateStatistics(); // Add this line to calculate statistics after CSV import
   }
 
   // Event listener pentru butonul de import CSV
@@ -2145,6 +2146,7 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.onload = (e) => {
         const csvData = processCSV(e.target.result);
         updateValuesFromCSV(csvData);
+        calculateStatistics(); // Add this line as a safeguard
       };
       reader.readAsText(file);
     });
