@@ -2551,7 +2551,7 @@ calculateStatistics();
   const toggleGridLinesCheckbox = document.getElementById("toggleGridLines");
   const gridGroup = svg.append("g").attr("id", "gridGroup").style("display", "none");
 
-  // Modify the drawGridLines function to use dynamic SVG dimensions
+  // Modify the drawGridLines function to use dynamic SVG dimensions and eliminate extra left space
   function drawGridLines() {
     gridGroup.selectAll(".grid-line").remove(); // Clear existing grid lines
 
@@ -2559,24 +2559,29 @@ calculateStatistics();
     const width = svg.node().clientWidth;
     const height = svg.node().clientHeight;
 
+    const margin = 0; // Adjust margin if needed
+
+    const adjustedWidth = width - margin * 2;
+    const adjustedHeight = height - margin * 2;
+
     // Draw vertical lines
     for (let i = 1; i < numLines; i++) {
       gridGroup.append("line")
         .attr("class", "grid-line")
-        .attr("x1", (width / numLines) * i)
-        .attr("y1", 0)
-        .attr("x2", (width / numLines) * i)
-        .attr("y2", height);
+        .attr("x1", margin + (adjustedWidth / numLines) * i)
+        .attr("y1", margin)
+        .attr("x2", margin + (adjustedWidth / numLines) * i)
+        .attr("y2", margin + adjustedHeight);
     }
 
     // Draw horizontal lines
     for (let i = 1; i < numLines; i++) {
       gridGroup.append("line")
         .attr("class", "grid-line")
-        .attr("x1", 0)
-        .attr("y1", (height / numLines) * i)
-        .attr("x2", width)
-        .attr("y2", (height / numLines) * i);
+        .attr("x1", margin)
+        .attr("y1", margin + (adjustedHeight / numLines) * i)
+        .attr("x2", margin + adjustedWidth)
+        .attr("y2", margin + (adjustedHeight / numLines) * i);
     }
   }
 
@@ -2597,8 +2602,13 @@ calculateStatistics();
     console.error("Elementul cu ID 'toggleGridLines' nu a fost găsit.");
   }
 
-  // Add event listener for window resize to adjust grid lines
+  // Add event listener for window resize to adjust grid lines and SVG viewBox
   window.addEventListener("resize", () => {
+    const newWidth = mapContainer.clientWidth;
+    const newHeight = mapContainer.clientHeight;
+
+    svg.attr("viewBox", `0 0 ${newWidth} ${newHeight}`);
+
     if (toggleGridLinesCheckbox.checked) {
       drawGridLines();
     }
