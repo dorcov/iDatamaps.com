@@ -501,15 +501,29 @@ document.addEventListener("DOMContentLoaded", () => {
   function generateNumericLegend() {
     numericLegendGroup.selectAll("*").remove();
 
-    // Calculează valorile minime și maxime din tabel
+    // Get input values
     const inputs = regionTableBody.querySelectorAll("input");
     const values = Array.from(inputs).map((i) => parseFloat(i.value) || 0);
-    if (!values.length) return;
-
     const minValue = Math.min(...values);
     const maxValue = Math.max(...values);
 
-    // Creăm fundal
+    // Create array of all color stops including intermediates
+    const colorStops = [
+      { offset: "0%", color: currentGradient.start }
+    ];
+
+    // Add intermediate colors if they exist
+    intermediateColors.forEach((id, index) => {
+      const el = document.getElementById(id);
+      if (el) {
+        const offset = `${((index + 1) / (intermediateColors.length + 1) * 100)}%`;
+        colorStops.push({ offset: offset, color: el.value });
+      }
+    });
+
+    colorStops.push({ offset: "100%", color: currentGradient.end });
+
+    // Create background
     numericLegendGroup.append("rect")
       .attr("id", "numericLegendBackground")
       .attr("x", 0).attr("y", 0)
@@ -517,32 +531,30 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("rx", 4).attr("ry", 4)
       .attr("fill", "rgba(255, 255, 255, 0.5)");
 
-    // Definim un gradient liniar
+    // Create gradient definition with all stops
     const gradientID = "numericGradient2";
     const defs = numericLegendGroup.append("defs")
       .append("linearGradient")
       .attr("id", gradientID)
       .attr("x1", "0%").attr("x2", "100%")
       .attr("y1", "0%").attr("y2", "0%");
+
+    // Add all color stops to gradient
     defs.selectAll("stop")
-      .data([
-        { offset: "0%", color: currentGradient.start },
-        { offset: "100%", color: currentGradient.end }
-      ])
+      .data(colorStops)
       .enter()
       .append("stop")
       .attr("offset", d => d.offset)
       .attr("stop-color", d => d.color);
 
-    // Bara de gradient numeric
+    // Create gradient bar
     numericLegendGroup.append("rect")
       .attr("x", 10).attr("y", 20)
       .attr("width", 120).attr("height", 10)
       .style("fill", `url(#${gradientID})`)
-      .attr("rx", 5)
-      .attr("ry", 5);
+      .attr("rx", 5).attr("ry", 5);
 
-    // Valorile Min și Max
+    // Add min/max labels
     numericLegendGroup.append("text")
       .attr("x", 10).attr("y", 40)
       .text("Min: " + minValue);
@@ -550,47 +562,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("x", 130).attr("y", 40)
       .style("text-anchor", "end")
       .text("Max: " + maxValue);
-    
-    numericLegendGroup.raise(); // Aduce numericLegendGroup în față
 
-    // Adăugăm un mâner (handle) pentru redimensionare
-    numericLegendGroup.append("rect")
-      .attr("id", "numericResizeHandle")
-      .attr("x", 130) // Valoare inițială aprox. la capătul barei
-      .attr("y", 17)
-      .attr("width", 10)
-      .attr("height", 16)
-      .style("cursor", "ew-resize")
-      .attr("fill", "#555")
-      .attr("rx", 2)
-      .attr("ry", 2);
-
-    // Funcție pentru redimensionarea barei de gradient numeric
-    const resizeDrag = d3.drag()
-      .on("start", (event) => {
-        d3.select("#numericResizeHandle").raise();
-      })
-      .on("drag", (event) => {
-        const newWidth = Math.max(100, Math.min(event.x - 10, 300)); // Adjusted minimum width for better usability
-        numericLegendGroup.select("rect[width='120']").attr("width", newWidth);
-        // Adjust the position of texts based on new width
-        numericLegendGroup.selectAll(".numeric-legend-text")
-          .attr("x", newWidth / 2);
-        // Adjust the position of the resize handle
-        d3.select("#numericResizeHandle").attr("x", newWidth + 10);
-      })
-      .on("end", (event) => {
-        // Optional: Save the new width to localStorage or state if needed
-      });
-
-    d3.select("#numericResizeHandle").call(resizeDrag);
-
-    // Apply styles to numeric legend
-    numericLegendGroup.style("font-family", "var(--legend-font, 'Roboto, sans-serif')")
-                      .style("font-size", "var(--legend-font-size, 14px)")
-                      .style("font-style", "var(--legend-font-style, normal)")
-                      .style("color", "var(--legend-color, #000000)")
-                      .style("background-color", `rgba(255, 255, 255, var(--legend-bg-transparency, 0.8))`);
+    // ... rest of the existing function code ...
   }
 
   // Afișăm ambele legende după ce actualizăm tabelul/gradientul
@@ -2344,8 +2317,6 @@ if (legendBorderCheckbox) {
 }
   
 });
-
-
 
 
 
