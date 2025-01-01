@@ -44,6 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Define projection as a global variable
   let projection;
 
+  // Add this with other DOM element references at the top
+  const legendTitleInput = document.getElementById("legendTitle");
+
   // Funcție de debouncing pentru îmbunătățirea performanței
   function debounce(func, wait) {
     let timeout;
@@ -972,12 +975,20 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("ry", 4)
       .attr("fill", "rgba(255, 255, 255, var(--legend-bg-transparency, 0.8))"); // Utilizare variabilă CSS
 
-    legendGroup.append("text")
+    // Update this part to handle cases where legendTitleInput might not exist
+    const legendTitle = legendGroup.append("text")
       .attr("id", "legendTitle")
       .attr("x", 10)
       .attr("y", 20)
       .attr("class", "legend-title")
-      .text(legendTitleInput ? legendTitleInput.value : "Legendă");
+      .text(legendTitleInput && legendTitleInput.value ? legendTitleInput.value : "Legendă");
+
+    // Add event listener for title changes
+    if (legendTitleInput) {
+      legendTitleInput.addEventListener('input', () => {
+        legendTitle.text(legendTitleInput.value || "Legendă");
+      });
+    }
 
     legendGroup.append("g")
       .attr("id", "legendItems");
