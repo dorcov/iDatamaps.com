@@ -246,7 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const maxValue = Math.max(...values, 1); // Evităm zero
 
     gMap.selectAll("path").each(function (d) {
-      const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || d.properties.region_nam ||d.properties.nume_regiu || "Unknown");
+      const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || d.properties.region_nam ||d.properties.nume_regiu ||d.properties.cntry_name || "Unknown");
       const input = document.querySelector(`[data-region="${regionName}"]`);
       const select = document.querySelector(`select[data-region="${regionName}"]`);
       const value = input ? parseFloat(input.value) || 0 : 0;
@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcționalitate Tooltip
   function showTooltip(event, d) {
-    const regionName = d.properties.NAME || d.properties.name || d.properties.region_nam ||d.properties.nume_regiu || "Unknown";
+    const regionName = d.properties.NAME || d.properties.name || d.properties.region_nam ||d.properties.nume_regiu || d.properties.cntry_name || "Unknown";
     const value = getRegionValue(d);
     const category = getRegionCategory(d);
     tooltip.style("visibility", "visible")
@@ -324,14 +324,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a obține valoarea unei regiuni
   function getRegionValue(d) {
-    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name ||d.properties.region_nam || d.properties.nume_regiu ||"Unknown");
+    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name ||d.properties.region_nam || d.properties.nume_regiu ||d.properties.cntry_name ||"Unknown");
     const input = document.querySelector(`[data-region="${regionName}"]`);
     return input ? parseFloat(input.value) || 0 : 0;
   }
 
   // Funcție pentru a obține categoria unei regiuni
   function getRegionCategory(d) {
-    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name ||d.properties.region_nam ||d.properties.nume_regiu || "Unknown");
+    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name ||d.properties.region_nam ||d.properties.nume_regiu || d.properties.cntry_name ||"Unknown");
     const select = document.querySelector(`select[data-region="${regionName}"]`);
     if (select && select.value !== "" && categories[select.value]) {
       return categories[select.value].name;
@@ -362,7 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const pointLocations = {};
       pointFeatures.forEach(point => {
         const regionName = point.properties.NAME || point.properties.name || 
-                          point.properties.region_nam || point.properties.nume_regiu;
+                          point.properties.region_nam || point.properties.nume_regiu ||point.properties.cntry_name;
         if (regionName) {
           pointLocations[regionName] = point.geometry.coordinates;
         }
@@ -372,7 +372,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.pointLocations = {};
       pointFeatures.forEach(point => {
         const regionName = point.properties.NAME || point.properties.name || 
-                          point.properties.region_nam || point.properties.nume_regiu;
+                          point.properties.region_nam || point.properties.nume_regiu||point.properties.cntry_name;
         if (regionName) {
           window.pointLocations[regionName] = point.geometry.coordinates;
         }
@@ -415,7 +415,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Modify getRegionPointOnSurface to use point coordinates if available
       window.getRegionPointOnSurface = function(feature) {
         const regionName = feature.properties.NAME || feature.properties.name || 
-                          feature.properties.region_nam || feature.properties.nume_regiu;
+                          feature.properties.region_nam || feature.properties.nume_regiu||feature.properties.cntry_name;
         if (pointLocations[regionName]) {
           // Return the coordinates from the points layer
           return pointLocations[regionName];
@@ -441,7 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     regionTableBody.innerHTML = "";
     features.forEach((feature) => {
-      const regionName = feature.properties.NAME || feature.properties.name || feature.properties.region_nam ||feature.properties.nume_regiu || "Unknown";
+      const regionName = feature.properties.NAME || feature.properties.name || feature.properties.region_nam ||feature.properties.nume_regiu ||feature.properties.cntry_name ||"Unknown";
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${regionName}</td>
@@ -1156,7 +1156,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .style("font-family", valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif")
       .attr("x", d => {
         const regionName = d.properties.NAME || d.properties.name || 
-                          d.properties.region_nam || d.properties.nume_regiu;
+                          d.properties.region_nam || d.properties.nume_regiu ||d.properties.cntry_name||d.properties.cntry_name;
         // First try to use saved position
         if (labelPositions[regionName]) {
           return labelPositions[regionName].x;
@@ -1173,7 +1173,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .attr("y", d => {
         const regionName = d.properties.NAME || d.properties.name || 
-                          d.properties.region_nam || d.properties.nume_regiu;
+                          d.properties.region_nam || d.properties.nume_regiu||d.properties.cntry_name;
         // First try to use saved position
         if (labelPositions[regionName]) {
           return labelPositions[regionName].y;
@@ -1267,7 +1267,7 @@ document.addEventListener("DOMContentLoaded", () => {
     gMap.selectAll(".value-label")
       .attr("x", d => {
         const regionName = d.properties.NAME || d.properties.name || 
-                          d.properties.region_nam || d.properties.nume_regiu;
+                          d.properties.region_nam || d.properties.nume_regiu||d.properties.cntry_name;
         if (labelPositions[regionName]) {
           return labelPositions[regionName].x;
         }
@@ -1281,7 +1281,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .attr("y", d => {
         const regionName = d.properties.NAME || d.properties.name || 
-                          d.properties.region_nam || d.properties.nume_regiu;
+                          d.properties.region_nam || d.properties.nume_regiu||d.properties.cntry_name;
         if (labelPositions[regionName]) {
           return labelPositions[regionName].y;
         }
@@ -2743,7 +2743,7 @@ calculateStatistics();
       .style("font-family", valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif")
       .attr("x", d => {
         const regionName = d.properties.NAME || d.properties.name || 
-                          d.properties.region_nam || d.properties.nume_regiu;
+                          d.properties.region_nam || d.properties.nume_regiu||d.properties.cntry_name;
         // First try to use saved position
         if (labelPositions[regionName]) {
           return labelPositions[regionName].x;
@@ -2760,7 +2760,7 @@ calculateStatistics();
       })
       .attr("y", d => {
         const regionName = d.properties.NAME || d.properties.name || 
-                          d.properties.region_nam || d.properties.nume_regiu;
+                          d.properties.region_nam || d.properties.nume_regiu||d.properties.cntry_name;
         // First try to use saved position
         if (labelPositions[regionName]) {
           return labelPositions[regionName].y;
