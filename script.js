@@ -350,18 +350,39 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      geoDataFeatures = data.features;
+      // Separate polygon and point features
+      const polygonFeatures = data.features.filter(f => 
+        f.geometry.type === 'Polygon' || f.geometry.type === 'MultiPolygon'
+      );
+      const pointFeatures = data.features.filter(f => 
+        f.geometry.type === 'Point'
+      );
 
-      // Set the projection once
+      // Store point coordinates for each region
+      const pointLocations = {};
+      pointFeatures.forEach(point => {
+        const regionName = point.properties.NAME || point.properties.name || 
+                          point.properties.region_nam || point.properties.nume_regiu;
+        if (regionName) {
+          pointLocations[regionName] = point.geometry.coordinates;
+        }
+      });
+
+      // Use only polygon features for the map rendering
+      geoDataFeatures = polygonFeatures;
+
       projection = d3.geoMercator()
-        .fitSize([svgWidth, svgHeight], data);
+        .fitSize([svgWidth, svgHeight], {
+          type: 'FeatureCollection',
+          features: polygonFeatures
+        });
 
       const path = d3.geoPath().projection(projection);
 
       gMap.selectAll("path").remove();
 
       gMap.selectAll("path")
-        .data(geoDataFeatures)
+        .data(polygonFeatures)
         .enter()
         .append("path")
         .attr("d", path)
@@ -381,7 +402,20 @@ document.addEventListener("DOMContentLoaded", () => {
           hideTooltip();
         });
 
-      generateTable(data.features);
+      // Modify getRegionPointOnSurface to use point coordinates if available
+      window.getRegionPointOnSurface = function(feature) {
+        const regionName = feature.properties.NAME || feature.properties.name || 
+                          feature.properties.region_nam || feature.properties.nume_regiu;
+        if (pointLocations[regionName]) {
+          // Return the coordinates from the points layer
+          return pointLocations[regionName];
+        }
+        // Fallback to calculating centroid if no point is found
+        const point = turf.pointOnFeature(feature);
+        return point.geometry.coordinates;
+      };
+
+      generateTable(polygonFeatures);
       updateMapColors();
     }).catch((err) => {
       console.error(`Eroare la încărcarea GeoJSON (${geojsonFile}):`, err);
