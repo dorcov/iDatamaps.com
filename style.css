@@ -362,7 +362,7 @@ td.select-category select {
 
 #legendBackground {
   fill: rgba(255, 255, 255, 0.8); /* Fundal semi-transparent */
-  stroke: #ccc;
+  stroke: #000;
   stroke-width: 1px;
   rx: 4;
   ry: 4;
@@ -372,6 +372,10 @@ td.select-category select {
   align-items: center;
   justify-content: space-between; /* Distributează etichetele în interior */
   padding: 0 10px; /* Spațiu interior pentru etichete */
+}
+
+#legendBackground.no-border {
+  stroke: none;
 }
 
 .legend-title {

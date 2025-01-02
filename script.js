@@ -2073,11 +2073,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to toggle legend border
   function toggleLegendBorder() {
-    const legend = d3.select("#legendGroup");
+    const legendBackground = d3.select("#legendBackground");
     if (legendBorderCheckbox.checked) {
-      legend.classed("no-border", false);
+      legendBackground
+        .attr("stroke", "#000")
+        .attr("stroke-width", "1px");
     } else {
-      legend.classed("no-border", true);
+      legendBackground
+        .attr("stroke", "none")
+        .attr("stroke-width", "0");
     }
   }
 
