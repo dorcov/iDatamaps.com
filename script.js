@@ -826,7 +826,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Încarcă harta selectată inițial
-  loadMap("md.geojson");
+  loadMap("combinedMD.geojson");
 
   // Simplu set de funcții pentru drag & drop (similar cu legendGroup)
   function dragStarted(event, d) {
