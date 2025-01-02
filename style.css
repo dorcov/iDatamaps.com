@@ -1447,6 +1447,13 @@ button#addTitle:hover {
 
 /* ...rest of existing code... */
 
+/* Style for grid lines */
+.grid-line {
+  stroke: #ccc;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
 .grid-line {
   stroke: #ccc;
   stroke-width: 1;
