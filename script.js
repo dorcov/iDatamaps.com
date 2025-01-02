@@ -1114,7 +1114,21 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("class", "value-label")
       .attr("text-anchor", "middle")
       .style("pointer-events", "none") // ensure text doesn’t interfere with mouse events
-      .style("font-family", valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif"); // Set initial font family
+      .style("font-family", valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif") // Set initial font family
+      .attr("x", d => labelPositions[d.properties.NAME]?.x || getRegionPointOnSurface(d)[0])
+      .attr("y", d => labelPositions[d.properties.NAME]?.y || getRegionPointOnSurface(d)[1])
+      .call(d3.drag()
+        .on("drag", function(event, d) {
+          d3.select(this)
+            .attr("x", event.x)
+            .attr("y", event.y);
+        })
+        .on("end", function(event, d) {
+          const regionName = d.properties.NAME;
+          labelPositions[regionName] = { x: event.x, y: event.y };
+          localStorage.setItem("labelPositions", JSON.stringify(labelPositions));
+        })
+      );
   }
 
   // Funcție pentru a obține centrul unei regiuni
@@ -2551,37 +2565,33 @@ calculateStatistics();
   const toggleGridLinesCheckbox = document.getElementById("toggleGridLines");
   const gridGroup = svg.append("g").attr("id", "gridGroup").style("display", "none");
 
-  // Modify the drawGridLines function to use dynamic SVG dimensions and eliminate extra left space
+  // Modify the drawGridLines function to use dynamic SVG dimensions
   function drawGridLines() {
-    gridGroup.selectAll(".grid-line").remove(); // Clear existing grid lines
+    gridGroup.selectAll(".grid-line").remove();
 
+    const svgElem = svg.node();
+    const width = svgElem.clientWidth;
+    const height = svgElem.clientHeight;
     const numLines = 10;
-    const width = svg.node().clientWidth;
-    const height = svg.node().clientHeight;
-
-    const margin = 0; // Adjust margin if needed
-
-    const adjustedWidth = width - margin * 2;
-    const adjustedHeight = height - margin * 2;
 
     // Draw vertical lines
     for (let i = 1; i < numLines; i++) {
       gridGroup.append("line")
         .attr("class", "grid-line")
-        .attr("x1", margin + (adjustedWidth / numLines) * i)
-        .attr("y1", margin)
-        .attr("x2", margin + (adjustedWidth / numLines) * i)
-        .attr("y2", margin + adjustedHeight);
+        .attr("x1", (width / numLines) * i)
+        .attr("y1", 0)
+        .attr("x2", (width / numLines) * i)
+        .attr("y2", height);
     }
 
     // Draw horizontal lines
     for (let i = 1; i < numLines; i++) {
       gridGroup.append("line")
         .attr("class", "grid-line")
-        .attr("x1", margin)
-        .attr("y1", margin + (adjustedHeight / numLines) * i)
-        .attr("x2", margin + adjustedWidth)
-        .attr("y2", margin + (adjustedHeight / numLines) * i);
+        .attr("x1", 0)
+        .attr("y1", (height / numLines) * i)
+        .attr("x2", width)
+        .attr("y2", (height / numLines) * i);
     }
   }
 
@@ -2602,13 +2612,8 @@ calculateStatistics();
     console.error("Elementul cu ID 'toggleGridLines' nu a fost găsit.");
   }
 
-  // Add event listener for window resize to adjust grid lines and SVG viewBox
+  // Add event listener for window resize to adjust grid lines
   window.addEventListener("resize", () => {
-    const newWidth = mapContainer.clientWidth;
-    const newHeight = mapContainer.clientHeight;
-
-    svg.attr("viewBox", `0 0 ${newWidth} ${newHeight}`);
-
     if (toggleGridLinesCheckbox.checked) {
       drawGridLines();
     }
@@ -2626,6 +2631,42 @@ calculateStatistics();
     });
   } else {
     console.error("Elementul cu ID 'exportMap' nu a fost găsit.");
+  }
+  
+  // 1) Global object to store label positions
+  let labelPositions = JSON.parse(localStorage.getItem("labelPositions") || "{}");
+
+  // Funcție pentru a crea label-uri pe hartă
+  function createValueLabels() {
+    // 1) Remove or comment out any old HTML label creation
+    // ...existing code...
+
+    // 2) Clear existing SVG labels
+    gMap.selectAll(".value-label").remove();
+
+    // 3) Append new text elements for each region
+    gMap.selectAll(".value-label")
+      .data(geoDataFeatures)
+      .enter()
+      .append("text")
+      .attr("class", "value-label")
+      .attr("text-anchor", "middle")
+      .style("pointer-events", "none") // ensure text doesn’t interfere with mouse events
+      .style("font-family", valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif") // Set initial font family
+      .attr("x", d => labelPositions[d.properties.NAME]?.x || getRegionPointOnSurface(d)[0])
+      .attr("y", d => labelPositions[d.properties.NAME]?.y || getRegionPointOnSurface(d)[1])
+      .call(d3.drag()
+        .on("drag", function(event, d) {
+          d3.select(this)
+            .attr("x", event.x)
+            .attr("y", event.y);
+        })
+        .on("end", function(event, d) {
+          const regionName = d.properties.NAME;
+          labelPositions[regionName] = { x: event.x, y: event.y };
+          localStorage.setItem("labelPositions", JSON.stringify(labelPositions));
+        })
+      );
   }
   
 });
