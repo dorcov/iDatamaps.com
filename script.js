@@ -368,6 +368,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
 
+      // Store point coordinates globally
+      window.pointLocations = {};
+      pointFeatures.forEach(point => {
+        const regionName = point.properties.NAME || point.properties.name || 
+                          point.properties.region_nam || point.properties.nume_regiu;
+        if (regionName) {
+          window.pointLocations[regionName] = point.geometry.coordinates;
+        }
+      });
+
       // Use only polygon features for the map rendering
       geoDataFeatures = polygonFeatures;
 
@@ -1134,23 +1144,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a crea label-uri pe hartă
   function createValueLabels() {
-    // 1) Remove or comment out any old HTML label creation
-    // ...existing code...
-
-    // 2) Clear existing SVG labels
     gMap.selectAll(".value-label").remove();
 
-    // 3) Append new text elements for each region
     gMap.selectAll(".value-label")
       .data(geoDataFeatures)
       .enter()
       .append("text")
       .attr("class", "value-label")
       .attr("text-anchor", "middle")
-      .style("pointer-events", "none") // ensure text doesn’t interfere with mouse events
-      .style("font-family", valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif") // Set initial font family
-      .attr("x", d => labelPositions[d.properties.NAME]?.x || getRegionPointOnSurface(d)[0])
-      .attr("y", d => labelPositions[d.properties.NAME]?.y || getRegionPointOnSurface(d)[1])
+      .style("pointer-events", "none")
+      .style("font-family", valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif")
+      .attr("x", d => {
+        const regionName = d.properties.NAME || d.properties.name || 
+                          d.properties.region_nam || d.properties.nume_regiu;
+        // First try to use saved position
+        if (labelPositions[regionName]) {
+          return labelPositions[regionName].x;
+        }
+        // Then try to use point coordinates from points layer
+        if (window.pointLocations && window.pointLocations[regionName]) {
+          const [x, y] = projection(window.pointLocations[regionName]);
+          return x;
+        }
+        // Fallback to centroid if no point exists
+        const coords = getRegionPointOnSurface(d);
+        const [x, y] = projection(coords);
+        return x;
+      })
+      .attr("y", d => {
+        const regionName = d.properties.NAME || d.properties.name || 
+                          d.properties.region_nam || d.properties.nume_regiu;
+        // First try to use saved position
+        if (labelPositions[regionName]) {
+          return labelPositions[regionName].y;
+        }
+        // Then try to use point coordinates from points layer
+        if (window.pointLocations && window.pointLocations[regionName]) {
+          const [x, y] = projection(window.pointLocations[regionName]);
+          return y;
+        }
+        // Fallback to centroid if no point exists
+        const coords = getRegionPointOnSurface(d);
+        const [x, y] = projection(coords);
+        return y;
+      })
       .call(d3.drag()
         .on("drag", function(event, d) {
           d3.select(this)
@@ -1229,14 +1266,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     gMap.selectAll(".value-label")
       .attr("x", d => {
+        const regionName = d.properties.NAME || d.properties.name || 
+                          d.properties.region_nam || d.properties.nume_regiu;
+        if (labelPositions[regionName]) {
+          return labelPositions[regionName].x;
+        }
+        if (window.pointLocations && window.pointLocations[regionName]) {
+          const [x, y] = projection(window.pointLocations[regionName]);
+          return x;
+        }
         const coords = getRegionPointOnSurface(d);
-        const [cx, cy] = projection(coords);
-        return cx;
+        const [x, y] = projection(coords);
+        return x;
       })
       .attr("y", d => {
+        const regionName = d.properties.NAME || d.properties.name || 
+                          d.properties.region_nam || d.properties.nume_regiu;
+        if (labelPositions[regionName]) {
+          return labelPositions[regionName].y;
+        }
+        if (window.pointLocations && window.pointLocations[regionName]) {
+          const [x, y] = projection(window.pointLocations[regionName]);
+          return y;
+        }
         const coords = getRegionPointOnSurface(d);
-        const [cx, cy] = projection(coords);
-        return cy;
+        const [x, y] = projection(coords);
+        return y;
       })
       .text(d => {
         // Use getRegionValue(d)
@@ -2672,23 +2727,50 @@ calculateStatistics();
 
   // Funcție pentru a crea label-uri pe hartă
   function createValueLabels() {
-    // 1) Remove or comment out any old HTML label creation
-    // ...existing code...
-
-    // 2) Clear existing SVG labels
     gMap.selectAll(".value-label").remove();
 
-    // 3) Append new text elements for each region
     gMap.selectAll(".value-label")
       .data(geoDataFeatures)
       .enter()
       .append("text")
       .attr("class", "value-label")
       .attr("text-anchor", "middle")
-      .style("pointer-events", "none") // ensure text doesn’t interfere with mouse events
-      .style("font-family", valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif") // Set initial font family
-      .attr("x", d => labelPositions[d.properties.NAME]?.x || getRegionPointOnSurface(d)[0])
-      .attr("y", d => labelPositions[d.properties.NAME]?.y || getRegionPointOnSurface(d)[1])
+      .style("pointer-events", "none")
+      .style("font-family", valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif")
+      .attr("x", d => {
+        const regionName = d.properties.NAME || d.properties.name || 
+                          d.properties.region_nam || d.properties.nume_regiu;
+        // First try to use saved position
+        if (labelPositions[regionName]) {
+          return labelPositions[regionName].x;
+        }
+        // Then try to use point coordinates from points layer
+        if (window.pointLocations && window.pointLocations[regionName]) {
+          const [x, y] = projection(window.pointLocations[regionName]);
+          return x;
+        }
+        // Fallback to centroid if no point exists
+        const coords = getRegionPointOnSurface(d);
+        const [x, y] = projection(coords);
+        return x;
+      })
+      .attr("y", d => {
+        const regionName = d.properties.NAME || d.properties.name || 
+                          d.properties.region_nam || d.properties.nume_regiu;
+        // First try to use saved position
+        if (labelPositions[regionName]) {
+          return labelPositions[regionName].y;
+        }
+        // Then try to use point coordinates from points layer
+        if (window.pointLocations && window.pointLocations[regionName]) {
+          const [x, y] = projection(window.pointLocations[regionName]);
+          return y;
+        }
+        // Fallback to centroid if no point exists
+        const coords = getRegionPointOnSurface(d);
+        const [x, y] = projection(coords);
+        return y;
+      })
       .call(d3.drag()
         .on("drag", function(event, d) {
           d3.select(this)
