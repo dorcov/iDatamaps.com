@@ -1516,3 +1516,11 @@ button#addTitle:hover {
 
 /* ...existing code... */
 
+.legend-styling {
+  /* Remove border and stroke properties */
+  border: none;
+  stroke: none;
+  
+  /* ...existing code... */
+}
+
