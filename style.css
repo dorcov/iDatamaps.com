@@ -70,11 +70,11 @@ body {
 
 .map-column::before {
   content: '';
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
-  width: 200%;
-  height: 250%;
+  width: 500%;
+  height: 500%;
   background: url("images/watermark.png") repeat;
   opacity: 0.05;
   transform: rotate(-30deg);
