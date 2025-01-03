@@ -2575,6 +2575,32 @@ calculateStatistics();
   
   document.getElementById("legendSortDirection").addEventListener("change", generateAllLegends);
   
+  function updateWatermarkColor(backgroundColor) {
+    const rgb = hexToRgb(backgroundColor);
+    if (!rgb) return;
+    
+    const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+    const root = document.documentElement;
+    
+    root.style.setProperty(
+      '--watermark-filter', 
+      brightness > 128 
+        ? 'brightness(0) opacity(0.05)' 
+        : 'brightness(100) opacity(0.05)'
+    );
+  }
+
+  // Update canvasColorInput event listener
+  if (canvasColorInput) {
+    canvasColorInput.addEventListener("input", (e) => {
+      updateCanvas();
+      updateWatermarkColor(e.target.value);
+    });
+  }
+
+  // Initial watermark setup
+  updateWatermarkColor(canvasColorInput.value);
+  
 });
 
 

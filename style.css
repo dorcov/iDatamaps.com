@@ -34,6 +34,9 @@
 
   /* Border radius */
   --border-radius: 4px;
+
+  /* Watermark filter */
+  --watermark-filter: brightness(0) opacity(0.05);
 }
 
 /* Aplicarea fonturilor globale */
@@ -79,14 +82,15 @@ body {
   background-repeat: space;           
   background-position: 200px 200px;   
   background-size: 150px auto;        
-  opacity: 0.05;
+  opacity: 1;
+  filter: var(--watermark-filter);
   transform: rotate(-30deg);
   transform-origin: center;
   pointer-events: none;
   z-index: 0;
   overflow: visible;
+  mix-blend-mode: multiply;
 }
-
 
 /* SVG-ul hărții să ocupe întreg spațiul disponibil */
 .map-column svg {
