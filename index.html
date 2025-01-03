@@ -223,30 +223,48 @@
         <section class="control-group">
           <h4 data-key="controlValuesOnMap">Control Valori pe Harta</h4>
           <div class="control-values">
-            <label for="toggleValues" data-key="toggleValues">Afișează/Ascunde Valorile:</label>
-            <input type="checkbox" id="toggleValues" checked />
             
-            <label for="valuesFontSize" data-key="fontSize">Mărime Font:</label>
-            <input type="number" id="valuesFontSize" class="input-text" value="14" min="10" max="50" />
+            <div class="option">
+              <label for="toggleValues" data-key="toggleValues">Afișează/Ascunde Valorile:</label>
+              <input type="checkbox" id="toggleValues" checked />
+            </div>
             
-            <label for="valuesColor" data-key="fontColor">Culoare Font:</label>
-            <input type="color" id="valuesColor" value="#000000" />
+            <div class="option">
+              <label for="valuesFontSize" data-key="fontSize">Mărime Font:</label>
+              <input
+                type="number"
+                id="valuesFontSize"
+                class="input-text"
+                value="14"
+                min="10"
+                max="50"
+              />
+            </div>
+            
+            <div class="option">
+              <label for="valuesColor" data-key="fontColor">Culoare Font:</label>
+              <input type="color" id="valuesColor" value="#000000" />
+            </div>
 
-            <label for="valuesFont" data-key="font">Font Valorilor:</label>
-            <select id="valuesFont" class="custom-select">
-              <option value="'Roboto', sans-serif">Roboto</option>
-              <option value="'Montserrat', sans-serif">Montserrat</option>
-              <option value="'Open Sans', sans-serif">Open Sans</option>
-              <option value="'Lobster', cursive">Lobster</option>
-              <option value="'Playfair Display', serif">Playfair Display</option>
-              <option value="'Fira Sans', sans-serif">Fira Sans</option>
-              <option value="'Merriweather', serif">Merriweather</option>
-              <option value="'Bebas Neue', cursive">Bebas Neue</option>
-              <option value="'Oswald', sans-serif">Oswald</option>
-              <option value="'Source Sans Pro', sans-serif">Source Sans Pro</option>
-            </select>
+            <div class="option">
+              <label for="valuesFont" data-key="font">Font Valorilor:</label>
+              <select id="valuesFont" class="custom-select">
+                <option value="'Roboto', sans-serif">Roboto</option>
+                <option value="'Montserrat', sans-serif">Montserrat</option>
+                <option value="'Open Sans', sans-serif">Open Sans</option>
+                <option value="'Lobster', cursive">Lobster</option>
+                <option value="'Playfair Display', serif">Playfair Display</option>
+                <option value="'Fira Sans', sans-serif">Fira Sans</option>
+                <option value="'Merriweather', serif">Merriweather</option>
+                <option value="'Bebas Neue', cursive">Bebas Neue</option>
+                <option value="'Oswald', sans-serif">Oswald</option>
+                <option value="'Source Sans Pro', sans-serif">Source Sans Pro</option>
+              </select>
+            </div>
+            
           </div>
         </section>
+
 
         <!-- Secțiunea de Adăugare Titlu -->
         <section class="control-group">
