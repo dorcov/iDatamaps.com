@@ -412,6 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("stroke", "#fff")
         .attr("stroke-width", 0.5)
         .attr("data-region-name", d => d.properties.name)
+        .attr("class", "region")
         .on("mouseover", function (event, d) {
           d3.select(this).attr("fill", "orange");
           showTooltip(event, d);
@@ -2495,6 +2496,19 @@ calculateStatistics();
 
   // Initial outline setup
   updateMapOutlines();
+  
+  function updateOutline() {
+    const outlineColor = document.getElementById("outlineColor").value;
+    const outlineWidth = document.getElementById("outlineWidth").value;
+    const outlineToggle = document.getElementById("toggleOutline").checked;
+    d3.selectAll(".region")
+      .style("stroke", outlineToggle ? outlineColor : "none")
+      .style("stroke-width", outlineToggle ? outlineWidth : 0);
+  }
+
+  document.getElementById("outlineColor").addEventListener("input", updateOutline);
+  document.getElementById("outlineWidth").addEventListener("input", updateOutline);
+  document.getElementById("toggleOutline").addEventListener("change", updateOutline);
   
 });
 
