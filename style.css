@@ -412,15 +412,15 @@ td.select-category select {
 /* Optional: Default styles for map outlines */
 .map-group path {
   stroke: #000000; /* Default outline color */
-  stroke-width: 1;  /* Default outline width */
+  stroke-width: 0.5;  /* Default outline width */
 }
 
 /* Ensure map paths do not have a default stroke set via CSS */
-.map-group path {
+/* .map-group path {
   /* Remove any existing stroke properties */
   /* stroke: none; */ /* <-- Comment out if present */
   /* stroke-width: 0; */ /* <-- Comment out if present */
-}
+/* } */ */
 
 .legend-title {
   font-family: 'Montserrat', sans-serif;
