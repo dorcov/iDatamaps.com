@@ -676,14 +676,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const decimals2 = parseInt(legendDecimalsInput.value, 10);
     const effectiveDecimals2 = isNaN(decimals2) ? 1 : decimals2;
 
-    // Add min/max labels with custom decimals
-    numericLegendGroup.append("text")
-      .attr("x", 10).attr("y", 40)
-      .text("Min: " + minValue2.toFixed(effectiveDecimals2));
-    numericLegendGroup.append("text")
-      .attr("x", 130).attr("y", 40)
-      .style("text-anchor", "end")
-      .text("Max: " + maxValue2.toFixed(effectiveDecimals2));
+  // Add min/max labels with default values and styling
+  numericLegendGroup.append("text")
+    .attr("x", 10)
+    .attr("y", 40)
+    .attr("class", "legend-value")
+    .style("font-family", "'Montserrat', sans-serif")
+    .style("font-size", "12px")
+    .style("fill", "#333")
+    .text("Min: " + (minValue2 || 0).toFixed(effectiveDecimals2 || 0));
+
+  numericLegendGroup.append("text")
+    .attr("x", 50)  // Adjusted for smaller width
+    .attr("y", 40)
+    .attr("class", "legend-value")
+    .style("text-anchor", "end")
+    .style("font-family", "'Montserrat', sans-serif")
+    .style("font-size", "12px")
+    .style("fill", "#333")
+    .text("Max: " + (maxValue2 || 100).toFixed(effectiveDecimals2 || 0));
 
     // ... rest of the existing function code ...
   }
