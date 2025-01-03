@@ -2525,6 +2525,33 @@ calculateStatistics();
   document.getElementById("outlineWidth").addEventListener("input", updateOutline);
   document.getElementById("toggleOutline").addEventListener("change", updateOutline);
   
+  const legendFontSelect = document.getElementById("legendFont");
+  const legendFontSizeInput = document.getElementById("legendFontSize");
+
+  // Function to update legend title styles
+  function updateLegendTitleStyles() {
+    const legendTitle = document.getElementById("legendTitle");
+    const selectedFont = legendFontSelect.value;
+    const selectedSize = legendFontSizeInput.value;
+
+    if (legendTitle) {
+      legendTitle.style.fontFamily = selectedFont;
+      legendTitle.style.fontSize = `${selectedSize}px`;
+    }
+  }
+
+  // Event listeners for legend font and size changes
+  if (legendFontSelect) {
+    legendFontSelect.addEventListener("change", updateLegendTitleStyles);
+  }
+
+  if (legendFontSizeInput) {
+    legendFontSizeInput.addEventListener("input", updateLegendTitleStyles);
+  }
+
+  // Initialize legend title styles on load
+  updateLegendTitleStyles();
+  
 });
 
 
