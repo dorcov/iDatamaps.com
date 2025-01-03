@@ -1769,28 +1769,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   
-  // Add reference to the new legendBorder checkbox
-  const legendBorderCheckbox = document.getElementById("legendBorder");
-
-  // Function to toggle legend border
-  function toggleLegendBorder() {
-    const mainRect = d3.select("#legendBackground");
-    if (legendBorderCheckbox.checked) {
-      mainRect.attr("stroke", "#000").attr("stroke-width", 1);
-    } else {
-      mainRect.attr("stroke", "none").attr("stroke-width", 0);
-    }
-  }
-
-  // Event listener for legendBorder checkbox
-  if (legendBorderCheckbox) {
-    legendBorderCheckbox.addEventListener("change", () => {
-      toggleLegendBorder();
-    });
-  } else {
-    console.error("Elementul cu ID 'legendBorder' nu a fost găsit.");
-  }
-  
   // Step 2: Define translation strings
   const translations = {
     ro: {
@@ -2325,22 +2303,6 @@ if (legendHeightInput) {
     console.error("Elementul cu ID 'legendHeight' nu a fost găsit.");
 }
 
-// Event listener for legend border checkbox
-if (legendBorderCheckbox) {
-    legendBorderCheckbox.addEventListener("change", (event) => {
-        const hasBorder = event.target.checked;
-        const legendBackground = d3.select("#legendBackground");
-        if (hasBorder) {
-            legendBackground.attr("stroke", "#000")
-                             .attr("stroke-width", 1);
-        } else {
-            legendBackground.attr("stroke", "none").attr("stroke-width", 0);
-        }
-    });
-} else {
-    console.error("Elementul cu ID 'legendBorder' nu a fost găsit.");
-}
-
 // Add functions to calculate and update statistics
 function calculateStatistics() {
   const values = Array.from(regionTableBody.querySelectorAll('input[type="number"]'))
@@ -2449,64 +2411,6 @@ calculateStatistics();
     } : null;
   }
   
-  // Add grid lines variables
-  const toggleGridLinesCheckbox = document.getElementById("toggleGridLines");
-  const gridGroup = svg.append("g").attr("id", "gridGroup").style("display", "none");
-
-  // Modify the drawGridLines function to use dynamic SVG dimensions
-  function drawGridLines() {
-    gridGroup.selectAll(".grid-line").remove();
-
-    const svgElem = svg.node();
-    const width = svgElem.clientWidth;
-    const height = svgElem.clientHeight;
-    const numLines = 10;
-
-    // Draw vertical lines
-    for (let i = 1; i < numLines; i++) {
-      gridGroup.append("line")
-        .attr("class", "grid-line")
-        .attr("x1", (width / numLines) * i)
-        .attr("y1", 0)
-        .attr("x2", (width / numLines) * i)
-        .attr("y2", height);
-    }
-
-    // Draw horizontal lines
-    for (let i = 1; i < numLines; i++) {
-      gridGroup.append("line")
-        .attr("class", "grid-line")
-        .attr("x1", 0)
-        .attr("y1", (height / numLines) * i)
-        .attr("x2", width)
-        .attr("y2", (height / numLines) * i);
-    }
-  }
-
-  // Initial draw of grid lines
-  drawGridLines();
-
-  // Event listener for toggling grid lines
-  if (toggleGridLinesCheckbox) {
-    toggleGridLinesCheckbox.addEventListener("change", (e) => {
-      if (e.target.checked) {
-        gridGroup.style("display", "block");
-        drawGridLines(); // Redraw grid lines when enabled
-      } else {
-        gridGroup.style("display", "none");
-      }
-    });
-  } else {
-    console.error("Elementul cu ID 'toggleGridLines' nu a fost găsit.");
-  }
-
-  // Add event listener for window resize to adjust grid lines
-  window.addEventListener("resize", () => {
-    if (toggleGridLinesCheckbox.checked) {
-      drawGridLines();
-    }
-  });
-
   // Ensure grid lines are included in the export
   if (exportButton) {
     exportButton.addEventListener("click", () => {

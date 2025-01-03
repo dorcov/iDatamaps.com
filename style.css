@@ -407,21 +407,11 @@ td.select-category select {
   stroke: none;
 }
 
-/* ...existing code... */
-#legendBackground {
-    /* ...existing styles... */
-    stroke: none;
-    stroke-width: 0;
-}
-/* ...existing code... */
-
 /* Optional: Default styles for map outlines */
 .map-group path {
   stroke: #000000; /* Default outline color */
   stroke-width: 1;  /* Default outline width */
 }
-
-/* ...existing code... */
 
 /* Ensure map paths do not have a default stroke set via CSS */
 .map-group path {
@@ -429,8 +419,6 @@ td.select-category select {
   /* stroke: none; */ /* <-- Comment out if present */
   /* stroke-width: 0; */ /* <-- Comment out if present */
 }
-
-/* ...existing code... */
 
 .legend-title {
   font-family: 'Montserrat', sans-serif;
@@ -1197,10 +1185,6 @@ svg .selected {
   /* ...other legend styles... */
 }
 
-.legend.no-border {
-  border: none;
-}
-
 .control-panel {
   display: flex;
   flex-wrap: wrap;
@@ -1500,19 +1484,6 @@ button#addTitle:hover {
 }
 
 /* ...rest of existing code... */
-
-/* Style for grid lines */
-.grid-line {
-  stroke: #ccc;
-  stroke-width: 1;
-  stroke-dasharray: 4 4;
-}
-
-.grid-line {
-  stroke: #ccc;
-  stroke-width: 1;
-  stroke-dasharray: 4;
-}
 
 /* ...existing code... */
 
