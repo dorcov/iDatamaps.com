@@ -1726,17 +1726,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to toggle legend border
   function toggleLegendBorder() {
-    // Main legend
     const mainRect = d3.select("#legendBackground");
-    // Numeric legend
-    const numericRect = d3.select("#numericLegendBackground");
-  
     if (legendBorderCheckbox.checked) {
       mainRect.attr("stroke", "#000").attr("stroke-width", 1);
-      numericRect.attr("stroke", "#000").attr("stroke-width", 1);
     } else {
       mainRect.attr("stroke", "none");
-      numericRect.attr("stroke", "none");
     }
   }
 
