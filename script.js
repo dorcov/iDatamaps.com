@@ -705,7 +705,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .style("font-family", "'Montserrat', sans-serif")
     .style("font-size", "12px")
     .style("fill", "#333")
-    .text("Min: " + (minValue2 || 0).toFixed(effectiveDecimals2 || 0));
+    .text("Min: " + (minValue2).toFixed(effectiveDecimals2));
 
   numericLegendGroup.append("text")
     .attr("x", 130)  // Adjusted for smaller width
@@ -715,7 +715,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .style("font-family", "'Montserrat', sans-serif")
     .style("font-size", "12px")
     .style("fill", "#333")
-    .text("Max: " + (maxValue2 || 100).toFixed(effectiveDecimals2 || 0));
+    .text("Max: " + (maxValue2).toFixed(effectiveDecimals2));
 
     // ... rest of the existing function code ...
   }
