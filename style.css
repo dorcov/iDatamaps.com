@@ -386,6 +386,12 @@ td.select-category select {
 }
 /* ...existing code... */
 
+/* Optional: Default styles for map outlines */
+.map-group path {
+  stroke: #000000; /* Default outline color */
+  stroke-width: 1;  /* Default outline width */
+}
+
 .legend-title {
   font-family: 'Montserrat', sans-serif;
   font-size: 14px;

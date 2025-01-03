@@ -2464,6 +2464,37 @@ calculateStatistics();
       .range(range);
   }
   
+  const outlineColorInput = document.getElementById("outlineColor");
+  const outlineWidthInput = document.getElementById("outlineWidth");
+  const toggleOutlineCheckbox = document.getElementById("toggleOutline");
+
+  // Function to update map shape outlines
+  function updateMapOutlines() {
+    const showOutline = toggleOutlineCheckbox.checked;
+    const color = outlineColorInput.value;
+    const width = outlineWidthInput.value;
+
+    gMap.selectAll("path")
+      .attr("stroke", showOutline ? color : "none")
+      .attr("stroke-width", showOutline ? width : 0);
+  }
+
+  // Event listeners for outline controls
+  if (outlineColorInput) {
+    outlineColorInput.addEventListener("input", updateMapOutlines);
+  }
+
+  if (outlineWidthInput) {
+    outlineWidthInput.addEventListener("input", updateMapOutlines);
+  }
+
+  if (toggleOutlineCheckbox) {
+    toggleOutlineCheckbox.addEventListener("change", updateMapOutlines);
+  }
+
+  // Initial outline setup
+  updateMapOutlines();
+  
 });
 
 
