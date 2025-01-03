@@ -1877,7 +1877,10 @@ document.addEventListener("DOMContentLoaded", () => {
         median: "Mediana:",
         backgroundColor: "Culoare Fundal",
         legendIntervals: "Număr de intervale",
-        legendDecimals: "Număr de zecimale"
+        legendDecimals: "Număr de zecimale",
+        sortDirection: "Sortare:",
+        sortAscending: "↑ Ascendent",
+        sortDescending: "↓ Descendent"
     },
     en: {
         legendTitle: "Legend",
@@ -1965,7 +1968,10 @@ document.addEventListener("DOMContentLoaded", () => {
         legendDecimals: "Decimal places:",
         backgroundColor: "Background Color",
         legendIntervals: "Number of intervals",
-        legendDecimals: "Decimal places"
+        legendDecimals: "Decimal places",
+        sortDirection: "Sort:",
+        sortAscending: "↑ Ascending",
+        sortDescending: "↓ Descending"
     }
 };
 
