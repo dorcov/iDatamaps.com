@@ -5,6 +5,35 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* Typography */
+  --font-primary: 'Roboto', sans-serif;
+  --font-headers: 'Montserrat', sans-serif;
+  --font-size-base: 14px;
+  --font-size-header: 16px;
+  --font-size-subheader: 15px;
+  --font-weight-normal: 400;
+  --font-weight-bold: 500;
+  --line-height-base: 1.5;
+
+  /* Colors */
+  --color-text: #333333;
+  --color-text-light: #666666;
+  --color-border: #cccccc;
+  --color-background: #ffffff;
+  --color-background-light: #f9f9f9;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+
+  /* Border radius */
+  --border-radius: 4px;
+}
+
 /* Aplicarea fonturilor globale */
 body {
   font-family: 'Roboto', sans-serif;
@@ -102,10 +131,10 @@ svg {
 
 /* Secțiune de opțiuni */
 .option-section {
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--color-background-light);
+  border-radius: var(--border-radius);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
