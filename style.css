@@ -82,7 +82,7 @@ body {
   background-repeat: space;           
   background-position: 200px 200px;   
   background-size: 150px auto;        
-  opacity: 1;
+  opacity: 0.3;
   filter: var(--watermark-filter);
   transform: rotate(-30deg);
   transform-origin: center;
