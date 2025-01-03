@@ -378,6 +378,14 @@ td.select-category select {
   stroke: none;
 }
 
+/* ...existing code... */
+#legendBackground {
+    /* ...existing styles... */
+    stroke: none;
+    stroke-width: 0;
+}
+/* ...existing code... */
+
 .legend-title {
   font-family: 'Montserrat', sans-serif;
   font-size: 14px;
