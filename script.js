@@ -2446,10 +2446,17 @@ calculateStatistics();
   }
   
   function getSharedColorScale(domainValues, gradient) {
-    // For numerical data, create a d3 scale with the same stops used by map & legend
+    const intervals = parseInt(document.getElementById("legendIntervals").value, 10) || 5;
+    const minVal = d3.min(domainValues);
+    const maxVal = d3.max(domainValues);
+    const step = (maxVal - minVal) / (intervals - 1);
+    // Build a domain array with 'intervals' steps
+    const domain = d3.range(intervals).map(i => minVal + i * step);
+    // For multiple colors, incorporate intermediateColors if needed
+    const range = [gradient.start, ...intermediateColors.map(id => document.getElementById(id).value), gradient.end];
     return d3.scaleLinear()
-      .domain([d3.min(domainValues), d3.max(domainValues)]) // or custom intervals
-      .range([gradient.start, gradient.end]);
+      .domain(d3.range(range.length).map(i => i * (maxVal - minVal) / (range.length - 1) + minVal))
+      .range(range);
   }
   
 });
