@@ -159,12 +159,12 @@ document.addEventListener("DOMContentLoaded", () => {
         categories.splice(index, 1);
         renderCategoryList();
         generateTable(geoDataFeatures); // Regenerează tabelul pentru a actualiza opțiunile de categorie
-        generateBothLegends(); // Actualizează legenda
+        generateAllLegends(); // Actualizează legenda
         updateMapColors();
       });
     });
 
-    generateBothLegends(); // Generează legenda după actualizarea listei de categorii
+    generateAllLegends(); // Generează legenda după actualizarea listei de categorii
   }
 
   if (addCategoryButton) {
@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .duration(500)
       .attr("fill", d => getFillColor(d));
 
-    generateBothLegends();
+    generateAllLegends();
     updateValueLabels();
   }
 
@@ -472,12 +472,12 @@ document.addEventListener("DOMContentLoaded", () => {
     regionTableBody.querySelectorAll("input").forEach((input) => {
       input.addEventListener("input", () => {
         debouncedUpdateMapColors();
-        generateBothLegends();
+        generateAllLegends();
         calculateStatistics(); // Add statistics calculation
       });
     });
 
-    generateBothLegends(); // Generează legenda după actualizarea tabelului
+    generateAllLegends(); // Generează legenda după actualizarea tabelului
     updateValueLabels();
   }
 
@@ -512,7 +512,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Funcție pentru a genera elementele legendei
-  function generateLegend() {
+  function generateAllLegends() {
     const legendItemsGroup = d3.select("#legendItems");
     legendItemsGroup.selectAll("*").remove(); // Clear existing legend
 
@@ -605,34 +605,17 @@ document.addEventListener("DOMContentLoaded", () => {
     
     d3.select("#legendBackground")
       .attr("height", backgroundHeight);
-  }
 
-  // Add event listener for interval count changes
-  document.getElementById("legendIntervals").addEventListener("input", () => {
-    generateBothLegends();
-  });
-
-  // Adăugăm event listener pentru numărul de zecimale
-  if (legendDecimalsInput) {
-    legendDecimalsInput.addEventListener("input", () => {
-      generateBothLegends();
-    });
-  } else {
-    console.error("Elementul cu ID 'legendDecimals' nu a fost găsit.");
-  }
-
-  // Funcție nouă pentru afișarea legendei numerice
-  function generateNumericLegend() {
     numericLegendGroup.selectAll("*").remove();
 
     // Get input values
     const inputs = regionTableBody.querySelectorAll("input");
-    const values = Array.from(inputs).map((i) => parseFloat(i.value) || 0);
-    const minValue = Math.min(...values);
-    const maxValue = Math.max(...values);
+    const values2 = Array.from(inputs).map((i) => parseFloat(i.value) || 0);
+    const minValue2 = Math.min(...values2);
+    const maxValue2 = Math.max(...values2);
 
     // Create array of all color stops including intermediates
-    const colorStops = [
+    const colorStops2 = [
       { offset: "0%", color: currentGradient.start }
     ];
 
@@ -641,11 +624,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const el = document.getElementById(id);
       if (el) {
         const offset = `${((index + 1) / (intermediateColors.length + 1) * 100)}%`;
-        colorStops.push({ offset: offset, color: el.value });
+        colorStops2.push({ offset: offset, color: el.value });
       }
     });
 
-    colorStops.push({ offset: "100%", color: currentGradient.end });
+    colorStops2.push({ offset: "100%", color: currentGradient.end });
 
     // Create background
     numericLegendGroup.append("rect")
@@ -665,7 +648,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Add all color stops to gradient
     defs.selectAll("stop")
-      .data(colorStops)
+      .data(colorStops2)
       .enter()
       .append("stop")
       .attr("offset", d => d.offset)
@@ -678,25 +661,39 @@ document.addEventListener("DOMContentLoaded", () => {
       .style("fill", `url(#${gradientID})`)
       .attr("rx", 5).attr("ry", 5);
 
-    const decimals = parseInt(legendDecimalsInput.value, 10);
-    const effectiveDecimals = isNaN(decimals) ? 1 : decimals;
+    const decimals2 = parseInt(legendDecimalsInput.value, 10);
+    const effectiveDecimals2 = isNaN(decimals2) ? 1 : decimals2;
 
     // Add min/max labels with custom decimals
     numericLegendGroup.append("text")
       .attr("x", 10).attr("y", 40)
-      .text("Min: " + minValue.toFixed(effectiveDecimals));
+      .text("Min: " + minValue2.toFixed(effectiveDecimals2));
     numericLegendGroup.append("text")
       .attr("x", 130).attr("y", 40)
       .style("text-anchor", "end")
-      .text("Max: " + maxValue.toFixed(effectiveDecimals));
+      .text("Max: " + maxValue2.toFixed(effectiveDecimals2));
 
     // ... rest of the existing function code ...
+  }
+
+  // Add event listener for interval count changes
+  document.getElementById("legendIntervals").addEventListener("input", () => {
+    generateAllLegends();
+  });
+
+  // Adăugăm event listener pentru numărul de zecimale
+  if (legendDecimalsInput) {
+    legendDecimalsInput.addEventListener("input", () => {
+      generateAllLegends();
+    });
+  } else {
+    console.error("Elementul cu ID 'legendDecimals' nu a fost găsit.");
   }
 
   // Afișăm ambele legende după ce actualizăm tabelul/gradientul
   function generateBothLegends() {
     // Generate main legend
-    generateLegend();
+    generateAllLegends();
 
     // Generate numeric legend if there are values
     const hasValues = regionTableBody && 
@@ -704,7 +701,7 @@ document.addEventListener("DOMContentLoaded", () => {
                      .some(input => parseFloat(input.value) > 0);
 
     if (hasValues) {
-      generateNumericLegend();
+      generateAllLegends();
     } else {
       d3.select("#numericLegendGroup").attr("visibility", "hidden");
       localStorage.setItem("numericLegendVisible", "hidden");
@@ -1367,7 +1364,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.documentElement.style.setProperty('--legend-bg-transparency', bgTransparency);
 
     // Regenerează legendele pentru a aplica noile stiluri
-    generateBothLegends();
+    generateAllLegends();
   }
 
   // Adaugă evenimente pentru noile controale
@@ -1615,7 +1612,7 @@ document.addEventListener("DOMContentLoaded", () => {
     numericLegendGroup.attr("width", width).attr("height", height);
 
     // Redraw legends with new dimensions
-    generateBothLegends();
+    generateAllLegends();
   }
   
   const addTitleButton = document.getElementById("addTitle");
@@ -2011,7 +2008,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Actualizăm harta cu noile valori
     updateMapColors();
-    generateBothLegends();
+    generateAllLegends();
     calculateStatistics(); // Add this line to calculate statistics after CSV import
   }
 
@@ -2233,7 +2230,7 @@ function calculateStatistics() {
 regionTableBody.querySelectorAll("input").forEach((input) => {
   input.addEventListener("input", () => {
     debouncedUpdateMapColors();
-    generateBothLegends();
+    generateAllLegends();
     calculateStatistics(); // Add statistics calculation
   });
 });
