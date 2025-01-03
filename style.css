@@ -1562,3 +1562,31 @@ button#addTitle:hover {
   z-index: 0;
 }
 
+/* ...existing code... */
+
+.option-section h4 {
+  /* ...existing styles... */
+  margin-bottom: 10px;
+}
+
+#tableSearch {
+  /* Style for search input */
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+#exportCSV {
+  /* Style for export button */
+  background-color: #17a2b8;
+  color: #fff;
+}
+
+#exportCSV:hover {
+  background-color: #117a8b;
+}
+
+/* ...existing code... */
+

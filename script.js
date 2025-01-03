@@ -2601,6 +2601,41 @@ calculateStatistics();
   // Initial watermark setup
   updateWatermarkColor(canvasColorInput.value);
   
+  // Add Search Functionality
+  const tableSearch = document.getElementById("tableSearch");
+  tableSearch.addEventListener("input", () => {
+    const filter = tableSearch.value.toLowerCase();
+    const rows = regionTableBody.querySelectorAll("tr");
+    
+    rows.forEach(row => {
+      const cells = row.querySelectorAll("td");
+      const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(filter));
+      row.style.display = match ? "" : "none";
+    });
+  });
+
+  // Add CSV Export Functionality
+  const exportCSV = document.getElementById("exportCSV");
+  exportCSV.addEventListener("click", () => {
+    let csvContent = "data:text/csv;charset=utf-8,";
+    const headers = Array.from(document.querySelectorAll("#regionTable th")).map(th => th.textContent);
+    csvContent += headers.join(",") + "\n";
+
+    const rows = regionTableBody.querySelectorAll("tr");
+    rows.forEach(row => {
+      const data = Array.from(row.querySelectorAll("td")).map(td => `"${td.textContent}"`);
+      csvContent += data.join(",") + "\n";
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "data_table.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+  
 });
 
 
