@@ -1524,3 +1524,17 @@ button#addTitle:hover {
   /* ...existing code... */
 }
 
+.watermark-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  opacity: 0.2;
+  pointer-events: none;
+  background: url("images/watermark.png") no-repeat center;
+  background-size: 300px 300px;
+  width: 600px;
+  height: 600px;
+  z-index: 0;
+}
+
