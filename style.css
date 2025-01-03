@@ -1498,3 +1498,19 @@ button#addTitle:hover {
 
 /* ...existing code... */
 
+/* ...existing code... */
+
+.legend-sort-direction {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legend-sort-direction select {
+  width: auto;
+  min-width: 120px;
+}
+
+/* ...existing code... */
+
