@@ -410,7 +410,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("d", path)
         .attr("fill", "#ccc")
         .attr("stroke", "#fff")
-        .attr("stroke-width", 0.5)
+        .attr("stroke-width", 0.3)
         .attr("data-region-name", d => d.properties.name)
         .attr("class", "region")
         .on("mouseover", function (event, d) {
