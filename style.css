@@ -392,6 +392,17 @@ td.select-category select {
   stroke-width: 1;  /* Default outline width */
 }
 
+/* ...existing code... */
+
+/* Add the following to ensure map paths do not have a default stroke set via CSS */
+.map-group path {
+  /* Remove any existing stroke properties */
+  stroke: none;
+  stroke-width: 0;
+}
+
+/* ...existing code... */
+
 .legend-title {
   font-family: 'Montserrat', sans-serif;
   font-size: 14px;
