@@ -71,8 +71,8 @@ body {
 .map-column::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 0;
+  left: 0;
   width: 5000%;
   height: 500%;
   background: url("images/watermark.png") repeat;
