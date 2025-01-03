@@ -528,9 +528,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const legendItemsGroup = d3.select("#legendItems");
     legendItemsGroup.selectAll("*").remove(); // Clear existing legend
 
-    // Actualizăm titlul legendei cu valoarea din input
-    d3.select("#legendTitle")
-      .text(legendTitleInput.value || "Legendă");
+    // Update the legend title with current font and size settings
+    const legendFont = document.getElementById("legendFont").value;
+    const legendFontSize = document.getElementById("legendFontSize").value;
+    
+    // Update title text and styles
+    const legendTitle = d3.select("#legendTitle")
+      .text(legendTitleInput.value || "Legendă")
+      .style("font-family", legendFont)
+      .style("font-size", `${legendFontSize}px`);
 
     let yOffset = 30;
 

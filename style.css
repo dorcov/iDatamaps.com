@@ -1485,3 +1485,16 @@ button#addTitle:hover {
   stroke-dasharray: 4;
 }
 
+/* ...existing code... */
+
+.legend-title-input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+/* ...existing code... */
+
