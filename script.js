@@ -1052,6 +1052,10 @@ document.addEventListener("DOMContentLoaded", () => {
       .attr("x", 10)
       .attr("y", 20)
       .attr("class", "legend-title")
+      .text("Legendă")
+      .style("font-family", "'Montserrat', sans-serif")  // Default font
+      .style("font-size", "14px")                        // Default size
+      .style("font-weight", "500") 
       .text(legendTitleInput && legendTitleInput.value ? legendTitleInput.value : "Legendă");
 
     // Add event listener for title changes
