@@ -1730,7 +1730,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (legendBorderCheckbox.checked) {
       mainRect.attr("stroke", "#000").attr("stroke-width", 1);
     } else {
-      mainRect.attr("stroke", "none");
+      mainRect.attr("stroke", "none").attr("stroke-width", 0);
     }
   }
 
@@ -2190,7 +2190,7 @@ if (legendBorderCheckbox) {
             legendBackground.attr("stroke", "#000")
                              .attr("stroke-width", 1);
         } else {
-            legendBackground.attr("stroke", "none");
+            legendBackground.attr("stroke", "none").attr("stroke-width", 0);
         }
     });
 } else {
