@@ -346,8 +346,9 @@
                 type="text"
                 id="legendTitle"
                 class="input-text legend-title-input"
-                placeholder="Introduceți titlul legendei"
-                value="Legendă"
+                data-key="legendTitle"
+                placeholder=""
+                value=""
               />
             </div>
 
@@ -601,7 +602,11 @@
     document.querySelectorAll('[data-key]').forEach(element => {
       const key = element.getAttribute('data-key');
       if (translations[currentLanguage][key]) {
-        element.textContent = translations[currentLanguage][key];
+        if (element.hasAttribute('placeholder')) {
+          element.placeholder = translations[currentLanguage][key];
+        } else {
+          element.textContent = translations[currentLanguage][key];
+        }
       }
     });
   }
