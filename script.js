@@ -245,6 +245,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const values = Array.from(inputs).map((input) => parseFloat(input.value) || 0);
     const maxValue = Math.max(...values, 1); // Evităm zero
 
+    const colorScale = getSharedColorScale(values, currentGradient);
+
     gMap.selectAll("path").each(function (d) {
       const regionName = encodeURIComponent(d.properties.NAME || d.properties.name || d.properties.region_nam ||d.properties.nume_regiu ||d.properties.cntry_name || "Unknown");
       const input = document.querySelector(`[data-region="${regionName}"]`);
@@ -258,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
         d3.select(this).attr("fill", categoryColor);
       } else if (value > 0) {
         // Folosește gradientul personalizat sau presetat
-        const fillColor = getColor(value, maxValue, currentGradient);
+        const fillColor = colorScale(value);
         d3.select(this).attr("fill", fillColor);
       } else {
         d3.select(this).attr("fill", "#ccc"); // Gri pentru valoare 0 sau lipsă
@@ -2441,6 +2443,13 @@ calculateStatistics();
           localStorage.setItem("labelPositions", JSON.stringify(labelPositions));
         })
       );
+  }
+  
+  function getSharedColorScale(domainValues, gradient) {
+    // For numerical data, create a d3 scale with the same stops used by map & legend
+    return d3.scaleLinear()
+      .domain([d3.min(domainValues), d3.max(domainValues)]) // or custom intervals
+      .range([gradient.start, gradient.end]);
   }
   
 });
