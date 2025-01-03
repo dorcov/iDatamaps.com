@@ -687,7 +687,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .text("Min: " + (minValue2 || 0).toFixed(effectiveDecimals2 || 0));
 
   numericLegendGroup.append("text")
-    .attr("x", 50)  // Adjusted for smaller width
+    .attr("x", 130)  // Adjusted for smaller width
     .attr("y", 40)
     .attr("class", "legend-value")
     .style("text-anchor", "end")
