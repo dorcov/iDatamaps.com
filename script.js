@@ -1726,21 +1726,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to toggle legend border
   function toggleLegendBorder() {
-    const legendBackground = d3.select("#legendBackground");
+    // Main legend
+    const mainRect = d3.select("#legendBackground");
+    // Numeric legend
+    const numericRect = d3.select("#numericLegendBackground");
+  
     if (legendBorderCheckbox.checked) {
-      legendBackground
-        .attr("stroke", "#000")
-        .attr("stroke-width", "1px");
+      mainRect.attr("stroke", "#000").attr("stroke-width", 1);
+      numericRect.attr("stroke", "#000").attr("stroke-width", 1);
     } else {
-      legendBackground
-        .attr("stroke", "none")
-        .attr("stroke-width", "0");
+      mainRect.attr("stroke", "none");
+      numericRect.attr("stroke", "none");
     }
   }
 
   // Event listener for legendBorder checkbox
   if (legendBorderCheckbox) {
-    legendBorderCheckbox.addEventListener("change", toggleLegendBorder);
+    legendBorderCheckbox.addEventListener("change", () => {
+      toggleLegendBorder();
+    });
   } else {
     console.error("Elementul cu ID 'legendBorder' nu a fost găsit.");
   }
