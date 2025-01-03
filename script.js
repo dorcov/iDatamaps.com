@@ -439,6 +439,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       generateTable(polygonFeatures);
       updateMapColors();
+      updateMapOutlines(); // Apply outlines to newly loaded shapes
     }).catch((err) => {
       console.error(`Eroare la încărcarea GeoJSON (${geojsonFile}):`, err);
     });
