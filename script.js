@@ -596,10 +596,25 @@ document.addEventListener("DOMContentLoaded", () => {
         .range(colorStops.map(stop => stop.color));
 
       // Generate legend items with custom decimals
+      const sortDirection = document.getElementById("legendSortDirection").value;
+      let intervals = [];
       for (let i = 0; i < numIntervals; i++) {
         const startValue = minValue + (step * i);
         const endValue = minValue + (step * (i + 1));
-        
+        intervals.push({ 
+          startValue, 
+          endValue,
+          color: colorScale(startValue)
+        });
+      }
+
+      // Sort intervals based on direction
+      if (sortDirection === "descending") {
+        intervals.reverse();
+      }
+
+      // Generate legend items
+      intervals.forEach((interval, i) => {
         const legendItem = legendItemsGroup.append("g")
           .attr("class", "legend-item")
           .attr("transform", `translate(10, ${yOffset + i * 25})`);
@@ -607,14 +622,14 @@ document.addEventListener("DOMContentLoaded", () => {
         legendItem.append("rect")
           .attr("width", 20)
           .attr("height", 20)
-          .attr("fill", colorScale(startValue));
+          .attr("fill", interval.color);
 
         legendItem.append("text")
           .attr("x", 30)
           .attr("y", 15)
           .attr("class", "legend-text")
-          .text(`${startValue.toFixed(effectiveDecimals)} - ${endValue.toFixed(effectiveDecimals)}`);
-      }
+          .text(`${interval.startValue.toFixed(effectiveDecimals)} - ${interval.endValue.toFixed(effectiveDecimals)}`);
+      });
     }
 
     // Adjust legend background height based on content
@@ -2557,6 +2572,8 @@ calculateStatistics();
 
   // Initialize legend title styles on load
   updateLegendTitleStyles();
+  
+  document.getElementById("legendSortDirection").addEventListener("change", generateAllLegends);
   
 });
 
