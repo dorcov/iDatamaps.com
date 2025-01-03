@@ -531,5 +531,42 @@
   
   <!-- Legătura către fișierul JavaScript -->
   <script src="script.js"></script>
+  <script>
+  const translations = {
+    en: {
+      // ...existing translations...
+      value: "Value",
+      category: "Category",
+      hoverTooltip: "Hover Tooltip"
+    },
+    ro: {
+      // ...existing translations...
+      value: "Valoare",
+      category: "Categorie",
+      hoverTooltip: "Informație Tooltip"
+    }
+  };
+  
+  let currentLanguage = 'ro'; // Default language
+
+  // Function to update translations based on selected language
+  function updateTranslations() {
+    document.querySelectorAll('[data-key]').forEach(element => {
+      const key = element.getAttribute('data-key');
+      if (translations[currentLanguage][key]) {
+        element.textContent = translations[currentLanguage][key];
+      }
+    });
+  }
+
+  // Event listener for language selector
+  document.getElementById('languageSelector').addEventListener('change', (e) => {
+    currentLanguage = e.target.value;
+    updateTranslations();
+  });
+
+  // Initialize translations on page load
+  updateTranslations();
+</script>
 </body>
 </html>

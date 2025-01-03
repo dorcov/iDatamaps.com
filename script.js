@@ -303,8 +303,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const regionName = d.properties.NAME || d.properties.name || d.properties.region_nam ||d.properties.nume_regiu || d.properties.cntry_name || "Unknown";
     const value = getRegionValue(d);
     const category = getRegionCategory(d);
+    let tooltipContent = `<strong>${regionName}</strong>`;
+  
+    if (value && value !== 'NA') {
+      tooltipContent += `<br>${translations[currentLanguage].value}: ${value}`;
+    }
+  
+    if (category && category !== 'NA') {
+      tooltipContent += `<br>${translations[currentLanguage].category}: ${category}`;
+    }
+  
     tooltip.style("visibility", "visible")
-           .html(`<strong>${regionName}</strong><br/>Valoare: ${value}<br/>Categorie: ${category || "N/A"}`)
+           .html(tooltipContent)
            .transition()
            .duration(200)
            .style("opacity", 1);
