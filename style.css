@@ -76,9 +76,9 @@ body {
   width: 200%;
   height: 200%;
   background: url("images/watermark.png");
-  background-repeat: space;
-  background-position: 100px 100px;    /* Increased spacing from 50px to 100px */
-  background-size: 250px auto;         /* Increased from 200px to 250px */
+  background-repeat: repeat;           /* Changed from space to repeat */
+  background-position: 200px 200px;    /* Increased explicit spacing */
+  background-size: 150px auto;         /* Larger watermark size */
   opacity: 0.05;
   transform: rotate(-30deg);
   transform-origin: center;
