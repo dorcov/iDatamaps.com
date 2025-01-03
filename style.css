@@ -68,21 +68,36 @@ body {
   width: auto !important;
 }
 
-.map-column::before {
+/* .map-column::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 600%;
-  height: 600%;
+  width: 100%;
+  height: 100%;
   background: url("images/watermark.png") repeat;
   opacity: 0.05;
   transform: rotate(-30deg);
   transform-origin: center;
   pointer-events: none;
   z-index: 0;
+} */
+.map-column::before {
+  content: '';
+  position: absolute;
+  top: -50%;          /* Extend beyond container */
+  left: -50%;         /* Extend beyond container */
+  width: 200%;        /* Double the width */
+  height: 200%;       /* Double the height */
+  background: url("images/watermark.png") repeat;
+  background-size: 200px auto;  /* Adjust size of individual watermark */
+  opacity: 0.05;
+  transform: rotate(-30deg);
+  transform-origin: center;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;  /* Allow content to overflow */
 }
-
 /* SVG-ul hărții să ocupe întreg spațiul disponibil */
 .map-column svg {
   width: 100%;
