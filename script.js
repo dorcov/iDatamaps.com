@@ -2646,28 +2646,8 @@ function updateAnalysisTable() {
   });
 }
 
-// Add event listeners for analysis controls
-document.getElementById("highlightTop").addEventListener("click", () => {
-  const rows = document.querySelectorAll("#analysisTable tbody tr");
-  rows.forEach((row, index) => {
-    row.classList.toggle("highlight-top", index < 5);
-  });
-});
-
-document.getElementById("highlightBottom").addEventListener("click", () => {
-  const rows = document.querySelectorAll("#analysisTable tbody tr");
-  rows.forEach((row, index) => {
-    row.classList.toggle("highlight-bottom", index >= rows.length - 5);
-  });
-});
-
-document.getElementById("showPercentages").addEventListener("click", function() {
-  const percentageCells = document.querySelectorAll("#analysisTable td:nth-child(3)");
-  percentageCells.forEach(cell => {
-    cell.style.display = cell.style.display === 'none' ? '' : 'none';
-  });
-  this.textContent = this.textContent.includes("Arată") ? "Ascunde Procente" : "Arată Procente";
-});
+// Remove event listeners for the buttons
+// ...existing code...
 
 // Update analysis table when main table changes
 regionTableBody.addEventListener("input", debounce(() => {
@@ -2676,5 +2656,7 @@ regionTableBody.addEventListener("input", debounce(() => {
 
 // Initial update
 updateAnalysisTable();
+
+// ...existing code...
 
 });
