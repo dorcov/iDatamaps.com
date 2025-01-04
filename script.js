@@ -2075,13 +2075,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const regionName = decodeURIComponent(input.getAttribute("data-region"));
       if (csvData[regionName] !== undefined) {
         input.value = csvData[regionName];
+        // Trigger the input event to ensure all updates occur
+        const event = new Event('input', { bubbles: true });
+        input.dispatchEvent(event);
       }
     });
 
-    // Actualizăm harta cu noile valori
+    // Update everything
     updateMapColors();
     generateAllLegends();
-    calculateStatistics(); // Add this line to calculate statistics after CSV import
+    calculateStatistics();
+    updateAnalysisTable(); // Add this line to update analysis table
   }
 
   // Event listener pentru butonul de import CSV
@@ -2097,7 +2101,6 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.onload = (e) => {
         const csvData = processCSV(e.target.result);
         updateValuesFromCSV(csvData);
-        calculateStatistics(); // Add this line as a safeguard
       };
       reader.readAsText(file);
     });
@@ -2671,8 +2674,3 @@ regionTableBody.addEventListener("input", debounce(() => {
 updateAnalysisTable();
 
 });
-
-
-
-
-
