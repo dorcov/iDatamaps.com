@@ -258,11 +258,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let tooltipContent = `<strong>${regionName}</strong>`;
   
     if (value && value !== 'NA') {
-      tooltipContent += `<br>${translations[currentLanguage].value}: ${value}`;
+      tooltipContent += `<br>Valoare: ${value}`;
     }
   
     if (category && category !== 'NA') {
-      tooltipContent += `<br>${translations[currentLanguage].category}: ${category}`;
+      tooltipContent += `<br>Categorie: ${category}`;
     }
   
     tooltip.style("visibility", "visible")
@@ -1658,322 +1658,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   
-  // Step 2: Define translation strings
-  const translations = {
-    ro: {
-        controlPanelTitle: "Setările hărții",
-        selectMap: "Selectează Harta",
-        // Add all other translation keys and their Romanian translations
-        exportAsPNG: "Exportă ca PNG",
-        selectGradient: "Selectează Gradient",
-        // Continue for all control panel texts
-        backgroundSettings: "Setările fundalului",
-        color: "Culoare",
-        transparency: "Transparență",
-        canvasWidth: "Lățime Canvas (px)",
-        canvasHeight: "Înălțime Canvas (px)",
-        gradient: "Gradient",
-        categoricalData: "Date categorice",
-        chooseCategories: "Alege una sau mai multe categorii",
-        addCategory: "Adaugă Categorie",
-        addText: "Adaugă Text",
-        font: "Font",
-        size: "Mărime (px)",
-        border: "Chenar",
-        bold: "Bold",
-        italic: "Italic",
-        addTextButton: "Adaugă Text",
-        removeTextButton: "Elimină Text",
-        addTitle: "Adaugă Titlu",
-        addTitleButton: "Adaugă Titlu",
-        removeTitleButton: "Elimină Titlu",
-        geometricShapes: "Forme geometrice",
-        addGeometricShape: "Adaugă o formă geometrică",
-        addRectangle: "Adaugă Dreptunghi",
-        addCircle: "Adaugă Cerc",
-        deleteShape: "Șterge Forma",
-        dataTable: "Tabel de Date",
-        regionCountry: "Regiune/Țară",
-        value: "Valoare",
-        category: "Categorie",
-        resetData: "Resetează datele",
-        controlValuesOnMap: "Control Valori pe Harta",
-        toggleValues: "Afișează/Ascunde Valorile",
-        fontSize: "Mărime Font",
-        fontColor: "Culoare Font",
-        styleLegends: "Stilizează legendele",
-        fontStyle: "Stil Font",
-        bgTransparency: "Transparență Fundal",
-        legendWidth: "Lățime Legendă (px)",
-        legendHeight: "Înălțime Legendă (px)",
-        toggleLegend: "Ascunde/Adaugă Legenda",
-        toggleNumericLegend: "Afișează/Ascunde Legenda Numerică",
-        futureFeatures: "Viitoare Funcționalități",
-        futureFeatureDescription: "Aici va fi adăugată funcționalitatea viitoare.",
-        language: "Limba",
-        categoryNamePlaceholder: "Nume Categorie",
-        textPlaceholder: "Introdu Textul",
-        titlePlaceholder: "Introdu Titlul",
-        presetGradient: "Gradient Presetat",
-        selectPresetGradient: "Selectează un Gradient Presetat",
-        minValueColor: "Culoare valori minime",
-        maxValueColor: "Culoare valori maxime",
-        applyCustomGradient: "Aplică Gradient Personalizat",
-        // Adăugăm traducerile pentru funcționalitatea CSV
-        csvImport: "Import din CSV",
-        importCSV: "Importă CSV",
-        csvTemplate: "Format CSV: Region,Value",
-        downloadTemplate: "Descarcă Template",
-        selectCsvFile: "Vă rugăm selectați un fișier CSV",
-        
-        // Adăugăm traduceri pentru adjustarea formelor
-        adjustShape: "Ajustează Forma",
-        width: "Lățime",
-        height: "Înălțime",
-        radius: "Rază",
-        selectShape: "Selectați o formă pentru a o șterge",
-        searchRegionsPlaceholder: "Caută regiuni...",
-        sortByName: "Sortare după nume ↕",
-        sortByValue: "Sortare după valoare ↕",
-        noResults: "Nu s-au găsit rezultate",
-        addIntermediateColor: "Adaugă Culoare Intermediară",
-        intermediateColor1: "Culoare Intermediară #1:",
-        intermediateColor2: "Culoare Intermediară #2:",
-        intermediateColor3: "Culoare Intermediară #3:",
-        mean: "Media:",
-        median: "Mediana:",
-        backgroundColor: "Culoare Fundal",
-        legendIntervals: "Număr de intervale",
-        legendDecimals: "Număr de zecimale",
-        sortDirection: "Sortare:",
-        sortAscending: "↑ Ascendent",
-        sortDescending: "↓ Descendent"
-    },
-    en: {
-        legendTitle: "Legend",
-        controlPanelTitle: "Map Settings",
-        selectMap: "Select Map",
-        // Add all other translation keys and their English translations
-        exportAsPNG: "Export as PNG",
-        selectGradient: "Select Gradient",
-        // Continue for all control panel texts
-        backgroundSettings: "Background Settings",
-        color: "Color",
-        transparency: "Transparency",
-        canvasWidth: "Canvas Width (px)",
-        canvasHeight: "Canvas Height (px)",
-        gradient: "Gradient",
-        categoricalData: "Categorical Data",
-        chooseCategories: "Choose one or more categories",
-        addCategory: "Add Category",
-        addText: "Add Text",
-        font: "Font",
-        size: "Size (px)",
-        border: "Border",
-        bold: "Bold",
-        italic: "Italic",
-        addTextButton: "Add Text",
-        removeTextButton: "Remove Text",
-        addTitle: "Add Title",
-        addTitleButton: "Add Title",
-        removeTitleButton: "Remove Title",
-        geometricShapes: "Geometric Shapes",
-        addGeometricShape: "Add a Geometric Shape",
-        addRectangle: "Add Rectangle",
-        addCircle: "Add Circle",
-        deleteShape: "Delete Shape",
-        dataTable: "Data Table",
-        regionCountry: "Region/Country",
-        value: "Value",
-        category: "Category",
-        resetData: "Reset Data",
-        controlValuesOnMap: "Control Values on Map",
-        toggleValues: "Show/Hide Values",
-        fontSize: "Font Size",
-        fontColor: "Font Color",
-        styleLegends: "Style Legends",
-        fontStyle: "Font Style",
-        bgTransparency: "Background Transparency",
-        legendWidth: "Legend Width (px)",
-        legendHeight: "Legend Height (px)",
-        toggleLegend: "Show/Hide Legend",
-        toggleNumericLegend: "Show/Hide Numeric Legend",
-        futureFeatures: "Future Features",
-        futureFeatureDescription: "Future functionality will be added here.",
-        language: "Language",
-        categoryNamePlaceholder: "Category Name",
-        textPlaceholder: "Enter your text",
-        titlePlaceholder: "Enter your title",
-        presetGradient: "Preset Gradient",
-        selectPresetGradient: "Select a Preset Gradient",
-        minValueColor: "Min Value Color",
-        maxValueColor: "Max Value Color",
-        applyCustomGradient: "Apply Custom Gradient",
-        // Add CSV functionality translations
-        csvImport: "Import from CSV",
-        importCSV: "Import CSV",
-        csvTemplate: "CSV Format: Region,Value",
-        downloadTemplate: "Download Template",
-        selectCsvFile: "Please select a CSV file",
-        
-        // Add shape adjustment translations
-        adjustShape: "Adjust Shape",
-        width: "Width",
-        height: "Height",
-        radius: "Radius",
-        selectShape: "Select a shape to delete",
-        searchRegionsPlaceholder: "Search regions...",
-        sortByName: "Sort by name ↕",
-        sortByValue: "Sort by value ↕",
-        noResults: "No results found",
-        addIntermediateColor: "Add Intermediate Color",
-        intermediateColor1: "Intermediate Color #1:",
-        intermediateColor2: "Intermediate Color #2:",
-        intermediateColor3: "Intermediate Color #3:",
-        mean: "Mean:",
-        median: "Median:",
-        legendDecimals: "Decimal places:",
-        backgroundColor: "Background Color",
-        legendIntervals: "Number of intervals",
-        legendDecimals: "Decimal places",
-        sortDirection: "Sort:",
-        sortAscending: "↑ Ascending",
-        sortDescending: "↓ Descending"
-    },
-    ru: {
-        controlPanelTitle: "Настройки карты",
-        selectMap: "Выбрать карту",
-        exportAsPNG: "Экспорт в PNG",
-        selectGradient: "Выбрать градиент",
-        backgroundSettings: "Настройки фона",
-        color: "Цвет",
-        transparency: "Прозрачность",
-        canvasWidth: "Ширина холста (px)",
-        canvasHeight: "Высота холста (px)",
-        gradient: "Градиент",
-        categoricalData: "Категориальные данные",
-        chooseCategories: "Выберите одну или несколько категорий",
-        addCategory: "Добавить категорию",
-        addText: "Добавить текст",
-        font: "Шрифт",
-        size: "Размер (px)",
-        border: "Граница",
-        bold: "Жирный",
-        italic: "Курсив",
-        addTextButton: "Добавить текст",
-        removeTextButton: "Удалить текст",
-        addTitle: "Добавить заголовок",
-        addTitleButton: "Добавить заголовок",
-        removeTitleButton: "Удалить заголовок",
-        geometricShapes: "Геометрические фигуры",
-        addGeometricShape: "Добавить фигуру",
-        addRectangle: "Добавить прямоугольник",
-        addCircle: "Добавить круг",
-        deleteShape: "Удалить фигуру",
-        dataTable: "Таблица данных",
-        regionCountry: "Регион/Страна",
-        value: "Значение",
-        category: "Категория",
-        resetData: "Сбросить данные",
-        controlValuesOnMap: "Управление значениями на карте",
-        toggleValues: "Показать/Скрыть значения",
-        fontSize: "Размер шрифта",
-        fontColor: "Цвет шрифта",
-        styleLegends: "Стили легенды",
-        fontStyle: "Стиль шрифта",
-        bgTransparency: "Прозрачность фона",
-        legendWidth: "Ширина легенды (px)",
-        legendHeight: "Высота легенды (px)",
-        toggleLegend: "Показать/Скрыть легенду",
-        toggleNumericLegend: "Показать/Скрыть числовую легенду",
-        futureFeatures: "Будущие функции",
-        futureFeatureDescription: "Здесь будут добавлены новые функции.",
-        language: "Язык",
-        categoryNamePlaceholder: "Имя категории",
-        textPlaceholder: "Введите текст",
-        titlePlaceholder: "Введите заголовок",
-        presetGradient: "Предустановленный градиент",
-        selectPresetGradient: "Выберите предустановленный градиент",
-        minValueColor: "Цвет минимальных значений",
-        maxValueColor: "Цвет максимальных значений",
-        applyCustomGradient: "Применить градиент",
-        csvImport: "Импорт из CSV",
-        importCSV: "Импортировать CSV",
-        csvTemplate: "Формат CSV: Region,Value",
-        downloadTemplate: "Скачать шаблон",
-        selectCsvFile: "Выберите файл CSV",
-        adjustShape: "Настроить фигуру",
-        width: "Ширина",
-        height: "Высота",
-        radius: "Радиус",
-        selectShape: "Выберите фигуру для удаления",
-        searchRegionsPlaceholder: "Поиск регионов...",
-        sortByName: "Сортировать по имени ↕",
-        sortByValue: "Сортировать по значению ↕",
-        noResults: "Результаты не найдены",
-        addIntermediateColor: "Добавить промежуточный цвет",
-        intermediateColor1: "Промежуточный цвет #1:",
-        intermediateColor2: "Промежуточный цвет #2:",
-        intermediateColor3: "Промежуточный цвет #3:",
-        mean: "Среднее:",
-        median: "Медиана:",
-        backgroundColor: "Цвет фона",
-        legendIntervals: "Количество интервалов",
-        legendDecimals: "Количество десятичных",
-        sortDirection: "Сортировка:",
-        sortAscending: "↑ По возрастанию",
-        sortDescending: "↓ По убыванию",
-        legendTitle: "Легенда",
-        outlineSettings: "Настройки контура",
-        outlineColor: "Цвет контура",
-        outlineWidth: "Ширина контура (px)",
-        toggleOutline: "Показать/Скрыть контур",
-        hoverTooltip: "Всплывающая подсказка"
-    }
-};
-
-  // Step 3: Implement language switching
-  const languageSelector = document.getElementById("languageSelector");
-
-  function setLanguage(lang) {
-    document.querySelectorAll('[data-key]').forEach(element => {
-      const key = element.getAttribute('data-key');
-      if (translations[lang] && translations[lang][key]) {
-        element.innerText = translations[lang][key];
-      }
-    });
-
-    // New code to handle placeholders
-    document.querySelectorAll('[data-placeholder]').forEach(element => {
-      const key = element.getAttribute('data-placeholder');
-      if (translations[lang][key]) {
-        element.placeholder = translations[lang][key];
-      }
-    });
-  }
-
-  // Initialize with default language
-  setLanguage(languageSelector.value);
-
-  // Add event listener for language change
-  if (languageSelector) {
-      languageSelector.addEventListener("change", (e) => {
-          const selectedLang = e.target.value;
-          setLanguage(selectedLang);
-          // Optionally, save the selected language to localStorage
-          localStorage.setItem("selectedLanguage", selectedLang);
-      });
-  } else {
-      console.error("Elementul cu ID 'languageSelector' nu a fost găsit.");
-  }
-
-  // Optionally, restore the selected language from localStorage on load
-  const savedLanguage = localStorage.getItem("selectedLanguage");
-  if (savedLanguage && translations[savedLanguage]) {
-      languageSelector.value = savedLanguage;
-      setLanguage(savedLanguage);
-  }
-  
   function highlightRegion(regionName) {
     d3.selectAll(".highlighted").classed("highlighted", false);
     const selected = d3.select(`[data-region-name="${regionName}"]`);
@@ -2030,7 +1714,7 @@ document.addEventListener("DOMContentLoaded", () => {
     importCSVButton.addEventListener("click", () => {
       const file = csvFileInput.files[0];
       if (!file) {
-        alert(translations[languageSelector.value].selectCsvFile);
+        alert("Vă rugăm selectați un fișier CSV");
         return;
       }
 
@@ -2107,7 +1791,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (!existingMsg) {
               const noResultsRow = document.createElement("tr");
               noResultsRow.className = "no-results";
-              noResultsRow.innerHTML = `<td colspan="3">${translations[languageSelector.value].noResults}</td>`;
+              noResultsRow.innerHTML = `<td colspan="3">Nu s-au găsit rezultate</td>`;
               regionTableBody.appendChild(noResultsRow);
           }
       } else if (existingMsg) {
@@ -2133,7 +1817,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Actualizăm textul butonului folosind traducerea corectă
       const currentLang = languageSelector.value;
       sortByNameBtn.setAttribute('data-key', 'sortByName');
-      sortByNameBtn.textContent = `${translations[currentLang].sortByName} ${sortNameAsc ? '↓' : '↑'}`;
+      sortByNameBtn.textContent = `Sortare după nume ↕ ${sortNameAsc ? '↓' : '↑'}`;
   }
 
   function sortTableByValue() {
@@ -2151,7 +1835,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Actualizăm textul butonului folosind traducerea corectă
       const currentLang = languageSelector.value;
       sortByValueBtn.setAttribute('data-key', 'sortByValue');
-      sortByValueBtn.textContent = `${translations[currentLang].sortByValue} ${sortValueAsc ? '↓' : '↑'}`;
+      sortByValueBtn.textContent = `Sortare după valoare ↕ ${sortValueAsc ? '↓' : '↑'}`;
   }
 
   // Event listeners pentru căutare și sortare
@@ -2633,47 +2317,16 @@ function updateAnalysisTable() {
     statItem.innerHTML = `
       <span class="category-stat-name">${category}</span>
       <div class="category-stat-details">
-        <span title="${translations[languageSelector.value].count}">${stats.count} ${translations[languageSelector.value].regions}</span>
-        <span title="${translations[languageSelector.value].average}">∅ ${avgValue.toFixed(2)}</span>
-        <span title="${translations[languageSelector.value].minMax}">↓${stats.minValue.toFixed(1)} ↑${stats.maxValue.toFixed(1)}</span>
-        <span title="${translations[languageSelector.value].percentage}">${percentageOfTotal}%</span>
+        <span title="Număr de regiuni">${stats.count} regiuni</span>
+        <span title="Valoare medie">∅ ${avgValue.toFixed(2)}</span>
+        <span title="Valori min/max">↓${stats.minValue.toFixed(1)} ↑${stats.maxValue.toFixed(1)}</span>
+        <span title="Procent din total">${percentageOfTotal}%</span>
       </div>
     `;
     
     categoryStatsContainer.appendChild(statItem);
   });
 }
-
-// Add new translations
-translations.en = {
-  // ...existing translations...
-  categoryStatistics: "Category Statistics",
-  count: "Number of regions",
-  regions: "regions",
-  average: "Average value",
-  minMax: "Min/Max values",
-  percentage: "Percentage of total"
-};
-
-translations.ro = {
-  // ...existing translations...
-  categoryStatistics: "Statistici Categorii",
-  count: "Număr de regiuni",
-  regions: "regiuni",
-  average: "Valoare medie",
-  minMax: "Valori min/max",
-  percentage: "Procent din total"
-};
-
-translations.ru = {
-  // ...existing translations...
-  categoryStatistics: "Статистика категорий",
-  count: "Количество регионов",
-  regions: "регионов",
-  average: "Среднее значение",
-  minMax: "Мин/макс значения",
-  percentage: "Процент от общего"
-};
 
 // Remove event listeners for the buttons
 // ...existing code...

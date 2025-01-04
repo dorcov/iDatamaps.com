@@ -622,69 +622,10 @@
     </div>
   </div>
   
-  <!-- Language Selector -->
-  <div id="languageSelectorContainer">
-    <label for="languageSelector" data-key="language">Language:</label>
-    <select id="languageSelector">
-        <option value="ro">Română</option>
-        <option value="en">English</option>
-        <option value="ru">Русский</option>
-    </select>
-  </div>
-
   <!-- Tooltip pentru informații suplimentare -->
   <div class="tooltip"></div>
   
   <!-- Legătura către fișierul JavaScript -->
   <script src="script.js"></script>
-  <script>
-  const translations = {
-    en: {
-      // ...existing translations...
-      value: "Value",
-      category: "Category",
-      hoverTooltip: "Hover Tooltip",
-      outlineSettings: "Outline Settings",
-      outlineColor: "Outline Color",
-      outlineWidth: "Outline Width (px)",
-      toggleOutline: "Show/Hide Outline"
-    },
-    ro: {
-      // ...existing translations...
-      value: "Valoare",
-      category: "Categorie",
-      hoverTooltip: "Informație Tooltip",
-      outlineSettings: "Setări Contur",
-      outlineColor: "Culoare Contur",
-      outlineWidth: "Lățime Contur (px)",
-      toggleOutline: "Afișează/Ascunde Conturul"
-    }
-  };
-  
-  let currentLanguage = 'ro'; // Default language
-
-  // Function to update translations based on selected language
-  function updateTranslations() {
-    document.querySelectorAll('[data-key]').forEach(element => {
-      const key = element.getAttribute('data-key');
-      if (translations[currentLanguage][key]) {
-        if (element.hasAttribute('placeholder')) {
-          element.placeholder = translations[currentLanguage][key];
-        } else {
-          element.textContent = translations[currentLanguage][key];
-        }
-      }
-    });
-  }
-
-  // Event listener for language selector
-  document.getElementById('languageSelector').addEventListener('change', (e) => {
-    currentLanguage = e.target.value;
-    updateTranslations();
-  });
-
-  // Initialize translations on page load
-  updateTranslations();
-</script>
 </body>
 </html>

@@ -1277,28 +1277,7 @@ button#addTitle:hover {
 
 /* Optional: Override hover for any other specific buttons if needed */
 
-/* Language Selector Styles */
-#languageSelectorContainer {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background-color: #ffffff;
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#languageSelectorContainer label {
-    margin-right: 8px;
-    font-family: 'Roboto', sans-serif;
-}
-
-#languageSelector {
-    padding: 4px;
-    font-size: 14px;
-}
-
+/* Highlighted region styles */
 .highlighted-region {
   stroke: #000;
   stroke-width: 2px;
