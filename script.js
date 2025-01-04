@@ -2548,6 +2548,33 @@ calculateStatistics();
   // Initial watermark setup
   updateWatermarkColor(canvasColorInput.value);
   
+  // Referințe la noile elemente DOM
+  const resetDataButton = document.getElementById("resetData");
+
+  // Funcție pentru resetarea datelor
+  function resetData() {
+    // Resetăm valorile în tabel la 0
+    const rows = regionTableBody.querySelectorAll("tr");
+    rows.forEach(row => {
+      const valueCell = row.querySelector("td:nth-child(2)");
+      const categoryCell = row.querySelector("td:nth-child(3)");
+      if (valueCell) valueCell.textContent = "0";
+      if (categoryCell) categoryCell.textContent = "Implicit";
+    });
+
+    // Resetăm categoriile la starea implicită
+    categories = []; // Sau setările implicite
+    renderCategoryList();
+    updateMapColors();
+  }
+
+  // Adăugăm event listener pentru resetare
+  if (resetDataButton) {
+    resetDataButton.addEventListener("click", resetData);
+  } else {
+    console.error("Elementul cu ID 'resetData' nu a fost găsit.");
+  }
+  
 });
 
 
