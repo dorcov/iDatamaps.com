@@ -220,6 +220,69 @@
           </div>
         </section>
 
+        <!-- Add after the existing data table section -->
+        <section class="control-group">
+          <h4 data-key="dataAnalysis">Analiză Date</h4>
+          
+          <!-- Quick Stats Row -->
+          <div class="quick-stats">
+            <div class="stat-box">
+              <span data-key="totalRegions">Total Regiuni:</span>
+              <span id="totalRegions">0</span>
+            </div>
+            <div class="stat-box">
+              <span data-key="totalValue">Valoare Totală:</span>
+              <span id="totalValue">0</span>
+            </div>
+            <div class="stat-box">
+              <span data-key="avgValue">Medie per Regiune:</span>
+              <span id="avgValue">0</span>
+            </div>
+          </div>
+        
+          <!-- Analysis Controls -->
+          <div class="analysis-controls">
+            <div class="control-row">
+              <button id="highlightTop" class="btn btn-secondary" data-key="highlightTop">
+                Evidențiază Top 5
+              </button>
+              <button id="highlightBottom" class="btn btn-secondary" data-key="highlightBottom">
+                Evidențiază Bottom 5
+              </button>
+              <button id="showPercentages" class="btn btn-secondary" data-key="showPercentages">
+                Arată Procente
+              </button>
+            </div>
+          </div>
+        
+          <!-- Analysis Table -->
+          <div class="analysis-table-container">
+            <table id="analysisTable">
+              <thead>
+                <tr>
+                  <th data-key="regionCountry">Regiune/Țară</th>
+                  <th data-key="value">Valoare</th>
+                  <th data-key="percentage">% din Total</th>
+                  <th data-key="category">Categorie</th>
+                  <th data-key="trend">Trend</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Will be populated dynamically -->
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td data-key="total">Total</td>
+                  <td id="tableTotalValue">0</td>
+                  <td>100%</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </section>
+
         <!-- Secțiunea pentru Controlul Valorilor pe Harta -->
         <section class="control-group">
           <h4 data-key="controlValuesOnMap">Control Valori pe Harta</h4>

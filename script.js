@@ -2585,6 +2585,91 @@ calculateStatistics();
     console.error("Elementul cu ID 'resetData' nu a fost găsit.");
   }
   
+  // Add after the existing table-related code
+function updateAnalysisTable() {
+  const analysisTableBody = document.querySelector("#analysisTable tbody");
+  const rows = Array.from(regionTableBody.querySelectorAll("tr"));
+  const total = rows.reduce((sum, row) => {
+    const value = parseFloat(row.querySelector("input").value) || 0;
+    return sum + value;
+  }, 0);
+
+  // Update quick stats
+  document.getElementById("totalRegions").textContent = rows.length;
+  document.getElementById("totalValue").textContent = total.toFixed(2);
+  document.getElementById("avgValue").textContent = (total / rows.length).toFixed(2);
+  document.getElementById("tableTotalValue").textContent = total.toFixed(2);
+
+  // Clear and rebuild analysis table
+  analysisTableBody.innerHTML = "";
+  
+  // Convert rows to data array for sorting
+  const rowData = rows.map(row => {
+    const regionName = row.cells[0].textContent;
+    const value = parseFloat(row.querySelector("input").value) || 0;
+    const category = row.querySelector("select").value;
+    const percentage = (value / total * 100).toFixed(1);
+    
+    return { regionName, value, category, percentage };
+  });
+
+  // Sort by value for highlighting
+  rowData.sort((a, b) => b.value - a.value);
+  
+  // Add rows to analysis table
+  rowData.forEach((data, index) => {
+    const tr = document.createElement("tr");
+    const isTop5 = index < 5;
+    const isBottom5 = index >= rowData.length - 5;
+    
+    if (isTop5) tr.classList.add("highlight-top");
+    if (isBottom5) tr.classList.add("highlight-bottom");
+    
+    tr.innerHTML = `
+      <td>${data.regionName}</td>
+      <td>${data.value}</td>
+      <td>${data.percentage}%</td>
+      <td>${data.category}</td>
+      <td class="trend-${data.value > (total / rows.length) ? 'up' : 'down'}">
+        ${data.value > (total / rows.length) ? '↑' : '↓'}
+      </td>
+    `;
+    
+    analysisTableBody.appendChild(tr);
+  });
+}
+
+// Add event listeners for analysis controls
+document.getElementById("highlightTop").addEventListener("click", () => {
+  const rows = document.querySelectorAll("#analysisTable tbody tr");
+  rows.forEach((row, index) => {
+    row.classList.toggle("highlight-top", index < 5);
+  });
+});
+
+document.getElementById("highlightBottom").addEventListener("click", () => {
+  const rows = document.querySelectorAll("#analysisTable tbody tr");
+  rows.forEach((row, index) => {
+    row.classList.toggle("highlight-bottom", index >= rows.length - 5);
+  });
+});
+
+document.getElementById("showPercentages").addEventListener("click", function() {
+  const percentageCells = document.querySelectorAll("#analysisTable td:nth-child(3)");
+  percentageCells.forEach(cell => {
+    cell.style.display = cell.style.display === 'none' ? '' : 'none';
+  });
+  this.textContent = this.textContent.includes("Arată") ? "Ascunde Procente" : "Arată Procente";
+});
+
+// Update analysis table when main table changes
+regionTableBody.addEventListener("input", debounce(() => {
+  updateAnalysisTable();
+}, 300));
+
+// Initial update
+updateAnalysisTable();
+
 });
 
 
