@@ -2559,22 +2559,29 @@ calculateStatistics();
 
   // Funcție pentru resetarea datelor
   function resetData() {
-    // Resetăm valorile în tabel la 0
+    // Reset table values without modifying structure
     const rows = regionTableBody.querySelectorAll("tr");
     rows.forEach(row => {
-      const valueCell = row.querySelector("td:nth-child(2)");
-      const categoryCell = row.querySelector("td:nth-child(3)");
-      if (valueCell) valueCell.textContent = "0";
-      if (categoryCell) categoryCell.textContent = "Implicit";
+      const valueInput = row.querySelector("td:nth-child(2) input");
+      const categorySelect = row.querySelector("td:nth-child(3) select");
+      
+      if (valueInput) {
+        valueInput.value = "0";
+      }
+      
+      if (categorySelect) {
+        categorySelect.value = "";
+      }
     });
 
-    // Resetăm categoriile la starea implicită
+    // Reset categories to default state
     categories = JSON.parse(JSON.stringify(defaultCategories));
     renderCategoryList();
+    
+    // Update map and legends
     updateMapColors();
-
-    // Asigură-te că structura tabelului rămâne intactă
-    // Evită orice modificare a structurii DOM a tabelului
+    generateAllLegends();
+    calculateStatistics();
   }
 
   // Adăugăm event listener pentru resetare
