@@ -271,6 +271,20 @@ svg {
   transform: translateY(-2px);
 }
 
+/* Stil pentru butoanele de resetare */
+.btn-reset {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.btn-reset:hover {
+  background-color: #d32f2f;
+}
 
 /* Stil pentru tabel */
 .table-container {
