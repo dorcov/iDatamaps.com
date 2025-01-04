@@ -271,10 +271,6 @@ svg {
   transform: translateY(-2px);
 }
 
-/* Opțional: Stil pentru secțiunea de resetare */
-.option-section button.btn-reset {
-  width: 100%;
-}
 
 /* Stil pentru tabel */
 .table-container {
@@ -1264,17 +1260,6 @@ button#addTitle:hover {
   transform: translateY(-2px);
 }
 
-/* Red hover for "Resetează Datele" button in table section */
-#resetAll:hover {
-  background-color: #c82333; /* Dark Red */
-  transform: translateY(-2px);
-}
-
-/* Ensure "Resetează Datele" button in table has red hover */
-.table-container .btn-reset:hover {
-  background-color: #c82333; /* Dark Red */
-  transform: translateY(-2px);
-}
 
 /* Optional: Override hover for any other specific buttons if needed */
 

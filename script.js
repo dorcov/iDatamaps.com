@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const applyGradientButton = document.getElementById("applyGradient");
   const regionTableBody = document.getElementById("regionTable").querySelector("tbody");
   const exportButton = document.getElementById("exportMap");
-  const resetButton = document.getElementById("resetAll");
   const legendTitleInput = document.getElementById("legendTitle"); // Add this here
   const legendDecimalsInput = document.getElementById("legendDecimals");
   const svg = d3.select("#mapSVG");
@@ -2292,11 +2291,6 @@ regionTableBody.querySelectorAll("input").forEach((input) => {
   });
 });
 
-// Add to resetAll function
-function resetAll() {
-  // ...existing reset code...
-  calculateStatistics(); // Reset statistics
-}
 
 // Initial calculation
 calculateStatistics();
