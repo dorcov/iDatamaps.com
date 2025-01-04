@@ -2572,6 +2572,9 @@ calculateStatistics();
     categories = JSON.parse(JSON.stringify(defaultCategories));
     renderCategoryList();
     updateMapColors();
+
+    // Asigură-te că structura tabelului rămâne intactă
+    // Evită orice modificare a structurii DOM a tabelului
   }
 
   // Adăugăm event listener pentru resetare
