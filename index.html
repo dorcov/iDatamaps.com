@@ -205,17 +205,17 @@
             </table>
           </div>
           <!-- Move statistics container here, after the reset button -->
-          <div class="statistics-container">
+          <!-- Remove this section from the data table area -->
+          <!-- <div class="statistics-container">
             <div class="stat-item">
               <span data-key="mean">Media:</span>
               <span id="meanValue">0</span>
             </div>
-            <!-- Add Mediana stat item -->
             <div class="stat-item">
               <span data-key="median">Mediana:</span>
               <span id="medianValue">0</span>
             </div>
-          </div>
+          </div> -->
           <div class="button-group">
             <button id="resetData" class="btn btn-reset" data-key="resetData">Resetează Datele</button>
           </div>
@@ -232,12 +232,16 @@
               <span id="totalRegions">0</span>
             </div>
             <div class="stat-box">
-              <span data-key="totalValue">Valoare Totală:</span>
-              <span id="totalValue">0</span>
+              <span data-key="mean">Medie:</span>
+              <span id="avgValue">0</span>
             </div>
             <div class="stat-box">
-              <span data-key="avgValue">Medie per Regiune:</span>
-              <span id="avgValue">0</span>
+              <span data-key="median">Mediană:</span>
+              <span id="medianValue">0</span>
+            </div>
+            <div class="stat-box">
+              <span data-key="totalValue">Total:</span>
+              <span id="totalValue">0</span>
             </div>
           </div>
         
@@ -676,3 +680,4 @@
 </script>
 </body>
 </html>
+```

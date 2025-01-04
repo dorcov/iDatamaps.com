@@ -2265,13 +2265,15 @@ function calculateStatistics() {
     .filter(val => !isNaN(val));
 
   if (values.length === 0) {
-    document.getElementById('meanValue').textContent = '0';
+    document.getElementById('totalValue').textContent = '0';
+    document.getElementById('avgValue').textContent = '0';
     document.getElementById('medianValue').textContent = '0';
+    document.getElementById('totalRegions').textContent = '0';
     return;
   }
 
-  // Calculate mean
-  const mean = values.reduce((a, b) => a + b, 0) / values.length;
+  const total = values.reduce((a, b) => a + b, 0);
+  const mean = total / values.length;
   
   // Calculate median
   const sorted = [...values].sort((a, b) => a - b);
@@ -2280,9 +2282,11 @@ function calculateStatistics() {
     ? (sorted[middle - 1] + sorted[middle]) / 2
     : sorted[middle];
 
-  // Update display
-  document.getElementById('meanValue').textContent = mean.toFixed(2);
+  // Update display in analysis section
+  document.getElementById('totalValue').textContent = total.toFixed(2);
+  document.getElementById('avgValue').textContent = mean.toFixed(2);
   document.getElementById('medianValue').textContent = median.toFixed(2);
+  document.getElementById('totalRegions').textContent = values.length;
 }
 
 // Add to event listeners for table inputs
