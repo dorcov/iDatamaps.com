@@ -2657,7 +2657,86 @@ function updateAnalysisTable() {
     
     analysisTableBody.appendChild(tr);
   });
+
+  // Calculate category statistics
+  const categoryStats = {};
+  
+  rowData.forEach(data => {
+    if (data.categoryName && data.categoryName !== "-") {
+      if (!categoryStats[data.categoryName]) {
+        categoryStats[data.categoryName] = {
+          count: 0,
+          totalValue: 0,
+          minValue: Infinity,
+          maxValue: -Infinity,
+          color: categories.find(cat => cat.name === data.categoryName)?.color || '#333'
+        };
+      }
+      
+      const stats = categoryStats[data.categoryName];
+      stats.count++;
+      stats.totalValue += data.value;
+      stats.minValue = Math.min(stats.minValue, data.value);
+      stats.maxValue = Math.max(stats.maxValue, data.value);
+    }
+  });
+
+  // Update category statistics display
+  const categoryStatsContainer = document.getElementById('categoryStatsContainer');
+  categoryStatsContainer.innerHTML = '';
+
+  Object.entries(categoryStats).forEach(([category, stats]) => {
+    const avgValue = stats.totalValue / stats.count;
+    const percentageOfTotal = ((stats.totalValue / total) * 100).toFixed(1);
+    
+    const statItem = document.createElement('div');
+    statItem.className = 'category-stat-item';
+    statItem.style.borderLeftColor = stats.color;
+    
+    statItem.innerHTML = `
+      <span class="category-stat-name">${category}</span>
+      <div class="category-stat-details">
+        <span title="${translations[languageSelector.value].count}">${stats.count} ${translations[languageSelector.value].regions}</span>
+        <span title="${translations[languageSelector.value].average}">∅ ${avgValue.toFixed(2)}</span>
+        <span title="${translations[languageSelector.value].minMax}">↓${stats.minValue.toFixed(1)} ↑${stats.maxValue.toFixed(1)}</span>
+        <span title="${translations[languageSelector.value].percentage}">${percentageOfTotal}%</span>
+      </div>
+    `;
+    
+    categoryStatsContainer.appendChild(statItem);
+  });
 }
+
+// Add new translations
+translations.en = {
+  // ...existing translations...
+  categoryStatistics: "Category Statistics",
+  count: "Number of regions",
+  regions: "regions",
+  average: "Average value",
+  minMax: "Min/Max values",
+  percentage: "Percentage of total"
+};
+
+translations.ro = {
+  // ...existing translations...
+  categoryStatistics: "Statistici Categorii",
+  count: "Număr de regiuni",
+  regions: "regiuni",
+  average: "Valoare medie",
+  minMax: "Valori min/max",
+  percentage: "Procent din total"
+};
+
+translations.ru = {
+  // ...existing translations...
+  categoryStatistics: "Статистика категорий",
+  count: "Количество регионов",
+  regions: "регионов",
+  average: "Среднее значение",
+  minMax: "Мин/макс значения",
+  percentage: "Процент от общего"
+};
 
 // Remove event listeners for the buttons
 // ...existing code...
