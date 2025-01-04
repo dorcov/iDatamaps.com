@@ -271,16 +271,6 @@ svg {
   transform: translateY(-2px);
 }
 
-.btn-reset {
-  background-color: #ff4d4f;
-  color: #fff;
-}
-
-.btn-reset:hover {
-  background-color: #d9363e;
-  transform: translateY(-2px);
-}
-
 /* Opțional: Stil pentru secțiunea de resetare */
 .option-section button.btn-reset {
   width: 100%;
@@ -621,16 +611,6 @@ td.select-category select {
 
 .btn-export:hover {
   background-color: #218838;
-  transform: translateY(-2px);
-}
-
-.btn-reset {
-  background-color: #dc3545;
-  color: #fff;
-}
-
-.btn-reset:hover {
-  background-color: #c82333;
   transform: translateY(-2px);
 }
 

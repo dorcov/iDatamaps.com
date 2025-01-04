@@ -186,53 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Elementul cu ID 'addCategory' nu a fost găsit.");
   }
 
-  // Funcție pentru resetarea tuturor valorilor și categoriilor
-  function resetAll() {
-    if (!regionTableBody) {
-      console.error("Elementul cu ID 'regionTable' nu a fost găsit.");
-      return;
-    }
-
-    // Resetăm valorile din tabel
-    regionTableBody.querySelectorAll("input").forEach(input => {
-      input.value = 0;
-    });
-
-    // Resetăm selectele de categorii din tabel
-    regionTableBody.querySelectorAll("select").forEach(select => {
-      select.value = "";
-    });
-
-    // Resetăm gradientul la valorile implicite
-    if (gradientStart && gradientEnd) {
-      gradientStart.value = "#FF0000";
-      gradientEnd.value = "#009E4F";
-      currentGradient = {
-        start: "#FF0000",
-        end: "#009E4F"
-      };
-    }
-
-    // Ștergem toate categoriile
-    categories = [];
-    renderCategoryList();
-
-    // Recolorăm harta
-    updateMapColors();
-    calculateStatistics(); // Reset statistics
-  }
-
-  if (resetButton) {
-    // Adăugăm evenimentul de click pentru butonul de resetare
-    resetButton.addEventListener("click", () => {
-      if (confirm("Ești sigur că vrei să resetezi toate valorile și categoriile?")) {
-        resetAll();
-      }
-    });
-  } else {
-    console.error("Elementul cu ID 'resetAll' nu a fost găsit.");
-  }
-
   // Funcție pentru a colora regiunile
   function updateMapColors() {
     if (!regionTableBody) {
