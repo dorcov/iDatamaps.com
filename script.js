@@ -2592,15 +2592,24 @@ calculateStatistics();
 function updateAnalysisTable() {
   const analysisTableBody = document.querySelector("#analysisTable tbody");
   const rows = Array.from(regionTableBody.querySelectorAll("tr"));
-  const total = rows.reduce((sum, row) => {
-    const value = parseFloat(row.querySelector("input").value) || 0;
-    return sum + value;
-  }, 0);
+  const values = rows.map(row => parseFloat(row.querySelector("input").value) || 0);
+  const total = values.reduce((sum, value) => sum + value, 0);
+  
+  // Calculate median
+  const sortedValues = [...values].sort((a, b) => a - b);
+  let median = 0;
+  const mid = Math.floor(sortedValues.length / 2);
+  if (sortedValues.length % 2 === 0) {
+    median = (sortedValues[mid - 1] + sortedValues[mid]) / 2;
+  } else {
+    median = sortedValues[mid];
+  }
 
   // Update quick stats
   document.getElementById("totalRegions").textContent = rows.length;
   document.getElementById("totalValue").textContent = total.toFixed(2);
   document.getElementById("avgValue").textContent = (total / rows.length).toFixed(2);
+  document.getElementById("medianValue").textContent = median.toFixed(2);
   document.getElementById("tableTotalValue").textContent = total.toFixed(2);
 
   // Clear and rebuild analysis table
