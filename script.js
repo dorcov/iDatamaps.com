@@ -2610,10 +2610,14 @@ function updateAnalysisTable() {
   const rowData = rows.map(row => {
     const regionName = row.cells[0].textContent;
     const value = parseFloat(row.querySelector("input").value) || 0;
-    const category = row.querySelector("select").value;
+    const categorySelect = row.querySelector("select");
+    // Get the actual category name instead of the index
+    const categoryName = categorySelect.value !== "" ? 
+      categories[categorySelect.value]?.name || "-" : 
+      "-";
     const percentage = (value / total * 100).toFixed(1);
     
-    return { regionName, value, category, percentage };
+    return { regionName, value, categoryName, percentage };
   });
 
   // Sort by value for highlighting
@@ -2632,7 +2636,7 @@ function updateAnalysisTable() {
       <td>${data.regionName}</td>
       <td>${data.value}</td>
       <td>${data.percentage}%</td>
-      <td>${data.category}</td>
+      <td>${data.categoryName}</td>
       <td class="trend-${data.value > (total / rows.length) ? 'up' : 'down'}">
         ${data.value > (total / rows.length) ? '↑' : '↓'}
       </td>
