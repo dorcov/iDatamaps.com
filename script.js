@@ -2551,12 +2551,6 @@ calculateStatistics();
   // Referințe la noile elemente DOM
   const resetDataButton = document.getElementById("resetData");
 
-  // Stabilește categoriile implicite
-  const defaultCategories = [
-    { name: "Implicit", color: "#FF5733" }
-    // Adaugă alte categorii implicite dacă este necesar
-  ];
-
   // Funcție pentru resetarea datelor
   function resetData() {
     // Reset table values without modifying structure
@@ -2574,8 +2568,8 @@ calculateStatistics();
       }
     });
 
-    // Reset categories to default state
-    categories = JSON.parse(JSON.stringify(defaultCategories));
+    // Reset categories to empty array
+    categories = [];
     renderCategoryList();
     
     // Update map and legends
