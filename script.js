@@ -2686,4 +2686,119 @@ circleScale.addEventListener("input", () => {
   createCircleLegend(maxValue, radiusScale);
 });
 
+// ...existing code...
+
+function createCircleLegend(maxValue, radiusScale) {
+  // Remove existing circle legend
+  d3.select("#circleLegend").remove();
+
+  // Get number of circles from user input
+  const numCircles = parseInt(legendCircleCount?.value || 3);
+
+  // Get legend styling options
+  const font = legendFont.value;
+  const fontSize = parseInt(legendFontSize.value);
+  const fontStyle = legendFontStyle.value;
+  const fontColor = legendColor.value;
+  const bgTransparency = legendBgTransparency.value;
+  const titleText = legendTitleInput.value || "Dimensiune Cercuri";
+  const decimals = parseInt(legendDecimalsInput.value, 10) || 1;
+
+  // Calculate total height with increased spacing
+  const circleSpacing = 60;
+  const titleHeight = 30;
+  const padding = 20;
+  const legendHeight = (numCircles * circleSpacing) + titleHeight + (padding * 2);
+  const legendWidth = parseInt(legendWidthInput.value) || 150;
+
+  // Create new legend group
+  const circleLegend = svg.append("g")
+    .attr("id", "circleLegend")
+    .attr("class", "legend-group")
+    .attr("transform", "translate(60, " + (svgHeight - legendHeight - 20) + ")")
+    .style("display", toggleCircles.checked ? "block" : "none");
+
+  // Add background with styling
+  circleLegend.append("rect")
+    .attr("width", legendWidth)
+    .attr("height", legendHeight)
+    .attr("fill", `rgba(255, 255, 255, ${bgTransparency})`)
+    .attr("rx", 4);
+
+  // Add title with styling
+  circleLegend.append("text")
+    .attr("x", legendWidth / 2)
+    .attr("y", padding + 5)
+    .attr("text-anchor", "middle")
+    .style("font-family", font)
+    .style("font-size", `${fontSize}px`)
+    .style("font-style", fontStyle.includes("italic") ? "italic" : "normal")
+    .style("font-weight", fontStyle.includes("bold") ? "bold" : "normal")
+    .style("fill", fontColor)
+    .text(titleText);
+
+  // Create reference sizes excluding zero
+  const referenceValues = Array.from({length: numCircles}, (_, i) => {
+    return maxValue * (1 - (i / numCircles));
+  }).filter(val => val > 0);
+
+  // Create circle groups with styling
+  const circleGroups = circleLegend.selectAll(".circle-legend-group")
+    .data(referenceValues)
+    .enter()
+    .append("g")
+    .attr("class", "circle-legend-group")
+    .attr("transform", (d, i) => `translate(${legendWidth/2}, ${titleHeight + padding + (i * circleSpacing)})`);
+
+  // Add circles
+  circleGroups.append("circle")
+    .attr("cx", 0)
+    .attr("cy", 0)
+    .attr("r", d => radiusScale(d))
+    .attr("fill", "none")
+    .attr("stroke", circleColor.value)
+    .attr("opacity", circleOpacity.value);
+
+  // Add value labels with styling
+  circleGroups.append("text")
+    .attr("x", 35)
+    .attr("y", 4)
+    .attr("text-anchor", "start")
+    .style("font-family", font)
+    .style("font-size", `${fontSize}px`)
+    .style("font-style", fontStyle.includes("italic") ? "italic" : "normal")
+    .style("font-weight", fontStyle.includes("bold") ? "bold" : "normal")
+    .style("fill", fontColor)
+    .text(d => d.toFixed(decimals));
+
+  // Make legend draggable
+  circleLegend.call(d3.drag()
+    .on("drag", (event) => {
+      const transform = d3.select("#circleLegend").attr("transform");
+      const currentTranslate = transform.match(/translate\(([^)]*)\)/)[1].split(",");
+      const newX = parseFloat(currentTranslate[0]) + event.dx;
+      const newY = parseFloat(currentTranslate[1]) + event.dy;
+      circleLegend.attr("transform", `translate(${newX},${newY})`);
+    }));
+}
+
+// Add event listeners for legend styling that also update circle legend
+function updateAllLegends() {
+  generateAllLegends();
+  if (toggleCircles.checked) {
+    updateProportionalCircles();
+  }
+}
+
+// Add these listeners to existing legend style controls
+[legendFont, legendFontSize, legendFontStyle, legendColor, legendBgTransparency, 
+ legendWidthInput, legendHeightInput, legendTitleInput, legendDecimalsInput].forEach(control => {
+  if (control) {
+    control.addEventListener("input", updateAllLegends);
+    control.addEventListener("change", updateAllLegends);
+  }
+});
+
+// ...existing code...
+
 });
