@@ -2436,66 +2436,39 @@ const circleGroup = gMap.append("g")
 // Function to draw proportional circles
 function updateProportionalCircles() {
   if (!toggleCircles.checked) {
-    gMap.selectAll(".proportional-circle").remove();
+    circleGroup.selectAll(".proportional-circle").remove();
     return;
   }
 
-  // Get all values to calculate the scale
   const values = Array.from(regionTableBody.querySelectorAll("input"))
     .map(input => parseFloat(input.value) || 0);
   const maxValue = Math.max(...values);
 
-  // Create a scale for circle radius
   const radiusScale = d3.scaleSqrt()
     .domain([0, maxValue])
     .range([0, 30 * parseFloat(circleScale.value)]);
 
-  // Remove existing circles
-  gMap.selectAll(".proportional-circle").remove();
+  // Update circles using the circleGroup
+  const circles = circleGroup.selectAll(".proportional-circle")
+    .data(geoDataFeatures);
 
-  // Draw new circles
-  gMap.selectAll(".proportional-circle")
-    .data(geoDataFeatures)
-    .enter()
+  // Remove old circles
+  circles.exit().remove();
+
+  // Add new circles
+  circles.enter()
     .append("circle")
     .attr("class", "proportional-circle")
+    .merge(circles)
     .attr("cx", d => {
-      const regionName = d.properties.NAME || d.properties.name || 
-                       d.properties.region_nam || d.properties.nume_regiu || 
-                       d.properties.cntry_name;
-      // First try to use saved position
-      if (labelPositions[regionName]) {
-        return labelPositions[regionName].x;
-      }
-      // Then try to use point coordinates from points layer
-      if (window.pointLocations && window.pointLocations[regionName]) {
-        const [x, y] = projection(window.pointLocations[regionName]);
-        return x;
-      }
-      // Fallback to centroid
       const coords = getRegionPointOnSurface(d);
-      const [x, y] = projection(coords);
-      return x;
+      return projection(coords)[0];
     })
     .attr("cy", d => {
-      const regionName = d.properties.NAME || d.properties.name || 
-                       d.properties.region_nam || d.properties.nume_regiu || 
-                       d.properties.cntry_name;
-      if (labelPositions[regionName]) {
-        return labelPositions[regionName].y;
-      }
-      if (window.pointLocations && window.pointLocations[regionName]) {
-        const [x, y] = projection(window.pointLocations[regionName]);
-        return y;
-      }
       const coords = getRegionPointOnSurface(d);
-      const [x, y] = projection(coords);
-      return y;
+      return projection(coords)[1];
     })
-    .attr("r", d => {
-      const value = getRegionValue(d);
-      return radiusScale(value);
-    })
+    .attr("r", d => radiusScale(getRegionValue(d)))
     .attr("fill", circleColor.value)
     .attr("fill-opacity", circleOpacity.value);
 }
