@@ -538,58 +538,86 @@ document.addEventListener("DOMContentLoaded", () => {
             const step = (maxValue - minValue) / numIntervals;
 
             // Create color stops array including intermediate colors
-            const colorStops = [{ offset: 0, color: currentGradient.start }];
+            const colorStops = [];
+            colorStops.push({ offset: 0, color: currentGradient.start });
             
             intermediateColors.forEach((id, i) => {
-                const el = document.getElementById(id);
-                if (el) {
-                    const offset = ((i + 1) / (intermediateColors.length + 1) * 100) + "%";
-                    colorStops.push({ offset, color: el.value });
-                }
+              const el = document.getElementById(id);
+              if (el) {
+                const offset = (i + 1) / (intermediateColors.length + 1);
+                colorStops.push({ offset: offset, color: el.value });
+              }
             });
             
             colorStops.push({ offset: 1, color: currentGradient.end });
 
-            // Create color scale
+            // Create a proper color scale that includes intermediate colors
             const colorScale = d3.scaleLinear()
-                .domain(colorStops.map(stop => minValue + (maxValue - minValue) * stop.offset))
-                .range(colorStops.map(stop => stop.color));
+              .domain(colorStops.map(stop => minValue + (maxValue - minValue) * stop.offset))
+              .range(colorStops.map(stop => stop.color));
 
             // Generate intervals
             const sortDirection = document.getElementById("legendSortDirection").value;
             let intervals = [];
             for (let i = 0; i < numIntervals; i++) {
-                const startValue = minValue + (step * i);
-                const endValue = minValue + (step * (i + 1));
-                intervals.push({ 
-                    startValue, 
-                    endValue,
-                    color: colorScale(startValue)
-                });
+              const startValue = minValue + (step * i);
+              const endValue = minValue + (step * (i + 1));
+              // Use the middle point of the interval to determine its color
+              const midValue = (startValue + endValue) / 2;
+              intervals.push({
+                startValue,
+                endValue,
+                color: colorScale(midValue) // Use midpoint for color interpolation
+              });
             }
 
             // Sort intervals if needed
             if (sortDirection === "descending") {
-                intervals.reverse();
+              intervals.reverse();
             }
 
-            // Generate legend items
+            // Generate legend items with properly interpolated colors
             intervals.forEach((interval, i) => {
-                const legendItem = legendItemsGroup.append("g")
-                    .attr("class", "legend-item")
-                    .attr("transform", `translate(10, ${yOffset + i * 25})`);
+              const legendItem = legendItemsGroup.append("g")
+                .attr("class", "legend-item")
+                .attr("transform", `translate(10, ${yOffset + i * 25})`);
 
-                legendItem.append("rect")
-                    .attr("width", 20)
-                    .attr("height", 20)
-                    .attr("fill", interval.color);
+              legendItem.append("rect")
+                .attr("width", 20)
+                .attr("height", 20)
+                .attr("fill", interval.color);
 
-                legendItem.append("text")
-                    .attr("x", 30)
-                    .attr("y", 15)
-                    .attr("class", "legend-text")
-                    .text(`${interval.startValue.toFixed(effectiveDecimals)} - ${interval.endValue.toFixed(effectiveDecimals)}`);
+              legendItem.append("text")
+                .attr("x", 30)
+                .attr("y", 15)
+                .attr("class", "legend-text")
+                .text(`${interval.startValue.toFixed(effectiveDecimals)} - ${interval.endValue.toFixed(effectiveDecimals)}`);
             });
+
+            // Update numeric legend similarly
+            if (d3.select("#numericLegendGroup").attr("visibility") !== "hidden") {
+              const numericLegendGroup = d3.select("#numericLegendGroup");
+              numericLegendGroup.selectAll("*").remove();
+
+              // Create gradient definition with proper intermediate stops
+              const defs = numericLegendGroup.append("defs");
+              const gradient = defs.append("linearGradient")
+                .attr("id", "numericLegendGradient")
+                .attr("x1", "0%")
+                .attr("y1", "0%")
+                .attr("x2", "100%")
+                .attr("y2", "0%");
+
+              // Add all color stops including intermediates
+              colorStops.forEach(stop => {
+                gradient.append("stop")
+                  .attr("offset", `${stop.offset * 100}%`)
+                  .attr("stop-color", stop.color);
+              });
+
+              // Rest of numeric legend code...
+              // ...existing code for numeric legend...
+            }
         }
     }
 
