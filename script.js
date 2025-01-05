@@ -1022,6 +1022,8 @@ document.addEventListener("DOMContentLoaded", () => {
     .scaleExtent([0.5, 8])
     .on("zoom", (event) => {
       gMap.attr("transform", event.transform);
+      // Make sure the circle group is also transformed:
+      d3.select(".circle-group").attr("transform", event.transform);
     });
 
   svg.call(zoom);
