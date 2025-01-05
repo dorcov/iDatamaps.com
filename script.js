@@ -2567,7 +2567,7 @@ function createCircleLegend(maxValue, radiusScale) {
     .attr("text-anchor", "middle")
     .style("font-size", "12px")
     .style("font-weight", "bold")
-    .text("Dimensiune Cercuri");
+    .text("Simboluri proporționale"); // Changed from "Dimensiune Cercuri"
 
   // Create reference sizes excluding zero
   const referenceValues = Array.from({length: numCircles}, (_, i) => {
@@ -2735,7 +2735,7 @@ function createCircleLegend(maxValue, radiusScale) {
     .style("font-style", fontStyle.includes("italic") ? "italic" : "normal")
     .style("font-weight", fontStyle.includes("bold") ? "bold" : "normal")
     .style("fill", fontColor)
-    .text(titleText);
+    .text("Simboluri proporționale"); // Changed from "Dimensiune Cercuri"
 
   // Create reference sizes excluding zero
   const referenceValues = Array.from({length: numCircles}, (_, i) => {
