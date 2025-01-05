@@ -2144,17 +2144,30 @@ calculateStatistics();
   }
   
   function getSharedColorScale(domainValues, gradient) {
-    const intervals = parseInt(document.getElementById("legendIntervals").value, 10) || 5;
-    const minVal = d3.min(domainValues);
-    const maxVal = d3.max(domainValues);
-    const step = (maxVal - minVal) / (intervals - 1);
-    // Build a domain array with 'intervals' steps
-    const domain = d3.range(intervals).map(i => minVal + i * step);
-    // For multiple colors, incorporate intermediateColors if needed
-    const range = [gradient.start, ...intermediateColors.map(id => document.getElementById(id).value), gradient.end];
+    const minValue = d3.min(domainValues);
+    const maxValue = d3.max(domainValues);
+  
+    // Construim array-ul de culori pentru scală
+    const colors = [gradient.start];
+    
+    // Adăugăm culorile intermediare în ordine
+    intermediateColors.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        colors.push(el.value);
+      }
+    });
+    
+    colors.push(gradient.end);
+  
+    // Construim domain-ul proporțional cu numărul de culori
+    const domain = colors.map((_, i) => 
+      minValue + (i * (maxValue - minValue) / (colors.length - 1))
+    );
+  
     return d3.scaleLinear()
-      .domain(d3.range(range.length).map(i => i * (maxVal - minVal) / (range.length - 1) + minVal))
-      .range(range);
+      .domain(domain)
+      .range(colors);
   }
   
   const outlineColorInput = document.getElementById("outlineColor");
