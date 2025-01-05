@@ -2492,19 +2492,20 @@ function updateProportionalCircles() {
 
   circles.exit().remove();
 
-  circles.enter()
+  // Create new circles with proper opacity
+  const circlesEnter = circles.enter()
     .append("circle")
-    .attr("class", "proportional-circle")
-    .merge(circles)
+    .attr("class", "proportional-circle");
+
+  // Merge existing and new circles and update all attributes
+  circles.merge(circlesEnter)
     .attr("cx", d => {
       const regionName = d.properties.NAME || d.properties.name || 
                         d.properties.region_nam || d.properties.nume_regiu || 
                         d.properties.cntry_name;
-      // Folosim punctele din stratul points dacă există
       if (window.pointLocations && window.pointLocations[regionName]) {
         return projection(window.pointLocations[regionName])[0];
       }
-      // Fallback la centroid doar dacă nu există punct predefinit
       const coords = getRegionPointOnSurface(d);
       return projection(coords)[0];
     })
@@ -2520,14 +2521,17 @@ function updateProportionalCircles() {
     })
     .attr("r", d => radiusScale(getRegionValue(d)))
     .attr("fill", circleColor.value)
-    .attr("fill-opacity", circleOpacity.value)
+    .attr("opacity", circleOpacity.value) // Changed from fill-opacity to opacity
     .raise();
 }
 
 // Add event listeners for circle controls
 toggleCircles.addEventListener("change", updateProportionalCircles);
 circleColor.addEventListener("input", updateProportionalCircles);
-circleOpacity.addEventListener("input", updateProportionalCircles);
+circleOpacity.addEventListener("input", () => {
+  gMap.selectAll(".proportional-circle")
+    .attr("opacity", circleOpacity.value);
+});
 circleScale.addEventListener("input", updateProportionalCircles);
 
 // Update circles when map data changes
