@@ -698,6 +698,7 @@ td.select-category select {
   align-items: center;
   position: relative;
   pointer-events: all;
+  cursor: move;
 }
 
 /* Style for numeric legend background */
@@ -1649,6 +1650,26 @@ button#addTitle:hover {
   gap: 15px;
   font-size: 13px;
   color: #666;
+}
+
+/* ...existing code... */
+
+/* ...existing code... */
+
+#numericLegendGroup {
+  cursor: move;
+  pointer-events: all;
+}
+
+#numericLegendGroup rect.gradient-bar {
+  stroke: #ccc;
+  stroke-width: 0.5;
+}
+
+#numericLegendGroup text {
+  font-family: var(--legend-font, 'Roboto, sans-serif');
+  font-size: var(--legend-font-size, 12px);
+  fill: var(--legend-color, #333);
 }
 
 /* ...existing code... */

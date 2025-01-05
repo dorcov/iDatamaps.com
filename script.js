@@ -607,6 +607,86 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update numeric legend visibility based on whether categories are being used
     d3.select("#numericLegendGroup")
         .attr("visibility", hasActiveCategories ? "hidden" : "visible");
+
+    // Numeric legend specific code
+    if (!hasActiveCategories) {
+      const values = Array.from(regionTableBody.querySelectorAll('input[type="number"]'))
+        .map(input => parseFloat(input.value) || 0)
+        .filter(val => val > 0);
+
+      if (values.length > 0) {
+        const minValue = Math.min(...values);
+        const maxValue = Math.max(...values);
+        const decimals = parseInt(legendDecimalsInput.value, 10) || 1;
+        
+        // Clear existing numeric legend
+        const numericLegendGroup = d3.select("#numericLegendGroup");
+        numericLegendGroup.selectAll("*").remove();
+
+        // Create gradient definition
+        const defs = numericLegendGroup.append("defs");
+        const gradient = defs.append("linearGradient")
+          .attr("id", "numericLegendGradient")
+          .attr("x1", "0%")
+          .attr("y1", "0%")
+          .attr("x2", "100%")
+          .attr("y2", "0%");
+
+        // Add gradient stops
+        gradient.append("stop")
+          .attr("offset", "0%")
+          .attr("stop-color", currentGradient.start);
+
+        // Add intermediate color stops if they exist
+        intermediateColors.forEach((id, i) => {
+          const el = document.getElementById(id);
+          if (el) {
+            const offset = ((i + 1) / (intermediateColors.length + 1) * 100) + "%";
+            gradient.append("stop")
+              .attr("offset", offset)
+              .attr("stop-color", el.value);
+          }
+        });
+
+        gradient.append("stop")
+          .attr("offset", "100%")
+          .attr("stop-color", currentGradient.end);
+
+        // Add background
+        numericLegendGroup.append("rect")
+          .attr("width", 180)
+          .attr("height", 60)
+          .attr("rx", 4)
+          .attr("ry", 4)
+          .attr("fill", "rgba(255, 255, 255, 0.8)");
+
+        // Add gradient bar
+        numericLegendGroup.append("rect")
+          .attr("x", 10)
+          .attr("y", 10)
+          .attr("width", 160)
+          .attr("height", 20)
+          .attr("fill", "url(#numericLegendGradient)")
+          .attr("rx", 2)
+          .attr("ry", 2);
+
+        // Add min value text
+        numericLegendGroup.append("text")
+          .attr("x", 10)
+          .attr("y", 45)
+          .attr("class", "legend-text")
+          .style("text-anchor", "start")
+          .text(minValue.toFixed(decimals));
+
+        // Add max value text
+        numericLegendGroup.append("text")
+          .attr("x", 170)
+          .attr("y", 45)
+          .attr("class", "legend-text")
+          .style("text-anchor", "end")
+          .text(maxValue.toFixed(decimals));
+      }
+    }
 }
 
   // Add event listener for interval count changes
