@@ -2540,8 +2540,11 @@ function createCircleLegend(maxValue, radiusScale) {
   // Get number of circles from user input (default to 3 if not specified)
   const numCircles = parseInt(legendCircleCount?.value || 3);
 
-  // Calculate total height needed (50px spacing between circles plus padding)
-  const legendHeight = (numCircles * 50) + 40; // 40px for title and padding
+  // Calculate total height needed with increased spacing
+  const circleSpacing = 60; // Increased from 50 to 60px
+  const titleHeight = 30; // Space for title
+  const padding = 20; // Padding at top and bottom
+  const legendHeight = (numCircles * circleSpacing) + titleHeight + (padding * 2);
 
   // Create new legend group
   const circleLegend = svg.append("g")
@@ -2557,26 +2560,27 @@ function createCircleLegend(maxValue, radiusScale) {
     .attr("fill", "rgba(255, 255, 255, 0.8)")
     .attr("rx", 4);
 
-  // Add title
+  // Add title with more space above circles
   circleLegend.append("text")
     .attr("x", 75)
-    .attr("y", 20)
+    .attr("y", padding + 5) // Adjusted position
     .attr("text-anchor", "middle")
     .style("font-size", "12px")
     .style("font-weight", "bold")
     .text("Dimensiune Cercuri");
 
-  // Create reference sizes with more even distribution
+  // Create reference sizes excluding zero
   const referenceValues = Array.from({length: numCircles}, (_, i) => {
-    return maxValue * (1 - (i / (numCircles - 1)));
-  });
+    // Start from maxValue and distribute evenly, excluding zero
+    return maxValue * (1 - (i / numCircles));
+  }).filter(val => val > 0); // Remove zero values
 
   const circleGroups = circleLegend.selectAll(".circle-legend-group")
     .data(referenceValues)
     .enter()
     .append("g")
     .attr("class", "circle-legend-group")
-    .attr("transform", (d, i) => `translate(75, ${40 + i * 50})`); // Increased spacing to 50px
+    .attr("transform", (d, i) => `translate(75, ${titleHeight + padding + (i * circleSpacing)})`);
 
   // Add circles
   circleGroups.append("circle")
@@ -2587,7 +2591,7 @@ function createCircleLegend(maxValue, radiusScale) {
     .attr("stroke", circleColor.value)
     .attr("opacity", circleOpacity.value);
 
-  // Add value labels
+  // Add value labels with better positioning
   circleGroups.append("text")
     .attr("x", 35)
     .attr("y", 4)
@@ -2656,5 +2660,30 @@ unlockAllInteractions = function() {
   gMap.selectAll(".proportional-circle")
     .style("pointer-events", "all");
 };
+
+// Update the scale change handler to update both map and legend immediately
+circleScale.addEventListener("input", () => {
+  // Update circles on map
+  const values = Array.from(regionTableBody.querySelectorAll("input"))
+    .map(input => parseFloat(input.value) || 0)
+    .filter(val => val > 0);
+  
+  const maxValue = Math.max(...values);
+  const scale = parseFloat(circleScale.value);
+  
+  // Create new radius scale with updated scale factor
+  const radiusScale = d3.scaleSqrt()
+    .domain([0, maxValue])
+    .range([0, 30 * scale]);
+
+  // Update circles on map
+  gMap.selectAll(".proportional-circle")
+    .transition()
+    .duration(300)
+    .attr("r", d => radiusScale(getRegionValue(d)));
+
+  // Update legend
+  createCircleLegend(maxValue, radiusScale);
+});
 
 });
