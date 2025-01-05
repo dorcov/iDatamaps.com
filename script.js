@@ -1022,8 +1022,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .scaleExtent([0.5, 8])
     .on("zoom", (event) => {
       gMap.attr("transform", event.transform);
-      // Make sure the circle group is also transformed:
-      d3.select(".circle-group").attr("transform", event.transform);
     });
 
   svg.call(zoom);
@@ -2436,7 +2434,7 @@ const circleGroup = gMap.append("g")
 // Function to draw proportional circles
 function updateProportionalCircles() {
   if (!toggleCircles.checked) {
-    circleGroup.selectAll(".proportional-circle").remove();
+    gMap.selectAll(".proportional-circle").remove();
     return;
   }
 
@@ -2448,14 +2446,12 @@ function updateProportionalCircles() {
     .domain([0, maxValue])
     .range([0, 30 * parseFloat(circleScale.value)]);
 
-  // Update circles using the circleGroup
-  const circles = circleGroup.selectAll(".proportional-circle")
+  // Create circles in gMap directly, not in a separate group
+  const circles = gMap.selectAll(".proportional-circle")
     .data(geoDataFeatures);
 
-  // Remove old circles
   circles.exit().remove();
 
-  // Add new circles
   circles.enter()
     .append("circle")
     .attr("class", "proportional-circle")
@@ -2470,7 +2466,8 @@ function updateProportionalCircles() {
     })
     .attr("r", d => radiusScale(getRegionValue(d)))
     .attr("fill", circleColor.value)
-    .attr("fill-opacity", circleOpacity.value);
+    .attr("fill-opacity", circleOpacity.value)
+    .raise(); // Asigură că cercurile sunt deasupra regiunilor
 }
 
 // Add event listeners for circle controls
@@ -2489,9 +2486,6 @@ updateMapColors = function() {
 // Add to zoom behavior to handle circles
 const originalZoom = d3.zoom().on("zoom", (event) => {
   gMap.attr("transform", event.transform);
-  // Update circles position with zoom
-  gMap.selectAll(".proportional-circle")
-    .attr("transform", event.transform);
 });
 
 svg.call(originalZoom);
