@@ -226,6 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     generateAllLegends();
     updateValueLabels();
+    updateProportionalCircles();
   }
 
   // Calculăm culoarea pe baza gradientului personalizat sau presetat
@@ -2476,11 +2477,14 @@ const circleGroup = gMap.append("g")
 function updateProportionalCircles() {
   if (!toggleCircles.checked) {
     gMap.selectAll(".proportional-circle").remove();
+    d3.select("#circleLegend").remove(); // Remove legend when circles are hidden
     return;
   }
 
   const values = Array.from(regionTableBody.querySelectorAll("input"))
-    .map(input => parseFloat(input.value) || 0);
+    .map(input => parseFloat(input.value) || 0)
+    .filter(val => val > 0);
+  
   const maxValue = Math.max(...values);
 
   const radiusScale = d3.scaleSqrt()
@@ -2523,23 +2527,102 @@ function updateProportionalCircles() {
     .attr("fill", circleColor.value)
     .attr("opacity", circleOpacity.value) // Changed from fill-opacity to opacity
     .raise();
+
+  // Create or update circle legend
+  createCircleLegend(maxValue, radiusScale);
 }
 
-// Add event listeners for circle controls
-toggleCircles.addEventListener("change", updateProportionalCircles);
-circleColor.addEventListener("input", updateProportionalCircles);
-circleOpacity.addEventListener("input", () => {
-  gMap.selectAll(".proportional-circle")
-    .attr("opacity", circleOpacity.value);
-});
-circleScale.addEventListener("input", updateProportionalCircles);
+function createCircleLegend(maxValue, radiusScale) {
+  // Remove existing circle legend
+  d3.select("#circleLegend").remove();
 
-// Update circles when map data changes
-const originalUpdateMapColors = updateMapColors;
-updateMapColors = function() {
-  originalUpdateMapColors();
+  // Create new legend group
+  const circleLegend = svg.append("g")
+    .attr("id", "circleLegend")
+    .attr("class", "legend-group")
+    .attr("transform", "translate(60, " + (svgHeight - 120) + ")")
+    .style("display", toggleCircles.checked ? "block" : "none");
+
+  // Add background
+  circleLegend.append("rect")
+    .attr("width", 150)
+    .attr("height", 110)
+    .attr("fill", "rgba(255, 255, 255, 0.8)")
+    .attr("rx", 4);
+
+  // Add title
+  circleLegend.append("text")
+    .attr("x", 75)
+    .attr("y", 20)
+    .attr("text-anchor", "middle")
+    .style("font-size", "12px")
+    .style("font-weight", "bold")
+    .text("Dimensiune Cercuri");
+
+  // Create reference sizes
+  const referenceValues = [
+    maxValue,
+    maxValue / 2,
+    maxValue / 4
+  ];
+
+  const circleGroups = circleLegend.selectAll(".circle-legend-group")
+    .data(referenceValues)
+    .enter()
+    .append("g")
+    .attr("class", "circle-legend-group")
+    .attr("transform", (d, i) => `translate(75, ${40 + i * 25})`);
+
+  // Add circles
+  circleGroups.append("circle")
+    .attr("cx", 0)
+    .attr("cy", 0)
+    .attr("r", d => radiusScale(d))
+    .attr("fill", "none")
+    .attr("stroke", circleColor.value)
+    .attr("opacity", circleOpacity.value);
+
+  // Add value labels
+  circleGroups.append("text")
+    .attr("x", 35)
+    .attr("y", 4)
+    .attr("text-anchor", "start")
+    .style("font-size", "11px")
+    .text(d => d.toFixed(1));
+
+  // Make legend draggable
+  circleLegend.call(d3.drag()
+    .on("drag", (event) => {
+      const transform = d3.select("#circleLegend").attr("transform");
+      const currentTranslate = transform.match(/translate\(([^)]*)\)/)[1].split(",");
+      const newX = parseFloat(currentTranslate[0]) + event.dx;
+      const newY = parseFloat(currentTranslate[1]) + event.dy;
+      d3.select("#circleLegend").attr("transform", `translate(${newX},${newY})`);
+    }));
+}
+
+// Add to circle controls event listeners
+toggleCircles.addEventListener("change", () => {
   updateProportionalCircles();
-};
+  const circleLegend = d3.select("#circleLegend");
+  if (circleLegend.size() > 0) {
+    circleLegend.style("display", toggleCircles.checked ? "block" : "none");
+  }
+});
+
+circleColor.addEventListener("input", () => {
+  updateProportionalCircles();
+  d3.selectAll(".circle-legend-group circle")
+    .attr("stroke", circleColor.value);
+});
+
+circleOpacity.addEventListener("input", () => {
+  const opacity = circleOpacity.value;
+  gMap.selectAll(".proportional-circle")
+    .attr("opacity", opacity);
+  d3.selectAll(".circle-legend-group circle")
+    .attr("opacity", opacity);
+});
 
 // Add to zoom behavior to handle circles
 const originalZoom = d3.zoom().on("zoom", (event) => {
