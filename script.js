@@ -2468,6 +2468,7 @@ const toggleCircles = document.getElementById("toggleCircles");
 const circleColor = document.getElementById("circleColor");
 const circleOpacity = document.getElementById("circleOpacity");
 const circleScale = document.getElementById("circleScale");
+const legendCircleCount = document.getElementById("legendCircleCount");
 
 // 1) Create/ensure a group inside gMap:
 const circleGroup = gMap.append("g")
@@ -2536,17 +2537,23 @@ function createCircleLegend(maxValue, radiusScale) {
   // Remove existing circle legend
   d3.select("#circleLegend").remove();
 
+  // Get number of circles from user input (default to 3 if not specified)
+  const numCircles = parseInt(legendCircleCount?.value || 3);
+
+  // Calculate total height needed (50px spacing between circles plus padding)
+  const legendHeight = (numCircles * 50) + 40; // 40px for title and padding
+
   // Create new legend group
   const circleLegend = svg.append("g")
     .attr("id", "circleLegend")
     .attr("class", "legend-group")
-    .attr("transform", "translate(60, " + (svgHeight - 120) + ")")
+    .attr("transform", "translate(60, " + (svgHeight - legendHeight - 20) + ")")
     .style("display", toggleCircles.checked ? "block" : "none");
 
   // Add background
   circleLegend.append("rect")
     .attr("width", 150)
-    .attr("height", 110)
+    .attr("height", legendHeight)
     .attr("fill", "rgba(255, 255, 255, 0.8)")
     .attr("rx", 4);
 
@@ -2559,19 +2566,17 @@ function createCircleLegend(maxValue, radiusScale) {
     .style("font-weight", "bold")
     .text("Dimensiune Cercuri");
 
-  // Create reference sizes
-  const referenceValues = [
-    maxValue,
-    maxValue / 2,
-    maxValue / 4
-  ];
+  // Create reference sizes with more even distribution
+  const referenceValues = Array.from({length: numCircles}, (_, i) => {
+    return maxValue * (1 - (i / (numCircles - 1)));
+  });
 
   const circleGroups = circleLegend.selectAll(".circle-legend-group")
     .data(referenceValues)
     .enter()
     .append("g")
     .attr("class", "circle-legend-group")
-    .attr("transform", (d, i) => `translate(75, ${40 + i * 25})`);
+    .attr("transform", (d, i) => `translate(75, ${40 + i * 50})`); // Increased spacing to 50px
 
   // Add circles
   circleGroups.append("circle")
@@ -2599,6 +2604,11 @@ function createCircleLegend(maxValue, radiusScale) {
       const newY = parseFloat(currentTranslate[1]) + event.dy;
       d3.select("#circleLegend").attr("transform", `translate(${newX},${newY})`);
     }));
+}
+
+// Add event listener for circle count changes
+if (legendCircleCount) {
+  legendCircleCount.addEventListener("change", updateProportionalCircles);
 }
 
 // Add to circle controls event listeners
