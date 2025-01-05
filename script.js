@@ -543,7 +543,7 @@ document.addEventListener("DOMContentLoaded", () => {
             intermediateColors.forEach((id, i) => {
                 const el = document.getElementById(id);
                 if (el) {
-                    const offset = (i + 1) / (intermediateColors.length + 1);
+                    const offset = ((i + 1) / (intermediateColors.length + 1) * 100) + "%";
                     colorStops.push({ offset, color: el.value });
                 }
             });
@@ -2428,6 +2428,10 @@ const toggleCircles = document.getElementById("toggleCircles");
 const circleColor = document.getElementById("circleColor");
 const circleOpacity = document.getElementById("circleOpacity");
 const circleScale = document.getElementById("circleScale");
+
+// 1) Create/ensure a group inside gMap:
+const circleGroup = gMap.append("g")
+  .attr("class", "circle-group");
 
 // Function to draw proportional circles
 function updateProportionalCircles() {
