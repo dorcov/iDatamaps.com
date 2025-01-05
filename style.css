@@ -1674,3 +1674,18 @@ button#addTitle:hover {
 
 /* ...existing code... */
 
+/* Proportional Circles Styling */
+.proportional-circle {
+  fill-opacity: 0.6;
+  stroke: #fff;
+  stroke-width: 1px;
+  pointer-events: none;
+  transition: fill-opacity 0.3s ease;
+}
+
+.proportional-circle:hover {
+  fill-opacity: 0.8;
+}
+
+/* ...existing code... */
+

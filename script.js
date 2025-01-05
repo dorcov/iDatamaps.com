@@ -295,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Funcție pentru a obține categoria unei regiuni
   function getRegionCategory(d) {
-    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name ||d.properties.region_nam ||d.properties.nume_regiu || d.properties.cntry_name ||"Unknown");
+    const regionName = encodeURIComponent(d.properties.NAME || d.properties.name ||d.properties.region_nam ||d.properties.nume_regiu ||d.properties.cntry_name ||"Unknown");
     const select = document.querySelector(`select[data-region="${regionName}"]`);
     if (select && select.value !== "" && categories[select.value]) {
       return categories[select.value].name;
@@ -2420,5 +2420,117 @@ regionTableBody.addEventListener("input", debounce(() => {
 updateAnalysisTable();
 
 // ...existing code...
+
+// Add new references for circle controls
+const toggleCircles = document.getElementById("toggleCircles");
+const circleColor = document.getElementById("circleColor");
+const circleOpacity = document.getElementById("circleOpacity");
+const circleScale = document.getElementById("circleScale");
+
+// Function to draw proportional circles
+function updateProportionalCircles() {
+  if (!toggleCircles.checked) {
+    gMap.selectAll(".proportional-circle").remove();
+    return;
+  }
+
+  // Get all values to calculate the scale
+  const values = Array.from(regionTableBody.querySelectorAll("input"))
+    .map(input => parseFloat(input.value) || 0);
+  const maxValue = Math.max(...values);
+
+  // Create a scale for circle radius
+  const radiusScale = d3.scaleSqrt()
+    .domain([0, maxValue])
+    .range([0, 30 * parseFloat(circleScale.value)]);
+
+  // Remove existing circles
+  gMap.selectAll(".proportional-circle").remove();
+
+  // Draw new circles
+  gMap.selectAll(".proportional-circle")
+    .data(geoDataFeatures)
+    .enter()
+    .append("circle")
+    .attr("class", "proportional-circle")
+    .attr("cx", d => {
+      const regionName = d.properties.NAME || d.properties.name || 
+                       d.properties.region_nam || d.properties.nume_regiu || 
+                       d.properties.cntry_name;
+      // First try to use saved position
+      if (labelPositions[regionName]) {
+        return labelPositions[regionName].x;
+      }
+      // Then try to use point coordinates from points layer
+      if (window.pointLocations && window.pointLocations[regionName]) {
+        const [x, y] = projection(window.pointLocations[regionName]);
+        return x;
+      }
+      // Fallback to centroid
+      const coords = getRegionPointOnSurface(d);
+      const [x, y] = projection(coords);
+      return x;
+    })
+    .attr("cy", d => {
+      const regionName = d.properties.NAME || d.properties.name || 
+                       d.properties.region_nam || d.properties.nume_regiu || 
+                       d.properties.cntry_name;
+      if (labelPositions[regionName]) {
+        return labelPositions[regionName].y;
+      }
+      if (window.pointLocations && window.pointLocations[regionName]) {
+        const [x, y] = projection(window.pointLocations[regionName]);
+        return y;
+      }
+      const coords = getRegionPointOnSurface(d);
+      const [x, y] = projection(coords);
+      return y;
+    })
+    .attr("r", d => {
+      const value = getRegionValue(d);
+      return radiusScale(value);
+    })
+    .attr("fill", circleColor.value)
+    .attr("fill-opacity", circleOpacity.value);
+}
+
+// Add event listeners for circle controls
+toggleCircles.addEventListener("change", updateProportionalCircles);
+circleColor.addEventListener("input", updateProportionalCircles);
+circleOpacity.addEventListener("input", updateProportionalCircles);
+circleScale.addEventListener("input", updateProportionalCircles);
+
+// Update circles when map data changes
+const originalUpdateMapColors = updateMapColors;
+updateMapColors = function() {
+  originalUpdateMapColors();
+  updateProportionalCircles();
+};
+
+// Add to zoom behavior to handle circles
+const originalZoom = d3.zoom().on("zoom", (event) => {
+  gMap.attr("transform", event.transform);
+  // Update circles position with zoom
+  gMap.selectAll(".proportional-circle")
+    .attr("transform", event.transform);
+});
+
+svg.call(originalZoom);
+
+// Add to lockAllInteractions function
+const originalLockAllInteractions = lockAllInteractions;
+lockAllInteractions = function() {
+  originalLockAllInteractions();
+  gMap.selectAll(".proportional-circle")
+    .style("pointer-events", "none");
+};
+
+// Add to unlockAllInteractions function
+const originalUnlockAllInteractions = unlockAllInteractions;
+unlockAllInteractions = function() {
+  originalUnlockAllInteractions();
+  gMap.selectAll(".proportional-circle")
+    .style("pointer-events", "all");
+};
 
 });
