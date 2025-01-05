@@ -2446,7 +2446,6 @@ function updateProportionalCircles() {
     .domain([0, maxValue])
     .range([0, 30 * parseFloat(circleScale.value)]);
 
-  // Create circles in gMap directly, not in a separate group
   const circles = gMap.selectAll(".proportional-circle")
     .data(geoDataFeatures);
 
@@ -2457,17 +2456,31 @@ function updateProportionalCircles() {
     .attr("class", "proportional-circle")
     .merge(circles)
     .attr("cx", d => {
+      const regionName = d.properties.NAME || d.properties.name || 
+                        d.properties.region_nam || d.properties.nume_regiu || 
+                        d.properties.cntry_name;
+      // Folosim punctele din stratul points dacă există
+      if (window.pointLocations && window.pointLocations[regionName]) {
+        return projection(window.pointLocations[regionName])[0];
+      }
+      // Fallback la centroid doar dacă nu există punct predefinit
       const coords = getRegionPointOnSurface(d);
       return projection(coords)[0];
     })
     .attr("cy", d => {
+      const regionName = d.properties.NAME || d.properties.name || 
+                        d.properties.region_nam || d.properties.nume_regiu || 
+                        d.properties.cntry_name;
+      if (window.pointLocations && window.pointLocations[regionName]) {
+        return projection(window.pointLocations[regionName])[1];
+      }
       const coords = getRegionPointOnSurface(d);
       return projection(coords)[1];
     })
     .attr("r", d => radiusScale(getRegionValue(d)))
     .attr("fill", circleColor.value)
     .attr("fill-opacity", circleOpacity.value)
-    .raise(); // Asigură că cercurile sunt deasupra regiunilor
+    .raise();
 }
 
 // Add event listeners for circle controls
