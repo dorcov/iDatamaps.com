@@ -2899,6 +2899,8 @@ circleColor.addEventListener("input", () => {
   updateProportionalCircles();
   d3.selectAll(".circle-legend-group circle")
     .attr("stroke", circleColor.value);
+  gMap.selectAll(".proportional-circle")
+    .attr("fill", circleColor.value); // Update circles on the map
 });
 
 circleOpacity.addEventListener("input", () => {
