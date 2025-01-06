@@ -1081,7 +1081,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add background and title to main legend
     legendGroup.append("rect")
       .attr("id", "legendBackground")
-      .attr("width", 100)
+      .attr("width", 200)
       .attr("height", 200)
       .attr("rx", 4)
       .attr("ry", 4)
