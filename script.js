@@ -319,9 +319,48 @@ const projections = {
   mercator: d3.geoMercator()  // Default Mercator projection
 };
 
+// Add after SVG initialization and before loadMap:
+const projectionTypes = {
+  mercator: () => d3.geoMercator(),
+  conicConformal: () => d3.geoConicConformal()
+    .parallels([35, 65])
+    .center([10, 55]),
+  azimuthalEqualArea: () => d3.geoAzimuthalEqualArea()
+    .center([10, 55])
+    .scale(400),
+  equalEarth: () => d3.geoEqualEarth()
+};
+
+// Add function to handle projection changes
+function updateProjection(projectionType, data) {
+  const projectionCreator = projectionTypes[projectionType] || projectionTypes.mercator;
+  projection = projectionCreator()
+    .fitSize([svgWidth, svgHeight], {
+      type: 'FeatureCollection',
+      features: data
+    });
+
+  const path = d3.geoPath().projection(projection);
+
+  // Update all paths with new projection
+  gMap.selectAll("path")
+    .attr("d", path);
+
+  // Update proportional circles if they exist
+  updateProportionalCircles();
+
+  // Update value labels if they exist
+  updateValueLabels();
+}
+
   // Funcție pentru a încărca harta
   function loadMap(geojsonFile) {
     console.log(`Încerc să încarc GeoJSON: data/${geojsonFile}`);
+    
+    // Get current projection selection
+    const projectionSelect = document.getElementById("projectionSelector");
+    const selectedProjection = projectionSelect ? projectionSelect.value : "mercator";
+
     d3.json(`data/${geojsonFile}`).then((data) => {
       console.log(`Harta ${geojsonFile} a fost încărcată cu succes.`);
 
@@ -361,17 +400,9 @@ const projections = {
       // Use only polygon features for the map rendering
       geoDataFeatures = polygonFeatures;
 
-      // Choose projection based on the map
-      if (geojsonFile === "combinedEU.geojson") {
-        projection = projections.europe;
-      } else {
-        // Use Mercator but fit to the data
-        projection = projections.mercator.fitSize([svgWidth, svgHeight], {
-          type: 'FeatureCollection',
-          features: polygonFeatures
-        });
-      }
-
+      // Create projection based on selection
+      updateProjection(selectedProjection, polygonFeatures);
+      
       const path = d3.geoPath().projection(projection);
 
       gMap.selectAll("path").remove();
@@ -3129,6 +3160,15 @@ function updateAllLegends() {
 
   // Initialize dark mode
   initializeDarkMode();
+
+  // Add event listener for projection changes
+if (document.getElementById("projectionSelector")) {
+  document.getElementById("projectionSelector").addEventListener("change", (e) => {
+    if (geoDataFeatures.length > 0) {
+      updateProjection(e.target.value, geoDataFeatures);
+    }
+  });
+}
 
   // ...existing code...
 
