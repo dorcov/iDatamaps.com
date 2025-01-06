@@ -489,7 +489,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const legendTitle = d3.select("#legendTitle")
       .text(legendTitleInput.value || "Legendă")
       .style("font-family", legendFont)
-      .style("font-size", `${legendFontSize}px`);
+      .style("font-size", `${legendFontSize}px`)
+      .attr("text-anchor", "start"); // Left-align legend title
 
     let yOffset = 30;
 
@@ -518,6 +519,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     .attr("x", 30)
                     .attr("y", 15)
                     .attr("class", "legend-text")
+                    .attr("text-anchor", "start") // Left-align text items
                     .text(category.name);
 
                 yOffset += 25;
@@ -592,6 +594,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .attr("x", 30)
                 .attr("y", 15)
                 .attr("class", "legend-text")
+                .attr("text-anchor", "start") // Left-align text items
                 .text(`${interval.startValue.toFixed(effectiveDecimals)} - ${interval.endValue.toFixed(effectiveDecimals)}`);
             });
 
@@ -1687,7 +1690,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const legendTitle = d3.select("#legendTitle")
       .text(legendTitleInput.value || "Legendă")
       .style("font-family", legendFont)
-      .style("font-size", `${legendFontSize}px`);
+      .style("font-size", `${legendFontSize}px`)
+      .attr("text-anchor", "start"); // Left-align legend title
 
     let yOffset = 30;
 
@@ -1716,6 +1720,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     .attr("x", 30)
                     .attr("y", 15)
                     .attr("class", "legend-text")
+                    .attr("text-anchor", "start") // Left-align text items
                     .text(category.name);
 
                 yOffset += 25;
@@ -1790,6 +1795,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .attr("x", 30)
                 .attr("y", 15)
                 .attr("class", "legend-text")
+                .attr("text-anchor", "start") // Left-align text items
                 .text(`${interval.startValue.toFixed(effectiveDecimals)} - ${interval.endValue.toFixed(effectiveDecimals)}`);
             });
 
@@ -1820,16 +1826,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Adjust legend background height based on content
-    // const totalItems = hasActiveCategories 
-    //     ? categories.filter((_, i) => Array.from(regionTableBody.querySelectorAll("select"))
-    //         .some(select => select.value === i.toString())).length
-    //     : parseInt(document.getElementById("legendIntervals").value);
-    
-    // const backgroundHeight = 20 + (totalItems * 25);
-    
-    // d3.select("#legendBackground")
-    //     .attr("height", backgroundHeight);
 
     // Update numeric legend visibility based on whether categories are being used
     d3.select("#numericLegendGroup")
