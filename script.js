@@ -1658,14 +1658,269 @@ document.addEventListener("DOMContentLoaded", () => {
     const width = parseInt(legendWidthInput.value, 10) || 200;
     const height = parseInt(legendHeightInput.value, 10) || 100;
 
-    // Update legend group dimensions
-    legendGroup.attr("width", width).attr("height", height);
-    numericLegendGroup.attr("width", width).attr("height", height);
+    // Actualizăm doar legenda principală
+    d3.select("#legendBackground")
+      .attr("width", width)
+      .attr("height", height);
 
-    // Redraw legends with new dimensions
-    generateAllLegends();
+    // Actualizăm și containerul pentru elementele legendei
+    d3.select("#legendItems")
+      .attr("width", width)
+      .attr("height", height - 30); // Scădem spațiul pentru titlu
+
+    // Regenerăm doar legenda principală, păstrând legenda cu simboluri neschimbată
+    if (!d3.select("#legendGroup").attr("visibility") === "hidden") {
+      generateAllLegends();
+    }
   }
-  
+
+  // Modificăm funcția generateAllLegends pentru a păstra dimensiunile legendei cu simboluri
+  function generateAllLegends() {
+    const legendItemsGroup = d3.select("#legendItems");
+    legendItemsGroup.selectAll("*").remove(); // Clear existing legend
+
+    // Update the legend title with current font and size settings
+    const legendFont = document.getElementById("legendFont").value;
+    const legendFontSize = document.getElementById("legendFontSize").value;
+    
+    // Update title text and styles
+    const legendTitle = d3.select("#legendTitle")
+      .text(legendTitleInput.value || "Legendă")
+      .style("font-family", legendFont)
+      .style("font-size", `${legendFontSize}px`);
+
+    let yOffset = 30;
+
+    // Check if there are any active categories on the map
+    const hasActiveCategories = Array.from(regionTableBody.querySelectorAll("select"))
+      .some(select => select.value !== "");
+
+    if (hasActiveCategories) {
+        // Show only categories if they are being used
+        categories.forEach((category, index) => {
+            // Only show categories that are actually used on the map
+            const isCategoryUsed = Array.from(regionTableBody.querySelectorAll("select"))
+                .some(select => select.value === index.toString());
+            
+            if (isCategoryUsed) {
+                const legendItem = legendItemsGroup.append("g")
+                    .attr("class", "legend-item")
+                    .attr("transform", `translate(10, ${yOffset})`);
+
+                legendItem.append("rect")
+                    .attr("width", 20)
+                    .attr("height", 20)
+                    .attr("fill", category.color);
+
+                legendItem.append("text")
+                    .attr("x", 30)
+                    .attr("y", 15)
+                    .attr("class", "legend-text")
+                    .text(category.name);
+
+                yOffset += 25;
+            }
+        });
+    } else {
+        // Show numeric intervals only if no categories are being used
+        const values = Array.from(regionTableBody.querySelectorAll('input[type="number"]'))
+            .map(input => parseFloat(input.value) || 0)
+            .filter(val => val > 0);
+
+        if (values.length > 0) {
+            const minValue = Math.min(...values);
+            const maxValue = Math.max(...values);
+            
+            const numIntervals = parseInt(document.getElementById("legendIntervals").value) || 5;
+            const decimals = parseInt(legendDecimalsInput.value, 10);
+            const effectiveDecimals = isNaN(decimals) ? 1 : decimals;
+            const step = (maxValue - minValue) / numIntervals;
+
+            // Create color stops array including intermediate colors
+            const colorStops = [];
+            colorStops.push({ offset: 0, color: currentGradient.start });
+            
+            intermediateColors.forEach((id, i) => {
+              const el = document.getElementById(id);
+              if (el) {
+                const offset = (i + 1) / (intermediateColors.length + 1);
+                colorStops.push({ offset: offset, color: el.value });
+              }
+            });
+            
+            colorStops.push({ offset: 1, color: currentGradient.end });
+
+            // Create a proper color scale that includes intermediate colors
+            const colorScale = d3.scaleLinear()
+              .domain(colorStops.map(stop => minValue + (maxValue - minValue) * stop.offset))
+              .range(colorStops.map(stop => stop.color));
+
+            // Generate intervals
+            const sortDirection = document.getElementById("legendSortDirection").value;
+            let intervals = [];
+            for (let i = 0; i < numIntervals; i++) {
+              const startValue = minValue + (step * i);
+              const endValue = minValue + (step * (i + 1));
+              // Use the middle point of the interval to determine its color
+              const midValue = (startValue + endValue) / 2;
+              intervals.push({
+                startValue,
+                endValue,
+                color: colorScale(midValue) // Use midpoint for color interpolation
+              });
+            }
+
+            // Sort intervals if needed
+            if (sortDirection === "descending") {
+              intervals.reverse();
+            }
+
+            // Generate legend items with properly interpolated colors
+            intervals.forEach((interval, i) => {
+              const legendItem = legendItemsGroup.append("g")
+                .attr("class", "legend-item")
+                .attr("transform", `translate(10, ${yOffset + i * 25})`);
+
+              legendItem.append("rect")
+                .attr("width", 20)
+                .attr("height", 20)
+                .attr("fill", interval.color);
+
+              legendItem.append("text")
+                .attr("x", 30)
+                .attr("y", 15)
+                .attr("class", "legend-text")
+                .text(`${interval.startValue.toFixed(effectiveDecimals)} - ${interval.endValue.toFixed(effectiveDecimals)}`);
+            });
+
+            // Update numeric legend similarly
+            if (d3.select("#numericLegendGroup").attr("visibility") !== "hidden") {
+              const numericLegendGroup = d3.select("#numericLegendGroup");
+              numericLegendGroup.selectAll("*").remove();
+
+              // Create gradient definition with proper intermediate stops
+              const defs = numericLegendGroup.append("defs");
+              const gradient = defs.append("linearGradient")
+                .attr("id", "numericLegendGradient")
+                .attr("x1", "0%")
+                .attr("y1", "0%")
+                .attr("x2", "100%")
+                .attr("y2", "0%");
+
+              // Add all color stops including intermediates
+              colorStops.forEach(stop => {
+                gradient.append("stop")
+                  .attr("offset", `${stop.offset * 100}%`)
+                  .attr("stop-color", stop.color);
+              });
+
+              // Rest of numeric legend code...
+              // ...existing code for numeric legend...
+            }
+        }
+    }
+
+    // Adjust legend background height based on content
+    const totalItems = hasActiveCategories 
+        ? categories.filter((_, i) => Array.from(regionTableBody.querySelectorAll("select"))
+            .some(select => select.value === i.toString())).length
+        : parseInt(document.getElementById("legendIntervals").value);
+    
+    const backgroundHeight = 20 + (totalItems * 25);
+    
+    d3.select("#legendBackground")
+        .attr("height", backgroundHeight);
+
+    // Update numeric legend visibility based on whether categories are being used
+    d3.select("#numericLegendGroup")
+        .attr("visibility", hasActiveCategories ? "hidden" : "visible");
+
+    // Numeric legend specific code
+    if (!hasActiveCategories) {
+      const values = Array.from(regionTableBody.querySelectorAll('input[type="number"]'))
+        .map(input => parseFloat(input.value) || 0)
+        .filter(val => val > 0);
+
+      if (values.length > 0) {
+        const minValue = Math.min(...values);
+        const maxValue = Math.max(...values);
+        const decimals = parseInt(legendDecimalsInput.value, 10) || 1;
+        
+        // Clear existing numeric legend
+        const numericLegendGroup = d3.select("#numericLegendGroup");
+        numericLegendGroup.selectAll("*").remove();
+
+        // Create gradient definition
+        const defs = numericLegendGroup.append("defs");
+        const gradient = defs.append("linearGradient")
+          .attr("id", "numericLegendGradient")
+          .attr("x1", "0%")
+          .attr("y1", "0%")
+          .attr("x2", "100%")
+          .attr("y2", "0%");
+
+        // Add gradient stops
+        gradient.append("stop")
+          .attr("offset", "0%")
+          .attr("stop-color", currentGradient.start);
+
+        // Add intermediate color stops if they exist
+        intermediateColors.forEach((id, i) => {
+          const el = document.getElementById(id);
+          if (el) {
+            const offset = ((i + 1) / (intermediateColors.length + 1) * 100) + "%";
+            gradient.append("stop")
+              .attr("offset", offset)
+              .attr("stop-color", el.value);
+          }
+        });
+
+        gradient.append("stop")
+          .attr("offset", "100%")
+          .attr("stop-color", currentGradient.end);
+
+        // Add background
+        numericLegendGroup.append("rect")
+          .attr("width", 180)
+          .attr("height", 60)
+          .attr("rx", 4)
+          .attr("ry", 4)
+          .attr("fill", "rgba(255, 255, 255, 0.8)");
+
+        // Add gradient bar
+        numericLegendGroup.append("rect")
+          .attr("x", 10)
+          .attr("y", 10)
+          .attr("width", 160)
+          .attr("height", 20)
+          .attr("fill", "url(#numericLegendGradient)")
+          .attr("rx", 2)
+          .attr("ry", 2);
+
+        // Add min value text
+        numericLegendGroup.append("text")
+          .attr("x", 10)
+          .attr("y", 45)
+          .attr("class", "legend-text")
+          .style("text-anchor", "start")
+          .text(minValue.toFixed(decimals));
+
+        // Add max value text
+        numericLegendGroup.append("text")
+          .attr("x", 170)
+          .attr("y", 45)
+          .attr("class", "legend-text")
+          .style("text-anchor", "end")
+          .text(maxValue.toFixed(decimals));
+      }
+    }
+    // Apply background transparency to numeric legend group if visible
+    if (!hasActiveCategories) {
+      d3.select("#numericLegendGroup rect")
+        .attr("fill", `rgba(255, 255, 255, ${legendBgTransparency.value})`);
+    }
+}
+
   const addTitleButton = document.getElementById("addTitle");
   const removeTitleButton = document.getElementById("removeTitle");
   const titleInput = document.getElementById("titleInput");
