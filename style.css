@@ -189,9 +189,9 @@ svg {
 .option-section {
   margin-bottom: var(--spacing-lg);
   padding: var(--spacing-md);
-  background-color: var(--color-background-light);
+  background-color: var(--bg-secondary);
   border-radius: var(--border-radius);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 /* Titluri pentru secțiuni */
@@ -199,8 +199,8 @@ svg {
   margin-bottom: 10px;
   font-family: 'Montserrat', sans-serif;
   font-size: 18px;
-  color: #333;
-  border-bottom: 1px solid #ddd;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 5px;
 }
 
@@ -1255,8 +1255,8 @@ svg .selected {
 
 .control-group {
   flex: 1 1 200px;
-  background-color: #FFF;
-  border: 1px solid #DDD;
+  background-color: var(--control-bg);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   padding: 1rem;
 }
@@ -1339,14 +1339,14 @@ button#addTitle:hover {
 .csv-import-section {
   margin-bottom: 15px;
   padding: 10px;
-  background-color: #f8f9fa;
+  background-color: var(--bg-secondary);
   border-radius: 4px;
 }
 
 .csv-import-section h5 {
   margin-bottom: 10px;
   font-size: 14px;
-  color: #495057;
+  color: var(--text-primary);
 }
 
 .csv-import-section input[type="file"] {
@@ -1362,7 +1362,7 @@ button#addTitle:hover {
 }
 
 .csv-template small {
-  color: #6c757d;
+  color: var(--text-secondary);
   font-size: 12px;
 }
 
@@ -1675,7 +1675,7 @@ button#addTitle:hover {
 .category-stats h5 {
   margin-bottom: 15px;
   font-size: 14px;
-  color: #495057;
+  color: var(--text-primary);
 }
 
 .category-stat-item {
@@ -1792,6 +1792,91 @@ button#addTitle:hover {
 
 [data-theme="dark"] .proportional-circle {
   fill: var(--btn-primary);
+}
+
+/* ...existing code... */
+
+/* Update control group styles */
+.control-group {
+  flex: 1 1 200px;
+  background-color: var(--control-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+/* Update section titles */
+.control-group h3,
+.control-group h4,
+.option-section h4 {
+  margin-bottom: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 5px;
+}
+
+/* Update option section background */
+.option-section {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+/* Update labels in control panel */
+.control-group label,
+.option-section label {
+  color: var(--text-primary);
+}
+
+/* Update CSV import section */
+.csv-import-section {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.csv-import-section h5 {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+/* Update small text color */
+.csv-template small {
+  color: var(--text-secondary);
+}
+
+/* Update table headers */
+#regionTable th {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Update table cells */
+#regionTable td {
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+/* Update table hover state */
+#regionTable tr:hover {
+  background-color: var(--hover-bg);
+}
+
+/* Update category stats headers */
+.category-stats h5 {
+  color: var(--text-primary);
+}
+
+/* Update future features section */
+[data-key="futureFeatureDescription"] {
+  color: var(--text-secondary);
 }
 
 /* ...existing code... */
