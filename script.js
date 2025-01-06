@@ -623,15 +623,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Adjust legend background height based on content
-    const totalItems = hasActiveCategories 
-        ? categories.filter((_, i) => Array.from(regionTableBody.querySelectorAll("select"))
-            .some(select => select.value === i.toString())).length
-        : parseInt(document.getElementById("legendIntervals").value);
+    // const totalItems = hasActiveCategories 
+    //     ? categories.filter((_, i) => Array.from(regionTableBody.querySelectorAll("select"))
+    //         .some(select => select.value === i.toString())).length
+    //     : parseInt(document.getElementById("legendIntervals").value);
     
-    const backgroundHeight = 20 + (totalItems * 25);
+    // const backgroundHeight = 20 + (totalItems * 25);
     
-    d3.select("#legendBackground")
-        .attr("height", backgroundHeight);
+    // d3.select("#legendBackground")
+    //     .attr("height", backgroundHeight);
 
     // Update numeric legend visibility based on whether categories are being used
     d3.select("#numericLegendGroup")
@@ -1821,15 +1821,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Adjust legend background height based on content
-    const totalItems = hasActiveCategories 
-        ? categories.filter((_, i) => Array.from(regionTableBody.querySelectorAll("select"))
-            .some(select => select.value === i.toString())).length
-        : parseInt(document.getElementById("legendIntervals").value);
+    // const totalItems = hasActiveCategories 
+    //     ? categories.filter((_, i) => Array.from(regionTableBody.querySelectorAll("select"))
+    //         .some(select => select.value === i.toString())).length
+    //     : parseInt(document.getElementById("legendIntervals").value);
     
-    const backgroundHeight = 20 + (totalItems * 25);
+    // const backgroundHeight = 20 + (totalItems * 25);
     
-    d3.select("#legendBackground")
-        .attr("height", backgroundHeight);
+    // d3.select("#legendBackground")
+    //     .attr("height", backgroundHeight);
 
     // Update numeric legend visibility based on whether categories are being used
     d3.select("#numericLegendGroup")
