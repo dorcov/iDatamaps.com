@@ -2254,6 +2254,7 @@ function calculateStatistics() {
     document.getElementById('totalValue').textContent = '0';
     document.getElementById('avgValue').textContent = '0';
     document.getElementById('medianValue').textContent = '0';
+    document.getElementById('stdDevValue').textContent = '0';
     document.getElementById('totalRegions').textContent = '0';
     return;
   }
@@ -2268,10 +2269,15 @@ function calculateStatistics() {
     ? (sorted[middle - 1] + sorted[middle]) / 2
     : sorted[middle];
 
+  // Calculate standard deviation
+  const variance = values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / values.length;
+  const stdDev = Math.sqrt(variance);
+
   // Update display in analysis section
   document.getElementById('totalValue').textContent = total.toFixed(2);
   document.getElementById('avgValue').textContent = mean.toFixed(2);
   document.getElementById('medianValue').textContent = median.toFixed(2);
+  document.getElementById('stdDevValue').textContent = stdDev.toFixed(2);
   document.getElementById('totalRegions').textContent = values.length;
 }
 
@@ -2608,11 +2614,17 @@ function updateAnalysisTable() {
     median = sortedValues[mid];
   }
 
+  // Calculate standard deviation
+  const mean = total / values.length;
+  const variance = values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / values.length;
+  const stdDev = Math.sqrt(variance);
+
   // Update quick stats
   document.getElementById("totalRegions").textContent = rows.length;
   document.getElementById("totalValue").textContent = total.toFixed(2);
   document.getElementById("avgValue").textContent = (total / rows.length).toFixed(2);
   document.getElementById("medianValue").textContent = median.toFixed(2);
+  document.getElementById("stdDevValue").textContent = stdDev.toFixed(2);
   document.getElementById("tableTotalValue").textContent = total.toFixed(2);
 
   // Clear and rebuild analysis table
