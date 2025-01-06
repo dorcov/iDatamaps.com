@@ -3074,10 +3074,14 @@ function updateAllLegends() {
 
   // Add after other initialization code
   function initializeDarkMode() {
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem("theme") || "light";
-    document.documentElement.setAttribute("data-theme", savedTheme);
-    darkModeToggle.checked = savedTheme === "dark";
+    // Set dark mode as default
+    document.documentElement.setAttribute("data-theme", "dark");
+    darkModeToggle.checked = true;
+    localStorage.setItem("theme", "dark");
+    
+    // Update watermark and other components for dark mode
+    updateWatermarkColor("#1a1a1a");
+    generateAllLegends();
   }
 
   // Add dark mode toggle handler
