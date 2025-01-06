@@ -307,6 +307,18 @@ document.addEventListener("DOMContentLoaded", () => {
     return "";
   }
 
+  // Add after the SVG initialization and before loadMap function:
+const projections = {
+  europe: d3.geoConicConformal()
+    .center([15, 55])  // Center on Europe
+    .rotate([-10, 0])  // Rotate to better position
+    .parallels([35, 65])  // Standard parallels for Europe
+    .scale(600)  // Initial scale
+    .translate([svgWidth / 2, svgHeight / 2]),
+    
+  mercator: d3.geoMercator()  // Default Mercator projection
+};
+
   // Funcție pentru a încărca harta
   function loadMap(geojsonFile) {
     console.log(`Încerc să încarc GeoJSON: data/${geojsonFile}`);
@@ -349,11 +361,16 @@ document.addEventListener("DOMContentLoaded", () => {
       // Use only polygon features for the map rendering
       geoDataFeatures = polygonFeatures;
 
-      projection = d3.geoMercator()
-        .fitSize([svgWidth, svgHeight], {
+      // Choose projection based on the map
+      if (geojsonFile === "combinedEU.geojson") {
+        projection = projections.europe;
+      } else {
+        // Use Mercator but fit to the data
+        projection = projections.mercator.fitSize([svgWidth, svgHeight], {
           type: 'FeatureCollection',
           features: polygonFeatures
         });
+      }
 
       const path = d3.geoPath().projection(projection);
 
