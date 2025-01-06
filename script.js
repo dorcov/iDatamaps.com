@@ -2896,11 +2896,22 @@ toggleCircles.addEventListener("change", () => {
 });
 
 circleColor.addEventListener("input", () => {
-  updateProportionalCircles();
+  // Update circles on map
+  gMap.selectAll(".proportional-circle")
+    .attr("fill", circleColor.value);
+    
+  // Update legend circles
   d3.selectAll(".circle-legend-group circle")
     .attr("stroke", circleColor.value);
+    
+  // Optional: add transition for smooth color change
   gMap.selectAll(".proportional-circle")
-    .attr("fill", circleColor.value); // Update circles on the map
+    .transition()
+    .duration(300)
+    .attr("fill", circleColor.value);
+    
+  // Call updateProportionalCircles to ensure everything is synchronized
+  updateProportionalCircles();
 });
 
 circleOpacity.addEventListener("input", () => {
