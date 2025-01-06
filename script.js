@@ -48,6 +48,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Add this with other DOM element references at the top
   // const legendTitleInput = document.getElementById("legendTitle");
 
+  // Add near the top with other DOM references
+  const darkModeToggle = document.getElementById("darkModeToggle");
+
   // Funcție de debouncing pentru îmbunătățirea performanței
   function debounce(func, wait) {
     let timeout;
@@ -3068,5 +3071,31 @@ function updateAllLegends() {
 });
 
 // ...existing code...
+
+  // Add after other initialization code
+  function initializeDarkMode() {
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    darkModeToggle.checked = savedTheme === "dark";
+  }
+
+  // Add dark mode toggle handler
+  darkModeToggle.addEventListener("change", (e) => {
+    const theme = e.target.checked ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+    
+    // Update watermark color based on theme
+    updateWatermarkColor(theme === "dark" ? "#1a1a1a" : "#ffffff");
+    
+    // Regenerate legends with new theme colors
+    generateAllLegends();
+  });
+
+  // Initialize dark mode
+  initializeDarkMode();
+
+  // ...existing code...
 
 });

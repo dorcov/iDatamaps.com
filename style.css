@@ -37,13 +37,43 @@
 
   /* Watermark filter */
   --watermark-filter: brightness(0) opacity(0.05);
+
+  /* Light theme variables */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --border-color: #cccccc;
+  --control-bg: #ffffff;
+  --panel-bg: #ffffff;
+  --hover-bg: #f1f1f1;
+  --btn-primary: #2A73FF;
+  --btn-secondary: #6c757d;
+  --tooltip-bg: rgba(50, 50, 50, 0.9);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme variables */
+[data-theme="dark"] {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --border-color: #404040;
+  --control-bg: #333333;
+  --panel-bg: #2d2d2d;
+  --hover-bg: #404040;
+  --btn-primary: #3d8bff;
+  --btn-secondary: #8c8c8c;
+  --tooltip-bg: rgba(255, 255, 255, 0.9);
+  --shadow-color: rgba(0, 0, 0, 0.3);
 }
 
 /* Aplicarea fonturilor globale */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 /* Container principal folosind Flexbox pentru layout 50/50 */
@@ -60,11 +90,11 @@ body {
   flex: 2; /* Ocupă 50% din lățime */
   position: relative; /* Pentru poziționarea absolută a titlului și footer-ului */
   padding: 20px;
-  background-color: #ffffff; /* Fundal ușor pentru contrast */
+  background-color: var(--bg-primary); /* Fundal ușor pentru contrast */
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px var(--shadow-color);
   margin: 20px;
   border-radius: 8px;
   overflow: hidden;
@@ -147,9 +177,9 @@ svg {
 .right-panel {
   flex: 1; /* Ocupă 25% din lățime */
   padding: 20px;
-  background-color: #ffffff; /* Fundal alb pentru opțiuni */
+  background-color: var(--panel-bg); /* Fundal alb pentru opțiuni */
   overflow-y: auto; /* Adaugă scroll dacă conținutul depășește înălțimea */
-  border-left: 1px solid #e0e0e0;
+  border-left: 1px solid var(--border-color);
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
   margin: 20px;
   border-radius: 8px;
@@ -179,11 +209,13 @@ svg {
   width: 100%;
   padding: 8px 12px;
   margin-top: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 14px;
   font-family: 'Roboto', sans-serif;
   transition: border-color 0.3s;
+  background-color: var(--control-bg);
+  color: var(--text-primary);
 }
 
 .input-text:focus {
@@ -196,13 +228,14 @@ svg {
   width: 100%;
   padding: 8px 12px;
   margin-top: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
-  background-color: #fff;
+  background-color: var(--control-bg);
   font-size: 14px;
   font-family: 'Roboto', sans-serif;
   transition: border-color 0.3s;
   appearance: none;
+  color: var(--text-primary);
 }
 
 .custom-select:focus {
@@ -252,7 +285,7 @@ svg {
 }
 
 .btn-primary {
-  background-color: #2A73FF;
+  background-color: var(--btn-primary);
   color: #fff;
 }
 
@@ -301,16 +334,21 @@ table {
 }
 
 th, td {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--border-color);
   padding: 8px 12px;
   text-align: left;
   font-size: 14px;
   font-family: 'Roboto', sans-serif;
+  color: var(--text-primary);
 }
 
 th {
-  background-color: #f5f5f5;
-  color: #333;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+tr:hover {
+  background-color: var(--hover-bg);
 }
 
 /* Stil pentru categoria selectată în tabel */
@@ -383,13 +421,13 @@ td.select-category select {
   text-align: center;
   padding: 6px 10px;
   font: 12px sans-serif;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--tooltip-bg);
   border: 0px;
   border-radius: 4px;
-  color: #fff;
+  color: var(--text-primary);
   z-index: 10;
-  background: rgba(50, 50, 50, 0.9);
-  color: #ffffff;
+  background: var(--tooltip-bg);
+  color: var(--text-primary);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
@@ -684,6 +722,11 @@ td.select-category select {
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+[data-theme="dark"] .free-text-container {
+  background-color: var(--control-bg);
+  color: var(--text-primary);
 }
 
 /* Style for numeric legend group */
@@ -1207,6 +1250,7 @@ svg .selected {
   flex-wrap: wrap;
   gap: 1rem;
   margin: 1rem 0;
+  background-color: var(--control-bg);
 }
 
 .control-group {
@@ -1521,6 +1565,10 @@ button#addTitle:hover {
   z-index: 0;
 }
 
+[data-theme="dark"] .watermark-container {
+  filter: invert(1) opacity(0.05);
+}
+
 /* Data Analysis Styles */
 .quick-stats {
   display: flex;
@@ -1531,11 +1579,12 @@ button#addTitle:hover {
 
 .stat-box {
   flex: 1;
-  background: #f8f9fa;
+  background: var(--control-bg);
   padding: 15px;
   border-radius: 8px;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  color: var(--text-primary);
 }
 
 .stat-box span:first-child {
@@ -1575,13 +1624,12 @@ button#addTitle:hover {
 #analysisTable th,
 #analysisTable td {
   padding: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
 }
 
 #analysisTable thead th {
-  background-color: #f8f9fa;
-  font-weight: 600;
-  text-align: left;
+  background-color: var(--bg-secondary);
 }
 
 #analysisTable tbody tr:nth-child(even) {
@@ -1685,6 +1733,65 @@ button#addTitle:hover {
 
 .proportional-circle:hover {
   fill-opacity: 0.8;
+}
+
+[data-theme="dark"] .proportional-circle {
+  fill: var(--btn-primary);
+}
+
+/* ...existing code... */
+
+/* Theme toggle button */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.theme-toggle input[type="checkbox"] {
+  width: 40px;
+  height: 20px;
+  appearance: none;
+  background-color: var(--bg-secondary);
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.theme-toggle input[type="checkbox"]::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-color: var(--text-primary);
+  position: absolute;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s;
+}
+
+.theme-toggle input[type="checkbox"]:checked {
+  background-color: var(--btn-primary);
+}
+
+.theme-toggle input[type="checkbox"]:checked::before {
+  transform: translateX(20px);
+}
+
+/* Additional dark mode adjustments */
+[data-theme="dark"] .watermark-container {
+  filter: invert(1) opacity(0.05);
+}
+
+[data-theme="dark"] .free-text-container {
+  background-color: var(--control-bg);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .proportional-circle {
+  fill: var(--btn-primary);
 }
 
 /* ...existing code... */
