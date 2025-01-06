@@ -1081,8 +1081,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add background and title to main legend
     legendGroup.append("rect")
       .attr("id", "legendBackground")
-      .attr("width", 200)
-      .attr("height", 200)
+      .attr("width", 120)
+      .attr("height", 180)
       .attr("rx", 4)
       .attr("ry", 4)
       .attr("fill", "rgba(255, 255, 255, var(--legend-bg-transparency, 0.8))"); // Utilizare variabilă CSS
