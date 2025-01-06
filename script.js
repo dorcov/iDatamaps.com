@@ -716,6 +716,11 @@ document.addEventListener("DOMContentLoaded", () => {
           .text(maxValue.toFixed(decimals));
       }
     }
+    // Apply background transparency to numeric legend group if visible
+    if (!hasActiveCategories) {
+      d3.select("#numericLegendGroup rect")
+        .attr("fill", `rgba(255, 255, 255, ${legendBgTransparency.value})`);
+    }
 }
 
   // Add event listener for interval count changes
