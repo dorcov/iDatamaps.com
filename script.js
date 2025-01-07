@@ -1552,156 +1552,7 @@ function updateProjection(projectionType, data) {
       b: bigint & 255,
     };
   }
-
-  // Add map lock/unlock functionality
-  let mapLocked = false;
-  const toggleMapLockButton = document.getElementById('toggleMapLock');
-
-  function lockAllInteractions() {
-    // Disable zoom and pan
-    svg.on(".zoom", null);
-    
-    // Disable dragging for legends
-    d3.selectAll('.legend-group')
-      .style('pointer-events', 'none')
-      .style('cursor', 'default');
-    
-    // Disable text editing and dragging
-    document.querySelectorAll('.free-text-container').forEach(el => {
-      el.contentEditable = false;
-      el.style.cursor = 'default';
-      el.style.pointerEvents = 'none';
-    });
-    
-    // Disable shape dragging
-    document.querySelectorAll('.shape').forEach(el => {
-      el.style.pointerEvents = 'none';
-      el.style.cursor = 'default';
-    });
-    
-    // Disable text selection
-    mapContainer.style.userSelect = 'none';
-    
-    toggleMapLockButton.textContent = 'Deblochează Harta';
-    toggleMapLockButton.classList.add('active');
-  }
   
-  function unlockAllInteractions() {
-    // Re-enable zoom and pan
-    applyZoomBehavior();
-    
-    // Re-enable legend dragging
-    d3.selectAll('.legend-group')
-      .style('pointer-events', 'all')
-      .style('cursor', 'move');
-    
-    // Re-enable text editing and dragging
-    document.querySelectorAll('.free-text-container').forEach(el => {
-      el.contentEditable = true;
-      el.style.cursor = 'move';
-      el.style.pointerEvents = 'auto';
-    });
-    
-    // Re-enable shape dragging
-    document.querySelectorAll('.shape').forEach(el => {
-      el.style.pointerEvents = 'auto';
-      el.style.cursor = 'move';
-    });
-    
-    // Re-enable text selection
-    mapContainer.style.userSelect = 'auto';
-    
-    toggleMapLockButton.textContent = 'Blochează Harta';
-    toggleMapLockButton.classList.remove('active');
-  }
-  
-  if (toggleMapLockButton) {
-    toggleMapLockButton.addEventListener('click', () => {
-      mapLocked = !mapLocked;
-      if (mapLocked) {
-        lockAllInteractions();
-      } else {
-        unlockAllInteractions();
-      }
-    });
-  }
-
-  // Exemplu minimal pentru reactivarea pan/zoom:
-  function applyZoomBehavior() {
-    const zoom = d3.zoom().on('zoom', (event) => {
-      gMap.attr('transform', event.transform);
-    });
-    svg.call(zoom);
-  }
-
-  // Define zoom behavior globaly
-  const zoomBehavior = d3.zoom()
-    .scaleExtent([0.5, 8])
-    .on("zoom", (event) => {
-      gMap.attr("transform", event.transform);
-    });
-
-  function applyZoomBehavior() {
-    svg.call(zoomBehavior);
-  }
-
-  function lockAllInteractions() {
-    // Disable zoom and pan
-    svg.on(".zoom", null);
-    
-    // Disable dragging for legends
-    d3.selectAll('.legend-group')
-      .style('pointer-events', 'none')
-      .style('cursor', 'default');
-    
-    // Disable text editing and dragging
-    document.querySelectorAll('.free-text-container').forEach(el => {
-      el.contentEditable = false;
-      el.style.cursor = 'default';
-      el.style.pointerEvents = 'none';
-    });
-    
-    // Disable shape dragging
-    document.querySelectorAll('.shape').forEach(el => {
-      el.style.pointerEvents = 'none';
-      el.style.cursor = 'default';
-    });
-    
-    // Disable text selection
-    mapContainer.style.userSelect = 'none';
-    
-    toggleMapLockButton.textContent = 'Deblochează Harta';
-    toggleMapLockButton.classList.add('active');
-  }
-
-  function unlockAllInteractions() {
-    // Re-enable zoom and pan
-    applyZoomBehavior();
-    
-    // Re-enable legend dragging
-    d3.selectAll('.legend-group')
-      .style('pointer-events', 'all')
-      .style('cursor', 'move');
-    
-    // Re-enable text editing and dragging
-    document.querySelectorAll('.free-text-container').forEach(el => {
-      el.contentEditable = true;
-      el.style.cursor = 'move';
-      el.style.pointerEvents = 'auto';
-    });
-    
-    // Re-enable shape dragging
-    document.querySelectorAll('.shape').forEach(el => {
-      el.style.pointerEvents = 'auto';
-      el.style.cursor = 'move';
-    });
-    
-    // Re-enable text selection
-    mapContainer.style.userSelect = 'auto';
-    
-    toggleMapLockButton.textContent = 'Blochează Harta';
-    toggleMapLockButton.classList.remove('active');
-  }
 
   // Initialize zoom behavior
   applyZoomBehavior();
@@ -3003,21 +2854,6 @@ const originalZoom = d3.zoom().on("zoom", (event) => {
 
 svg.call(originalZoom);
 
-// Add to lockAllInteractions function
-const originalLockAllInteractions = lockAllInteractions;
-lockAllInteractions = function() {
-  originalLockAllInteractions();
-  gMap.selectAll(".proportional-circle")
-    .style("pointer-events", "none");
-};
-
-// Add to unlockAllInteractions function
-const originalUnlockAllInteractions = unlockAllInteractions;
-unlockAllInteractions = function() {
-  originalUnlockAllInteractions();
-  gMap.selectAll(".proportional-circle")
-    .style("pointer-events", "all");
-};
 
 // Update the scale change handler to update both map and legend immediately
 circleScale.addEventListener("input", () => {
@@ -3265,5 +3101,109 @@ if (valuesBoldCheckbox) {
     updateValueLabels();
   });
 }
+
+// ...existing code...
+
+// Add after other global variables
+let selectedFlagContainer = null;
+const flagCountrySelect = document.getElementById("flagCountry");
+const flagSizeSelect = document.getElementById("flagSize");
+const addFlagButton = document.getElementById("addFlag");
+const removeFlagButton = document.getElementById("removeFlag");
+const flagPreview = document.getElementById("flagPreview");
+
+// Add flag preview functionality
+function updateFlagPreview() {
+  const country = flagCountrySelect.value;
+  const size = flagSizeSelect.value;
+  flagPreview.innerHTML = `<img src="https://flagcdn.com/${size}/${country}.png" 
+    srcset="https://flagcdn.com/${size}/${country}.png 2x" 
+    alt="${country}">`;
+}
+
+// Initialize flag preview
+if (flagCountrySelect && flagSizeSelect) {
+  flagCountrySelect.addEventListener("change", updateFlagPreview);
+  flagSizeSelect.addEventListener("change", updateFlagPreview);
+  updateFlagPreview(); // Initial preview
+}
+
+// Function to add new flag
+function addFlag() {
+  const country = flagCountrySelect.value;
+  const size = flagSizeSelect.value;
+  
+  const flagContainer = document.createElement('div');
+  flagContainer.className = 'flag-container';
+  flagContainer.innerHTML = `<img src="https://flagcdn.com/${size}/${country}.png" 
+    srcset="https://flagcdn.com/${size}/${country}.png 2x" 
+    alt="${country}">`;
+  
+  mapContainer.appendChild(flagContainer);
+
+  // Position the flag in the center initially
+  flagContainer.style.left = `${mapContainer.clientWidth / 2 - flagContainer.clientWidth / 2}px`;
+  flagContainer.style.top = `${mapContainer.clientHeight / 2 - flagContainer.clientHeight / 2}px`;
+
+  // Make the flag draggable
+  d3.select(flagContainer).call(d3.drag()
+    .on('drag', (event) => {
+      const bounds = mapContainer.getBoundingClientRect();
+      const x = event.x - bounds.left;
+      const y = event.y - bounds.top;
+      
+      flagContainer.style.left = `${x}px`;
+      flagContainer.style.top = `${y}px`;
+    })
+  );
+
+  // Add click handler for selection
+  flagContainer.addEventListener('click', (e) => {
+    e.stopPropagation();
+    selectFlagContainer(flagContainer);
+  });
+}
+
+// Function to select a flag container
+function selectFlagContainer(container) {
+  // Deselect previous
+  if (selectedFlagContainer) {
+    selectedFlagContainer.classList.remove('selected');
+  }
+  
+  selectedFlagContainer = container;
+  if (selectedFlagContainer) {
+    selectedFlagContainer.classList.add('selected');
+  }
+}
+
+// Function to remove selected flag
+function removeFlag() {
+  if (selectedFlagContainer) {
+    mapContainer.removeChild(selectedFlagContainer);
+    selectedFlagContainer = null;
+  }
+}
+
+// Add click handler to deselect when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.flag-container')) {
+    selectFlagContainer(null);
+  }
+});
+
+// Initialize flag buttons
+if (addFlagButton) {
+  addFlagButton.addEventListener("click", addFlag);
+} else {
+  console.error("Elementul cu ID 'addFlag' nu a fost găsit.");
+}
+
+if (removeFlagButton) {
+  removeFlagButton.addEventListener("click", removeFlag);
+} else {
+  console.error("Elementul cu ID 'removeFlag' nu a fost găsit.");
+}
+
 
 });

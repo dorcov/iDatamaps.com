@@ -1989,5 +1989,56 @@ input[type="color"]::-moz-color-swatch {
   border-radius: 50%;
 }
 
+/* ...existing code... */
+
+/* ...existing code... */
+
+/* Flag Container Styles */
+.flag-container {
+  position: absolute;
+  cursor: move;
+  user-select: none;
+  z-index: 1000;
+  background: white;
+  padding: 4px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.flag-container.selected {
+  border: 2px dashed #2A73FF;
+}
+
+.flag-container img {
+  display: block;
+  pointer-events: none;
+}
+
+.flag-preview {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  text-align: center;
+  background: var(--bg-secondary);
+}
+
+.flag-preview img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .flag-container {
+  background: var(--control-bg);
+}
+
+[data-theme="dark"] .flag-preview {
+  background: var(--control-bg);
+}
+
+/* ...existing code... */
+
 
 

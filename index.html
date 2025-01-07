@@ -471,6 +471,39 @@
         </section>
 
         <section class="control-group">
+          <h3 data-key="flags">Steaguri</h3>
+          <div class="option-section">
+            <h4 data-key="addFlag">Adaugă Steag</h4>
+            <div class="flag-options">
+              <label for="flagCountry" data-key="selectCountry">Țară:</label>
+              <select id="flagCountry" class="custom-select">
+                <option value="md">Moldova</option>
+                <option value="ro">România</option>
+                <option value="ua">Ucraina</option>
+                <option value="ru">Rusia</option>
+                <option value="bg">Bulgaria</option>
+                <option value="hu">Ungaria</option>
+                <!-- Add more countries as needed -->
+              </select>
+
+              <label for="flagSize" data-key="flagSize">Mărime:</label>
+              <select id="flagSize" class="custom-select">
+                <option value="w20">Mic (20px)</option>
+                <option value="w40" selected>Mediu (40px)</option>
+                <option value="w80">Mare (80px)</option>
+                <option value="w160">Foarte Mare (160px)</option>
+              </select>
+
+              <div class="flag-preview" id="flagPreview">
+                <!-- Flag preview will be shown here -->
+              </div>
+            </div>
+            <button id="addFlag" class="btn btn-primary" data-key="addFlagButton">Adaugă Steag</button>
+            <button id="removeFlag" class="btn btn-reset" data-key="removeFlagButton">Elimină Steag</button>
+          </div>
+        </section>
+
+        <section class="control-group">
           <h3 data-key="styleLegends">Stilizează legendele</h3>
           <div class="legend-styling">
             <!-- Adăugăm acest grup nou pentru titlul legendei -->
