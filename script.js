@@ -3172,4 +3172,57 @@ if (document.getElementById("projectionSelector")) {
 
   // ...existing code...
 
+  function updateProjectionOptions(selectedMap) {
+    const projectionSelector = document.getElementById("projectionSelector");
+    if (!projectionSelector) return;
+  
+    // Clear existing options
+    projectionSelector.innerHTML = "";
+  
+    let options = [];
+    // Single country: mercator only
+    const singleCountryMaps = ["combinedMD.geojson", "regiuni.geojson", "combined.geojson", "combinedRO.geojson"];
+    if (singleCountryMaps.includes(selectedMap)) {
+      options = [
+        { value: "mercator", label: "Mercator (Default)" }
+      ];
+    } else if (selectedMap === "world.geojson") {
+      options = [
+        { value: "mercator", label: "Mercator (Default)" },
+        { value: "equalEarth", label: "Equal Earth" }
+      ];
+    } else if (selectedMap === "combinedEU.geojson") {
+      options = [
+        { value: "mercator", label: "Mercator (Default)" },
+        { value: "conicConformal", label: "Conică Conformă" }
+      ];
+    } else {
+      // Fallback: mercator only
+      options = [
+        { value: "mercator", label: "Mercator (Default)" }
+      ];
+    }
+  
+    // Populate the projection selector
+    options.forEach(opt => {
+      const optionEl = document.createElement("option");
+      optionEl.value = opt.value;
+      optionEl.textContent = opt.label;
+      projectionSelector.appendChild(optionEl);
+    });
+  }
+  
+  // Update mapSelector event listener to call updateProjectionOptions
+  if (mapSelector) {
+    mapSelector.addEventListener("change", () => {
+      // ...existing code...
+      updateProjectionOptions(mapSelector.value);
+    });
+  }
+  
+  // Optionally call once at page load
+  updateProjectionOptions("combinedMD.geojson");
+  
+  // ...existing code...
+
 });
