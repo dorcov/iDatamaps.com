@@ -900,27 +900,59 @@ function updateProjection(projectionType, data) {
   // Exportăm harta ca PNG
   if (exportButton) {
     exportButton.addEventListener("click", () => {
+      // Store original visibility states
       const mainLegendVisibility = localStorage.getItem("legendVisibility") || "visible";
       const numericLegendVisibility = localStorage.getItem("numericLegendVisible") || "visible";
       
-      // Temporarily hide legends for export
-      const legendGroup = document.getElementById("legendGroup");
-      const numericLegendGroup = document.getElementById("numericLegendGroup");
-      const originalMainDisplay = legendGroup.style.display;
-      const originalNumericDisplay = numericLegendGroup.style.display;
-      if (mainLegendVisibility === "hidden") legendGroup.style.display = "none";
-      if (numericLegendVisibility === "hidden") numericLegendGroup.style.display = "none";
+      // Function to load flag images and convert to base64
+      const loadFlagImage = (imgElement) => {
+        return new Promise((resolve) => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          const img = new Image();
+          img.crossOrigin = "anonymous"; // Enable CORS
+          img.onload = () => {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            resolve(canvas.toDataURL());
+          };
+          img.src = imgElement.src;
+        });
+      };
 
-      html2canvas(document.querySelector(".map-column"), {
-        backgroundColor: null
-      }).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "map_export.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-        // Restore legends
-        legendGroup.style.display = originalMainDisplay;
-        numericLegendGroup.style.display = originalNumericDisplay;
+      // Process all flags before export
+      const flagPromises = Array.from(document.querySelectorAll('.flag-container img'))
+        .map(async (flagImg) => {
+          const base64Url = await loadFlagImage(flagImg);
+          const originalSrc = flagImg.src;
+          flagImg.src = base64Url;
+          return { element: flagImg, originalSrc };
+        });
+
+      Promise.all(flagPromises).then((flagsInfo) => {
+        // Configure html2canvas options
+        const options = {
+          backgroundColor: null,
+          scale: 2, // Increase quality
+          logging: false,
+          allowTaint: true,
+          useCORS: true
+        };
+
+        // Capture the map
+        html2canvas(document.querySelector(".map-column"), options).then(canvas => {
+          // Create download link
+          const link = document.createElement("a");
+          link.download = "map_export.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+
+          // Restore original flag sources
+          flagsInfo.forEach(({ element, originalSrc }) => {
+            element.src = originalSrc;
+          });
+        });
       });
     });
   } else {
