@@ -3388,4 +3388,44 @@ unlockAllInteractions = function() {
   });
 };
 
+// ...existing code...
+
+// Add after other DOM references
+const flagSearch = document.getElementById("flagSearch");
+
+// Add flag search functionality
+if (flagSearch) {
+  flagSearch.addEventListener("input", (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const options = flagCountrySelect.options;
+
+    for (let i = 0; i < options.length; i++) {
+      const option = options[i];
+      const text = option.text.toLowerCase();
+      
+      // If text matches search, show option, otherwise hide it
+      if (text.includes(searchTerm)) {
+        option.classList.remove("hidden");
+      } else {
+        option.classList.add("hidden");
+      }
+    }
+    
+    // If search term matches exactly one option, select it
+    const visibleOptions = Array.from(options).filter(opt => !opt.classList.contains("hidden"));
+    if (visibleOptions.length === 1) {
+      visibleOptions[0].selected = true;
+      updateFlagPreview();
+    }
+  });
+
+  // Clear search when selection changes
+  flagCountrySelect.addEventListener("change", () => {
+    flagSearch.value = "";
+    Array.from(flagCountrySelect.options).forEach(opt => opt.classList.remove("hidden"));
+  });
+}
+
+// ...existing code...
+
 });

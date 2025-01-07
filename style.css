@@ -2040,5 +2040,34 @@ input[type="color"]::-moz-color-swatch {
 
 /* ...existing code... */
 
+/* ...existing code... */
+
+.flag-search {
+  margin-bottom: 10px;
+}
+
+.flag-search input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--control-bg);
+  color: var(--text-primary);
+}
+
+.flag-search input:focus {
+  outline: none;
+  border-color: var(--btn-primary);
+  box-shadow: 0 0 0 2px rgba(42, 115, 255, 0.1);
+}
+
+/* Hide options that don't match search */
+#flagCountry option.hidden {
+  display: none;
+}
+
+/* ...existing code... */
+
 
 
