@@ -2485,31 +2485,28 @@ calculateStatistics();
       );
   }
   
-  function getSharedColorScale(domainValues, gradient) {
-    const minValue = d3.min(domainValues);
-    const maxValue = d3.max(domainValues);
+  function getSharedColorScale(values, gradient) {
+    const minValue = Math.min(...values.filter(v => v > 0));
+    const maxValue = Math.max(...values);
+    const numIntervals = parseInt(document.getElementById("legendIntervals").value) || 5;
+    const step = (maxValue - minValue) / numIntervals;
   
+    // Creăm punctele de întrerupere pentru intervale
+    const breakpoints = Array.from({length: numIntervals + 1}, (_, i) => minValue + (step * i));
+    
     // Construim array-ul de culori pentru scală
     const colors = [gradient.start];
-    
-    // Adăugăm culorile intermediare în ordine
     intermediateColors.forEach(id => {
       const el = document.getElementById(id);
-      if (el) {
-        colors.push(el.value);
-      }
+      if (el) colors.push(el.value);
     });
-    
     colors.push(gradient.end);
   
-    // Construim domain-ul proporțional cu numărul de culori
-    const domain = colors.map((_, i) => 
-      minValue + (i * (maxValue - minValue) / (colors.length - 1))
-    );
-  
+    // Creăm scala de culori folosind exact aceleași puncte de întrerupere ca în legendă
     return d3.scaleLinear()
-      .domain(domain)
-      .range(colors);
+      .domain(breakpoints)
+      .range(colors)
+      .clamp(true); // Asigură că valorile în afara domeniului primesc culorile extreme
   }
   
   const outlineColorInput = document.getElementById("outlineColor");
