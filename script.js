@@ -1453,6 +1453,7 @@ function updateProjection(projectionType, data) {
     if (valuesBoldCheckbox) {
       valuesBoldCheckbox.checked = savedBold;
     }
+    updateValueLabels(); // Ensure bold is applied on page load
   }
 
   // Apelăm restaurarea setărilor la încărcarea paginii
