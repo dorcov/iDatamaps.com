@@ -233,25 +233,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Calculăm culoarea pe baza gradientului personalizat sau presetat
-  function getColor(value, maxValue, gradient) {
-    // Build color array: start -> intermediates -> end
-    const stops = [];
-    stops.push({ offset: 0, color: gradient.start });
-    intermediateColors.forEach((id, i) => {
-      const el = document.getElementById(id);
-      if (el) {
-        const offset = (i + 1) / (intermediateColors.length + 1);
-        stops.push({ offset, color: el.value });
+  function getFillColor(d) {
+    const value = getRegionValue(d);
+    const category = getRegionCategory(d);
+    
+    if (category) {
+      const categoryIndex = categories.findIndex(cat => cat.name === category);
+      if (categoryIndex !== -1) {
+        return categories[categoryIndex].color;
       }
-    });
-    stops.push({ offset: 1, color: gradient.end });
-
-    // Use stops to determine the color (replace with your interpolation logic)
-    const scale = d3.scaleLinear()
-      .domain(stops.map(s => s.offset * maxValue))
-      .range(stops.map(s => s.color));
-
-    return scale(value);
+    }
+  
+    if (value > 0) {
+      const values = Array.from(regionTableBody.querySelectorAll("input"))
+        .map(input => parseFloat(input.value) || 0)
+        .filter(v => v > 0);
+      const colorScale = getSharedColorScale(values, currentGradient);
+      return colorScale(value);
+    }
+    
+    return "#ccc"; // Pentru valori 0 sau lipsă
   }
 
   // Funcționalitate Tooltip
@@ -515,16 +516,24 @@ function updateProjection(projectionType, data) {
   // Funcție pentru a obține culoarea unei regiuni
   function getFillColor(d) {
     const value = getRegionValue(d);
-    const maxValue = Math.max(...Array.from(regionTableBody.querySelectorAll("input")).map(i => parseFloat(i.value) || 0), 1);
-    const gradient = currentGradient;
     const category = getRegionCategory(d);
+    
     if (category) {
       const categoryIndex = categories.findIndex(cat => cat.name === category);
       if (categoryIndex !== -1) {
         return categories[categoryIndex].color;
       }
     }
-    return value > 0 ? getColor(value, maxValue, gradient) : "#ccc";
+  
+    if (value > 0) {
+      const values = Array.from(regionTableBody.querySelectorAll("input"))
+        .map(input => parseFloat(input.value) || 0)
+        .filter(v => v > 0);
+      const colorScale = getSharedColorScale(values, currentGradient);
+      return colorScale(value);
+    }
+    
+    return "#ccc"; // Pentru valori 0 sau lipsă
   }
 
   // Funcție pentru a genera elementele legendei
@@ -2491,22 +2500,21 @@ calculateStatistics();
     const minValue = Math.min(...values.filter(v => v > 0));
     const maxValue = Math.max(...values);
     const numIntervals = parseInt(document.getElementById("legendIntervals").value) || 5;
-    const step = (maxValue - minValue) / numIntervals;
-  
-    // Creăm breakpoints pentru intervale discrete
-    const breakpoints = Array.from({length: numIntervals + 1}, (_, i) => 
-      minValue + (step * i)
-    );
-  
-    // Calculăm culorile pentru fiecare interval
+
+    // Generăm exact numărul de culori necesar pentru intervalele specificate
     const colors = d3.quantize(
       d3.interpolate(gradient.start, gradient.end),
       numIntervals
     );
-  
-    // Creăm o scală discretă (threshold) în loc de una continuă
+
+    // Calculăm valorile de prag pentru fiecare interval
+    const thresholds = d3.range(numIntervals - 1).map(i => 
+      minValue + ((maxValue - minValue) * (i + 1)) / numIntervals
+    );
+
+    // Folosim scaleThreshold pentru a asigura culori distincte
     return d3.scaleThreshold()
-      .domain(breakpoints.slice(1, -1)) // Excludem primul și ultimul breakpoint
+      .domain(thresholds)
       .range(colors);
   }
   
