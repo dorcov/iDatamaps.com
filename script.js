@@ -1416,7 +1416,7 @@ function updateProjection(projectionType, data) {
       })
       .style("font-size", valuesFontSizeInput.value + "px")
       .style("fill", valuesColorInput.value)
-      .style("font-weight", valuesBoldCheckbox.checked ? "bold" : "normal") // Add this line
+      .style("font-weight", () => valuesBoldCheckbox.checked ? "bold" : "normal") // Fixed: Use function
       .style("display", d => getRegionValue(d) > 0 ? 'block' : 'none'); // Hide label if value is zero
 
     const selectedFont = valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif";
