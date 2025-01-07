@@ -2972,10 +2972,13 @@ toggleCircles.addEventListener("change", () => {
 circleColor.addEventListener("input", () => {
   // Update circles on map
   gMap.selectAll(".proportional-circle")
-    .attr("fill", circleColor.value);
+    .attr("fill", circleColor.value)  // Change from "stroke" to "fill"
+    .attr("stroke", "#fff")           // Add white stroke for better visibility
+    .attr("stroke-width", "1px");     // Add stroke width
     
   // Update legend circles
   d3.selectAll(".circle-legend-group circle")
+    .attr("fill", "none")            // Keep legend circles outlined
     .attr("stroke", circleColor.value);
     
   // Optional: add transition for smooth color change
@@ -2983,9 +2986,6 @@ circleColor.addEventListener("input", () => {
     .transition()
     .duration(300)
     .attr("fill", circleColor.value);
-    
-  // Call updateProportionalCircles to ensure everything is synchronized
-  updateProportionalCircles();
 });
 
 circleOpacity.addEventListener("input", () => {
