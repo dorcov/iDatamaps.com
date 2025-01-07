@@ -3251,4 +3251,19 @@ if (document.getElementById("projectionSelector")) {
   
   // ...existing code...
 
+// Update the event listener for valuesBoldCheckbox
+if (valuesBoldCheckbox) {
+  valuesBoldCheckbox.addEventListener("change", () => {
+    // Immediately update the text style
+    gMap.selectAll(".value-label")
+      .style("font-weight", valuesBoldCheckbox.checked ? "bold" : "normal");
+    
+    // Store the setting
+    localStorage.setItem("valuesBold", valuesBoldCheckbox.checked);
+    
+    // Full refresh for consistency
+    updateValueLabels();
+  });
+}
+
 });
