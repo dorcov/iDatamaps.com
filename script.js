@@ -2493,22 +2493,21 @@ calculateStatistics();
     const numIntervals = parseInt(document.getElementById("legendIntervals").value) || 5;
     const step = (maxValue - minValue) / numIntervals;
   
-    // Creăm punctele de întrerupere pentru intervale
-    const breakpoints = Array.from({length: numIntervals + 1}, (_, i) => minValue + (step * i));
-    
-    // Construim array-ul de culori pentru scală
-    const colors = [gradient.start];
-    intermediateColors.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) colors.push(el.value);
-    });
-    colors.push(gradient.end);
+    // Creăm breakpoints pentru intervale discrete
+    const breakpoints = Array.from({length: numIntervals + 1}, (_, i) => 
+      minValue + (step * i)
+    );
   
-    // Creăm scala de culori folosind exact aceleași puncte de întrerupere ca în legendă
-    return d3.scaleLinear()
-      .domain(breakpoints)
-      .range(colors)
-      .clamp(true); // Asigură că valorile în afara domeniului primesc culorile extreme
+    // Calculăm culorile pentru fiecare interval
+    const colors = d3.quantize(
+      d3.interpolate(gradient.start, gradient.end),
+      numIntervals
+    );
+  
+    // Creăm o scală discretă (threshold) în loc de una continuă
+    return d3.scaleThreshold()
+      .domain(breakpoints.slice(1, -1)) // Excludem primul și ultimul breakpoint
+      .range(colors);
   }
   
   const outlineColorInput = document.getElementById("outlineColor");
