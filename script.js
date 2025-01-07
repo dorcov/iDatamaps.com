@@ -779,7 +779,9 @@ function updateProjection(projectionType, data) {
 
   // Add event listener for interval count changes
   document.getElementById("legendIntervals").addEventListener("input", () => {
-    generateAllLegends();
+    // Actualizează atât legenda cât și culorile de pe hartă
+    updateMapColors();
+    // generateAllLegends() va fi apelat automat din updateMapColors()
   });
 
   // Adăugăm event listener pentru numărul de zecimale
