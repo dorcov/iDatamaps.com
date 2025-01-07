@@ -2501,21 +2501,33 @@ calculateStatistics();
     const maxValue = Math.max(...values);
     const numIntervals = parseInt(document.getElementById("legendIntervals").value) || 5;
 
-    // Generăm exact numărul de culori necesar pentru intervalele specificate
-    const colors = d3.quantize(
-      d3.interpolate(gradient.start, gradient.end),
-      numIntervals
-    );
+    // Construim array-ul complet de culori, inclusiv cele intermediare
+    const allColors = [gradient.start];
+    intermediateColors.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) allColors.push(el.value);
+    });
+    allColors.push(gradient.end);
 
-    // Calculăm valorile de prag pentru fiecare interval
-    const thresholds = d3.range(numIntervals - 1).map(i => 
+    // Creăm o scală de interpolare între toate culorile
+    const colorScale = d3.scaleLinear()
+      .domain(d3.range(allColors.length).map(i => minValue + (maxValue - minValue) * (i / (allColors.length - 1))))
+      .range(allColors);
+
+    // Creăm intervalele pentru scală discretă
+    const thresholds = d3.range(numIntervals).map(i => 
       minValue + ((maxValue - minValue) * (i + 1)) / numIntervals
     );
 
-    // Folosim scaleThreshold pentru a asigura culori distincte
+    // Generăm culorile discrete pentru fiecare interval
+    const discreteColors = d3.range(numIntervals).map(i => 
+      colorScale(minValue + ((maxValue - minValue) * (i + 0.5)) / numIntervals)
+    );
+
+    // Returnăm o scală discretă (threshold) cu culorile calculate
     return d3.scaleThreshold()
       .domain(thresholds)
-      .range(colors);
+      .range(discreteColors);
   }
   
   const outlineColorInput = document.getElementById("outlineColor");
