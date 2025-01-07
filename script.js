@@ -1247,6 +1247,7 @@ function updateProjection(projectionType, data) {
   const valuesFontSizeInput = document.getElementById("valuesFontSize");
   const valuesColorInput = document.getElementById("valuesColor");
   const valuesFontSelect = document.getElementById("valuesFont");
+  const valuesBoldCheckbox = document.getElementById("valuesBold");
 
   // Array pentru a stoca label-urile
   let valueLabels = [];
@@ -1415,6 +1416,7 @@ function updateProjection(projectionType, data) {
       })
       .style("font-size", valuesFontSizeInput.value + "px")
       .style("fill", valuesColorInput.value)
+      .style("font-weight", valuesBoldCheckbox.checked ? "bold" : "normal") // Add this line
       .style("display", d => getRegionValue(d) > 0 ? 'block' : 'none'); // Hide label if value is zero
 
     const selectedFont = valuesFontSelect ? valuesFontSelect.value : "'Roboto', sans-serif";
@@ -1445,6 +1447,11 @@ function updateProjection(projectionType, data) {
       valueLabels.forEach(label => {
         label.style.color = savedColor;
       });
+    }
+
+    const savedBold = localStorage.getItem("valuesBold") === "true";
+    if (valuesBoldCheckbox) {
+      valuesBoldCheckbox.checked = savedBold;
     }
   }
 
