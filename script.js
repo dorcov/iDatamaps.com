@@ -3453,11 +3453,13 @@ function handleImageUpload(event) {
     img.onload = function() {
       container.style.width = `${this.width}px`;
       container.style.height = `${this.height}px`;
-      container.appendChild(this);
+      
+      // Setează scala implicită la 0.8
+      container.style.transform = 'scale(0.8)';
       
       // Poziționare inițială în centru
-      container.style.left = `${mapContainer.clientWidth / 2 - this.width / 2}px`;
-      container.style.top = `${mapContainer.clientHeight / 2 - this.height / 2}px`;
+      container.style.left = `${mapContainer.clientWidth / 2 - (this.width * 0.8) / 2}px`;
+      container.style.top = `${mapContainer.clientHeight / 2 - (this.height * 0.8) / 2}px`;
       
       mapContainer.appendChild(container);
       imageControls.style.display = 'block';
@@ -3468,12 +3470,12 @@ function handleImageUpload(event) {
         selectImageContainer(container);
       });
 
-      // Drag functionality using d3.drag()
+      // Funcționalitate drag ajustată
       d3.select(container).call(d3.drag()
         .on('drag', function(event) {
           const bounds = mapContainer.getBoundingClientRect();
-          const x = event.x - bounds.left;
-          const y = event.y - bounds.top;
+          const x = event.x - bounds.left - (selectedImageContainer.offsetWidth / 2);
+          const y = event.y - bounds.top - (selectedImageContainer.offsetHeight / 2);
           
           this.style.left = `${x}px`;
           this.style.top = `${y}px`;

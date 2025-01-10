@@ -2089,6 +2089,9 @@ input[type="color"]::-moz-color-swatch {
   z-index: 1000;
   cursor: move;
   display: inline-block;
+  
+  /* Setează originea transformării la centru */
+  transform-origin: center center;
 }
 
 .custom-image-container.selected {
