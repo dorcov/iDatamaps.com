@@ -2083,5 +2083,36 @@ input[type="color"]::-moz-color-swatch {
 
 /* ...existing code... */
 
+.custom-image-container {
+  position: absolute;
+  cursor: move;
+  user-select: none;
+  z-index: 1000;
+  transform-origin: center;
+}
+
+.custom-image-container.selected {
+  outline: 2px dashed var(--btn-primary);
+}
+
+.custom-image-container img {
+  display: block;
+  max-width: 100%;
+  pointer-events: none;
+}
+
+.image-controls {
+  margin-top: 10px;
+  padding: 10px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+#imageUpload {
+  margin-bottom: 10px;
+}
+
+/* ...existing code... */
+
 
 

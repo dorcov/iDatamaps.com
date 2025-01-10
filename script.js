@@ -3460,4 +3460,148 @@ if (flagSearch) {
 
 // ...existing code...
 
+// Add after flags section and before dark mode
+
+// Image handling functionality
+const imageUpload = document.getElementById('imageUpload');
+const imageControls = document.querySelector('.image-controls');
+const imageOpacityScale = document.getElementById('imageOpacityScale');
+const removeImageButton = document.getElementById('removeImage');
+
+let selectedImageContainer = null;
+
+function handleImageUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const imageContainer = document.createElement('div');
+    imageContainer.className = 'custom-image-container';
+    
+    const img = document.createElement('img');
+    img.src = e.target.result;
+    imageContainer.appendChild(img);
+    
+    // Center the image initially
+    imageContainer.style.left = `${mapContainer.clientWidth / 2 - 100}px`;
+    imageContainer.style.top = `${mapContainer.clientHeight / 2 - 100}px`;
+    
+    mapContainer.appendChild(imageContainer);
+    
+    // Show controls
+    imageControls.style.display = 'block';
+    
+    // Make draggable
+    d3.select(imageContainer)
+      .call(d3.drag()
+        .on('drag', function(event) {
+          const bounds = mapContainer.getBoundingClientRect();
+          const x = event.x - bounds.left;
+          const y = event.y - bounds.top;
+          
+          this.style.left = `${x}px`;
+          this.style.top = `${y}px`;
+        }));
+    
+    // Handle selection
+    imageContainer.addEventListener('click', (e) => {
+      e.stopPropagation();
+      selectImageContainer(imageContainer);
+    });
+    
+    // Select the newly added image
+    selectImageContainer(imageContainer);
+    
+    // Reset file input
+    imageUpload.value = '';
+  };
+  
+  reader.readAsDataURL(file);
+}
+
+function selectImageContainer(container) {
+  // Deselect previous
+  if (selectedImageContainer) {
+    selectedImageContainer.classList.remove('selected');
+  }
+  
+  selectedImageContainer = container;
+  if (selectedImageContainer) {
+    selectedImageContainer.classList.add('selected');
+    imageControls.style.display = 'block';
+    
+    // Set slider value based on current transform
+    const transform = selectedImageContainer.style.transform;
+    const scale = transform ? parseFloat(transform.match(/scale\((.*?)\)/)?.[1] || 1) : 1;
+    const opacity = selectedImageContainer.style.opacity || 1;
+    imageOpacityScale.value = scale;
+  } else {
+    imageControls.style.display = 'none';
+  }
+}
+
+function updateSelectedImage() {
+  if (!selectedImageContainer) return;
+  
+  const value = parseFloat(imageOpacityScale.value);
+  selectedImageContainer.style.transform = `scale(${value})`;
+  selectedImageContainer.style.opacity = Math.min(1, value);
+}
+
+function removeSelectedImage() {
+  if (selectedImageContainer) {
+    mapContainer.removeChild(selectedImageContainer);
+    selectedImageContainer = null;
+    imageControls.style.display = 'none';
+  }
+}
+
+// Event Listeners
+if (imageUpload) {
+  imageUpload.addEventListener('change', handleImageUpload);
+} else {
+  console.error("Elementul cu ID 'imageUpload' nu a fost găsit.");
+}
+
+if (imageOpacityScale) {
+  imageOpacityScale.addEventListener('input', updateSelectedImage);
+} else {
+  console.error("Elementul cu ID 'imageOpacityScale' nu a fost găsit.");
+}
+
+if (removeImageButton) {
+  removeImageButton.addEventListener('click', removeSelectedImage);
+} else {
+  console.error("Elementul cu ID 'removeImage' nu a fost găsit.");
+}
+
+// Click outside to deselect
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.custom-image-container')) {
+    selectImageContainer(null);
+  }
+});
+
+// Update lockAllInteractions and unlockAllInteractions to include images
+const originalLockAllInteractionsWithImages = lockAllInteractions;
+lockAllInteractions = function() {
+  originalLockAllInteractionsWithImages();
+  document.querySelectorAll('.custom-image-container').forEach(el => {
+    el.style.pointerEvents = 'none';
+    el.style.cursor = 'default';
+  });
+};
+
+const originalUnlockAllInteractionsWithImages = unlockAllInteractions;
+unlockAllInteractions = function() {
+  originalUnlockAllInteractionsWithImages();
+  document.querySelectorAll('.custom-image-container').forEach(el => {
+    el.style.pointerEvents = 'auto';
+    el.style.cursor = 'move';
+  });
+};
+
+// ...existing code...
+
 });
