@@ -3454,6 +3454,9 @@ function handleImageUpload(event) {
       container.style.width = `${this.width}px`;
       container.style.height = `${this.height}px`;
       
+      // Adaugă imaginea în container
+      container.appendChild(this);
+      
       // Setează scala implicită la 0.8
       container.style.transform = 'scale(0.8)';
       
@@ -3474,15 +3477,15 @@ function handleImageUpload(event) {
       d3.select(container).call(d3.drag()
         .on('drag', function(event) {
           const bounds = mapContainer.getBoundingClientRect();
-          const x = event.x - bounds.left - (selectedImageContainer.offsetWidth / 2);
-          const y = event.y - bounds.top - (selectedImageContainer.offsetHeight / 2);
+          const x = event.x - bounds.left - (container.offsetWidth / 2);
+          const y = event.y - bounds.top - (container.offsetHeight / 2);
           
           this.style.left = `${x}px`;
           this.style.top = `${y}px`;
         })
       );
 
-      // Select the newly added image
+      // Selectează imaginea nou adăugată
       selectImageContainer(container);
     };
     
