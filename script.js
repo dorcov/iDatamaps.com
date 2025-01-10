@@ -3422,55 +3422,17 @@ unlockAllInteractions = function() {
 
 // ...existing code...
 
-// Add after other DOM references
-const flagSearch = document.getElementById("flagSearch");
-
-// Add flag search functionality
-if (flagSearch) {
-  flagSearch.addEventListener("input", (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    const options = flagCountrySelect.options;
-
-    for (let i = 0; i < options.length; i++) {
-      const option = options[i];
-      const text = option.text.toLowerCase();
-      
-      // If text matches search, show option, otherwise hide it
-      if (text.includes(searchTerm)) {
-        option.classList.remove("hidden");
-      } else {
-        option.classList.add("hidden");
-      }
-    }
-    
-    // If search term matches exactly one option, select it
-    const visibleOptions = Array.from(options).filter(opt => !opt.classList.contains("hidden"));
-    if (visibleOptions.length === 1) {
-      visibleOptions[0].selected = true;
-      updateFlagPreview();
-    }
-  });
-
-  // Clear search when selection changes
-  flagCountrySelect.addEventListener("change", () => {
-    flagSearch.value = "";
-    Array.from(flagCountrySelect.options).forEach(opt => opt.classList.remove("hidden"));
-  });
-}
-
-// ...existing code...
-
 // Add after flags section and before dark mode
 
 // Image handling functionality
 const imageUpload = document.getElementById('imageUpload');
 const imageControls = document.querySelector('.image-controls');
-const imageScale = document.getElementById('imageScale');
+const imageSize = document.getElementById('imageSize');
 const imageOpacity = document.getElementById('imageOpacity');
 const removeImageButton = document.getElementById('removeImage');
 
 let selectedImageContainer = null;
-let originalImageSize = { width: 0, height: 0 };
+let images = [];
 
 function handleImageUpload(event) {
   const file = event.target.files[0];
@@ -3478,53 +3440,50 @@ function handleImageUpload(event) {
 
   const reader = new FileReader();
   reader.onload = function(e) {
-    const imageContainer = document.createElement('div');
-    imageContainer.className = 'custom-image-container';
+    const imageId = `image_${Date.now()}`;
+    images.push({ id: imageId });
+
+    const container = document.createElement('div');
+    container.className = 'custom-image-container';
+    container.id = imageId;
     
     const img = new Image();
+    img.src = e.target.result;
+    
     img.onload = function() {
-      // Store original dimensions
-      originalImageSize = {
-        width: this.width,
-        height: this.height
-      };
+      container.style.width = `${this.width}px`;
+      container.style.height = `${this.height}px`;
+      container.appendChild(this);
       
-      // Set initial size
-      imageContainer.style.width = `${originalImageSize.width}px`;
-      imageContainer.style.height = `${originalImageSize.height}px`;
+      // Poziționare inițială în centru
+      container.style.left = `${mapContainer.clientWidth / 2 - this.width / 2}px`;
+      container.style.top = `${mapContainer.clientHeight / 2 - this.height / 2}px`;
       
-      imageContainer.appendChild(this);
-      
-      // Center the image initially
-      imageContainer.style.left = `${mapContainer.clientWidth / 2 - (originalImageSize.width / 2)}px`;
-      imageContainer.style.top = `${mapContainer.clientHeight / 2 - (originalImageSize.height / 2)}px`;
-      
-      mapContainer.appendChild(imageContainer);
+      mapContainer.appendChild(container);
       imageControls.style.display = 'block';
-      
-      // Make draggable
-      d3.select(imageContainer)
-        .call(d3.drag()
-          .on('drag', function(event) {
-            const bounds = mapContainer.getBoundingClientRect();
-            const x = event.x - bounds.left;
-            const y = event.y - bounds.top;
-            
-            this.style.left = `${x}px`;
-            this.style.top = `${y}px`;
-          }));
-      
-      // Handle selection
-      imageContainer.addEventListener('click', (e) => {
+
+      // Adăugare event listeners pentru drag și selecție
+      container.addEventListener('click', (e) => {
         e.stopPropagation();
-        selectImageContainer(imageContainer);
+        selectImageContainer(container);
       });
-      
+
+      // Drag functionality using d3.drag()
+      d3.select(container).call(d3.drag()
+        .on('drag', function(event) {
+          const bounds = mapContainer.getBoundingClientRect();
+          const x = event.x - bounds.left;
+          const y = event.y - bounds.top;
+          
+          this.style.left = `${x}px`;
+          this.style.top = `${y}px`;
+        })
+      );
+
       // Select the newly added image
-      selectImageContainer(imageContainer);
+      selectImageContainer(container);
     };
     
-    img.src = e.target.result;
     imageUpload.value = '';
   };
   
@@ -3541,66 +3500,33 @@ function selectImageContainer(container) {
     selectedImageContainer.classList.add('selected');
     imageControls.style.display = 'block';
     
-    // Set sliders to current values
+    // Update controls to match current image
     const scale = selectedImageContainer.style.transform ?
       parseFloat(selectedImageContainer.style.transform.match(/scale\((.*?)\)/)?.[1] || 1) : 1;
     const opacity = selectedImageContainer.style.opacity || 1;
     
-    imageScale.value = scale;
+    imageSize.value = scale;
     imageOpacity.value = opacity;
   } else {
     imageControls.style.display = 'none';
   }
 }
 
-// Separate update functions for scale and opacity
-function updateImageScale() {
+function updateSelectedImage() {
   if (!selectedImageContainer) return;
   
-  const scale = parseFloat(imageScale.value);
-  selectedImageContainer.style.transform = `scale(${scale})`;
+  const size = parseFloat(imageSize.value);
+  const opacity = parseFloat(imageOpacity.value);
   
-  // Update the container size to maintain the scaled dimensions
-  selectedImageContainer.style.width = `${originalImageSize.width}px`;
-  selectedImageContainer.style.height = `${originalImageSize.height}px`;
-  
-  // Adjust position to keep image centered around its current position
-  const currentLeft = parseFloat(selectedImageContainer.style.left);
-  const currentTop = parseFloat(selectedImageContainer.style.top);
-  const previousScale = parseFloat(selectedImageContainer.getAttribute('data-previous-scale') || 1);
-  
-  const scaleDiff = scale / previousScale;
-  const newLeft = currentLeft - (originalImageSize.width * (scaleDiff - 1) / 2);
-  const newTop = currentTop - (originalImageSize.height * (scaleDiff - 1) / 2);
-  
-  selectedImageContainer.style.left = `${newLeft}px`;
-  selectedImageContainer.style.top = `${newTop}px`;
-  
-  // Store the current scale for future calculations
-  selectedImageContainer.setAttribute('data-previous-scale', scale);
-}
-
-function updateImageOpacity() {
-  if (!selectedImageContainer) return;
-  selectedImageContainer.style.opacity = imageOpacity.value;
-}
-
-// Update event listeners
-if (imageScale) {
-  imageScale.addEventListener('input', updateImageScale);
-} else {
-  console.error("Elementul cu ID 'imageScale' nu a fost găsit.");
-}
-
-if (imageOpacity) {
-  imageOpacity.addEventListener('input', updateImageOpacity);
-} else {
-  console.error("Elementul cu ID 'imageOpacity' nu a fost găsit.");
+  selectedImageContainer.style.transform = `scale(${size})`;
+  selectedImageContainer.style.opacity = opacity;
 }
 
 function removeSelectedImage() {
   if (selectedImageContainer) {
+    const imageId = selectedImageContainer.id;
     mapContainer.removeChild(selectedImageContainer);
+    images = images.filter(img => img.id !== imageId);
     selectedImageContainer = null;
     imageControls.style.display = 'none';
   }
@@ -3609,20 +3535,18 @@ function removeSelectedImage() {
 // Event Listeners
 if (imageUpload) {
   imageUpload.addEventListener('change', handleImageUpload);
-} else {
-  console.error("Elementul cu ID 'imageUpload' nu a fost găsit.");
+}
+
+if (imageSize) {
+  imageSize.addEventListener('input', updateSelectedImage);
 }
 
 if (imageOpacity) {
   imageOpacity.addEventListener('input', updateSelectedImage);
-} else {
-  console.error("Elementul cu ID 'imageOpacity' nu a fost găsit.");
 }
 
 if (removeImageButton) {
   removeImageButton.addEventListener('click', removeSelectedImage);
-} else {
-  console.error("Elementul cu ID 'removeImage' nu a fost găsit.");
 }
 
 // Click outside to deselect
@@ -3632,7 +3556,7 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Update lockAllInteractions and unlockAllInteractions to include images
+// Update lockAllInteractions and unlockAllInteractions
 const originalLockAllInteractionsWithImages = lockAllInteractions;
 lockAllInteractions = function() {
   originalLockAllInteractionsWithImages();
