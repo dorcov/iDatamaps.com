@@ -3465,10 +3465,12 @@ if (flagSearch) {
 // Image handling functionality
 const imageUpload = document.getElementById('imageUpload');
 const imageControls = document.querySelector('.image-controls');
-const imageOpacityScale = document.getElementById('imageOpacityScale');
+const imageScale = document.getElementById('imageScale');
+const imageOpacity = document.getElementById('imageOpacity');
 const removeImageButton = document.getElementById('removeImage');
 
 let selectedImageContainer = null;
+let originalImageSize = { width: 0, height: 0 };
 
 function handleImageUpload(event) {
   const file = event.target.files[0];
@@ -3479,41 +3481,50 @@ function handleImageUpload(event) {
     const imageContainer = document.createElement('div');
     imageContainer.className = 'custom-image-container';
     
-    const img = document.createElement('img');
-    img.src = e.target.result;
-    imageContainer.appendChild(img);
-    
-    // Center the image initially
-    imageContainer.style.left = `${mapContainer.clientWidth / 2 - 100}px`;
-    imageContainer.style.top = `${mapContainer.clientHeight / 2 - 100}px`;
-    
-    mapContainer.appendChild(imageContainer);
-    
-    // Show controls
-    imageControls.style.display = 'block';
-    
-    // Make draggable
-    d3.select(imageContainer)
-      .call(d3.drag()
-        .on('drag', function(event) {
-          const bounds = mapContainer.getBoundingClientRect();
-          const x = event.x - bounds.left;
-          const y = event.y - bounds.top;
-          
-          this.style.left = `${x}px`;
-          this.style.top = `${y}px`;
-        }));
-    
-    // Handle selection
-    imageContainer.addEventListener('click', (e) => {
-      e.stopPropagation();
+    const img = new Image();
+    img.onload = function() {
+      // Store original dimensions
+      originalImageSize = {
+        width: this.width,
+        height: this.height
+      };
+      
+      // Set initial size
+      imageContainer.style.width = `${originalImageSize.width}px`;
+      imageContainer.style.height = `${originalImageSize.height}px`;
+      
+      imageContainer.appendChild(this);
+      
+      // Center the image initially
+      imageContainer.style.left = `${mapContainer.clientWidth / 2 - (originalImageSize.width / 2)}px`;
+      imageContainer.style.top = `${mapContainer.clientHeight / 2 - (originalImageSize.height / 2)}px`;
+      
+      mapContainer.appendChild(imageContainer);
+      imageControls.style.display = 'block';
+      
+      // Make draggable
+      d3.select(imageContainer)
+        .call(d3.drag()
+          .on('drag', function(event) {
+            const bounds = mapContainer.getBoundingClientRect();
+            const x = event.x - bounds.left;
+            const y = event.y - bounds.top;
+            
+            this.style.left = `${x}px`;
+            this.style.top = `${y}px`;
+          }));
+      
+      // Handle selection
+      imageContainer.addEventListener('click', (e) => {
+        e.stopPropagation();
+        selectImageContainer(imageContainer);
+      });
+      
+      // Select the newly added image
       selectImageContainer(imageContainer);
-    });
+    };
     
-    // Select the newly added image
-    selectImageContainer(imageContainer);
-    
-    // Reset file input
+    img.src = e.target.result;
     imageUpload.value = '';
   };
   
@@ -3521,7 +3532,6 @@ function handleImageUpload(event) {
 }
 
 function selectImageContainer(container) {
-  // Deselect previous
   if (selectedImageContainer) {
     selectedImageContainer.classList.remove('selected');
   }
@@ -3531,22 +3541,61 @@ function selectImageContainer(container) {
     selectedImageContainer.classList.add('selected');
     imageControls.style.display = 'block';
     
-    // Set slider value based on current transform
-    const transform = selectedImageContainer.style.transform;
-    const scale = transform ? parseFloat(transform.match(/scale\((.*?)\)/)?.[1] || 1) : 1;
+    // Set sliders to current values
+    const scale = selectedImageContainer.style.transform ?
+      parseFloat(selectedImageContainer.style.transform.match(/scale\((.*?)\)/)?.[1] || 1) : 1;
     const opacity = selectedImageContainer.style.opacity || 1;
-    imageOpacityScale.value = scale;
+    
+    imageScale.value = scale;
+    imageOpacity.value = opacity;
   } else {
     imageControls.style.display = 'none';
   }
 }
 
-function updateSelectedImage() {
+// Separate update functions for scale and opacity
+function updateImageScale() {
   if (!selectedImageContainer) return;
   
-  const value = parseFloat(imageOpacityScale.value);
-  selectedImageContainer.style.transform = `scale(${value})`;
-  selectedImageContainer.style.opacity = Math.min(1, value);
+  const scale = parseFloat(imageScale.value);
+  selectedImageContainer.style.transform = `scale(${scale})`;
+  
+  // Update the container size to maintain the scaled dimensions
+  selectedImageContainer.style.width = `${originalImageSize.width}px`;
+  selectedImageContainer.style.height = `${originalImageSize.height}px`;
+  
+  // Adjust position to keep image centered around its current position
+  const currentLeft = parseFloat(selectedImageContainer.style.left);
+  const currentTop = parseFloat(selectedImageContainer.style.top);
+  const previousScale = parseFloat(selectedImageContainer.getAttribute('data-previous-scale') || 1);
+  
+  const scaleDiff = scale / previousScale;
+  const newLeft = currentLeft - (originalImageSize.width * (scaleDiff - 1) / 2);
+  const newTop = currentTop - (originalImageSize.height * (scaleDiff - 1) / 2);
+  
+  selectedImageContainer.style.left = `${newLeft}px`;
+  selectedImageContainer.style.top = `${newTop}px`;
+  
+  // Store the current scale for future calculations
+  selectedImageContainer.setAttribute('data-previous-scale', scale);
+}
+
+function updateImageOpacity() {
+  if (!selectedImageContainer) return;
+  selectedImageContainer.style.opacity = imageOpacity.value;
+}
+
+// Update event listeners
+if (imageScale) {
+  imageScale.addEventListener('input', updateImageScale);
+} else {
+  console.error("Elementul cu ID 'imageScale' nu a fost găsit.");
+}
+
+if (imageOpacity) {
+  imageOpacity.addEventListener('input', updateImageOpacity);
+} else {
+  console.error("Elementul cu ID 'imageOpacity' nu a fost găsit.");
 }
 
 function removeSelectedImage() {
@@ -3564,10 +3613,10 @@ if (imageUpload) {
   console.error("Elementul cu ID 'imageUpload' nu a fost găsit.");
 }
 
-if (imageOpacityScale) {
-  imageOpacityScale.addEventListener('input', updateSelectedImage);
+if (imageOpacity) {
+  imageOpacity.addEventListener('input', updateSelectedImage);
 } else {
-  console.error("Elementul cu ID 'imageOpacityScale' nu a fost găsit.");
+  console.error("Elementul cu ID 'imageOpacity' nu a fost găsit.");
 }
 
 if (removeImageButton) {

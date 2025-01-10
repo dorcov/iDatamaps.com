@@ -2088,7 +2088,11 @@ input[type="color"]::-moz-color-swatch {
   cursor: move;
   user-select: none;
   z-index: 1000;
-  transform-origin: center;
+  transform-origin: center center;
+  /* Remove any existing transitions to prevent lag during dragging */
+  transition: opacity 0.2s ease;
+  /* Ensure the container maintains its size */
+  box-sizing: border-box;
 }
 
 .custom-image-container.selected {
@@ -2097,8 +2101,11 @@ input[type="color"]::-moz-color-swatch {
 
 .custom-image-container img {
   display: block;
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
+  /* Ensure the image fills the container exactly */
+  object-fit: contain;
 }
 
 .image-controls {
@@ -2106,6 +2113,9 @@ input[type="color"]::-moz-color-swatch {
   padding: 10px;
   background: var(--bg-secondary);
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 #imageUpload {
