@@ -2920,7 +2920,7 @@ function createCircleLegend(maxValue, radiusScale) {
   const circleSpacing = 60; // Spațiul dintre simboluri
   const titleHeight = 30;   // Spațiul pentru titlu
   const topPadding = 20;    // Padding-ul de sus
-  const bottomPadding = 40; // Padding-ul de jos mărit pentru mai mult spațiu
+  const bottomPadding = 10; // Padding-ul de jos mărit pentru mai mult spațiu
   
   // Calculăm înălțimea totală cu padding-ul de jos mărit
   const legendHeight = (numCircles * circleSpacing) + titleHeight + topPadding + bottomPadding;
