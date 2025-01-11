@@ -2842,7 +2842,6 @@ updateAnalysisTable();
 
 // Add new references for circle controls
 const toggleCircles = document.getElementById("toggleCircles");
-const circleColor = document.getElementById("circleColor");
 const circleOpacity = document.getElementById("circleOpacity");
 const circleScale = document.getElementById("circleScale");
 const legendCircleCount = document.getElementById("legendCircleCount");
@@ -2902,7 +2901,7 @@ function updateProportionalCircles() {
       return projection(coords)[1];
     })
     .attr("r", d => radiusScale(getRegionValue(d)))
-    .attr("fill", circleColor.value)
+    .attr("fill", "#1f77b4") // Use fixed color
     .attr("opacity", circleOpacity.value) // Changed from fill-opacity to opacity
     .raise();
 
@@ -2965,7 +2964,7 @@ function createCircleLegend(maxValue, radiusScale) {
     .attr("cy", 0)
     .attr("r", d => radiusScale(d))
     .attr("fill", "none")
-    .attr("stroke", circleColor.value)
+    .attr("stroke", "#1f77b4") // Use fixed color
     .attr("opacity", circleOpacity.value);
 
   // Add value labels with better positioning
@@ -2999,25 +2998,6 @@ toggleCircles.addEventListener("change", () => {
   if (circleLegend.size() > 0) {
     circleLegend.style("display", toggleCircles.checked ? "block" : "none");
   }
-});
-
-circleColor.addEventListener("input", () => {
-  // Update circles on map
-  gMap.selectAll(".proportional-circle")
-    .attr("fill", circleColor.value)  // Change from "stroke" to "fill"
-    .attr("stroke", "#fff")           // Add white stroke for better visibility
-    .attr("stroke-width", "1px");     // Add stroke width
-    
-  // Update legend circles
-  d3.selectAll(".circle-legend-group circle")
-    .attr("fill", "none")            // Keep legend circles outlined
-    .attr("stroke", circleColor.value);
-    
-  // Optional: add transition for smooth color change
-  gMap.selectAll(".proportional-circle")
-    .transition()
-    .duration(300)
-    .attr("fill", circleColor.value);
 });
 
 circleOpacity.addEventListener("input", () => {
@@ -3146,7 +3126,7 @@ function createCircleLegend(maxValue, radiusScale) {
     .attr("cy", 0)
     .attr("r", d => radiusScale(d))
     .attr("fill", "none")
-    .attr("stroke", circleColor.value)
+    .attr("stroke", "#1f77b4") // Use fixed color
     .attr("opacity", circleOpacity.value);
 
   // Add value labels with styling
@@ -3297,128 +3277,6 @@ if (valuesBoldCheckbox) {
     updateValueLabels();
   });
 }
-
-// ...existing code...
-
-// Add after other global variables
-let selectedFlagContainer = null;
-const flagCountrySelect = document.getElementById("flagCountry");
-const flagSizeSelect = document.getElementById("flagSize");
-const addFlagButton = document.getElementById("addFlag");
-const removeFlagButton = document.getElementById("removeFlag");
-const flagPreview = document.getElementById("flagPreview");
-
-// Add flag preview functionality
-function updateFlagPreview() {
-  const country = flagCountrySelect.value;
-  const size = flagSizeSelect.value;
-  flagPreview.innerHTML = `<img src="https://flagcdn.com/${size}/${country}.png" 
-    srcset="https://flagcdn.com/${size}/${country}.png 2x" 
-    alt="${country}">`;
-}
-
-// Initialize flag preview
-if (flagCountrySelect && flagSizeSelect) {
-  flagCountrySelect.addEventListener("change", updateFlagPreview);
-  flagSizeSelect.addEventListener("change", updateFlagPreview);
-  updateFlagPreview(); // Initial preview
-}
-
-// Function to add new flag
-function addFlag() {
-  const country = flagCountrySelect.value;
-  const size = flagSizeSelect.value;
-  
-  const flagContainer = document.createElement('div');
-  flagContainer.className = 'flag-container';
-  flagContainer.innerHTML = `<img src="https://flagcdn.com/${size}/${country}.png" 
-    srcset="https://flagcdn.com/${size}/${country}.png 2x" 
-    alt="${country}">`;
-  
-  mapContainer.appendChild(flagContainer);
-
-  // Position the flag in the center initially
-  flagContainer.style.left = `${mapContainer.clientWidth / 2 - flagContainer.clientWidth / 2}px`;
-  flagContainer.style.top = `${mapContainer.clientHeight / 2 - flagContainer.clientHeight / 2}px`;
-
-  // Make the flag draggable
-  d3.select(flagContainer).call(d3.drag()
-    .on('drag', (event) => {
-      const bounds = mapContainer.getBoundingClientRect();
-      const x = event.x - bounds.left;
-      const y = event.y - bounds.top;
-      
-      flagContainer.style.left = `${x}px`;
-      flagContainer.style.top = `${y}px`;
-    })
-  );
-
-  // Add click handler for selection
-  flagContainer.addEventListener('click', (e) => {
-    e.stopPropagation();
-    selectFlagContainer(flagContainer);
-  });
-}
-
-// Function to select a flag container
-function selectFlagContainer(container) {
-  // Deselect previous
-  if (selectedFlagContainer) {
-    selectedFlagContainer.classList.remove('selected');
-  }
-  
-  selectedFlagContainer = container;
-  if (selectedFlagContainer) {
-    selectedFlagContainer.classList.add('selected');
-  }
-}
-
-// Function to remove selected flag
-function removeFlag() {
-  if (selectedFlagContainer) {
-    mapContainer.removeChild(selectedFlagContainer);
-    selectedFlagContainer = null;
-  }
-}
-
-// Add click handler to deselect when clicking outside
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.flag-container')) {
-    selectFlagContainer(null);
-  }
-});
-
-// Initialize flag buttons
-if (addFlagButton) {
-  addFlagButton.addEventListener("click", addFlag);
-} else {
-  console.error("Elementul cu ID 'addFlag' nu a fost găsit.");
-}
-
-if (removeFlagButton) {
-  removeFlagButton.addEventListener("click", removeFlag);
-} else {
-  console.error("Elementul cu ID 'removeFlag' nu a fost găsit.");
-}
-
-// Update lockAllInteractions and unlockAllInteractions to include flags
-const originalLockAllInteractions = lockAllInteractions;
-lockAllInteractions = function() {
-  originalLockAllInteractions();
-  document.querySelectorAll('.flag-container').forEach(el => {
-    el.style.pointerEvents = 'none';
-    el.style.cursor = 'default';
-  });
-};
-
-const originalUnlockAllInteractions = unlockAllInteractions;
-unlockAllInteractions = function() {
-  originalUnlockAllInteractions();
-  document.querySelectorAll('.flag-container').forEach(el => {
-    el.style.pointerEvents = 'auto';
-    el.style.cursor = 'move';
-  });
-};
 
 // ...existing code...
 
