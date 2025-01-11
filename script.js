@@ -2916,13 +2916,16 @@ function createCircleLegend(maxValue, radiusScale) {
   // Get number of circles from user input (default to 3 if not specified)
   const numCircles = parseInt(legendCircleCount?.value || 3);
 
-  // Calculate total height needed with increased spacing
-  const circleSpacing = 60; // Increased from 50 to 60px
-  const titleHeight = 30; // Space for title
-  const padding = 20; // Padding at top and bottom
-  const legendHeight = (numCircles * circleSpacing) + titleHeight + (padding * 2);
+  // Modificare aici: ajustăm spațierea 
+  const circleSpacing = 60; // Spațiul dintre simboluri
+  const titleHeight = 30;   // Spațiul pentru titlu
+  const topPadding = 20;    // Padding-ul de sus
+  const bottomPadding = 40; // Padding-ul de jos mărit pentru mai mult spațiu
+  
+  // Calculăm înălțimea totală cu padding-ul de jos mărit
+  const legendHeight = (numCircles * circleSpacing) + titleHeight + topPadding + bottomPadding;
 
-  // Create new legend group
+  // Creăm grupul pentru legendă cu noile dimensiuni
   const circleLegend = svg.append("g")
     .attr("id", "circleLegend")
     .attr("class", "legend-group")
@@ -2956,7 +2959,7 @@ function createCircleLegend(maxValue, radiusScale) {
     .enter()
     .append("g")
     .attr("class", "circle-legend-group")
-    .attr("transform", (d, i) => `translate(75, ${titleHeight + padding + (i * circleSpacing)})`);
+    .attr("transform", (d, i) => `translate(75, ${titleHeight + topPadding + (i * circleSpacing)})`);
 
   // Add circles
   circleGroups.append("circle")
@@ -3076,7 +3079,7 @@ function createCircleLegend(maxValue, radiusScale) {
 
   // Calculate total height with increased spacing
   const circleSpacing = 60;
-  const titleHeight = 30;
+  const titleHeight = 50;
   const padding = 20;
   const legendHeight = (numCircles * circleSpacing) + titleHeight + (padding * 2);
   const legendWidth = parseInt(legendWidthInput.value) || 150;
