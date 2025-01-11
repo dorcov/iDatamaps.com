@@ -2966,7 +2966,7 @@ function createCircleLegend(maxValue, radiusScale) {
     .attr("cx", 0)
     .attr("cy", 0)
     .attr("r", d => radiusScale(d))
-    .attr("fill", "none")
+    .attr("fill", "#1f77b4")
     .attr("stroke", "#1f77b4") // Use fixed color
     .attr("opacity", circleOpacity.value);
 
