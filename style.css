@@ -184,7 +184,7 @@ svg {
 /* Panoul drept pentru opțiuni */
 .right-panel {
   flex: 1; /* Ocupă 25% din lățime */
-  padding: 20px;
+  padding: 10px;
   background-color: var(--panel-bg); /* Fundal alb pentru opțiuni */
   overflow-y: auto; /* Adaugă scroll dacă conținutul depășește înălțimea */
   border-left: 1px solid var(--border-color);
@@ -193,6 +193,8 @@ svg {
   border-radius: 8px;
   display: flex; /* Add flex display */
   flex-direction: column; /* Stack children vertically */
+  width: 100%;
+  max-width: 400px;
 }
 
 /* Secțiune de opțiuni */
@@ -203,6 +205,8 @@ svg {
   border-radius: var(--border-radius);
   box-shadow: 0 2px 4px var(--shadow-color);
   width: 100%; /* Ensure full width */
+  margin: 5px 0;
+  padding: 10px;
 }
 
 /* Titluri pentru secțiuni */
@@ -227,6 +231,9 @@ svg {
   transition: border-color 0.3s;
   background-color: var(--control-bg);
   color: var(--text-primary);
+  width: 100%;
+  max-width: none;
+  margin: 5px 0;
 }
 
 .input-text:focus {
@@ -247,6 +254,9 @@ svg {
   transition: border-color 0.3s;
   appearance: none;
   color: var(--text-primary);
+  width: 100%;
+  max-width: none;
+  margin: 5px 0;
 }
 
 .custom-select:focus {
@@ -293,6 +303,9 @@ svg {
   transition: background-color 0.3s, transform 0.2s;
   margin-top: 5px;
   cursor: pointer;
+  width: 100%;
+  max-width: none;
+  margin: 5px 0;
 }
 
 .btn-primary {
@@ -337,6 +350,8 @@ svg {
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   background-color: var(--control-bg);
+  width: 100%;
+  margin: 0;
 }
 
 table {
@@ -878,6 +893,8 @@ td.select-category select {
   border: 1px solid #e8e8e8;
   border-radius: 4px;
   background-color: var(--control-bg);
+  width: 100%;
+  margin: 0;
 }
 
 #regionTable {
@@ -1265,6 +1282,7 @@ svg .selected {
   margin: 0; /* Remove margin */
   background-color: var(--control-bg);
   width: 100%; /* Ensure full width */
+  padding: 0;
 }
 
 .control-group {
@@ -1275,10 +1293,9 @@ svg .selected {
   border-radius: 4px;
   padding: 1rem;
   margin-bottom: 1rem; /* Add bottom margin for spacing */
-}
-
-body, button, input, select, .btn {
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Roboto", sans-serif;
+  width: 100%;
+  margin: 0 0 10px 0;
+  padding: 15px;
 }
 
 /* Example Apple-style button with subtle rounded corners and minimal borders */
@@ -1875,6 +1892,9 @@ button#addTitle:hover {
   background-color: var(--bg-secondary);
   border-radius: var(--border-radius);
   box-shadow: 0 2px 4px var(--shadow-color);
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
 }
 
 /* Update labels in control panel */
@@ -1972,6 +1992,9 @@ input[type="color"]::-moz-color-swatch {
   opacity: 0.7;
   transition: opacity 0.2s;
   border-radius: 4px;
+  width: 100%;
+  max-width: none;
+  margin: 5px 0;
 }
 
 .slider:hover {
@@ -2173,6 +2196,12 @@ input[type="color"]::-moz-color-swatch {
   background: var(--bg-primary);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .control-group {
@@ -2182,6 +2211,9 @@ input[type="color"]::-moz-color-swatch {
   border: 1px solid var(--border-color);
   transition: box-shadow 0.2s;
   margin: 0;
+  width: 100%;
+  margin: 0 0 10px 0;
+  padding: 15px;
 }
 
 .control-group h3,
@@ -2200,6 +2232,9 @@ input[type="color"]::-moz-color-swatch {
   padding: 1rem;
   margin-top: 0.75rem;
   margin-left: 0;
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
 }
 
 /* Update form controls */
@@ -2212,6 +2247,9 @@ input[type="color"]::-moz-color-swatch {
   color: var(--text-primary);
   font-size: 0.9rem;
   transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  max-width: none;
+  margin: 5px 0;
 }
 
 .input-text:focus, .custom-select:focus {
@@ -2229,6 +2267,9 @@ input[type="color"]::-moz-color-swatch {
   transition: transform 0.2s, box-shadow 0.2s;
   border: none;
   cursor: pointer;
+  width: 100%;
+  max-width: none;
+  margin: 5px 0;
 }
 
 .btn-primary {
@@ -2260,6 +2301,9 @@ input[type="color"]::-moz-color-swatch {
   background: var(--border-color);
   outline: none;
   margin: 1rem 0;
+  width: 100%;
+  max-width: none;
+  margin: 5px 0;
 }
 
 .slider::-webkit-slider-thumb {
