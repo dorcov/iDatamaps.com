@@ -191,6 +191,8 @@ svg {
   box-shadow: -2px 0 8px var(--shadow-color);
   margin: 20px;
   border-radius: 8px;
+  display: flex; /* Add flex display */
+  flex-direction: column; /* Stack children vertically */
 }
 
 /* Secțiune de opțiuni */
@@ -200,6 +202,7 @@ svg {
   background-color: var(--bg-secondary);
   border-radius: var(--border-radius);
   box-shadow: 0 2px 4px var(--shadow-color);
+  width: 100%; /* Ensure full width */
 }
 
 /* Titluri pentru secțiuni */
@@ -1257,22 +1260,21 @@ svg .selected {
 
 .control-panel {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column; /* Change to column layout */
   gap: 1rem;
-  margin: 1rem 0;
+  margin: 0; /* Remove margin */
   background-color: var(--control-bg);
+  width: 100%; /* Ensure full width */
 }
 
 .control-group {
-  flex: 1 1 200px;
+  width: 100%; /* Ensure full width */
+  flex: none; /* Remove flex growing/shrinking */
   background-color: var(--control-bg);
   border: 1px solid var(--border-color);
   border-radius: 4px;
   padding: 1rem;
-}
-
-.control-group h3 {
-  margin-top: 0;
+  margin-bottom: 1rem; /* Add bottom margin for spacing */
 }
 
 body, button, input, select, .btn {
@@ -2317,6 +2319,11 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 }
 
 input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 6px;
+}
+
+input[type="color"]::-moz-color-swatch {
   border: none;
   border-radius: 6px;
 }
