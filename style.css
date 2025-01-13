@@ -1602,32 +1602,32 @@ button#addTitle:hover {
 /* Data Analysis Styles */
 .quick-stats {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column; /* Change to column layout */
+  gap: 6px; /* Reduced gap between boxes */
   margin-bottom: 15px;
-  gap: 8px;
 }
 
 .stat-box {
-  flex: 1;
-  background: var(--control-bg);
-  padding: 10px;
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0 2px 4px var(--shadow-color);
+  width: 100%; /* Take full width */
+  flex: none; /* Remove flex grow */
+  padding: 8px; /* Slightly reduce padding */
+  border-radius: 6px;
+  text-align: left; /* Align text to left */
+  box-shadow: 0 1px 3px var(--shadow-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .stat-box span:first-child {
-  display: block;
+  margin-bottom: 0; /* Remove bottom margin */
   font-size: 11px;
-  color: var(--text-secondary);
-  margin-bottom: 5px;
   opacity: 0.9;
 }
 
 .stat-box span:last-child {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--text-primary);
 }
 
 .analysis-controls {
