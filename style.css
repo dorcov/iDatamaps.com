@@ -1424,17 +1424,18 @@ button#addTitle:hover {
 
 .sort-controls {
   display: flex;
-  gap: 10px;
+  gap: 8px;  /* Reduce gap between sort buttons */
 }
 
 .btn-secondary {
   background-color: #6c757d;
   color: white;
   border: none;
-  padding: 8px 12px;
+  padding: 6px 10px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-size: 11px;  /* Smaller font size for sort buttons */
 }
 
 .btn-secondary:hover {
@@ -2387,6 +2388,17 @@ input[type="color"]::-moz-color-swatch {
 }
 
 /* ...rest of existing code... */
+
+/* ...existing code... */
+
+/* Update table value input width */
+#regionTable input[type="number"] {
+  width: 80px;  /* Reduce width of value inputs */
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+/* ...existing code... */
 
 
 
