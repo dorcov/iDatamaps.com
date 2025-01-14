@@ -410,17 +410,11 @@
             <label for="titleSize" data-key="size">Mărime (px):</label>
             <input type="number" id="titleSize" class="input-text" value="24" min="10" max="100" />
             
-            <div>
+            <div class="title-style-row" style="display: flex; align-items: center; gap: 8px;">
               <label for="titleColor" data-key="color">Culoare:</label>
               <input type="color" id="titleColor" value="#000000" />
-            </div>
-            
-            <div>
               <label for="titleBold" data-key="bold">Bold:</label>
               <input type="checkbox" id="titleBold" />
-            </div>
-            
-            <div>
               <label for="titleItalic" data-key="italic">Italic:</label>
               <input type="checkbox" id="titleItalic" />
             </div>
@@ -452,15 +446,13 @@
               </select>
               <label for="freeTextSize" data-key="size">Mărime (px):</label>
               <input type="number" id="freeTextSize" class="input-text" value="14" min="10" max="50" />
-              <label for="freeTextColor" data-key="color">Culoare:</label>
-              <input type="color" id="freeTextColor" value="#333333" />
-              <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="text-style-row" style="display: flex; align-items: center; gap: 8px;">
+                <label for="freeTextColor" data-key="color">Culoare:</label>
+                <input type="color" id="freeTextColor" value="#333333" />
                 <label for="freeTextBorder" data-key="border">Chenar:</label>
                 <input type="checkbox" id="freeTextBorder" />
-                
                 <label for="freeTextBold" data-key="bold">Bold:</label>
                 <input type="checkbox" id="freeTextBold" />
-                
                 <label for="freeTextItalic" data-key="italic">Italic:</label>
                 <input type="checkbox" id="freeTextItalic" />
               </div>
