@@ -3480,4 +3480,20 @@ function updateMapOutline() {
   }
 }
 
+// ...existing code...
+
+function highlightExternalBoundaries(topoData) {
+  const externalMesh = topojson.mesh(
+    topoData, 
+    topoData.objects[Object.keys(topoData.objects)[0]],
+    (a, b) => a === b
+  );
+  svg.append("path")
+     .attr("fill", "none")
+     .attr("stroke", "#FF0000")
+     .attr("d", d3.geoPath().projection(projection)(externalMesh));
+}
+
+// ...existing code...
+
 });
