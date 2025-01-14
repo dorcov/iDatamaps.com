@@ -2696,7 +2696,26 @@ calculateStatistics();
     // Update map and legends
     updateMapColors();
     generateAllLegends();
+    
+    // Reset statistics
     calculateStatistics();
+    
+    // Reset analysis table values
+    document.querySelectorAll('#analysisTable tbody tr').forEach(tr => tr.remove());
+    document.getElementById('tableTotalValue').textContent = '0';
+    
+    // Reset stats in analysis section
+    document.getElementById('totalValue').textContent = '0';
+    document.getElementById('avgValue').textContent = '0';
+    document.getElementById('medianValue').textContent = '0';
+    document.getElementById('stdDevValue').textContent = '0';
+    document.getElementById('totalRegions').textContent = '0';
+    
+    // Clear category stats container
+    document.getElementById('categoryStatsContainer').innerHTML = '';
+    
+    // Update analysis table
+    updateAnalysisTable();
   }
 
   // Adăugăm event listener pentru resetare
