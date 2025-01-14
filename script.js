@@ -3462,4 +3462,22 @@ unlockAllInteractions = function() {
 
 // ...existing code...
 
+const mapOutlineColor = document.getElementById('mapOutlineColor');
+const mapOutlineWidth = document.getElementById('mapOutlineWidth');
+const toggleMapOutline = document.getElementById('toggleMapOutline');
+
+if (mapOutlineColor && mapOutlineWidth && toggleMapOutline) {
+  mapOutlineColor.addEventListener('input', updateMapOutline);
+  mapOutlineWidth.addEventListener('input', updateMapOutline);
+  toggleMapOutline.addEventListener('change', updateMapOutline);
+}
+
+function updateMapOutline() {
+  if (toggleMapOutline.checked) {
+    mapContainer.style.border = `${mapOutlineWidth.value}px solid ${mapOutlineColor.value}`;
+  } else {
+    mapContainer.style.border = 'none';
+  }
+}
+
 });
