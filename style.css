@@ -2309,6 +2309,7 @@ input[type="color"]::-moz-color-swatch {
 
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
+  appearance: none;
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -2387,10 +2388,6 @@ input[type="color"]::-moz-color-swatch {
   color: var(--text-primary);
 }
 
-/* ...rest of existing code... */
-
-/* ...existing code... */
-
 /* Update table value input width */
 #regionTable input[type="number"] {
   width: 80px;  /* Reduce width of value inputs */
@@ -2398,7 +2395,8 @@ input[type="color"]::-moz-color-swatch {
   font-size: 12px;
 }
 
-/* ...existing code... */
+/* Dezactivare temporară watermark */
+.watermark-container { display: none !important; }
 
 
 
